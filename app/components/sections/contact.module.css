@@ -1,0 +1,123 @@
+.contact {
+  background-color: var(--color-bg-primary);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: var(--size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xl);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-size: var(--size-base);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary);
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.submitButton {
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: var(--size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: var(--space-md);
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #ff5a52;
+  transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successMessage {
+  padding: var(--space-md);
+  background-color: rgba(50, 200, 100, 0.1);
+  border-left: 4px solid #32c864;
+  color: #32c864;
+  border-radius: 4px;
+  font-size: var(--size-base);
+  margin: 0;
+}
+
+.errorMessage {
+  padding: var(--space-md);
+  background-color: rgba(255, 59, 48, 0.1);
+  border-left: 4px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 4px;
+  font-size: var(--size-base);
+  margin: 0;
+}
+
+.alternativeContact {
+  text-align: center;
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-2xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.alternativeContact h3 {
+  font-size: var(--size-lg);
+  margin-bottom: var(--space-md);
+}
+
+.alternativeContact p {
+  margin-bottom: var(--space-sm);
+  font-size: var(--size-base);
+}
+
+.alternativeContact a {
+  color: var(--color-accent);
+}

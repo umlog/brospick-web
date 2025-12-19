@@ -1,0 +1,118 @@
+.manifesto {
+  background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  padding: 120px 0;
+  position: relative;
+}
+
+.manifesto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.mainContent {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.englishSlogan {
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 768px) {
+  .englishSlogan {
+    font-size: 42px;
+  }
+}
+
+.koreanMessage {
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .koreanMessage {
+    font-size: 16px;
+  }
+}
+
+.title {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  color: var(--color-text-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.card {
+  background-color: var(--color-bg-primary);
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 30px 20px;
+  }
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.card h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--color-text-primary);
+}
+
+.card p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}

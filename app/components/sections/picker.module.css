@@ -1,0 +1,135 @@
+.picker {
+  background-color: var(--color-bg-secondary);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.content h2 {
+  margin-bottom: var(--space-lg);
+}
+
+.subtitle {
+  font-size: var(--size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xl);
+}
+
+.features {
+  display: grid;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.feature {
+  padding: var(--space-lg);
+  background-color: var(--color-bg-primary);
+  border-radius: 8px;
+  border-left: 4px solid var(--color-accent);
+}
+
+.featureIcon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.feature h3 {
+  margin-bottom: var(--space-sm);
+}
+
+.feature p {
+  margin: 0;
+  font-size: var(--size-sm);
+}
+
+.ctaButton {
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: var(--size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #ff5a52;
+  transform: translateY(-2px);
+}
+
+.mockup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone {
+  width: 280px;
+  height: 560px;
+  background-color: var(--color-bg-primary);
+  border: 8px solid var(--color-border);
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.phoneScreen {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-secondary);
+  border-radius: 32px;
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.playerCard {
+  width: 100%;
+}
+
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: linear-gradient(135deg, var(--color-accent), #ff5a52);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.info {
+  text-align: center;
+}
+
+.playerName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.playerTeam {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-xs) 0 0;
+}

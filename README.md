@@ -29,6 +29,48 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Deploy on Netlify
+
+This project is configured for deployment on Netlify.
+
+### Quick Deploy Steps:
+
+1. **GitHub에 코드 푸시**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+2. **Netlify에 연결**
+   - [Netlify.com](https://netlify.com) 접속
+   - "Sign up" → GitHub 계정으로 로그인
+   - "New site from Git" 클릭
+   - GitHub 저장소 선택 (`brospick-web`)
+   - 빌드 설정이 자동으로 감지됩니다:
+     - Build command: `npm run build`
+     - Publish directory: `.next`
+   - "Deploy" 클릭
+
+3. **배포 완료!**
+   - Netlify가 자동으로 배포합니다 (2-3분 소요)
+   - 이후 GitHub에 푸시할 때마다 자동 재배포됩니다
+
+### 배포 전 체크리스트:
+
+- [ ] `netlify.toml` 파일 확인
+- [ ] `.gitignore`에 `.env*`, `node_modules`, `.next` 포함 확인
+- [ ] 로컬에서 `npm run build` 성공 확인
+- [ ] GitHub 저장소에 코드 푸시 완료
+
+### 배포 후 확인:
+
+- [ ] 배포된 사이트 URL 접속 가능
+- [ ] 모든 페이지 정상 작동
+- [ ] 이미지 및 스타일 로드 확인
+
+---
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
