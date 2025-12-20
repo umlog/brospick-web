@@ -49,6 +49,24 @@
   font-size: var(--size-sm);
 }
 
+.companyInfo {
+  grid-column: 1 / -1;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.companyInfo p {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.companyInfo p:not(:last-child) {
+  margin-bottom: var(--space-xs);
+}
+
 .bottom {
   grid-column: 1 / -1;
   text-align: center;

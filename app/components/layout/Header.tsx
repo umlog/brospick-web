@@ -12,9 +12,9 @@ export default function Header() {
   const navItems = [
     { label: 'Manifesto', href: '#manifesto' },
     { label: 'Project', href: '#project' },
-    { label: 'Picker', href: '#picker' },
-    { label: 'Apparel', href: '#apparel' },
-    { label: 'Contact', href: '#contact' },
+    // { label: 'Picker', href: '#picker' },
+    // { label: 'Apparel', href: '#apparel' },
+    // { label: 'Contact', href: '#contact' },
   ];
 
   return (

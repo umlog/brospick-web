@@ -10,7 +10,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: 'Brospick – 기록이 없다고 실력이 없는 건 아니다',
+  title: 'BROSPICK',
   description:
     '대학 축구 선수들의 실력과 스토리를 기록하는 브로스픽. 인터뷰·하이라이트 콘텐츠와 함께, 하이라이트 플랫폼 픽커(Picker)를 준비 중입니다.',
   openGraph: {

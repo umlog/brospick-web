@@ -4,7 +4,7 @@ import styles from './manifesto.module.css';
 
 export default function Manifesto() {
   return (
-    <section id="reality" className={styles.manifesto}>
+    <section id="manifesto" className={styles.manifesto}>
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>보이지 않는 재능의 현실을 드러낸다</h2>
 

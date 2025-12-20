@@ -15,17 +15,26 @@ export default function Footer() {
             className={styles.logo}
           />
           <p>
-            실력은 충분하지만
-            <br />
-            환경과 인맥, 노출 부족으로 기회조차 얻지 못하는 선수들이 있기 때문이다.
+            무명선수가 유명선수로    Team BrosPick
           </p>
         </div>
 
         <div className={styles.links}>
-          <a href="https://instagram.com/brospick.official" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/team.brospick/" target="_blank" rel="noopener noreferrer">
             Instagram
           </a>
-          <a href="mailto:contact@brospick.com">Email</a>
+          <a href="https://www.threads.com/@team.brospick?" target="_blank" rel="noopener noreferrer">
+            Threads
+          </a>
+          <a href="mailto:team.brospick@gmail.com">Email</a>
+        </div>
+
+        <div className={styles.companyInfo}>
+          <p>회사: BROSPICK</p>
+          <p>대표자: 홍주영</p>
+          <p>
+            주소: 경기도 파주시 금정20길 19, 504동 5층 n161호 (금촌동, 세성빌딩)
+          </p>
         </div>
 
         <div className={styles.bottom}>
