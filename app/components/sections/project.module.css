@@ -22,13 +22,40 @@
 
 .sectionTitle {
   text-align: center;
-  margin-bottom: var(--space-xl);
-  color: var(--color-text-secondary);
-  font-size: 14px;
-  font-weight: 500;
+  margin-bottom: 16px;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.6;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.intro {
+  text-align: center;
+  margin-top: 48px;
+  margin-bottom: 24px;
+}
+
+.introLine {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin: 8px 0;
+  line-height: 1.6;
 }
 
 .mainContent {
@@ -53,8 +80,8 @@
 }
 
 .koreanMessage {
-  font-size: 20px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.8;
   color: var(--color-text-secondary);
   margin: 0;
   font-weight: 400;
@@ -62,7 +89,7 @@
 
 @media (max-width: 768px) {
   .koreanMessage {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
@@ -111,11 +138,27 @@
   opacity: 1;
 }
 
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cardNumber {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .card h3 {
-  margin-bottom: var(--space-sm);
+  margin: 0;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.4;
+  white-space: pre-line;
 }
 
 .card p {
@@ -123,4 +166,119 @@
   font-size: 14px;
   color: var(--color-text-secondary);
   line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* Activities Section */
+.activitiesSection {
+  margin-top: 120px;
+  padding-top: 80px;
+  border-top: 1px solid var(--color-border);
+}
+
+.activitiesTitle {
+  text-align: center;
+  margin-bottom: 60px;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.chartContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.chartSvg {
+  width: 100%;
+  height: auto;
+  min-height: 600px;
+  overflow: visible;
+}
+
+.chartPath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 2s ease-out forwards;
+  stroke-linecap: round;
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chartPointGroup {
+  opacity: 0;
+  animation: fadeInGroup 0.6s ease-out forwards;
+}
+
+@keyframes fadeInGroup {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.chartPoint {
+  transition: all 0.3s ease;
+}
+
+.chartNumber {
+  font-size: 2px;
+  font-weight: 700;
+  fill: var(--color-accent);
+  letter-spacing: 0.05em;
+}
+
+.chartText {
+  pointer-events: none;
+}
+
+.chartTitle {
+  font-size: 2.5px;
+  font-weight: 700;
+  fill: var(--color-text-primary);
+}
+
+.chartDescription {
+  font-size: 1.8px;
+  fill: var(--color-text-secondary);
+}
+
+.chartDescriptionWrapper {
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .activitiesSection {
+    margin-top: 80px;
+    padding-top: 60px;
+  }
+
+  .activitiesTitle {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
+
+  .chartSvg {
+    min-height: 500px;
+  }
+
+  .chartNumber {
+    font-size: 2.5px;
+  }
+
+  .chartTitle {
+    font-size: 3px;
+  }
+
+  .chartDescription {
+    font-size: 7px;
+  }
 }

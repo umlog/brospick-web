@@ -1,0 +1,223 @@
+.main {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-2xl) 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-lg);
+  }
+}
+
+.container h1 {
+  margin-bottom: var(--space-2xl);
+}
+
+.checkoutContent {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--space-2xl);
+}
+
+@media (max-width: 968px) {
+  .checkoutContent {
+    grid-template-columns: 1fr;
+  }
+}
+
+.checkoutForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.formSection {
+  padding: var(--space-xl);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.formSection h2 {
+  font-size: var(--size-xl);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.formGroup input,
+.formGroup select {
+  padding: var(--space-md);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.formGroup input[readonly] {
+  cursor: pointer;
+  background-color: var(--color-bg-secondary);
+}
+
+.addressSearch {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.addressSearch input {
+  flex: 1;
+}
+
+.searchButton {
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.searchButton:hover {
+  background-color: #ff5a52;
+}
+
+.submitButton {
+  padding: var(--space-lg);
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+  font-size: var(--size-lg);
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #ff5a52;
+}
+
+.orderSummary {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  padding: var(--space-xl);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+@media (max-width: 968px) {
+  .orderSummary {
+    position: static;
+  }
+}
+
+.orderSummary h2 {
+  font-size: var(--size-xl);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+.orderItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.orderItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.orderItemName {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.orderItemSize,
+.orderItemQuantity {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.orderItemPrice {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.orderTotal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--size-base);
+  color: var(--color-text-secondary);
+}
+
+.totalDivider {
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.totalRowFinal {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+

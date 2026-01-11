@@ -3,18 +3,18 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useCart } from '../../contexts/CartContext';
 import styles from './header.module.css';
 import symbolImg from '../../styles/symbol.svg';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { getTotalItems } = useCart();
 
   const navItems = [
-    { label: 'Manifesto', href: '#manifesto' },
-    { label: 'Project', href: '#project' },
-    // { label: 'Picker', href: '#picker' },
-    // { label: 'Apparel', href: '#apparel' },
-    // { label: 'Contact', href: '#contact' },
+    { label: '의류', href: '/apparel-showcase' },
+    { label: '팀브로스픽', href: '/#manifesto' },
+    { label: '블로그', href: '/interviews' },
   ];
 
   return (
@@ -31,10 +31,16 @@ export default function Header() {
 
         <nav className={styles.navDesktop}>
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className={styles.navLink}>
+            <Link key={item.href} href={item.href} className={styles.navLink}>
               {item.label}
-            </a>
+            </Link>
           ))}
+          {/* <Link href="/cart" className={styles.cartLink}>
+            <span className={styles.cartIcon}>🛒</span>
+            {getTotalItems() > 0 && (
+              <span className={styles.cartBadge}>{getTotalItems()}</span>
+            )}
+          </Link> */}
         </nav>
 
         <button
@@ -51,15 +57,22 @@ export default function Header() {
       {isMenuOpen && (
         <nav className={styles.navMobile}>
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={styles.navLinkMobile}
               onClick={() => setIsMenuOpen(false)}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
+          {/* <Link
+            href="/cart"
+            className={styles.navLinkMobile}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            장바구니 {getTotalItems() > 0 && `(${getTotalItems()})`}
+          </Link> */}
         </nav>
       )}
     </header>

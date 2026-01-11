@@ -1,0 +1,81 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import styles from './video-embed.module.css';
+
+interface VideoEmbedProps {
+  url: string;
+  autoPlay?: boolean;
+}
+
+export default function VideoEmbed({ url, autoPlay = true }: VideoEmbedProps) {
+  const [embedUrl, setEmbedUrl] = useState<string>('');
+  const [videoType, setVideoType] = useState<'youtube' | 'instagram' | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // YouTube URL 처리
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      let videoId = '';
+      
+      if (url.includes('youtube.com/watch?v=')) {
+        videoId = url.split('v=')[1]?.split('&')[0] || '';
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+      } else if (url.includes('youtube.com/embed/')) {
+        videoId = url.split('embed/')[1]?.split('?')[0] || '';
+      }
+
+      if (videoId) {
+        const autoplayParam = autoPlay ? '&autoplay=1&mute=1' : '';
+        setEmbedUrl(`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1${autoplayParam}`);
+        setVideoType('youtube');
+      }
+    }
+    // Instagram URL 처리
+    else if (url.includes('instagram.com')) {
+      // Instagram URL에서 shortcode 추출
+      const match = url.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
+      if (match && match[1]) {
+        const shortcode = match[1];
+        setEmbedUrl(`https://www.instagram.com/p/${shortcode}/embed/`);
+        setVideoType('instagram');
+      }
+    }
+  }, [url, autoPlay]);
+
+  if (!embedUrl || !videoType) {
+    return (
+      <div className={styles.error}>
+        <p>영상을 불러올 수 없습니다.</p>
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          원본 링크로 이동
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.videoContainer} ref={containerRef}>
+      {videoType === 'youtube' && (
+        <iframe
+          src={embedUrl}
+          className={styles.videoEmbed}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title="YouTube video player"
+        />
+      )}
+      {videoType === 'instagram' && (
+        <iframe
+          src={embedUrl}
+          className={styles.videoEmbed}
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+          title="Instagram post"
+        />
+      )}
+    </div>
+  );
+}
+

@@ -8,36 +8,49 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <div className={styles.content}>
+        <div className={styles.column}>
           <Image
             src={symbolImg}
             alt="Brospick"
             className={styles.logo}
           />
-          <p>
-            무명선수가 유명선수로    Team BrosPick
-          </p>
         </div>
 
-        <div className={styles.links}>
-          <a href="https://www.instagram.com/team.brospick/" target="_blank" rel="noopener noreferrer">
-            Instagram
-          </a>
-          <a href="https://www.threads.com/@team.brospick?" target="_blank" rel="noopener noreferrer">
-            Threads
-          </a>
-          <a href="mailto:team.brospick@gmail.com">Email</a>
+        <div className={styles.column}>
+          <h3 className={styles.columnTitle}>지원</h3>
+          <ul className={styles.columnList}>
+            <li>
+              <a href="https://www.instagram.com/team.brospick/" target="_blank" rel="noopener noreferrer">
+                인스타그램
+              </a>
+            </li>
+            <li>
+              <a href="https://www.threads.com/@team.brospick?" target="_blank" rel="noopener noreferrer">
+                스레드
+              </a>
+            </li>
+            <li>
+              <a href="mailto:team.brospick@gmail.com">이메일 문의</a>
+            </li>
+            <li>개인 정보 보호 정책</li>
+            <li>쿠키 정책</li>
+            <li>면책 조항</li>
+          </ul>
         </div>
 
-        <div className={styles.companyInfo}>
-          <p>회사: BROSPICK</p>
-          <p>대표자: 홍주영</p>
-          <p>
-            주소: 경기도 파주시 금정20길 19, 504동 5층 n161호 (금촌동, 세성빌딩)
-          </p>
+        <div className={styles.column}>
+          <h3 className={styles.columnTitle}>BROSPICK</h3>
+          <ul className={styles.columnList}>
+            <li>회사: BROSPICK</li>
+            <li>대표자: 홍주영</li>
+            <li>사업자번호: </li>
+            <li>주소: 경기도 파주시 금정20길 19,<br />504동 5층 n161호 (금촌동, 세성빌딩)</li>
+          </ul>
         </div>
+      </div>
 
-        <div className={styles.bottom}>
+      <div className={styles.bottom}>
+        <div className={styles.bottomContainer}>
           <p>© {year} BROSPICK. All rights reserved.</p>
         </div>
       </div>

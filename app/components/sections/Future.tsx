@@ -1,22 +1,23 @@
 'use client';
 
 import styles from './future.module.css';
+import ScrollReveal from '../animations/ScrollReveal';
 
 const roadmap = [
   {
-    stage: 'PICKED.',
-    title: '선수 스토리와 기록을 축적하는 미디어',
-    description: '콘텐츠 수집, 플레이어 데이터베이스 구축',
+    stage: '01',
+    title: '해외리그 진출 서포트',
+    description: '해외리그 기회를 얻기 원하는 선수의 진출 기회를 연결합니다.',
   },
   {
-    stage: 'SEEN.',
-    title: '선수 데이터와 하이라이트가 쌓이는 플랫폼 (PICKER)',
-    description: '플레이어 검색/탐색 시스템, 성과 기록',
+    stage: '02',
+    title: '개인/팀 웨어',
+    description: '각 팀마다 비슷한 디자인 웨어에서 벗어나, 트렌드와 협업으로 새로운 스타일을 제안합니다.',
   },
   {
-    stage: 'PROVEN.',
-    title: '팀 단체복·의류·스폰저십까지 연결되는 선수 기반 브랜드',
-    description: '전체 에코시스템 구축, 선수 비즈니스 기회 확대',
+    stage: '03',
+    title: '선수 기록 플랫폼',
+    description: '선수 개인 커리어를 기반으로 해외 진출 기회를 연결하는 플레이어 마켓형 플랫폼입니다.',
   },
 ];
 
@@ -24,24 +25,22 @@ export default function Future() {
   return (
     <section id="future" className={styles.future}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>선수를 무대로 연결하는 브랜드</h2>
+        <ScrollReveal direction="up">
+          <h2 className={styles.sectionTitle}>Our Services</h2>
+        </ScrollReveal>
 
-        <div className={styles.roadmap}>
+        <div className={styles.grid}>
           {roadmap.map((item, idx) => (
-            <div key={idx} className={styles.roadmapItem}>
-              <div className={styles.roadmapHeader}>
-                <span className={styles.stage}>{item.stage}</span>
+            <ScrollReveal key={idx} direction="up" delay={0.1 * idx}>
+              <div className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardNumber}>{item.stage}</div>
+                  <h3>{item.title}</h3>
+                </div>
+                <p>{item.description}</p>
               </div>
-              <h3 className={styles.roadmapTitle}>{item.title}</h3>
-              <p className={styles.roadmapDescription}>{item.description}</p>
-            </div>
+            </ScrollReveal>
           ))}
-        </div>
-
-        <div className={styles.philosophy}>
-          <p className={styles.philosophyText}>
-            선수가 성장하면, 브로스픽도 함께 성장한다
-          </p>
         </div>
       </div>
     </section>
