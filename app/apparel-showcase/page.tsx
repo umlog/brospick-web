@@ -10,7 +10,6 @@ export default function ApparelShowcase() {
   // 여기에 실제 이미지 경로를 추가하세요
   const images = [
     '/apparel/brospick-sportswear-1-removebg-preview.png',
-    '/apparel/brospick-sportswear-2-removebg-preview.png',
   ];
 
   const nextImage = () => {
