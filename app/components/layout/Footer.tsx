@@ -43,8 +43,8 @@ export default function Footer() {
           <ul className={styles.columnList}>
             <li>회사: BROSPICK</li>
             <li>대표자: 홍주영</li>
-            <li>사업자번호: </li>
-            <li>주소: 경기도 파주시 금정20길 19,<br />504동 5층 n161호 (금촌동, 세성빌딩)</li>
+            <li>사업자번호: 887-05-03210</li>
+            <li>주소: 경기도 화성시 동탄신리천로 270,<br />402동 1층 u126호 (오산동)</li>
           </ul>
         </div>
       </div>

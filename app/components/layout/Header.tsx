@@ -14,9 +14,9 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
 
   const navItems = [
-    { label: '의류', href: '/apparel-showcase' },
-    { label: '팀브로스픽', href: '/#manifesto' },
-    { label: '블로그', href: '/interviews' },
+    { label: 'BROSPICK', href: '/#manifesto' },
+    { label: 'BLOG', href: '/interviews' },
+    { label: 'SPORTWEAR', href: '/apparel-showcase' },
   ];
 
   return (
@@ -100,7 +100,7 @@ export default function Header() {
             className={styles.themeToggleMobile}
             aria-label="테마 전환"
           >
-            {theme === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드'}
+            {theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}
           </button>
           {/* <Link
             href="/cart"
