@@ -64,7 +64,7 @@ const interviewsContent: Record<number, string> = {
 
 공격수의 골, 미드필더의 패스, 골키퍼의 선방. 축구에서 주목받는 플레이들은 화려하다. 하지만 수비수, 특히 풀백은 조용히 자신의 임무를 수행한다. 최은우가 그랬다.
 
-![img]/players/eunu/action-1.jpeg
+![img]/players/eunu/action-2.jpeg
 
 대학 리그에서 라이트백으로 뛰며, 묵묵히 오른쪽 측면을 지켰다. 화려한 오버래핑도, 눈에 띄는 어시스트도 많지 않았다. 하지만 그에게는 특별한 재능이 있었다. 바로 '안정감'이었다.
 
@@ -76,7 +76,7 @@ const interviewsContent: Record<number, string> = {
 
 브로스픽과의 인터뷰 제안을 받았을 때의 솔직한 심정이었다. 하지만 용기를 내어 촬영에 참여했고, 그 결정이 인생을 바꿨다.
 
-![img]/players/eunu/action-2.jpeg
+![img]/players/eunu/action-1.jpeg
 
 하이라이트 영상은 그의 장점을 명확히 보여줬다. 일대일 수비 성공률 82%, 90분간 평균 달리기 거리 11km, 패스 성공률 85%. 화려하지 않지만 팀에 꼭 필요한 선수라는 것을 증명했다.
 
