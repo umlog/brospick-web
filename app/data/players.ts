@@ -1,7 +1,9 @@
 // content에서 첫 번째 이미지를 추출하는 함수
 function extractFirstImage(content: string): string {
   const match = content.match(/!\[img\](.+)/);
-  return match ? match[1] : '/placeholder-manifesto.jpg';
+  const result = match ? match[1] : '/placeholder-manifesto.jpg';
+  console.log('Extracted image:', result);
+  return result;
 }
 
 export interface Player {
@@ -23,7 +25,7 @@ const interviewsContent: Record<number, string> = {
 
 대학 리그에서 뛰던 평범한 수비수. 화려한 득점 기록도, 언론의 주목도 없었다. 하지만 김건오에게는 특별한 재능이 있었다. 바로 경기를 '읽는 능력'이었다.
 
-![img]/players/guno/action-1-1.jpeg
+![img]/players/guno/action-1.jpg
 
 상대 공격수의 움직임을 예측하고, 한 발 앞서 자리를 잡는다. 화려하지 않지만 정확한 태클, 동료에게 이어지는 정확한 빌드업. 묵묵히 자신의 플레이를 완성해갔다.
 
@@ -33,7 +35,7 @@ const interviewsContent: Record<number, string> = {
 
 대학 리그에서 최선을 다했다. 매 경기 집중했고, 실수를 줄여나갔다. 공중볼 경합 승률 75%, 패스 성공률 88%. 숫자가 말해주는 그의 성장.
 
-![img]/players/guno/action-2-2.jpeg
+![img]/players/guno/action-2.jpg
 
 브로스픽과의 협업으로 자신의 플레이를 영상으로 정리했다. 단순한 하이라이트가 아닌, 전술적 이해도와 판단력을 보여주는 콘텐츠였다.
 
@@ -49,7 +51,7 @@ const interviewsContent: Record<number, string> = {
 
 현재 김건오는 호주 NPL에서 주전 센터백으로 활약 중이다. 리그 수비 성공률 상위권, 그리고 팀의 주장으로도 활동하고 있다.
 
-![img]/players/guno/action-3.jpeg
+![img]/players/guno/action-3.jpg
 
 "무명이라는 이유로 기회를 놓치는 선수들이 많습니다. 브로스픽이 적극적으로 해외 구단들에 저를 알려주지 않았다면, 이런 기회는 오지 않았을 겁니다. 이제는 후배들에게도 그 기회가 닿았으면 좋겠습니다."
 
@@ -119,7 +121,7 @@ export const players: Player[] = [
     name: '최은우',
     team: 'Tigers FC (호주 NPL Capital)',
     position: 'LW, AMF',
-    excerpt: '국내에서 상위리그 진출의 어려움을 극복하고 브로스픽을 통해 호주 NPL Tigers FC에 입단한 최은우 선수의 이야기.',
+    excerpt: '조선대-평택 시티즌을 거쳐 브로스픽을 통해 호주 NPL Tigers FC에 입단한 최은우 선수의 이야기.',
     image: extractFirstImage(interviewsContent[2]),
   },
 ];

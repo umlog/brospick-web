@@ -45,7 +45,7 @@ const interviews: Record<string, {
 
 청주대학교에서 뛰던 평범한 후보 선수. 화려한 득점 기록도, 언론의 주목도 없었다. 하지만 김건오에게는 특별한 강점이 있었다.
 
-![img]/players/guno/action-1-1.jpeg
+![img]/players/guno/action-1.jpg
 
 주요 강점:
 - 드리블: 뛰어난 돌파력
@@ -70,7 +70,7 @@ const interviews: Record<string, {
 
 국내외 해외 프로 진출을 꿈꾸며 독립구단에서 훈련과 활동을 병행했으나, 기존 한국 시스템에서는 프로나 해외 진출이 쉽지 않았습니다.
 
-![img]/players/guno/action-2-2.jpeg
+![img]/players/guno/action-2.jpg
 
 브로스픽과의 협업으로 자신의 플레이를 영상으로 정리했다. 단순한 하이라이트가 아닌, 자신의 강점을 보여주는 콘텐츠였다.
 
@@ -80,7 +80,7 @@ const interviews: Record<string, {
 
 2025년, 김건오는 호주 NPL의 Launceston City를 거쳐 현재 Manningham FC에서 새로운 도전을 이어가고 있습니다.
 
-![img]/players/guno/action-3.jpeg
+![img]/players/guno/action-3.jpg
 
 ## 메시지
 
@@ -122,7 +122,7 @@ const interviews: Record<string, {
 
 ## 시작은 평범했다
 
-조선대학교와 퓨처시티즌스에서 선수 생활을 이어갔지만, 그 이상의 상위리그 진출에 어려움을 겪고 있었습니다. 수원삼성블루윙즈 U-12 출신으로 시작한 축구 인생, 하지만 프로 무대까지 가는 길은 순탄치 않았습니다.
+조선대학교와 평택 시티즌에서 선수 생활을 이어갔지만, 그 이상의 상위리그 진출에 어려움을 겪고 있었습니다. 수원삼성블루윙즈 U-12 출신으로 시작한 축구 인생, 하지만 프로 무대까지 가는 길은 순탄치 않았습니다.
 
 ![img]/players/eunu/action-1.jpeg
 
@@ -145,7 +145,7 @@ const interviews: Record<string, {
 | 2016-2018 | 중앙대학교사범대부속중학교 |
 | 2019-2021 | 인천고등학교 |
 | 2022-2023 | 조선대학교 |
-| 2024 | 퓨처시티즌스 |
+| 2024 | 평택 시티즌 |
 | 2025 | HR FC |
 
 독립 구단에서도 해외 진출을 위해 노력하였지만, 한국에서의 좋은 기회와 필수적인 구단들의 테스트 시에는 한계가 있다고 판단하였습니다. 혼자 에이전시 없이 해외 진출을 위해 많은 비용을 내야 해서 무리가 있었습니다.
@@ -172,7 +172,7 @@ const interviews: Record<string, {
 최은우의 도전은 계속된다. 더 높은 무대를 향해, 그의 축구 인생은 이제부터 시작이다.`,
     highlights: [
       '수원삼성 유스 출신',
-      '조선대-퓨처시티즌스 거쳐',
+      '조선대-평택 시티즌 거쳐',
       '브로스픽을 통한 호주 진출',
       '현재 Tigers FC에서 활약 중',
     ],
@@ -271,7 +271,7 @@ export default function InterviewDetailPage({
                       width={800}
                       height={600}
                       className={styles.image}
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'contain', width: '100%', height: 'auto' }}
                     />
                   </div>
                 );

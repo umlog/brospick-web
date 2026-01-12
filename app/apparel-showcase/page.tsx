@@ -124,7 +124,7 @@ export default function ApparelShowcase() {
             <div className={styles.comingSoon}>
               {/* <p className={styles.notice}>현재 판매 준비 중입니다</p> */}
               <p className={styles.contact}>
-                문의: <a href="mailto:team.brospick@gmail.com">brospick@gmail.com</a>
+                문의: <a href="mailto:team.brospick@gmail.com">team.brospick@gmail.com</a>
               </p>
             </div>
           </div>
