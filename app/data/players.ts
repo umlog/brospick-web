@@ -124,4 +124,12 @@ export const players: Player[] = [
     excerpt: '조선대-평택 시티즌을 거쳐 브로스픽을 통해 호주 NPL Tigers FC에 입단한 최은우 선수의 이야기.',
     image: extractFirstImage(interviewsContent[2]),
   },
+  {
+    id: 3,
+    name: '김준용',
+    team: 'Sydney Olympic FC (호주 NPL NSW)',
+    position: 'CM, DMF, AMF',
+    excerpt: '국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기.',
+    image: '/players/junyong/action-1.png',
+  },
 ];
