@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './showcase.module.css';
 
 export default function ApparelShowcase() {
   const [currentImage, setCurrentImage] = useState(0);
 
-  // 여기에 실제 이미지 경로를 추가하세요
   const images = [
     '/apparel/brospick-sportswear-1-removebg-preview.png',
   ];
@@ -94,16 +94,20 @@ export default function ApparelShowcase() {
         <div className={styles.content}>
           <div className={styles.textContainer}>
             <h1 className={styles.title}>BROSPICK COLLECTION</h1>
-            <p className={styles.subtitle}>Coming Soon</p>
+            <p className={styles.subtitle}>NOW AVAILABLE</p>
 
             <div className={styles.description}>
               <p>
-                브로스픽의 첫 번째 컬렉션을 준비하고 있습니다.
+                브로스픽의 첫 번째 컬렉션이 출시되었습니다.
               </p>
               <p>
-                우리의 가치를 담은 특별한 의류로 곧 찾아뵙겠습니다.
+                우리의 가치를 담은 특별한 체육복을 만나보세요.
               </p>
             </div>
+
+            <Link href="/apparel/1" className={styles.shopButton}>
+              구매하기
+            </Link>
 
             {/* <div className={styles.info}>
               <div className={styles.infoItem}>

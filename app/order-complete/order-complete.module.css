@@ -1,0 +1,135 @@
+.main {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-2xl) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  text-align: center;
+}
+
+.successIcon {
+  color: #4CAF50;
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-size: var(--size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.orderNumber {
+  font-size: var(--size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xl);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+}
+
+.bankSection {
+  text-align: left;
+  margin-bottom: var(--space-2xl);
+}
+
+.bankSection h2 {
+  font-size: var(--size-xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.bankCard {
+  padding: var(--space-xl);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.bankRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) 0;
+}
+
+.bankLabel {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.bankValue {
+  font-size: var(--size-base);
+  color: var(--color-text-primary);
+}
+
+.bankAmount {
+  font-size: var(--size-xl);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-sm) 0;
+}
+
+.notice {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-md);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+.homeButton,
+.shopButton {
+  display: inline-block;
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--size-base);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.homeButton {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.homeButton:hover {
+  background-color: var(--color-border);
+}
+
+.shopButton {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.shopButton:hover {
+  background-color: #ff5a52;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .homeButton,
+  .shopButton {
+    text-align: center;
+  }
+}

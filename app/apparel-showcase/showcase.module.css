@@ -230,6 +230,25 @@
   text-decoration: underline;
 }
 
+.shopButton {
+  display: inline-block;
+  padding: var(--space-md) var(--space-2xl);
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-size: var(--size-lg);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: var(--space-xl);
+}
+
+.shopButton:hover {
+  background-color: #ff5a52;
+  transform: translateY(-2px);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .textContainer {

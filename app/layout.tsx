@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from './contexts/CartContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import FloatingTracker from './components/FloatingTracker';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -50,6 +52,9 @@ export default function RootLayout({
             <Header />
             <main>{children}</main>
             <Footer />
+            <Suspense fallback={null}>
+              <FloatingTracker />
+            </Suspense>
           </CartProvider>
         </ThemeProvider>
       </body>

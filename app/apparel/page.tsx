@@ -8,11 +8,11 @@ export default function ApparelPage() {
   const products = [
     {
       id: 1,
-      name: '브로스픽 반집업 체육복',
-      price: 69000,
-      originalPrice: 79000,
-      image: '/placeholder-apparel.jpg', // 임시 이미지 경로
-      description: '편안한 착용감과 스타일을 겸비한 브로스픽 반집업 체육복',
+      name: 'BROSPICK Half-Zip Training Top',
+      price: 28900,
+      originalPrice: 69000,
+      image: '/apparel/brospick-sportswear-1.png',
+      description: '편안한 착용감과 스타일을 겸비한 BROSPICK Half-Zip Training Top',
     },
   ];
 
@@ -34,9 +34,7 @@ export default function ApparelPage() {
                     src={product.image} 
                     alt={product.name}
                     onError={(e) => {
-                      // 이미지 로드 실패 시 플레이스홀더 표시
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement!.innerHTML = '<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">👕</div>';
+                      e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
                     }}
                   />
                 </div>

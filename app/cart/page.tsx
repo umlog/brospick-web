@@ -113,8 +113,7 @@ export default function CartPage() {
                       src={item.image}
                       alt={item.name}
                       onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.parentElement!.innerHTML = '<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%); display: flex; align-items: center; justify-content: center; font-size: 40px;">👕</div>';
+                        e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
                       }}
                     />
                     </div>

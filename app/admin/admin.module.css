@@ -1,0 +1,376 @@
+.main {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-2xl) 0;
+}
+
+/* Login */
+.loginContainer {
+  max-width: 400px;
+  margin: 100px auto 0;
+  padding: 0 var(--space-md);
+  text-align: center;
+}
+
+.loginContainer h1 {
+  margin-bottom: var(--space-xl);
+  color: var(--color-text-primary);
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.loginForm input {
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  font-family: inherit;
+  text-align: center;
+}
+
+.loginForm input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.loginForm button {
+  padding: var(--space-md);
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-size: var(--size-base);
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loginForm button:hover {
+  background-color: #ff5a52;
+}
+
+/* Dashboard */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-lg);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+.header h1 {
+  color: var(--color-text-primary);
+}
+
+.refreshButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  font-weight: 600;
+}
+
+.refreshButton:hover {
+  background-color: var(--color-border);
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  transition: all 0.2s ease;
+}
+
+.filterButton:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.filterActive {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+.filterActive:hover {
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+/* States */
+.loading,
+.empty {
+  text-align: center;
+  padding: var(--space-2xl);
+  color: var(--color-text-secondary);
+  font-size: var(--size-base);
+}
+
+/* Order List */
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.orderCard {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.orderHeader:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orderNumber {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: monospace;
+}
+
+.orderDate {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.orderQuick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.orderCustomer {
+  font-size: var(--size-base);
+  color: var(--color-text-primary);
+}
+
+.orderAmount {
+  font-size: var(--size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background-color: #ff9800;
+  color: #000;
+}
+
+.statusConfirmed {
+  background-color: #2196F3;
+  color: #fff;
+}
+
+.statusPreparing {
+  background-color: #9C27B0;
+  color: #fff;
+}
+
+.statusShipping {
+  background-color: #00BCD4;
+  color: #000;
+}
+
+.statusDelivered {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+/* Order Detail */
+.orderDetail {
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.detailSection h3 {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.detailSection p {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Status Control */
+.statusHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.statusHeader h3 {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0;
+}
+
+.notifyToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.notifyToggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.notifyToggle span {
+  user-select: none;
+}
+
+.noEmail {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+.statusControl h3 {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.statusButtons {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.statusButton {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.statusButton:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.statusButtonActive {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+  cursor: default;
+}
+
+.statusButton:disabled {
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .orderQuick {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .statusButtons {
+    flex-direction: column;
+  }
+
+  .statusButton {
+    text-align: center;
+  }
+}

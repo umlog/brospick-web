@@ -16,6 +16,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { clearCart } = useCart();
   const [checkoutItems, setCheckoutItems] = useState<CartItem[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,10 +24,9 @@ export default function CheckoutPage() {
     address: '',
     addressDetail: '',
     postalCode: '',
-    paymentMethod: 'card',
+    depositorName: '',
   });
 
-  // sessionStorage에서 선택된 항목 불러오기
   useEffect(() => {
     const storedItems = sessionStorage.getItem('checkoutItems');
     if (storedItems) {
@@ -42,52 +42,96 @@ export default function CheckoutPage() {
     }
   }, [router]);
 
-  // 선택된 항목들의 총 가격
   const selectedTotalPrice = checkoutItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+  const shippingFee = 3000;
 
   if (checkoutItems.length === 0) {
     return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 실제로는 결제 API를 호출해야 합니다
-    alert('결제가 완료되었습니다! (테스트 모드)');
-    
-    // 선택된 항목만 장바구니에서 제거
-    const currentCart = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
-    const remainingItems = currentCart.filter((item: CartItem) => {
-      return !checkoutItems.some(
-        (checkoutItem) => 
-          checkoutItem.id === item.id && 
-          checkoutItem.size === item.size &&
-          checkoutItem.quantity === item.quantity
-      );
-    });
-    
-    // 수량이 다른 경우 처리 (일부만 결제한 경우)
-    const updatedItems = remainingItems.map((item: CartItem) => {
-      const checkoutItem = checkoutItems.find(
-        (ci) => ci.id === item.id && ci.size === item.size
-      );
-      if (checkoutItem && item.quantity > checkoutItem.quantity) {
-        return { ...item, quantity: item.quantity - checkoutItem.quantity };
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: formData.name,
+          customerPhone: formData.phone,
+          customerEmail: formData.email,
+          postalCode: formData.postalCode,
+          address: formData.address,
+          addressDetail: formData.addressDetail,
+          totalAmount: selectedTotalPrice + shippingFee,
+          shippingFee,
+          depositorName: formData.depositorName,
+          items: checkoutItems.map((item) => ({
+            productName: item.name,
+            size: item.size,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || '주문에 실패했습니다.');
       }
-      return item;
-    }).filter((item: CartItem) => item.quantity > 0);
-    
-    localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
-    sessionStorage.removeItem('checkoutItems');
-    
-    // 장바구니가 비어있으면 clearCart 호출, 아니면 페이지 새로고침으로 상태 업데이트
-    if (updatedItems.length === 0) {
-      clearCart();
-    } else {
-      // 장바구니 상태를 업데이트하기 위해 페이지 새로고침
-      window.location.href = '/';
+
+      const data = await response.json();
+
+      // 장바구니에서 구매한 상품 제거
+      const currentCart = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
+      const remainingItems = currentCart.filter((item: CartItem) => {
+        return !checkoutItems.some(
+          (checkoutItem) =>
+            checkoutItem.id === item.id &&
+            checkoutItem.size === item.size &&
+            checkoutItem.quantity === item.quantity
+        );
+      });
+
+      const updatedItems = remainingItems
+        .map((item: CartItem) => {
+          const checkoutItem = checkoutItems.find(
+            (ci) => ci.id === item.id && ci.size === item.size
+          );
+          if (checkoutItem && item.quantity > checkoutItem.quantity) {
+            return { ...item, quantity: item.quantity - checkoutItem.quantity };
+          }
+          return item;
+        })
+        .filter((item: CartItem) => item.quantity > 0);
+
+      localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
+      sessionStorage.removeItem('checkoutItems');
+
+      if (updatedItems.length === 0) {
+        clearCart();
+      }
+
+      // 주문 완료 페이지로 이동
+      sessionStorage.setItem(
+        'orderComplete',
+        JSON.stringify({
+          orderNumber: data.orderNumber,
+          totalAmount: data.totalAmount,
+          shippingFee: data.shippingFee,
+          depositorName: formData.depositorName,
+        })
+      );
+      router.push('/order-complete');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : '주문에 실패했습니다. 다시 시도해주세요.');
+      setIsSubmitting(false);
     }
   };
 
@@ -96,7 +140,6 @@ export default function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 카카오 주소 API 열기
   const openAddressSearch = () => {
     if (typeof window !== 'undefined' && window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
@@ -128,7 +171,6 @@ export default function CheckoutPage() {
             address: addr + extraAddr,
           }));
 
-          // 상세주소 입력란에 포커스
           const addressDetailInput = document.getElementById('addressDetail') as HTMLInputElement;
           if (addressDetailInput) {
             addressDetailInput.focus();
@@ -178,7 +220,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="email">이메일 (선택사항)</label>
+                  <label htmlFor="email">이메일 *</label>
                   <input
                     type="email"
                     id="email"
@@ -186,6 +228,7 @@ export default function CheckoutPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="주문 확인서를 받으실 이메일"
+                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -237,25 +280,39 @@ export default function CheckoutPage() {
 
               <section className={styles.formSection}>
                 <h2>결제 방법</h2>
+                <div className={styles.bankInfo}>
+                  <div className={styles.bankLabel}>무통장입금</div>
+                  <div className={styles.bankDetails}>
+                    <p className={styles.bankAccount}>
+                      <span className={styles.bankName}>카카오뱅크</span>
+                      <span>3333-27-7618216 (예금주: 홍주영)</span>
+                    </p>
+                    <p className={styles.bankNotice}>
+                      주문 후 24시간 이내에 입금해주세요.
+                      미입금 시 주문이 자동 취소됩니다.
+                    </p>
+                  </div>
+                </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="paymentMethod">결제 수단 *</label>
-                  <select
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    value={formData.paymentMethod}
+                  <label htmlFor="depositorName">입금자명 *</label>
+                  <input
+                    type="text"
+                    id="depositorName"
+                    name="depositorName"
+                    value={formData.depositorName}
                     onChange={handleInputChange}
+                    placeholder="실제 입금하실 분의 이름"
                     required
-                  >
-                    <option value="card">신용카드</option>
-                    <option value="bank">무통장 입금</option>
-                    <option value="kakao">카카오페이</option>
-                    <option value="toss">토스페이</option>
-                  </select>
+                  />
                 </div>
               </section>
 
-              <button type="submit" className={styles.submitButton}>
-                결제하기
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? '주문 처리 중...' : `₩${(selectedTotalPrice + shippingFee).toLocaleString()} 주문하기`}
               </button>
             </form>
 
@@ -282,12 +339,12 @@ export default function CheckoutPage() {
                 </div>
                 <div className={styles.totalRow}>
                   <span>배송비</span>
-                  <span>₩3,000</span>
+                  <span>₩{shippingFee.toLocaleString()}</span>
                 </div>
                 <div className={styles.totalDivider} />
                 <div className={styles.totalRowFinal}>
                   <span>총 결제 금액</span>
-                  <span>₩{(selectedTotalPrice + 3000).toLocaleString()}</span>
+                  <span>₩{(selectedTotalPrice + shippingFee).toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -297,4 +354,3 @@ export default function CheckoutPage() {
     </>
   );
 }
-

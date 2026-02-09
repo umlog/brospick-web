@@ -1,0 +1,286 @@
+'use client';
+
+import { useState, useCallback } from 'react';
+import styles from './admin.module.css';
+
+interface OrderItem {
+  id: string;
+  product_name: string;
+  size: string;
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string | null;
+  postal_code: string;
+  address: string;
+  address_detail: string | null;
+  total_amount: number;
+  shipping_fee: number;
+  status: string;
+  depositor_name: string | null;
+  payment_method: string;
+  created_at: string;
+  order_items: OrderItem[];
+}
+
+const STATUS_OPTIONS = ['입금대기', '입금확인', '배송준비', '배송중', '배송완료'];
+
+export default function AdminPage() {
+  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [filterStatus, setFilterStatus] = useState('');
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+
+  const fetchOrders = useCallback(async (pw: string, status?: string) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ password: pw });
+      if (status) params.set('status', status);
+
+      const response = await fetch(`/api/orders?${params}`);
+      if (!response.ok) {
+        if (response.status === 401) {
+          alert('비밀번호가 올바르지 않습니다.');
+          setIsAuthenticated(false);
+          return;
+        }
+        throw new Error('주문 조회 실패');
+      }
+
+      const data = await response.json();
+      setOrders(data.orders);
+      setIsAuthenticated(true);
+    } catch (error) {
+      alert('주문 조회에 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchOrders(password);
+  };
+
+  const [notifyOnChange, setNotifyOnChange] = useState(true);
+
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    const order = orders.find((o) => o.id === orderId);
+    const hasEmail = order?.customer_email;
+    const willNotify = notifyOnChange && hasEmail;
+
+    const confirmMsg = willNotify
+      ? `상태를 "${newStatus}"(으)로 변경하고 고객에게 알림을 보낼까요?`
+      : `상태를 "${newStatus}"(으)로 변경할까요?`;
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password,
+          status: newStatus,
+          sendNotification: notifyOnChange,
+        }),
+      });
+
+      if (!response.ok) throw new Error('상태 변경 실패');
+
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, status: newStatus } : o
+        )
+      );
+
+      if (willNotify) {
+        alert(`상태 변경 완료! ${order.customer_email}로 알림을 발송했습니다.`);
+      }
+    } catch (error) {
+      alert('상태 변경에 실패했습니다.');
+    }
+  };
+
+  const handleFilterChange = (status: string) => {
+    setFilterStatus(status);
+    fetchOrders(password, status || undefined);
+  };
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case '입금대기': return styles.statusPending;
+      case '입금확인': return styles.statusConfirmed;
+      case '배송준비': return styles.statusPreparing;
+      case '배송중': return styles.statusShipping;
+      case '배송완료': return styles.statusDelivered;
+      default: return '';
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <main className={styles.main}>
+        <div className={styles.loginContainer}>
+          <h1>관리자 로그인</h1>
+          <form onSubmit={handleLogin} className={styles.loginForm}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호 입력"
+              required
+            />
+            <button type="submit">로그인</button>
+          </form>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>주문 관리</h1>
+          <button
+            onClick={() => fetchOrders(password, filterStatus || undefined)}
+            className={styles.refreshButton}
+          >
+            새로고침
+          </button>
+        </div>
+
+        <div className={styles.filters}>
+          <button
+            className={`${styles.filterButton} ${filterStatus === '' ? styles.filterActive : ''}`}
+            onClick={() => handleFilterChange('')}
+          >
+            전체
+          </button>
+          {STATUS_OPTIONS.map((status) => (
+            <button
+              key={status}
+              className={`${styles.filterButton} ${filterStatus === status ? styles.filterActive : ''}`}
+              onClick={() => handleFilterChange(status)}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <p className={styles.loading}>로딩 중...</p>
+        ) : orders.length === 0 ? (
+          <p className={styles.empty}>주문이 없습니다.</p>
+        ) : (
+          <div className={styles.orderList}>
+            {orders.map((order) => (
+              <div key={order.id} className={styles.orderCard}>
+                <div
+                  className={styles.orderHeader}
+                  onClick={() =>
+                    setExpandedOrder(expandedOrder === order.id ? null : order.id)
+                  }
+                >
+                  <div className={styles.orderMeta}>
+                    <span className={styles.orderNumber}>{order.order_number}</span>
+                    <span className={styles.orderDate}>{formatDate(order.created_at)}</span>
+                  </div>
+                  <div className={styles.orderQuick}>
+                    <span className={styles.orderCustomer}>{order.customer_name}</span>
+                    <span className={styles.orderAmount}>
+                      ₩{order.total_amount.toLocaleString()}
+                    </span>
+                    <span className={`${styles.statusBadge} ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </div>
+                </div>
+
+                {expandedOrder === order.id && (
+                  <div className={styles.orderDetail}>
+                    <div className={styles.detailSection}>
+                      <h3>고객 정보</h3>
+                      <p>이름: {order.customer_name}</p>
+                      <p>전화: {order.customer_phone}</p>
+                      {order.customer_email && <p>이메일: {order.customer_email}</p>}
+                      <p>주소: [{order.postal_code}] {order.address} {order.address_detail || ''}</p>
+                    </div>
+
+                    <div className={styles.detailSection}>
+                      <h3>결제 정보</h3>
+                      <p>결제방법: {order.payment_method}</p>
+                      <p>입금자명: {order.depositor_name || '-'}</p>
+                      <p>상품금액: ₩{(order.total_amount - order.shipping_fee).toLocaleString()}</p>
+                      <p>배송비: ₩{order.shipping_fee.toLocaleString()}</p>
+                      <p>총액: ₩{order.total_amount.toLocaleString()}</p>
+                    </div>
+
+                    <div className={styles.detailSection}>
+                      <h3>주문 상품</h3>
+                      {order.order_items.map((item) => (
+                        <div key={item.id} className={styles.detailItem}>
+                          <span>{item.product_name} ({item.size})</span>
+                          <span>{item.quantity}개 × ₩{item.price.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className={styles.statusControl}>
+                      <div className={styles.statusHeader}>
+                        <h3>상태 변경</h3>
+                        <label className={styles.notifyToggle}>
+                          <input
+                            type="checkbox"
+                            checked={notifyOnChange}
+                            onChange={(e) => setNotifyOnChange(e.target.checked)}
+                          />
+                          <span>고객에게 알림 보내기</span>
+                          {!order.customer_email && (
+                            <span className={styles.noEmail}>(이메일 없음)</span>
+                          )}
+                        </label>
+                      </div>
+                      <div className={styles.statusButtons}>
+                        {STATUS_OPTIONS.map((status) => (
+                          <button
+                            key={status}
+                            className={`${styles.statusButton} ${order.status === status ? styles.statusButtonActive : ''}`}
+                            onClick={() => handleStatusChange(order.id, status)}
+                            disabled={order.status === status}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
