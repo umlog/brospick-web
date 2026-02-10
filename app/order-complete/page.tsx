@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { BANK } from '../../lib/constants';
 import styles from './order-complete.module.css';
 
 interface OrderData {
@@ -52,15 +53,15 @@ export default function OrderCompletePage() {
           <div className={styles.bankCard}>
             <div className={styles.bankRow}>
               <span className={styles.bankLabel}>입금 은행</span>
-              <span className={styles.bankValue}>카카오뱅크</span>
+              <span className={styles.bankValue}>{BANK.name}</span>
             </div>
             <div className={styles.bankRow}>
               <span className={styles.bankLabel}>계좌번호</span>
-              <span className={styles.bankValue}>3333-27-7618216</span>
+              <span className={styles.bankValue}>{BANK.account}</span>
             </div>
             <div className={styles.bankRow}>
               <span className={styles.bankLabel}>예금주</span>
-              <span className={styles.bankValue}>홍주영</span>
+              <span className={styles.bankValue}>{BANK.holder}</span>
             </div>
             <div className={styles.divider} />
             <div className={styles.bankRow}>
@@ -73,7 +74,7 @@ export default function OrderCompletePage() {
             </div>
           </div>
           <p className={styles.notice}>
-            주문 후 24시간 이내에 입금해주세요. 미입금 시 주문이 자동 취소됩니다.
+            {BANK.notice}
           </p>
         </div>
 

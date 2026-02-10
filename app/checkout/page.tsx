@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { useCart, CartItem } from '../contexts/CartContext';
+import { SHIPPING, BANK } from '../../lib/constants';
 import styles from './checkout-page.module.css';
 
 declare global {
@@ -68,7 +69,7 @@ export default function CheckoutPage() {
           address: formData.address,
           addressDetail: formData.addressDetail,
           totalAmount: selectedTotalPrice,
-          shippingFee: 0,
+          shippingFee: SHIPPING.freeShipping ? 0 : SHIPPING.fee,
           depositorName: formData.depositorName,
           items: checkoutItems.map((item) => ({
             productName: item.name,
@@ -282,12 +283,11 @@ export default function CheckoutPage() {
                   <div className={styles.bankLabel}>무통장입금</div>
                   <div className={styles.bankDetails}>
                     <p className={styles.bankAccount}>
-                      <span className={styles.bankName}>카카오뱅크</span>
-                      <span>3333-27-7618216 (예금주: 홍주영)</span>
+                      <span className={styles.bankName}>{BANK.name}</span>
+                      <span>{BANK.account} (예금주: {BANK.holder})</span>
                     </p>
                     <p className={styles.bankNotice}>
-                      주문 후 24시간 이내에 입금해주세요.
-                      미입금 시 주문이 자동 취소됩니다.
+                      {BANK.notice}
                     </p>
                   </div>
                 </div>
@@ -337,12 +337,16 @@ export default function CheckoutPage() {
                 </div>
                 <div className={styles.totalRow}>
                   <span>배송비</span>
-                  <span className={styles.shippingFree}>₩3,500 → 무료</span>
+                  <span className={SHIPPING.freeShipping ? styles.shippingFree : undefined}>
+                    ₩{SHIPPING.fee.toLocaleString()}{SHIPPING.freeShipping && ' → 무료'}
+                  </span>
                 </div>
-                <div className={styles.totalRow}>
-                  <span>배송비 할인</span>
-                  <span className={styles.discountText}>-₩3,500</span>
-                </div>
+                {SHIPPING.freeShipping && (
+                  <div className={styles.totalRow}>
+                    <span>배송비 할인</span>
+                    <span className={styles.discountText}>-₩{SHIPPING.fee.toLocaleString()}</span>
+                  </div>
+                )}
                 <div className={styles.totalDivider} />
                 <div className={styles.totalRowFinal}>
                   <span>총 결제 금액</span>

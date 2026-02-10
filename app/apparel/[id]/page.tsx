@@ -4,39 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
+import { products, getDiscountPercent } from '../../../lib/products';
+import { SHIPPING, CONTACT } from '../../../lib/constants';
 import styles from './product-detail.module.css';
-
-const products: Record<string, {
-  id: number;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  images: string[];
-  tagline: string;
-  description: string;
-  sizes: string[];
-  soldOut?: string[];
-}> = {
-  '1': {
-    id: 1,
-    name: 'Half-Zip Training Top',
-    price: 29900,
-    originalPrice: 69000,
-    image: '/apparel/bp-detail1.JPG',
-    images: [
-      '/apparel/bp-detail1.JPG',
-      '/apparel/bp-detailpoint.JPG',
-      '/apparel/bp-light-second.png',
-      '/apparel/bp-light-main.png',
-      '/apparel/bp-sizes.JPG',
-    ],
-    tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
-    description: '편안한 착용감과 슬림한 실루엣을 동시에 잡은 Half-Zip Training Top. 고탄성 원단으로 몸을 안정감 있게 잡아주면서도 움직임은 자유롭고, 땀은 빠르게 건조되어 격한 운동에도 쾌적함을 유지해 줍니다.',
-    sizes: ['S', 'M', 'L', 'XL', '2XL'],
-    soldOut: ['XL'],
-  },
-};
 
 function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -193,12 +163,14 @@ export default function ProductDetailPage({
                       ₩{product.originalPrice.toLocaleString()}
                     </span>
                     <span className={styles.discountBadge}>
-                      {Math.round((1 - product.price / product.originalPrice) * 100)}%
+                      {getDiscountPercent(product.price, product.originalPrice)}%
                     </span>
                   </>
                 )}
               </div>
-              <span className={styles.shippingInfo}>배송비 포함</span>
+              {SHIPPING.freeShipping && (
+                <span className={styles.shippingInfo}>배송비 포함</span>
+              )}
 
               <div className={styles.sizeChartInline}>
                 <table className={styles.sizeTable}>
@@ -335,7 +307,10 @@ export default function ProductDetailPage({
                 <Accordion title="배송">
                   <div className={styles.accordionContent}>
                     <ul>
-                      <li>배송비: ₩3,500 → 무료 (할인)</li>
+                      <li>배송비: {SHIPPING.freeShipping
+                        ? `₩${SHIPPING.fee.toLocaleString()} → 무료 (할인)`
+                        : `₩${SHIPPING.fee.toLocaleString()}`}
+                      </li>
                       <li>입금 확인 후 1~3 영업일 이내 발송</li>
                       <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>
                       <li>제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다</li>
@@ -350,7 +325,7 @@ export default function ProductDetailPage({
                       <li>단순 변심에 의한 반품 시 왕복 배송비 고객 부담</li>
                       <li>제품 하자의 경우 배송비 무료 교환/반품</li>
                       <li>착용 흔적이 있거나 태그 제거 시 교환/반품 불가</li>
-                      <li>문의: <a href="mailto:team.brospick@gmail.com">team.brospick@gmail.com</a></li>
+                      <li>문의: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
                     </ul>
                   </div>
                 </Accordion>

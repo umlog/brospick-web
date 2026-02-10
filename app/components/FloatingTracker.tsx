@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { CONTACT } from '../../lib/constants';
 import styles from './FloatingTracker.module.css';
 
 type Tab = 'track' | 'inquiry';
@@ -117,7 +118,7 @@ export default function FloatingTracker() {
       `추가 요청: ${inquiryData.message}`,
     ].join('\n');
 
-    window.location.href = `mailto:team.brospick@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     setChatMessages(prev => [
       ...prev,

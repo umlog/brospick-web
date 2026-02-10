@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
+import { SHIPPING } from '../../lib/constants';
 import styles from './cart-page.module.css';
 
 export default function CartPage() {
@@ -162,12 +163,16 @@ export default function CartPage() {
                 </div>
                 <div className={styles.summaryRow}>
                   <span>배송비</span>
-                  <span className={styles.shippingFree}>₩3,500 → 무료</span>
+                  <span className={SHIPPING.freeShipping ? styles.shippingFree : undefined}>
+                    ₩{SHIPPING.fee.toLocaleString()}{SHIPPING.freeShipping && ' → 무료'}
+                  </span>
                 </div>
-                <div className={styles.summaryRow}>
-                  <span>배송비 할인</span>
-                  <span className={styles.discountText}>-₩3,500</span>
-                </div>
+                {SHIPPING.freeShipping && (
+                  <div className={styles.summaryRow}>
+                    <span>배송비 할인</span>
+                    <span className={styles.discountText}>-₩{SHIPPING.fee.toLocaleString()}</span>
+                  </div>
+                )}
                 <div className={styles.summaryDivider} />
                 <div className={styles.summaryRowTotal}>
                   <span>총 결제 금액</span>

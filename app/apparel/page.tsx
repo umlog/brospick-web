@@ -1,21 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { productList, getDiscountPercent } from '../../lib/products';
+import { SHIPPING } from '../../lib/constants';
 import styles from './apparel-page.module.css';
 
 export default function ApparelPage() {
-  // 반집업 체육복만 표시
-  const products = [
-    {
-      id: 1,
-      name: 'Half-Zip Training Top',
-      price: 29900,
-      originalPrice: 69000,
-      image: '/apparel/brospick-sportswear-1.png',
-      description: '편안한 착용감과 스타일을 겸비한 Half-Zip Training Top',
-    },
-  ];
-
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -27,7 +17,7 @@ export default function ApparelPage() {
         </div>
 
         <div className={styles.productsGrid}>
-          {products.map((product) => (
+          {productList.map((product) => (
             <Link key={product.id} href={`/apparel/${product.id}`} className={styles.productCard}>
               <div className={styles.productImage}>
                 <img
@@ -48,12 +38,14 @@ export default function ApparelPage() {
                         ₩{product.originalPrice.toLocaleString()}
                       </span>
                       <span className={styles.discountBadge}>
-                        {Math.round((1 - product.price / product.originalPrice) * 100)}%
+                        {getDiscountPercent(product.price, product.originalPrice)}%
                       </span>
                     </>
                   )}
                 </div>
-                <span className={styles.shippingInfo}>배송비 포함</span>
+                {SHIPPING.freeShipping && (
+                  <span className={styles.shippingInfo}>배송비 포함</span>
+                )}
                 <span className={styles.viewDetail}>자세히 보기 →</span>
               </div>
             </Link>

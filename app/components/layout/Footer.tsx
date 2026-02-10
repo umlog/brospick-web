@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { CONTACT } from '../../../lib/constants';
 import styles from './footer.module.css';
 import symbolImg from '../../styles/txtlogo.svg';
 
@@ -30,7 +31,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="mailto:team.brospick@gmail.com">이메일 문의</a>
+              <a href={`mailto:${CONTACT.email}`}>이메일 문의</a>
             </li>
             <li>개인 정보 보호 정책</li>
             <li>쿠키 정책</li>

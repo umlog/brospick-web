@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { BANK } from './constants';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -92,9 +93,9 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
 
       <div style="background:#fff8f0;border:1px solid #ffe0b2;border-radius:8px;padding:16px;margin-bottom:24px;">
         <h4 style="font-size:14px;color:#e65100;margin:0 0 10px;">입금 안내 (무통장입금)</h4>
-        <p style="font-size:13px;color:#555;margin:0 0 4px;">은행명: <strong>카카오뱅크</strong></p>
-        <p style="font-size:13px;color:#555;margin:0 0 4px;">계좌번호: <strong>3333-27-7618216</strong></p>
-        <p style="font-size:13px;color:#555;margin:0 0 4px;">예금주: <strong>홍주영</strong></p>
+        <p style="font-size:13px;color:#555;margin:0 0 4px;">은행명: <strong>${BANK.name}</strong></p>
+        <p style="font-size:13px;color:#555;margin:0 0 4px;">계좌번호: <strong>${BANK.account}</strong></p>
+        <p style="font-size:13px;color:#555;margin:0 0 4px;">예금주: <strong>${BANK.holder}</strong></p>
         <p style="font-size:13px;color:#555;margin:0 0 4px;">입금자명: <strong>${data.depositorName}</strong></p>
         <p style="font-size:12px;color:#e65100;margin:12px 0 0;font-weight:500;">
           ⚠ 주문 후 24시간 이내에 입금해주세요.
