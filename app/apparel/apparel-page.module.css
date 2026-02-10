@@ -144,6 +144,20 @@
   text-decoration: line-through;
 }
 
+.discountBadge {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: #ff4d4f;
+  background-color: rgba(255, 77, 79, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.shippingInfo {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
 .viewDetail {
   margin-top: auto;
   color: var(--color-accent);

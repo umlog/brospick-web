@@ -353,6 +353,104 @@
   opacity: 0.5;
 }
 
+/* Tracking Number Modal */
+.trackingModal {
+  margin-top: var(--space-md);
+  padding: var(--space-lg);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.trackingModal h4 {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-md);
+}
+
+.trackingModal input {
+  width: 100%;
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  font-family: monospace;
+  box-sizing: border-box;
+}
+
+.trackingModal input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.trackingModalButtons {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  justify-content: flex-end;
+}
+
+.trackingCancelButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trackingCancelButton:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.trackingConfirmButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trackingConfirmButton:hover {
+  background-color: #ff5a52;
+}
+
+/* Danger Zone */
+.dangerZone {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: transparent;
+  color: #e53935;
+  border: 1px solid #e53935;
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteButton:hover {
+  background-color: #e53935;
+  color: #ffffff;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .orderHeader {

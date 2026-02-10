@@ -31,7 +31,7 @@
   min-height: 500px;
   max-height: 800px;
   overflow: hidden;
-  background: var(--color-apparel-bg);
+  background: var(--color-bg-primary);
 }
 
 @media (max-width: 1024px) {
@@ -73,20 +73,11 @@
 .image {
   object-fit: contain;
   object-position: center;
-  filter:
-    brightness(1.05)
-    contrast(1.15)
-    saturate(1.2)
-    blur(0.3px);
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  transition: filter 0.3s ease;
-  max-width: 70%;
-  max-height: 70%;
-  margin: auto;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+}
+
+.imageCover {
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Navigation Buttons */

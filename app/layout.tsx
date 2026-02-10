@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
@@ -14,6 +14,13 @@ const notoSansKR = Noto_Sans_KR({
   variable: '--font-noto-sans-kr',
   display: 'swap',
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: 'BROSPICK',

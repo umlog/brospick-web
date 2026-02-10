@@ -29,7 +29,7 @@ interface Order {
   order_items: OrderItem[];
 }
 
-const STATUS_OPTIONS = ['입금대기', '입금확인', '배송준비', '배송중', '배송완료'];
+const STATUS_OPTIONS = ['입금대기', '입금확인', '배송중', '배송완료'];
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
@@ -38,14 +38,18 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [trackingModal, setTrackingModal] = useState<string | null>(null);
+  const [trackingInput, setTrackingInput] = useState('');
 
   const fetchOrders = useCallback(async (pw: string, status?: string) => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ password: pw });
+      const params = new URLSearchParams();
       if (status) params.set('status', status);
 
-      const response = await fetch(`/api/orders?${params}`);
+      const response = await fetch(`/api/orders?${params}`, {
+        headers: { 'x-admin-password': pw },
+      });
       if (!response.ok) {
         if (response.status === 401) {
           alert('비밀번호가 올바르지 않습니다.');
@@ -72,7 +76,7 @@ export default function AdminPage() {
 
   const [notifyOnChange, setNotifyOnChange] = useState(true);
 
-  const handleStatusChange = async (orderId: string, newStatus: string) => {
+  const handleStatusChange = async (orderId: string, newStatus: string, trackingNumber?: string) => {
     const order = orders.find((o) => o.id === orderId);
     const hasEmail = order?.customer_email;
     const willNotify = notifyOnChange && hasEmail;
@@ -86,11 +90,14 @@ export default function AdminPage() {
     try {
       const response = await fetch(`/api/orders/${orderId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
         body: JSON.stringify({
-          password,
           status: newStatus,
           sendNotification: notifyOnChange,
+          ...(trackingNumber && { trackingNumber }),
         }),
       });
 
@@ -107,6 +114,40 @@ export default function AdminPage() {
       }
     } catch (error) {
       alert('상태 변경에 실패했습니다.');
+    }
+  };
+
+  const handleShippingClick = (orderId: string) => {
+    setTrackingModal(orderId);
+    setTrackingInput('');
+  };
+
+  const handleTrackingSubmit = () => {
+    if (!trackingModal) return;
+    if (!trackingInput.trim()) {
+      alert('운송장번호를 입력해주세요.');
+      return;
+    }
+    handleStatusChange(trackingModal, '배송중', trackingInput.trim());
+    setTrackingModal(null);
+    setTrackingInput('');
+  };
+
+  const handleDeleteOrder = async (orderId: string, orderNumber: string) => {
+    if (!confirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`)) return;
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': password },
+      });
+
+      if (!response.ok) throw new Error('삭제 실패');
+
+      setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      setExpandedOrder(null);
+    } catch (error) {
+      alert('주문 삭제에 실패했습니다.');
     }
   };
 
@@ -266,13 +307,56 @@ export default function AdminPage() {
                           <button
                             key={status}
                             className={`${styles.statusButton} ${order.status === status ? styles.statusButtonActive : ''}`}
-                            onClick={() => handleStatusChange(order.id, status)}
+                            onClick={() =>
+                              status === '배송중'
+                                ? handleShippingClick(order.id)
+                                : handleStatusChange(order.id, status)
+                            }
                             disabled={order.status === status}
                           >
                             {status}
                           </button>
                         ))}
                       </div>
+
+                      {trackingModal === order.id && (
+                        <div className={styles.trackingModal}>
+                          <h4>운송장번호 입력</h4>
+                          <input
+                            type="text"
+                            value={trackingInput}
+                            onChange={(e) => setTrackingInput(e.target.value)}
+                            placeholder="운송장번호를 입력하세요"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleTrackingSubmit();
+                            }}
+                          />
+                          <div className={styles.trackingModalButtons}>
+                            <button
+                              className={styles.trackingCancelButton}
+                              onClick={() => setTrackingModal(null)}
+                            >
+                              취소
+                            </button>
+                            <button
+                              className={styles.trackingConfirmButton}
+                              onClick={handleTrackingSubmit}
+                            >
+                              배송중으로 변경
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className={styles.dangerZone}>
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteOrder(order.id, order.order_number)}
+                      >
+                        주문 삭제
+                      </button>
                     </div>
                   </div>
                 )}

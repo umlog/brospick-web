@@ -7,6 +7,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-md);
+  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
@@ -42,6 +43,12 @@
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .formSection {
+    padding: var(--space-md);
+  }
 }
 
 .formSection h2 {
@@ -139,9 +146,11 @@
 
 .bankAccount {
   display: flex;
-  gap: var(--space-sm);
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-sm);
   font-size: var(--size-base);
   color: var(--color-text-primary);
+  word-break: break-all;
 }
 
 .bankName {

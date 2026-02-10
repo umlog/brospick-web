@@ -138,6 +138,7 @@ interface StatusChangeEmailData {
   customerEmail: string;
   status: string;
   trackingUrl: string;
+  trackingNumber?: string;
 }
 
 const STATUS_INFO: Record<string, { title: string; message: string; color: string; bgColor: string }> = {
@@ -146,12 +147,6 @@ const STATUS_INFO: Record<string, { title: string; message: string; color: strin
     message: '입금이 정상적으로 확인되었습니다. 빠르게 배송 준비를 시작하겠습니다.',
     color: '#34c759',
     bgColor: '#f0faf3',
-  },
-  '배송준비': {
-    title: '배송 준비 중입니다',
-    message: '주문하신 상품의 배송을 준비하고 있습니다. 곧 발송될 예정입니다.',
-    color: '#007aff',
-    bgColor: '#f0f6ff',
   },
   '배송중': {
     title: '상품이 배송 중입니다',
@@ -170,6 +165,35 @@ const STATUS_INFO: Record<string, { title: string; message: string; color: strin
 export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
   const info = STATUS_INFO[data.status];
   if (!info) return;
+
+  const copyButtonStyle = `display:inline-block;margin-left:8px;padding:2px 8px;background:#eee;border-radius:4px;font-size:11px;color:#555;text-decoration:none;cursor:pointer;vertical-align:middle;`;
+
+  const trackingNumberHtml = data.trackingNumber ? `
+      <div style="background:#f0f6ff;border:1px solid #d0e3ff;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;color:#888;">운송장번호</span>
+          <span>
+            <span style="font-size:15px;color:#333;font-weight:700;font-family:monospace;letter-spacing:0.5px;">${data.trackingNumber}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${data.trackingNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+          </span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:#888;">주문번호</span>
+          <span>
+            <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${data.orderNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+          </span>
+        </div>
+      </div>` : `
+      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:#888;">주문번호</span>
+          <span>
+            <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${data.orderNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+          </span>
+        </div>
+      </div>`;
 
   const html = `
   <div style="max-width:560px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;">
@@ -190,12 +214,7 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
         <p style="font-size:14px;color:#333;margin:12px 0 0;">${info.message}</p>
       </div>
 
-      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
-        <div style="display:flex;justify-content:space-between;">
-          <span style="font-size:13px;color:#888;">주문번호</span>
-          <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
-        </div>
-      </div>
+      ${trackingNumberHtml}
 
       <div style="text-align:center;margin-top:24px;">
         <a href="${data.trackingUrl}"

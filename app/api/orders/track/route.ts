@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // 주문 조회 (공개 - 주문번호 + 전화번호로 인증)
 export async function POST(request: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: order, error } = await supabase
+    const { data: order, error } = await supabaseAdmin
       .from('orders')
       .select(`
         order_number,
@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
         total_amount,
         shipping_fee,
         payment_method,
+        tracking_number,
         created_at,
         order_items (
           product_name,

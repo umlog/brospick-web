@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { sendOrderConfirmationEmail } from '@/lib/email';
+import { sendOrderAlimtalk } from '@/lib/kakao';
 
 function generateOrderNumber(): string {
   const now = new Date();
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     const orderNumber = generateOrderNumber();
 
     // 주문 생성
-    const { data: order, error: orderError } = await supabase
+    const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
         order_number: orderNumber,
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
       price: item.price,
     }));
 
-    const { error: itemsError } = await supabase
+    const { error: itemsError } = await supabaseAdmin
       .from('order_items')
       .insert(orderItems);
 
@@ -83,8 +84,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 이메일 발송 (입력한 경우만, 비동기 - 주문 응답을 지연시키지 않음)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || '';
     if (customerEmail) {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || '';
       sendOrderConfirmationEmail({
         orderNumber: order.order_number,
         customerName: customerName,
@@ -98,6 +99,17 @@ export async function POST(request: NextRequest) {
         trackingUrl: `${siteUrl}?track=true`,
       }).catch((err) => console.error('Email send error:', err));
     }
+
+    // 카카오톡 알림톡 발송 (비동기)
+    const productNames = items.map((item: { productName: string }) => item.productName).join(', ');
+    sendOrderAlimtalk({
+      customerPhone: customerPhone,
+      orderNumber: order.order_number,
+      productName: productNames,
+      totalAmount: order.total_amount,
+      depositorName: depositorName || customerName,
+      siteUrl: siteUrl,
+    }).catch((err) => console.error('Alimtalk send error:', err));
 
     return NextResponse.json({
       orderNumber: order.order_number,
@@ -115,16 +127,16 @@ export async function POST(request: NextRequest) {
 
 // 주문 목록 조회 (관리자)
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const password = searchParams.get('password');
+  const password = request.headers.get('x-admin-password');
 
   if (password !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: '권한이 없습니다.' }, { status: 401 });
   }
 
+  const { searchParams } = new URL(request.url);
   const status = searchParams.get('status');
 
-  let query = supabase
+  let query = supabaseAdmin
     .from('orders')
     .select(`
       *,

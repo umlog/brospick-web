@@ -15,6 +15,7 @@ CREATE TABLE orders (
   shipping_fee INTEGER NOT NULL DEFAULT 3000,
   status TEXT NOT NULL DEFAULT '입금대기',
   depositor_name TEXT,
+  tracking_number TEXT,
   payment_method TEXT NOT NULL DEFAULT '무통장입금',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -39,20 +40,21 @@ CREATE INDEX idx_order_items_order_id ON order_items(order_id);
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 
--- 누구나 주문 생성 가능 (anon key로)
-CREATE POLICY "Anyone can insert orders" ON orders
+-- ============================================
+-- anon key 정책 (공개 클라이언트 - 최소 권한)
+-- ============================================
+
+-- 주문 생성만 허용 (고객이 주문할 때)
+CREATE POLICY "Anon can insert orders" ON orders
   FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Anyone can insert order items" ON order_items
+CREATE POLICY "Anon can insert order items" ON order_items
   FOR INSERT WITH CHECK (true);
 
--- 주문번호로 조회 가능 (주문 확인용)
-CREATE POLICY "Anyone can read orders by order_number" ON orders
-  FOR SELECT USING (true);
+-- SELECT/UPDATE/DELETE는 anon에게 허용하지 않음
+-- 모든 조회/수정/삭제는 service_role key를 사용하는 API Route에서 처리
 
-CREATE POLICY "Anyone can read order items" ON order_items
-  FOR SELECT USING (true);
-
--- 업데이트는 모든 사용자 허용 (관리자 페이지용 - 추후 인증 추가 가능)
-CREATE POLICY "Anyone can update orders" ON orders
-  FOR UPDATE USING (true);
+-- ============================================
+-- service_role key는 RLS를 완전히 우회하므로
+-- 별도 정책이 필요 없음 (모든 CRUD 가능)
+-- ============================================
