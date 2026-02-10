@@ -16,11 +16,12 @@ const products: Record<string, {
   tagline: string;
   description: string;
   sizes: string[];
+  soldOut?: string[];
 }> = {
   '1': {
     id: 1,
     name: 'Half-Zip Training Top',
-    price: 28900,
+    price: 29900,
     originalPrice: 69000,
     image: '/apparel/bp-detail1.JPG',
     images: [
@@ -33,6 +34,7 @@ const products: Record<string, {
     tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
     description: '편안한 착용감과 슬림한 실루엣을 동시에 잡은 Half-Zip Training Top. 고탄성 원단으로 몸을 안정감 있게 잡아주면서도 움직임은 자유롭고, 땀은 빠르게 건조되어 격한 운동에도 쾌적함을 유지해 줍니다.',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
+    soldOut: ['XL'],
   },
 };
 
@@ -221,17 +223,22 @@ export default function ProductDetailPage({
               <div className={styles.sizeSection}>
                 <h3>사이즈 선택</h3>
                 <div className={styles.sizeOptions}>
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      className={`${styles.sizeButton} ${
-                        selectedSize === size ? styles.selected : ''
-                      }`}
-                      onClick={() => setSelectedSize(size)}
-                    >
-                      {size}
-                    </button>
-                  ))}
+                  {product.sizes.map((size) => {
+                    const isSoldOut = product.soldOut?.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        className={`${styles.sizeButton} ${
+                          selectedSize === size ? styles.selected : ''
+                        } ${isSoldOut ? styles.soldOut : ''}`}
+                        onClick={() => !isSoldOut && setSelectedSize(size)}
+                        disabled={isSoldOut}
+                      >
+                        {size}
+                        {isSoldOut && <span className={styles.soldOutLine} />}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -328,7 +335,7 @@ export default function ProductDetailPage({
                 <Accordion title="배송">
                   <div className={styles.accordionContent}>
                     <ul>
-                      <li>배송비: 3,000원</li>
+                      <li>배송비: ₩3,500 → 무료 (할인)</li>
                       <li>입금 확인 후 1~3 영업일 이내 발송</li>
                       <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>
                       <li>제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다</li>

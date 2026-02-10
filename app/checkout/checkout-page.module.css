@@ -260,6 +260,16 @@
   color: var(--color-text-secondary);
 }
 
+.shippingFree {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.discountText {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
 .totalDivider {
   height: 1px;
   background-color: var(--color-border);

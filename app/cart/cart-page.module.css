@@ -113,23 +113,50 @@
 
 @media (max-width: 768px) {
   .cartItem {
-    grid-template-columns: auto 80px 1fr;
-    gap: var(--space-md);
+    grid-template-columns: auto 72px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  .itemCheckbox {
+    grid-row: 1 / 2;
+  }
+
+  .itemImage {
+    width: 72px;
+    height: 72px;
+    grid-row: 1 / 2;
+  }
+
+  .itemInfo {
+    grid-row: 1 / 2;
+    min-width: 0;
+  }
+
+  .itemName {
+    font-size: var(--size-base);
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .itemControls {
     grid-column: 2 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .itemTotal {
     grid-column: 2 / -1;
     text-align: right;
+    font-size: var(--size-lg);
   }
 }
 
 .itemImage {
   width: 120px;
   height: 120px;
+  min-width: 0;
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: 4px;
@@ -258,9 +285,26 @@
 .summaryRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: var(--space-md) 0;
   font-size: var(--size-base);
   color: var(--color-text-secondary);
+  gap: var(--space-sm);
+}
+
+.summaryRow span:last-child {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.shippingFree {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.discountText {
+  color: #ff4d4f;
+  font-weight: 600;
 }
 
 .summaryDivider {

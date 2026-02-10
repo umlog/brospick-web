@@ -162,12 +162,16 @@ export default function CartPage() {
                 </div>
                 <div className={styles.summaryRow}>
                   <span>배송비</span>
-                  <span>₩3,000</span>
+                  <span className={styles.shippingFree}>₩3,500 → 무료</span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span>배송비 할인</span>
+                  <span className={styles.discountText}>-₩3,500</span>
                 </div>
                 <div className={styles.summaryDivider} />
                 <div className={styles.summaryRowTotal}>
                   <span>총 결제 금액</span>
-                  <span>₩{(selectedTotalPrice + 3000).toLocaleString()}</span>
+                  <span>₩{selectedTotalPrice.toLocaleString()}</span>
                 </div>
                 <button
                   className={styles.checkoutButton}

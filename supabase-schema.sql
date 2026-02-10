@@ -12,7 +12,7 @@ CREATE TABLE orders (
   address TEXT NOT NULL,
   address_detail TEXT,
   total_amount INTEGER NOT NULL,
-  shipping_fee INTEGER NOT NULL DEFAULT 3000,
+  shipping_fee INTEGER NOT NULL DEFAULT 3500,
   status TEXT NOT NULL DEFAULT '입금대기',
   depositor_name TEXT,
   tracking_number TEXT,

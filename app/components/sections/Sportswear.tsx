@@ -28,7 +28,7 @@ export default function Sportswear() {
               편안한 착용감과 스타일을 겸비한 하프집 트레이닝 탑.
             </p>
             <div className={styles.priceRow}>
-              <span className={styles.price}>₩28,900</span>
+              <span className={styles.price}>₩29,900</span>
               <span className={styles.originalPrice}>₩69,000</span>
             </div>
             <Link href="/apparel/1" className={styles.shopLink}>

@@ -224,9 +224,26 @@
   min-width: 60px;
 }
 
-.sizeButton:hover {
+.sizeButton:hover:not(:disabled) {
   border-color: var(--color-accent);
   color: var(--color-accent);
+}
+
+.sizeButton.soldOut {
+  position: relative;
+  opacity: 0.35;
+  cursor: not-allowed;
+  color: var(--color-text-secondary);
+}
+
+.soldOutLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background-color: var(--color-text-secondary);
+  transform: rotate(-15deg);
 }
 
 .sizeButton.selected {

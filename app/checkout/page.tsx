@@ -46,8 +46,6 @@ export default function CheckoutPage() {
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const shippingFee = 3000;
-
   if (checkoutItems.length === 0) {
     return null;
   }
@@ -69,8 +67,8 @@ export default function CheckoutPage() {
           postalCode: formData.postalCode,
           address: formData.address,
           addressDetail: formData.addressDetail,
-          totalAmount: selectedTotalPrice + shippingFee,
-          shippingFee,
+          totalAmount: selectedTotalPrice,
+          shippingFee: 0,
           depositorName: formData.depositorName,
           items: checkoutItems.map((item) => ({
             productName: item.name,
@@ -312,7 +310,7 @@ export default function CheckoutPage() {
                 className={styles.submitButton}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? '주문 처리 중...' : `₩${(selectedTotalPrice + shippingFee).toLocaleString()} 주문하기`}
+                {isSubmitting ? '주문 처리 중...' : `₩${selectedTotalPrice.toLocaleString()} 주문하기`}
               </button>
             </form>
 
@@ -339,12 +337,16 @@ export default function CheckoutPage() {
                 </div>
                 <div className={styles.totalRow}>
                   <span>배송비</span>
-                  <span>₩{shippingFee.toLocaleString()}</span>
+                  <span className={styles.shippingFree}>₩3,500 → 무료</span>
+                </div>
+                <div className={styles.totalRow}>
+                  <span>배송비 할인</span>
+                  <span className={styles.discountText}>-₩3,500</span>
                 </div>
                 <div className={styles.totalDivider} />
                 <div className={styles.totalRowFinal}>
                   <span>총 결제 금액</span>
-                  <span>₩{(selectedTotalPrice + shippingFee).toLocaleString()}</span>
+                  <span>₩{selectedTotalPrice.toLocaleString()}</span>
                 </div>
               </div>
             </div>
