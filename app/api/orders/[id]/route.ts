@@ -79,7 +79,7 @@ export async function PATCH(
     if (error) {
       console.error('Order update error:', error);
       return NextResponse.json(
-        { error: '주문 상태 변경에 실패했습니다.' },
+        { error: `주문 상태 변경에 실패했습니다: ${error.message}` },
         { status: 500 }
       );
     }
