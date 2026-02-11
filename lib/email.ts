@@ -178,8 +178,16 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
 
   const copyButtonStyle = `display:inline-block;margin-left:8px;padding:2px 8px;background:#eee;border-radius:4px;font-size:11px;color:#555;text-decoration:none;cursor:pointer;vertical-align:middle;`;
 
+  const cjTrackingUrl = data.trackingNumber
+    ? `https://trace.cjlogistics.com/next/tracking.html?wblNo=${encodeURIComponent(data.trackingNumber)}`
+    : '';
+
   const trackingNumberHtml = data.trackingNumber ? `
       <div style="background:#f0f6ff;border:1px solid #d0e3ff;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;color:#888;">택배사</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">CJ대한통운</span>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <span style="font-size:13px;color:#888;">운송장번호</span>
           <span>
@@ -193,6 +201,12 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
             <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
             <a href="#" onclick="navigator.clipboard.writeText('${escapeHtml(data.orderNumber)}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
           </span>
+        </div>
+        <div style="text-align:center;margin-top:14px;">
+          <a href="${cjTrackingUrl}"
+             style="display:inline-block;background:#003876;color:#fff;padding:10px 24px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">
+            CJ대한통운 배송 조회
+          </a>
         </div>
       </div>` : `
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">

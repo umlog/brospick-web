@@ -178,7 +178,10 @@ export default function AdminPage() {
         }),
       });
 
-      if (!response.ok) throw new Error('상태 변경 실패');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || `서버 오류 (${response.status})`);
+      }
 
       setOrders((prev) =>
         prev.map((o) =>
@@ -189,8 +192,8 @@ export default function AdminPage() {
       if (willNotify) {
         alert(`상태 변경 완료! ${order.customer_email}로 알림을 발송했습니다.`);
       }
-    } catch {
-      alert('상태 변경에 실패했습니다.');
+    } catch (err) {
+      alert(`상태 변경에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
     }
   };
 
@@ -527,6 +530,16 @@ export default function AdminPage() {
                           {trackingModal === order.id && (
                             <div className={styles.trackingModal}>
                               <h4>운송장번호 입력</h4>
+                              <select
+                                className={styles.carrierSelect}
+                                defaultValue="CJ대한통운"
+                              >
+                                <option value="CJ대한통운">CJ대한통운</option>
+                                <option value="한진택배">한진택배</option>
+                                <option value="롯데택배">롯데택배</option>
+                                <option value="로젠택배">로젠택배</option>
+                                <option value="우체국택배">우체국택배</option>
+                              </select>
                               <input
                                 type="text"
                                 value={trackingInput}

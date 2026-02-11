@@ -681,10 +681,24 @@ export default function FloatingTracker() {
                         <span>{result.order_number}</span>
                       </div>
                       {result.tracking_number && (
-                        <div className={styles.orderRow}>
-                          <span>운송장번호</span>
-                          <span className={styles.trackingNumber}>{result.tracking_number}</span>
-                        </div>
+                        <>
+                          <div className={styles.orderRow}>
+                            <span>택배사</span>
+                            <span>CJ대한통운</span>
+                          </div>
+                          <div className={styles.orderRow}>
+                            <span>운송장번호</span>
+                            <a
+                              href={`https://trace.cjlogistics.com/next/tracking.html?wblNo=${encodeURIComponent(result.tracking_number)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.trackingNumber}
+                              style={{ color: '#5856d6', textDecoration: 'underline', cursor: 'pointer' }}
+                            >
+                              {result.tracking_number}
+                            </a>
+                          </div>
+                        </>
                       )}
                       <div className={styles.orderRow}>
                         <span>주문일</span>

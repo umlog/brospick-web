@@ -369,6 +369,24 @@
   margin: 0 0 var(--space-md);
 }
 
+.carrierSelect {
+  width: 100%;
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  box-sizing: border-box;
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
+}
+
+.carrierSelect:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
 .trackingModal input {
   width: 100%;
   padding: var(--space-md);
