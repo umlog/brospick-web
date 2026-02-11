@@ -8,7 +8,8 @@ function generateRequestNumber(): string {
   const now = new Date();
   const date = now.toISOString().slice(0, 10).replace(/-/g, '');
   const random = Math.floor(1000 + Math.random() * 9000);
-  return `RR-${date}-${random}`;
+  const suffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+  return `RR-${date}-${random}${suffix}`;
 }
 
 // 교환/반품 신청 (고객)
@@ -122,34 +123,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const requestNumber = generateRequestNumber();
     const returnQuantity = quantity || orderItem.quantity;
 
-    // 교환/반품 요청 생성
-    const insertData: Record<string, unknown> = {
-      order_id: order.id,
-      order_item_id: orderItemId,
-      request_number: requestNumber,
-      type,
-      reason,
-      quantity: returnQuantity,
-      status: '접수완료',
-    };
+    // 교환/반품 요청 생성 (요청번호 충돌 시 최대 3회 재시도)
+    let requestNumber = '';
+    let insertError = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      requestNumber = generateRequestNumber();
 
-    if (type === '교환') {
-      insertData.exchange_size = exchangeSize;
+      const insertData: Record<string, unknown> = {
+        order_id: order.id,
+        order_item_id: orderItemId,
+        request_number: requestNumber,
+        type,
+        reason,
+        quantity: returnQuantity,
+        status: '접수완료',
+      };
+
+      if (type === '교환') {
+        insertData.exchange_size = exchangeSize;
+      }
+
+      if (type === '반품') {
+        insertData.refund_bank = refundBank;
+        insertData.refund_account = refundAccount;
+        insertData.refund_holder = refundHolder;
+        insertData.refund_amount = orderItem.price * returnQuantity;
+      }
+
+      const result = await supabaseAdmin
+        .from('return_requests')
+        .insert(insertData);
+
+      insertError = result.error;
+      if (!insertError) break;
+
+      // UNIQUE 제약 위반이 아니면 즉시 실패
+      if (!insertError.message?.includes('unique') && !insertError.code?.includes('23505')) {
+        break;
+      }
     }
-
-    if (type === '반품') {
-      insertData.refund_bank = refundBank;
-      insertData.refund_account = refundAccount;
-      insertData.refund_holder = refundHolder;
-      insertData.refund_amount = orderItem.price * returnQuantity;
-    }
-
-    const { error: insertError } = await supabaseAdmin
-      .from('return_requests')
-      .insert(insertData);
 
     if (insertError) {
       console.error('Return request creation error:', insertError);

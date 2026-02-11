@@ -61,7 +61,7 @@ export async function PATCH(
       );
     }
 
-    const updateData: Record<string, string> = { status };
+    const updateData: Record<string, unknown> = { status };
     if (trackingNumber && status === '배송중') {
       updateData.tracking_number = trackingNumber;
     }

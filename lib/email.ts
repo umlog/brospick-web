@@ -1,6 +1,15 @@
 import nodemailer from 'nodemailer';
 import { BANK } from './constants';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -34,8 +43,8 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     .map(
       (item) => `
       <tr>
-        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;">${item.productName}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;">${item.size}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;">${escapeHtml(item.productName)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;">${escapeHtml(item.size)}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;">${item.quantity}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:right;">₩${(item.price * item.quantity).toLocaleString()}</td>
       </tr>`
@@ -51,13 +60,13 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
 
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
       <p style="font-size:15px;color:#333;margin:0 0 20px;">
-        ${data.customerName}님, 주문해주셔서 감사합니다.
+        ${escapeHtml(data.customerName)}님, 주문해주셔서 감사합니다.
       </p>
 
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:13px;color:#888;">주문번호</span>
-          <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
         </div>
       </div>
 
@@ -96,7 +105,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
         <p style="font-size:13px;color:#555;margin:0 0 4px;">은행명: <strong>${BANK.name}</strong></p>
         <p style="font-size:13px;color:#555;margin:0 0 4px;">계좌번호: <strong>${BANK.account}</strong></p>
         <p style="font-size:13px;color:#555;margin:0 0 4px;">예금주: <strong>${BANK.holder}</strong></p>
-        <p style="font-size:13px;color:#555;margin:0 0 4px;">입금자명: <strong>${data.depositorName}</strong></p>
+        <p style="font-size:13px;color:#555;margin:0 0 4px;">입금자명: <strong>${escapeHtml(data.depositorName)}</strong></p>
         <p style="font-size:12px;color:#e65100;margin:12px 0 0;font-weight:500;">
           ⚠ 주문 후 24시간 이내에 입금해주세요.
         </p>
@@ -105,7 +114,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
         <h4 style="font-size:14px;color:#333;margin:0 0 8px;">배송지</h4>
         <p style="font-size:13px;color:#555;margin:0;">
-          ${data.address}${data.addressDetail ? ' ' + data.addressDetail : ''}
+          ${escapeHtml(data.address)}${data.addressDetail ? ' ' + escapeHtml(data.addressDetail) : ''}
         </p>
       </div>
 
@@ -174,15 +183,15 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <span style="font-size:13px;color:#888;">운송장번호</span>
           <span>
-            <span style="font-size:15px;color:#333;font-weight:700;font-family:monospace;letter-spacing:0.5px;">${data.trackingNumber}</span>
-            <a href="#" onclick="navigator.clipboard.writeText('${data.trackingNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+            <span style="font-size:15px;color:#333;font-weight:700;font-family:monospace;letter-spacing:0.5px;">${escapeHtml(data.trackingNumber)}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${escapeHtml(data.trackingNumber)}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
           </span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:13px;color:#888;">주문번호</span>
           <span>
-            <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
-            <a href="#" onclick="navigator.clipboard.writeText('${data.orderNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+            <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${escapeHtml(data.orderNumber)}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
           </span>
         </div>
       </div>` : `
@@ -190,8 +199,8 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:13px;color:#888;">주문번호</span>
           <span>
-            <span style="font-size:14px;color:#333;font-weight:600;">${data.orderNumber}</span>
-            <a href="#" onclick="navigator.clipboard.writeText('${data.orderNumber}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
+            <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
+            <a href="#" onclick="navigator.clipboard.writeText('${escapeHtml(data.orderNumber)}');this.textContent='복사됨!';setTimeout(()=>this.textContent='복사',1500);return false;" style="${copyButtonStyle}">복사</a>
           </span>
         </div>
       </div>`;
@@ -205,12 +214,12 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
 
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
       <p style="font-size:15px;color:#333;margin:0 0 20px;">
-        ${data.customerName}님, 안녕하세요.
+        ${escapeHtml(data.customerName)}님, 안녕하세요.
       </p>
 
       <div style="background:${info.bgColor};border-radius:8px;padding:20px;margin-bottom:24px;text-align:center;">
         <div style="display:inline-block;padding:6px 16px;border-radius:20px;background:${info.color};color:#fff;font-size:14px;font-weight:600;margin-bottom:12px;">
-          ${data.status}
+          ${escapeHtml(data.status)}
         </div>
         <p style="font-size:14px;color:#333;margin:12px 0 0;">${info.message}</p>
       </div>
@@ -259,7 +268,7 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
   const detailHtml = data.type === '교환'
     ? `<div style="display:flex;justify-content:space-between;margin-bottom:6px;">
         <span style="font-size:13px;color:#888;">사이즈 변경</span>
-        <span style="font-size:14px;color:#333;font-weight:600;">${data.currentSize} → ${data.exchangeSize}</span>
+        <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.currentSize)} → ${escapeHtml(data.exchangeSize || '')}</span>
       </div>`
     : '';
 
@@ -272,17 +281,17 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
 
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
       <p style="font-size:15px;color:#333;margin:0 0 20px;">
-        ${data.customerName}님, ${data.type} 신청이 정상적으로 접수되었습니다.
+        ${escapeHtml(data.customerName)}님, ${data.type} 신청이 정상적으로 접수되었습니다.
       </p>
 
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">접수번호</span>
-          <span style="font-size:14px;color:#333;font-weight:600;">${data.requestNumber}</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.requestNumber)}</span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">주문번호</span>
-          <span style="font-size:14px;color:#333;">${data.orderNumber}</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.orderNumber)}</span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">유형</span>
@@ -290,12 +299,12 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">상품</span>
-          <span style="font-size:14px;color:#333;">${data.productName} (${data.currentSize})</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.productName)} (${escapeHtml(data.currentSize)})</span>
         </div>
         ${detailHtml}
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#888;">사유</span>
-          <span style="font-size:14px;color:#333;">${data.reason}</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.reason)}</span>
         </div>
       </div>
 
@@ -387,7 +396,7 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
     extraHtml = `
       <div style="background:#fff0f0;border:1px solid #ffcdd2;border-radius:8px;padding:16px;margin-bottom:24px;">
         <h4 style="font-size:14px;color:#c62828;margin:0 0 8px;">거절 사유</h4>
-        <p style="font-size:13px;color:#555;margin:0;">${data.rejectReason}</p>
+        <p style="font-size:13px;color:#555;margin:0;">${escapeHtml(data.rejectReason)}</p>
       </div>`;
   }
 
@@ -396,7 +405,7 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
       <div style="background:#f0f6ff;border:1px solid #d0e3ff;border-radius:8px;padding:16px;margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:13px;color:#888;">반품 운송장번호</span>
-          <span style="font-size:15px;color:#333;font-weight:700;font-family:monospace;">${data.returnTrackingNumber}</span>
+          <span style="font-size:15px;color:#333;font-weight:700;font-family:monospace;">${escapeHtml(data.returnTrackingNumber)}</span>
         </div>
       </div>`;
   }
@@ -420,12 +429,12 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
 
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
       <p style="font-size:15px;color:#333;margin:0 0 20px;">
-        ${data.customerName}님, 안녕하세요.
+        ${escapeHtml(data.customerName)}님, 안녕하세요.
       </p>
 
       <div style="background:${info.bgColor};border-radius:8px;padding:20px;margin-bottom:24px;text-align:center;">
         <div style="display:inline-block;padding:6px 16px;border-radius:20px;background:${info.color};color:#fff;font-size:14px;font-weight:600;margin-bottom:12px;">
-          ${data.status}
+          ${escapeHtml(data.status)}
         </div>
         <p style="font-size:14px;color:#333;margin:12px 0 0;">${info.message}</p>
       </div>
@@ -433,11 +442,11 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">접수번호</span>
-          <span style="font-size:14px;color:#333;font-weight:600;">${data.requestNumber}</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.requestNumber)}</span>
         </div>
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#888;">주문번호</span>
-          <span style="font-size:14px;color:#333;">${data.orderNumber}</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.orderNumber)}</span>
         </div>
       </div>
 

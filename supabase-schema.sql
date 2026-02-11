@@ -94,3 +94,6 @@ CREATE INDEX idx_return_requests_status ON return_requests(status);
 CREATE INDEX idx_return_requests_request_number ON return_requests(request_number);
 
 ALTER TABLE return_requests ENABLE ROW LEVEL SECURITY;
+
+-- return_requests는 anon key에 대한 정책 없음 (의도적)
+-- 모든 CRUD는 API Route에서 service_role key(supabaseAdmin)를 통해 처리

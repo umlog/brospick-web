@@ -99,7 +99,12 @@ export async function PATCH(
     }
 
     if (status === '승인' && current.type === '반품' && !current.refund_amount) {
-      updateData.refund_amount = current.order_items.price * current.quantity;
+      const itemPrice = Array.isArray(current.order_items)
+        ? current.order_items[0]?.price
+        : current.order_items?.price;
+      if (itemPrice) {
+        updateData.refund_amount = itemPrice * current.quantity;
+      }
     }
 
     if (refundCompleted !== undefined) {
