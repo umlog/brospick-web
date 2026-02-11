@@ -58,3 +58,39 @@ CREATE POLICY "Anon can insert order items" ON order_items
 -- service_role key는 RLS를 완전히 우회하므로
 -- 별도 정책이 필요 없음 (모든 CRUD 가능)
 -- ============================================
+
+-- ============================================
+-- 교환/반품 관리
+-- ============================================
+
+-- 배송완료 시점 기록 (교환/반품 7일 이내 신청 판단용)
+ALTER TABLE orders ADD COLUMN delivered_at TIMESTAMPTZ;
+
+-- 교환/반품 요청 테이블
+CREATE TABLE return_requests (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  order_item_id UUID NOT NULL REFERENCES order_items(id) ON DELETE CASCADE,
+  request_number TEXT NOT NULL UNIQUE,
+  type TEXT NOT NULL CHECK (type IN ('교환', '반품')),
+  reason TEXT NOT NULL,
+  exchange_size TEXT,
+  quantity INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT '접수완료'
+    CHECK (status IN ('접수완료', '승인', '수거중', '수거완료', '처리완료', '거절')),
+  reject_reason TEXT,
+  refund_amount INTEGER,
+  refund_bank TEXT,
+  refund_account TEXT,
+  refund_holder TEXT,
+  refund_completed BOOLEAN DEFAULT FALSE,
+  return_tracking_number TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_return_requests_order_id ON return_requests(order_id);
+CREATE INDEX idx_return_requests_status ON return_requests(status);
+CREATE INDEX idx_return_requests_request_number ON return_requests(request_number);
+
+ALTER TABLE return_requests ENABLE ROW LEVEL SECURITY;

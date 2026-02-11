@@ -474,6 +474,482 @@
   cursor: not-allowed;
 }
 
+/* 교환/반품 신청 버튼 */
+.returnButton {
+  width: 100%;
+  padding: 11px;
+  background: var(--color-bg-primary);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.returnButton:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* 교환/반품 신청 폼 */
+.returnForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.returnHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.returnBackButton {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.returnBackButton:hover {
+  color: var(--color-text-primary);
+}
+
+.returnTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* 스텝 인디케이터 */
+.returnSteps {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.returnStepDot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.returnStepDot > span:first-child {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.returnStepActive > span:first-child {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.returnStepLabel {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+}
+
+.returnStepActive .returnStepLabel {
+  color: var(--color-text-primary);
+}
+
+/* 스텝 콘텐츠 */
+.returnStepContent {
+  animation: fadeIn 0.2s ease;
+}
+
+.returnStepTitle {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0 0 12px;
+}
+
+/* 아이템 카드 */
+.returnItemCard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+  text-align: left;
+  color: var(--color-text-primary);
+}
+
+.returnItemCard:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.returnItemCard:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.returnItemCardActive {
+  border-color: var(--color-accent);
+  background: rgba(255, 59, 48, 0.05);
+}
+
+.returnItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.returnItemName {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.returnItemMeta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.returnItemBadge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(88, 86, 214, 0.15);
+  color: #5856d6;
+  font-weight: 500;
+}
+
+/* 유형 선택 */
+.returnTypeGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.returnTypeButton {
+  flex: 1;
+  padding: 16px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.2s;
+  color: var(--color-text-primary);
+}
+
+.returnTypeButton:hover {
+  border-color: var(--color-accent);
+}
+
+.returnTypeActive {
+  border-color: var(--color-accent);
+  background: rgba(255, 59, 48, 0.05);
+}
+
+.returnTypeIcon {
+  font-size: 20px;
+}
+
+.returnTypeLabel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.returnTypeDesc {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+/* 사이즈 그리드 */
+.returnSizeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.returnSizeButton {
+  padding: 10px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.returnSizeButton:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.returnSizeActive {
+  border-color: var(--color-accent);
+  background: rgba(255, 59, 48, 0.05);
+  color: var(--color-accent);
+}
+
+.returnSizeDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.returnSizeTag {
+  display: block;
+  font-size: 9px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* select */
+.returnSelect {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.returnSelect:focus {
+  border-color: var(--color-accent);
+}
+
+/* textarea */
+.returnTextarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  min-height: 72px;
+}
+
+.returnTextarea:focus {
+  border-color: var(--color-accent);
+}
+
+.returnTextarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+/* 요약 */
+.returnSummary {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 하단 버튼 */
+.returnActions {
+  display: flex;
+  gap: 8px;
+}
+
+.returnPrevButton {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.returnPrevButton:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.returnNextButton {
+  flex: 2;
+  padding: 10px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.returnNextButton:hover {
+  opacity: 0.9;
+}
+
+.returnNextButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.returnSubmitButton {
+  flex: 2;
+  padding: 10px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.returnSubmitButton:hover {
+  opacity: 0.9;
+}
+
+.returnSubmitButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 신청 완료 뷰 */
+.returnSubmittedView {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.returnSuccessIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(52, 199, 89, 0.15);
+  color: #34c759;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.returnSuccessTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 16px;
+}
+
+.returnSuccessInfo {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.returnSuccessDesc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+/* 교환/반품 현황 */
+.returnStatusSection {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.returnStatusSection h4 {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.returnStatusCard {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+}
+
+.returnStatusTop {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.returnTypeBadge,
+.returnStatusBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.returnStatusDetails {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-primary);
+}
+
+.returnStatusDate {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.returnRejectReason {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #ff3b30;
+  padding: 6px 8px;
+  background: rgba(255, 59, 48, 0.08);
+  border-radius: 6px;
+}
+
 /* 모바일 */
 @media (max-width: 480px) {
   .panel {

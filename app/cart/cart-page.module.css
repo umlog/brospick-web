@@ -120,16 +120,20 @@
 
   .itemCheckbox {
     grid-row: 1 / 2;
+    grid-column: 1;
   }
 
   .itemImage {
     width: 72px;
+    max-width: 72px;
     height: 72px;
     grid-row: 1 / 2;
+    grid-column: 2;
   }
 
   .itemInfo {
     grid-row: 1 / 2;
+    grid-column: 3;
     min-width: 0;
   }
 
@@ -140,6 +144,7 @@
   }
 
   .itemControls {
+    grid-row: 2 / 3;
     grid-column: 2 / -1;
     flex-direction: row;
     align-items: center;
@@ -147,6 +152,7 @@
   }
 
   .itemTotal {
+    grid-row: 3 / 4;
     grid-column: 2 / -1;
     text-align: right;
     font-size: var(--size-lg);
@@ -155,8 +161,10 @@
 
 .itemImage {
   width: 120px;
+  max-width: 120px;
   height: 120px;
   min-width: 0;
+  flex-shrink: 0;
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: 4px;

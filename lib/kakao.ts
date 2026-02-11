@@ -94,3 +94,93 @@ export async function sendStatusAlimtalk(data: StatusAlimtalkData) {
     console.error('상태변경 알림톡 발송 실패:', error);
   }
 }
+
+// 교환/반품 접수 알림톡
+interface ReturnRequestAlimtalkData {
+  customerPhone: string;
+  requestNumber: string;
+  orderNumber: string;
+  type: '교환' | '반품';
+  productName: string;
+  siteUrl: string;
+}
+
+export async function sendReturnRequestAlimtalk(data: ReturnRequestAlimtalkData) {
+  const service = getMessageService();
+  if (!service || !pfId) {
+    console.warn('Solapi 설정이 완료되지 않아 알림톡을 발송하지 않습니다.');
+    return;
+  }
+
+  const templateId = process.env.SOLAPI_RETURN_REQUEST_TEMPLATE_ID || '';
+  if (!templateId) {
+    console.warn('교환/반품 접수 알림톡 템플릿이 설정되지 않았습니다.');
+    return;
+  }
+
+  try {
+    await service.sendOne({
+      to: data.customerPhone,
+      from: process.env.SOLAPI_SENDER_NUMBER || '',
+      kakaoOptions: {
+        pfId,
+        templateId,
+        variables: {
+          '#{접수번호}': data.requestNumber,
+          '#{주문번호}': data.orderNumber,
+          '#{유형}': data.type,
+          '#{상품명}': data.productName,
+          '#{사이트URL}': data.siteUrl,
+        },
+      },
+    });
+    console.log(`교환/반품 접수 알림톡 발송 성공: ${data.requestNumber}`);
+  } catch (error) {
+    console.error('교환/반품 접수 알림톡 발송 실패:', error);
+  }
+}
+
+// 교환/반품 상태 변경 알림톡
+interface ReturnStatusAlimtalkData {
+  customerPhone: string;
+  requestNumber: string;
+  orderNumber: string;
+  type: '교환' | '반품';
+  status: string;
+  siteUrl: string;
+}
+
+export async function sendReturnStatusAlimtalk(data: ReturnStatusAlimtalkData) {
+  const service = getMessageService();
+  if (!service || !pfId) {
+    console.warn('Solapi 설정이 완료되지 않아 알림톡을 발송하지 않습니다.');
+    return;
+  }
+
+  const templateId = process.env.SOLAPI_RETURN_STATUS_TEMPLATE_ID || '';
+  if (!templateId) {
+    console.warn('교환/반품 상태변경 알림톡 템플릿이 설정되지 않았습니다.');
+    return;
+  }
+
+  try {
+    await service.sendOne({
+      to: data.customerPhone,
+      from: process.env.SOLAPI_SENDER_NUMBER || '',
+      kakaoOptions: {
+        pfId,
+        templateId,
+        variables: {
+          '#{접수번호}': data.requestNumber,
+          '#{주문번호}': data.orderNumber,
+          '#{유형}': data.type,
+          '#{상태}': data.status,
+          '#{사이트URL}': data.siteUrl,
+        },
+      },
+    });
+    console.log(`교환/반품 상태변경 알림톡 발송 성공: ${data.requestNumber} → ${data.status}`);
+  } catch (error) {
+    console.error('교환/반품 상태변경 알림톡 발송 실패:', error);
+  }
+}

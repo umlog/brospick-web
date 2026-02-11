@@ -65,6 +65,9 @@ export async function PATCH(
     if (trackingNumber && status === '배송중') {
       updateData.tracking_number = trackingNumber;
     }
+    if (status === '배송완료') {
+      updateData.delivered_at = new Date().toISOString();
+    }
 
     const { data, error } = await supabaseAdmin
       .from('orders')

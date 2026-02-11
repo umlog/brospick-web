@@ -16,3 +16,8 @@ export const BANK = {
 export const CONTACT = {
   email: 'team.brospick@gmail.com',
 } as const;
+
+export const RETURN_POLICY = {
+  windowDays: 7,
+  banks: ['카카오뱅크', '국민은행', '신한은행', '우리은행', '하나은행', 'NH농협', '기업은행', 'SC제일은행', '토스뱅크', '케이뱅크'],
+} as const;

@@ -451,6 +451,116 @@
   color: #ffffff;
 }
 
+/* Admin Tabs */
+.adminTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.adminTab {
+  padding: var(--space-md) var(--space-xl);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.adminTab:hover {
+  color: var(--color-text-primary);
+}
+
+.adminTabActive {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Type Badge */
+.typeBadge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.typeBadgeExchange {
+  background-color: rgba(0, 122, 255, 0.15);
+  color: #007aff;
+}
+
+.typeBadgeReturn {
+  background-color: rgba(255, 149, 0, 0.15);
+  color: #ff9500;
+}
+
+/* Return Status Badges */
+.returnStatusReceived {
+  background-color: #ff9800;
+  color: #000;
+}
+
+.returnStatusApproved {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.returnStatusCollecting {
+  background-color: #9C27B0;
+  color: #fff;
+}
+
+.returnStatusCollected {
+  background-color: #2196F3;
+  color: #fff;
+}
+
+.returnStatusComplete {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.returnStatusRejected {
+  background-color: #e53935;
+  color: #fff;
+}
+
+/* Reject Button */
+.rejectStatusButton {
+  border-color: #e53935 !important;
+  color: #e53935 !important;
+}
+
+.rejectStatusButton:hover {
+  background-color: #e53935 !important;
+  color: #fff !important;
+}
+
+/* Reject Textarea */
+.rejectTextarea {
+  width: 100%;
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.rejectTextarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .orderHeader {
@@ -470,5 +580,15 @@
 
   .statusButton {
     text-align: center;
+  }
+
+  .adminTabs {
+    gap: 0;
+  }
+
+  .adminTab {
+    flex: 1;
+    text-align: center;
+    padding: var(--space-md) var(--space-sm);
   }
 }

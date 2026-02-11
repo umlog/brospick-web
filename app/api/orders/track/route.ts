@@ -16,14 +16,17 @@ export async function POST(request: NextRequest) {
     const { data: order, error } = await supabaseAdmin
       .from('orders')
       .select(`
+        id,
         order_number,
         status,
         total_amount,
         shipping_fee,
         payment_method,
         tracking_number,
+        delivered_at,
         created_at,
         order_items (
+          id,
           product_name,
           size,
           quantity,
@@ -41,7 +44,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ order });
+    // 교환/반품 요청 내역 조회
+    const { data: returnRequests } = await supabaseAdmin
+      .from('return_requests')
+      .select('request_number, type, status, reason, exchange_size, quantity, reject_reason, refund_amount, refund_completed, return_tracking_number, created_at, order_item_id')
+      .eq('order_id', order.id);
+
+    return NextResponse.json({
+      order: { ...order, return_requests: returnRequests || [] },
+    });
   } catch (error) {
     console.error('Order track error:', error);
     return NextResponse.json(
