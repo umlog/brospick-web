@@ -444,6 +444,29 @@
   background-color: #ff5a52;
 }
 
+/* Payment Reminder */
+.paymentReminder {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.paymentReminderButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: #ff9500;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paymentReminderButton:hover {
+  background-color: #e08600;
+}
+
 /* Danger Zone */
 .dangerZone {
   border-top: 1px solid var(--color-border);

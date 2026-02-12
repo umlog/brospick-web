@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { sendStatusChangeEmail } from '@/lib/email';
+import { sendStatusChangeEmail, sendPaymentReminderEmail } from '@/lib/email';
 import { sendStatusAlimtalk } from '@/lib/kakao';
 
 // 주문 삭제 (관리자)
@@ -33,6 +33,52 @@ export async function DELETE(
     console.error('Order delete API error:', error);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
+      { status: 500 }
+    );
+  }
+}
+
+// 입금 안내 메일 발송 (관리자)
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const password = request.headers.get('x-admin-password');
+
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return NextResponse.json({ error: '권한이 없습니다.' }, { status: 401 });
+    }
+
+    const { data: order, error } = await supabaseAdmin
+      .from('orders')
+      .select('order_number, customer_name, customer_email, total_amount')
+      .eq('id', params.id)
+      .single();
+
+    if (error || !order) {
+      return NextResponse.json({ error: '주문을 찾을 수 없습니다.' }, { status: 404 });
+    }
+
+    if (!order.customer_email) {
+      return NextResponse.json({ error: '고객 이메일이 없습니다.' }, { status: 400 });
+    }
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || '';
+
+    await sendPaymentReminderEmail({
+      orderNumber: order.order_number,
+      customerName: order.customer_name,
+      customerEmail: order.customer_email,
+      totalAmount: order.total_amount,
+      trackingUrl: `${siteUrl}?track=true`,
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Payment reminder email error:', error);
+    return NextResponse.json(
+      { error: '메일 발송에 실패했습니다.' },
       { status: 500 }
     );
   }
