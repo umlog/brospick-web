@@ -5,16 +5,19 @@ import type { AdminTab } from './types';
 import { useAdminAuth } from './hooks/useAdminAuth';
 import { useOrders } from './hooks/useOrders';
 import { useReturns } from './hooks/useReturns';
+import { useProductSizes } from './hooks/useProductSizes';
 import { LoginForm } from './components/LoginForm';
 import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
+import { ProductSizeManager } from './components/ProductSizeManager';
 import styles from './admin.module.css';
 
 export default function AdminPage() {
   const auth = useAdminAuth();
   const ordersState = useOrders(auth.password, auth.handleAuthFailure);
   const returnsState = useReturns(auth.password, ordersState.notifyOnChange);
+  const productSizesState = useProductSizes(auth.password);
   const [activeTab, setActiveTab] = useState<AdminTab>('orders');
 
   const handleLogin = (e: React.FormEvent) => {
@@ -27,13 +30,18 @@ export default function AdminPage() {
     if (tab === 'returns' && returnsState.returnRequests.length === 0) {
       returnsState.fetchReturns(auth.password);
     }
+    if (tab === 'products' && productSizesState.sizes.length === 0) {
+      productSizesState.fetchSizes();
+    }
   };
 
   const handleRefresh = () => {
     if (activeTab === 'orders') {
       ordersState.fetchOrders(auth.password, ordersState.filterStatus || undefined);
-    } else {
+    } else if (activeTab === 'returns') {
       returnsState.fetchReturns(auth.password, returnsState.filterStatus || undefined);
+    } else {
+      productSizesState.fetchSizes();
     }
   };
 
@@ -51,7 +59,7 @@ export default function AdminPage() {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>{activeTab === 'orders' ? '주문 관리' : '교환/반품 관리'}</h1>
+          <h1>{activeTab === 'orders' ? '주문 관리' : activeTab === 'returns' ? '교환/반품 관리' : '상품 관리'}</h1>
           <button onClick={handleRefresh} className={styles.refreshButton}>
             새로고침
           </button>
@@ -59,14 +67,18 @@ export default function AdminPage() {
 
         <AdminTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-        {activeTab === 'orders' ? (
+        {activeTab === 'orders' && (
           <OrderList ordersState={ordersState} />
-        ) : (
+        )}
+        {activeTab === 'returns' && (
           <ReturnList
             returnsState={returnsState}
             notifyOnChange={ordersState.notifyOnChange}
             onNotifyChange={ordersState.setNotifyOnChange}
           />
+        )}
+        {activeTab === 'products' && (
+          <ProductSizeManager state={productSizesState} />
         )}
       </div>
     </main>

@@ -17,6 +17,7 @@ CREATE TABLE orders (
   depositor_name TEXT,
   tracking_number TEXT,
   payment_method TEXT NOT NULL DEFAULT '무통장입금',
+  delivery_note TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -97,3 +98,29 @@ ALTER TABLE return_requests ENABLE ROW LEVEL SECURITY;
 
 -- return_requests는 anon key에 대한 정책 없음 (의도적)
 -- 모든 CRUD는 API Route에서 service_role key(supabaseAdmin)를 통해 처리
+
+-- ============================================
+-- 상품 사이즈 가용성 관리
+-- ============================================
+
+CREATE TABLE product_sizes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  product_id INT NOT NULL,
+  size TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'available'
+    CHECK (status IN ('available', 'sold_out', 'delayed')),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(product_id, size)
+);
+
+CREATE INDEX idx_product_sizes_product_id ON product_sizes(product_id);
+
+ALTER TABLE product_sizes ENABLE ROW LEVEL SECURITY;
+
+-- 초기 데이터
+INSERT INTO product_sizes (product_id, size, status) VALUES
+  (1, 'S', 'available'),
+  (1, 'M', 'available'),
+  (1, 'L', 'available'),
+  (1, 'XL', 'delayed'),
+  (1, '2XL', 'available');

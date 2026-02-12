@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
@@ -43,8 +43,22 @@ export default function ProductDetailPage({
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
 
   const product = products[params.id];
+
+  useEffect(() => {
+    fetch('/api/products/sizes')
+      .then((res) => res.json())
+      .then((data) => {
+        const map: Record<string, string> = {};
+        for (const item of data.sizes || []) {
+          map[`${item.product_id}-${item.size}`] = item.status;
+        }
+        setSizeStatuses(map);
+      })
+      .catch(() => {});
+  }, []);
 
   if (!product) {
     return (
@@ -196,18 +210,30 @@ export default function ProductDetailPage({
                 <h3>사이즈 선택</h3>
                 <div className={styles.sizeOptions}>
                   {product.sizes.map((size) => {
-                    const isSoldOut = product.soldOut?.includes(size);
+                    const sizeStatus = sizeStatuses[`${product.id}-${size}`] || 'available';
+                    const isSoldOut = sizeStatus === 'sold_out';
+                    const isDelayed = sizeStatus === 'delayed';
                     return (
                       <button
                         key={size}
                         className={`${styles.sizeButton} ${
                           selectedSize === size ? styles.selected : ''
-                        } ${isSoldOut ? styles.soldOut : ''}`}
-                        onClick={() => !isSoldOut && setSelectedSize(size)}
+                        } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
+                        onClick={() => {
+                          if (isSoldOut) return;
+                          if (isDelayed) {
+                            if (confirm('해당 사이즈는 주문 후 약 3주 뒤 발송됩니다.\n주문하시겠습니까?')) {
+                              setSelectedSize(size);
+                            }
+                            return;
+                          }
+                          setSelectedSize(size);
+                        }}
                         disabled={isSoldOut}
                       >
                         {size}
                         {isSoldOut && <span className={styles.soldOutLine} />}
+                        {isDelayed && <span className={styles.delayedLabel}>3주 뒤 발송</span>}
                       </button>
                     );
                   })}

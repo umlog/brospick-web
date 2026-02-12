@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
       totalAmount,
       shippingFee,
       depositorName,
+      deliveryNote,
       items,
     } = body;
 
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
         total_amount: totalAmount,
         shipping_fee: shippingFee,
         depositor_name: depositorName || null,
+        delivery_note: deliveryNote || null,
         payment_method: '무통장입금',
         status: '입금대기',
       })

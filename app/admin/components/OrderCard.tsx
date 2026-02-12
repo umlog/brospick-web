@@ -66,6 +66,7 @@ export function OrderCard({
             <p>전화: {order.customer_phone}</p>
             {order.customer_email && <p>이메일: {order.customer_email}</p>}
             <p>주소: [{order.postal_code}] {order.address} {order.address_detail || ''}</p>
+            {order.delivery_note && <p>배송 요청사항: {order.delivery_note}</p>}
           </div>
 
           <div className={styles.detailSection}>

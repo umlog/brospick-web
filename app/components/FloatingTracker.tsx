@@ -92,6 +92,20 @@ export default function FloatingTracker() {
   const [returnLoading, setReturnLoading] = useState(false);
   const [returnError, setReturnError] = useState('');
   const [returnRequestNumber, setReturnRequestNumber] = useState('');
+  const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch('/api/products/sizes')
+      .then((res) => res.json())
+      .then((data) => {
+        const map: Record<string, string> = {};
+        for (const item of data.sizes || []) {
+          map[`${item.product_id}-${item.size}`] = item.status;
+        }
+        setSizeStatuses(map);
+      })
+      .catch(() => {});
+  }, []);
 
   // 단체주문 문의 채팅 상태
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -259,7 +273,15 @@ export default function FloatingTracker() {
   // 해당 상품의 사이즈 정보 가져오기
   const getProductSizes = (productName: string) => {
     const product = Object.values(products).find((p) => p.name === productName);
-    return product ? { sizes: product.sizes, soldOut: product.soldOut || [] } : { sizes: [], soldOut: [] };
+    if (!product) return { sizes: [], soldOut: [], delayedShipping: [] };
+
+    const soldOut = product.sizes.filter(
+      (s) => sizeStatuses[`${product.id}-${s}`] === 'sold_out'
+    );
+    const delayedShipping = product.sizes.filter(
+      (s) => sizeStatuses[`${product.id}-${s}`] === 'delayed'
+    );
+    return { sizes: product.sizes, soldOut, delayedShipping };
   };
 
   // 교환/반품 신청 제출
@@ -406,22 +428,36 @@ export default function FloatingTracker() {
           <div className={styles.returnStepContent}>
             <p className={styles.returnStepTitle}>교환 희망 사이즈를 선택해주세요</p>
             <div className={styles.returnSizeGrid}>
-              {getProductSizes(returnSelectedItem.product_name).sizes.map((size) => {
-                const isSoldOut = getProductSizes(returnSelectedItem.product_name).soldOut.includes(size);
-                const isCurrent = size === returnSelectedItem.size;
-                return (
-                  <button
-                    key={size}
-                    className={`${styles.returnSizeButton} ${returnExchangeSize === size ? styles.returnSizeActive : ''} ${isSoldOut || isCurrent ? styles.returnSizeDisabled : ''}`}
-                    onClick={() => !isSoldOut && !isCurrent && setReturnExchangeSize(size)}
-                    disabled={isSoldOut || isCurrent}
-                  >
-                    {size}
-                    {isCurrent && <span className={styles.returnSizeTag}>현재</span>}
-                    {isSoldOut && !isCurrent && <span className={styles.returnSizeTag}>품절</span>}
-                  </button>
-                );
-              })}
+              {(() => {
+                const productSizes = getProductSizes(returnSelectedItem.product_name);
+                return productSizes.sizes.map((size) => {
+                  const isSoldOut = productSizes.soldOut.includes(size);
+                  const isDelayed = productSizes.delayedShipping.includes(size);
+                  const isCurrent = size === returnSelectedItem.size;
+                  return (
+                    <button
+                      key={size}
+                      className={`${styles.returnSizeButton} ${returnExchangeSize === size ? styles.returnSizeActive : ''} ${isSoldOut || isCurrent ? styles.returnSizeDisabled : ''}`}
+                      onClick={() => {
+                        if (isSoldOut || isCurrent) return;
+                        if (isDelayed) {
+                          if (confirm('해당 사이즈는 교환 후 약 3주 뒤 발송됩니다.\n교환하시겠습니까?')) {
+                            setReturnExchangeSize(size);
+                          }
+                          return;
+                        }
+                        setReturnExchangeSize(size);
+                      }}
+                      disabled={isSoldOut || isCurrent}
+                    >
+                      {size}
+                      {isCurrent && <span className={styles.returnSizeTag}>현재</span>}
+                      {isSoldOut && !isCurrent && <span className={styles.returnSizeTag}>품절</span>}
+                      {isDelayed && !isCurrent && !isSoldOut && <span className={styles.returnSizeTag}>3주 뒤 발송</span>}
+                    </button>
+                  );
+                });
+              })()}
             </div>
           </div>
         )}

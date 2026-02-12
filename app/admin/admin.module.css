@@ -633,3 +633,105 @@
     padding: var(--space-md) var(--space-sm);
   }
 }
+
+/* Product Size Manager */
+.sizeManagerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.sizeManagerCard {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-lg);
+}
+
+.sizeManagerTitle {
+  font-size: var(--size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-lg);
+}
+
+.sizeManagerGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sizeManagerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.sizeManagerLabel {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  min-width: 48px;
+  text-align: center;
+}
+
+.sizeManagerButtons {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.sizeManagerButton {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.sizeManagerButton:hover:not(:disabled) {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.sizeManagerButton:disabled {
+  cursor: default;
+}
+
+.sizeStatus_available {
+  background-color: #4CAF50;
+  color: #fff;
+  border-color: #4CAF50;
+}
+
+.sizeStatus_sold_out {
+  background-color: #e53935;
+  color: #fff;
+  border-color: #e53935;
+}
+
+.sizeStatus_delayed {
+  background-color: #ff9800;
+  color: #000;
+  border-color: #ff9800;
+}
+
+@media (max-width: 768px) {
+  .sizeManagerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .sizeManagerButtons {
+    width: 100%;
+  }
+
+  .sizeManagerButton {
+    flex: 1;
+    text-align: center;
+  }
+}

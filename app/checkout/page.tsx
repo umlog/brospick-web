@@ -26,6 +26,7 @@ export default function CheckoutPage() {
     addressDetail: '',
     postalCode: '',
     depositorName: '',
+    deliveryNote: '',
   });
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function CheckoutPage() {
           totalAmount: selectedTotalPrice,
           shippingFee: SHIPPING.freeShipping ? 0 : SHIPPING.fee,
           depositorName: formData.depositorName,
+          deliveryNote: formData.deliveryNote,
           items: checkoutItems.map((item) => ({
             productName: item.name,
             size: item.size,
@@ -273,6 +275,17 @@ export default function CheckoutPage() {
                     name="addressDetail"
                     value={formData.addressDetail}
                     onChange={handleInputChange}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="deliveryNote">배송 시 요청사항</label>
+                  <input
+                    type="text"
+                    id="deliveryNote"
+                    name="deliveryNote"
+                    value={formData.deliveryNote}
+                    onChange={handleInputChange}
+                    placeholder="공동현관 비밀번호: 0000"
                   />
                 </div>
               </section>

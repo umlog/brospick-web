@@ -19,6 +19,7 @@ export interface Order {
   shipping_fee: number;
   status: string;
   depositor_name: string | null;
+  delivery_note: string | null;
   payment_method: string;
   created_at: string;
   order_items: OrderItem[];
@@ -58,4 +59,10 @@ export interface ReturnRequest {
   };
 }
 
-export type AdminTab = 'orders' | 'returns';
+export type AdminTab = 'orders' | 'returns' | 'products';
+
+export interface ProductSize {
+  product_id: number;
+  size: string;
+  status: 'available' | 'sold_out' | 'delayed';
+}

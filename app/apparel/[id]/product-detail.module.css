@@ -246,10 +246,28 @@
   transform: rotate(-15deg);
 }
 
+.sizeButton.delayed {
+  position: relative;
+  border-color: #ff9800;
+  color: var(--color-text-primary);
+}
+
+.delayedLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #ff9800;
+  margin-top: 2px;
+}
+
 .sizeButton.selected {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-text-primary);
+}
+
+.sizeButton.selected .delayedLabel {
+  color: #fff;
 }
 
 .quantitySection {

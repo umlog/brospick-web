@@ -21,6 +21,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         교환/반품
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'products' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('products')}
+      >
+        상품 관리
+      </button>
     </div>
   );
 }

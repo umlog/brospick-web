@@ -10,7 +10,6 @@ export interface Product {
   tagline: string;
   description: string;
   sizes: string[];
-  soldOut?: string[];
 }
 
 export const products: Record<string, Product> = {
@@ -31,7 +30,6 @@ export const products: Record<string, Product> = {
     description:
       '편안한 착용감과 슬림한 실루엣을 동시에 잡은 Half-Zip Training Top. 고탄성 원단으로 몸을 안정감 있게 잡아주면서도 움직임은 자유롭고, 땀은 빠르게 건조되어 격한 운동에도 쾌적함을 유지해 줍니다.',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
-    soldOut: ['XL'],
   },
 };
 
