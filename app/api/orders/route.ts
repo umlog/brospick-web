@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { sendOrderConfirmationEmail } from '@/lib/email';
+import { sendOrderConfirmationEmail, sendNewOrderNotificationEmail } from '@/lib/email';
 import { sendOrderAlimtalk } from '@/lib/kakao';
 
 function generateOrderNumber(): string {
@@ -101,6 +101,20 @@ export async function POST(request: NextRequest) {
         trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`,
       }).catch((err) => console.error('Email send error:', err));
     }
+
+    // 관리자 알림 이메일 발송 (비동기)
+    sendNewOrderNotificationEmail({
+      orderNumber: order.order_number,
+      customerName: customerName,
+      customerEmail: customerEmail || '',
+      totalAmount: order.total_amount,
+      shippingFee: order.shipping_fee,
+      depositorName: depositorName || customerName,
+      items,
+      address,
+      addressDetail,
+      trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`,
+    }).catch((err) => console.error('Admin notification email error:', err));
 
     // 카카오톡 알림톡 발송 (비동기)
     const productNames = items.map((item: { productName: string }) => item.productName).join(', ');

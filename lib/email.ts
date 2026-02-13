@@ -141,6 +141,93 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
   });
 }
 
+// 관리자 주문 알림 이메일
+export async function sendNewOrderNotificationEmail(data: OrderEmailData) {
+  const itemsHtml = data.items
+    .map(
+      (item) => `
+      <tr>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;">${escapeHtml(item.productName)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;">${escapeHtml(item.size)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;">${item.quantity}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:right;">₩${(item.price * item.quantity).toLocaleString()}</td>
+      </tr>`
+    )
+    .join('');
+
+  const html = `
+  <div style="max-width:560px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;">
+    <div style="background:#121212;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+      <h1 style="color:#fff;font-size:20px;margin:0 0 8px;">BROSPICK</h1>
+      <p style="color:#ffcc00;font-size:14px;margin:0;font-weight:600;">새 주문이 들어왔습니다!</p>
+    </div>
+
+    <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
+      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">주문번호</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">고객명</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.customerName)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">입금자명</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.depositorName)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#888;">배송지</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.address)}${data.addressDetail ? ' ' + escapeHtml(data.addressDetail) : ''}</span>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px;color:#333;margin:0 0 12px;font-weight:600;">주문 상품</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+        <thead>
+          <tr style="background:#f8f8f8;">
+            <th style="padding:10px 12px;font-size:12px;color:#888;text-align:left;font-weight:500;">상품</th>
+            <th style="padding:10px 12px;font-size:12px;color:#888;text-align:center;font-weight:500;">사이즈</th>
+            <th style="padding:10px 12px;font-size:12px;color:#888;text-align:center;font-weight:500;">수량</th>
+            <th style="padding:10px 12px;font-size:12px;color:#888;text-align:right;font-weight:500;">금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemsHtml}
+        </tbody>
+      </table>
+
+      <div style="border-top:2px solid #333;padding-top:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:#888;">상품 금액</span>
+          <span style="font-size:14px;color:#333;">₩${(data.totalAmount - data.shippingFee).toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:#888;">배송비</span>
+          <span style="font-size:14px;color:#333;">₩${data.shippingFee.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <span style="font-size:15px;color:#333;font-weight:700;">총 결제금액</span>
+          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:20px 24px;text-align:center;border-radius:0 0 12px 12px;background:#f8f8f8;border:1px solid #eee;border-top:none;">
+      <p style="font-size:12px;color:#999;margin:0;">
+        BROSPICK 관리자 알림
+      </p>
+    </div>
+  </div>`;
+
+  await transporter.sendMail({
+    from: `"BROSPICK" <${process.env.GMAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL || process.env.GMAIL_USER!,
+    subject: `[새 주문] ${data.customerName}님 - ₩${data.totalAmount.toLocaleString()} (${data.orderNumber})`,
+    html,
+  });
+}
+
 // 상태 변경 알림 이메일
 interface StatusChangeEmailData {
   orderNumber: string;

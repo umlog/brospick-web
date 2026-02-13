@@ -702,6 +702,9 @@ export default function FloatingTracker() {
                     <button type="submit" className={styles.trackButton} disabled={loading}>
                       {loading ? '조회 중...' : '조회하기'}
                     </button>
+                    <a href="/tracking" className={styles.pageLink}>
+                      페이지에서 조회하기
+                    </a>
                   </form>
                 )}
 

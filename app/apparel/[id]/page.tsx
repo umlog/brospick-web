@@ -187,23 +187,26 @@ export default function ProductDetailPage({
               )}
 
               <div className={styles.sizeChartInline}>
+                <p className={styles.sizeUnit}>단위: cm</p>
                 <table className={styles.sizeTable}>
                   <thead>
                     <tr>
                       <th>사이즈</th>
-                      <th>키 (cm)</th>
-                      <th>몸무게 (kg)</th>
+                      <th>총장</th>
+                      <th>가슴단면</th>
+                      <th>소매길이</th>
+                      <th>밑단</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td>S</td><td>155–160</td><td>55–60</td></tr>
-                    <tr><td>M</td><td>160–165</td><td>60–65</td></tr>
-                    <tr><td>L</td><td>165–170</td><td>65–70</td></tr>
-                    <tr><td>XL</td><td>170–175</td><td>70–75</td></tr>
-                    <tr><td>2XL</td><td>175–180</td><td>75–80</td></tr>
+                    <tr><td>S</td><td>61</td><td>45</td><td>67</td><td>45</td></tr>
+                    <tr><td>M</td><td>64</td><td>46</td><td>68</td><td>48</td></tr>
+                    <tr><td>L</td><td>67</td><td>51</td><td>74</td><td>50</td></tr>
+                    <tr><td>XL</td><td>70</td><td>53</td><td>76</td><td>53</td></tr>
+                    <tr><td>2XL</td><td>73</td><td>55</td><td>78</td><td>55</td></tr>
                   </tbody>
                 </table>
-
+                <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
               </div>
 
               <div className={styles.sizeSection}>
@@ -309,24 +312,26 @@ export default function ProductDetailPage({
 
                 <Accordion title="사이즈 가이드">
                   <div className={styles.accordionContent}>
-                    <p className={styles.sizeNote}>슬림핏 기준으로 제작되었습니다. 여유 있는 착용감을 원하시면 한 사이즈 업을 권장합니다.</p>
+                    <p className={styles.sizeUnit}>단위: cm</p>
                     <table className={styles.sizeTable}>
                       <thead>
                         <tr>
                           <th>사이즈</th>
-                          <th>키 (cm)</th>
-                          <th>몸무게 (kg)</th>
+                          <th>총장</th>
+                          <th>가슴단면</th>
+                          <th>소매길이</th>
+                          <th>밑단</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr><td>S</td><td>155–160</td><td>55–60</td></tr>
-                        <tr><td>M</td><td>160–165</td><td>60–65</td></tr>
-                        <tr><td>L</td><td>165–170</td><td>65–70</td></tr>
-                        <tr><td>XL</td><td>170–175</td><td>70–75</td></tr>
-                        <tr><td>2XL</td><td>175–180</td><td>75–80</td></tr>
+                        <tr><td>S</td><td>61</td><td>45</td><td>67</td><td>45</td></tr>
+                        <tr><td>M</td><td>64</td><td>46</td><td>68</td><td>48</td></tr>
+                        <tr><td>L</td><td>67</td><td>51</td><td>74</td><td>50</td></tr>
+                        <tr><td>XL</td><td>70</td><td>53</td><td>76</td><td>53</td></tr>
+                        <tr><td>2XL</td><td>73</td><td>55</td><td>78</td><td>55</td></tr>
                       </tbody>
                     </table>
-                    <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–3cm 오차가 발생할 수 있습니다.</p>
+                    <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
                   </div>
                 </Accordion>
 

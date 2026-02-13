@@ -178,6 +178,21 @@
   cursor: not-allowed;
 }
 
+.pageLink {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.pageLink:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 /* 에러 메시지 */
 .error {
   background: rgba(255, 59, 48, 0.1);

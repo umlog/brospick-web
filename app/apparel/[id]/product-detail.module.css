@@ -477,6 +477,12 @@
 }
 
 /* Size Table */
+.sizeUnit {
+  font-size: 0.75rem !important;
+  color: var(--color-text-secondary) !important;
+  margin-bottom: var(--space-sm) !important;
+}
+
 .sizeNote {
   margin-bottom: var(--space-md) !important;
   font-weight: 500;
