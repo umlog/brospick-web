@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       console.error('Return request creation error:', insertError);
       return NextResponse.json(
-        { error: '교환/반품 신청에 실패했습니다.' },
+        { error: `교환/반품 신청에 실패했습니다: ${insertError.message}` },
         { status: 500 }
       );
     }
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
         currentSize: orderItem.size,
         exchangeSize,
         reason,
-        trackingUrl: `${siteUrl}?track=true`,
+        trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`,
       }).catch((err) => console.error('Return request email error:', err));
     }
 

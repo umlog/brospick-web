@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     if (orderError) {
       console.error('Order creation error:', orderError);
       return NextResponse.json(
-        { error: '주문 생성에 실패했습니다.' },
+        { error: `주문 생성에 실패했습니다: ${orderError.message}` },
         { status: 500 }
       );
     }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         items,
         address,
         addressDetail,
-        trackingUrl: `${siteUrl}?track=true`,
+        trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`,
       }).catch((err) => console.error('Email send error:', err));
     }
 

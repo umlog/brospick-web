@@ -121,7 +121,7 @@ export async function PATCH(
     if (error) {
       console.error('Return request update error:', error);
       return NextResponse.json(
-        { error: '상태 변경에 실패했습니다.' },
+        { error: `상태 변경에 실패했습니다: ${error.message}` },
         { status: 500 }
       );
     }
@@ -141,7 +141,7 @@ export async function PATCH(
           rejectReason,
           refundAmount: current.refund_amount || data.refund_amount,
           returnTrackingNumber,
-          trackingUrl: `${siteUrl}?track=true`,
+          trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(current.orders.order_number)}`,
         }).catch((err) => console.error('Return status email error:', err));
       }
 
@@ -187,7 +187,7 @@ export async function DELETE(
     if (error) {
       console.error('Return request delete error:', error);
       return NextResponse.json(
-        { error: '삭제에 실패했습니다.' },
+        { error: `삭제에 실패했습니다: ${error.message}` },
         { status: 500 }
       );
     }

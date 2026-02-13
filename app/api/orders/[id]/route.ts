@@ -23,7 +23,7 @@ export async function DELETE(
     if (error) {
       console.error('Order delete error:', error);
       return NextResponse.json(
-        { error: '주문 삭제에 실패했습니다.' },
+        { error: `주문 삭제에 실패했습니다: ${error.message}` },
         { status: 500 }
       );
     }
@@ -71,7 +71,7 @@ export async function POST(
       customerName: order.customer_name,
       customerEmail: order.customer_email,
       totalAmount: order.total_amount,
-      trackingUrl: `${siteUrl}?track=true`,
+      trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`,
     });
 
     return NextResponse.json({ success: true });
@@ -141,7 +141,7 @@ export async function PATCH(
           customerName: data.customer_name,
           customerEmail: data.customer_email,
           status,
-          trackingUrl: `${siteUrl}?track=true`,
+          trackingUrl: `${siteUrl}/tracking?orderNumber=${encodeURIComponent(data.order_number)}`,
           trackingNumber: data.tracking_number || undefined,
         }).catch((err) => console.error('Status email error:', err));
       }
