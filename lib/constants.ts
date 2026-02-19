@@ -7,8 +7,8 @@ export const SHIPPING = {
 } as const;
 
 export const BANK = {
-  name: '카카오뱅크',
-  account: '3333-27-7618216',
+  name: '기업은행',
+  account: '23714103902016',
   holder: '홍주영',
   notice: '주문 후 24시간 이내에 입금해주세요. 미입금 시 주문이 자동 취소됩니다.',
 } as const;

@@ -1,8 +1,22 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './sportswear.module.css';
 
+const images = ['/apparel/bp-thumb.png', '/apparel/bp-thumb2.png'];
+
 export default function Sportswear() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
@@ -10,13 +24,17 @@ export default function Sportswear() {
 
         <div className={styles.card}>
           <Link href="/apparel/1" className={styles.imageContainer}>
-            <Image
-              src="/apparel/bp-detailpoint.JPG"
-              alt="Half-Zip Training Top"
-              fill
-              className={styles.image}
-              style={{ objectFit: 'cover' }}
-            />
+            {images.map((src, i) => (
+              <Image
+                key={src}
+                src={src}
+                alt="Half-Zip Training Top"
+                fill
+                className={`${styles.image} ${i === activeIndex ? styles.imageActive : styles.imageHidden}`}
+                style={{ objectFit: 'cover' }}
+                priority={i === 0}
+              />
+            ))}
             <div className={styles.badge}>NOW AVAILABLE</div>
           </Link>
 

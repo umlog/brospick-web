@@ -5,7 +5,11 @@
       "Bash(npm run dev:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(netlify env:list:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\brospick-web\\brospick-web"
     ]
   }
 }
