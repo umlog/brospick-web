@@ -85,6 +85,7 @@ CREATE TABLE return_requests (
   refund_account TEXT,
   refund_holder TEXT,
   refund_completed BOOLEAN DEFAULT FALSE,
+  return_shipping_fee INTEGER,
   return_tracking_number TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { RETURN_POLICY } from '@/lib/constants';
 import { sendReturnStatusEmail } from '@/lib/email';
 import { sendReturnStatusAlimtalk } from '@/lib/kakao';
 
@@ -103,7 +104,8 @@ export async function PATCH(
         ? current.order_items[0]?.price
         : current.order_items?.price;
       if (itemPrice) {
-        updateData.refund_amount = itemPrice * current.quantity;
+        updateData.refund_amount = itemPrice * current.quantity - RETURN_POLICY.returnShippingFee;
+        updateData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
       }
     }
 

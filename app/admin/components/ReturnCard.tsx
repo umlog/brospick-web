@@ -84,13 +84,16 @@ export function ReturnCard({
               <h3>교환 정보</h3>
               <p>현재 사이즈: {req.order_items.size}</p>
               <p>희망 사이즈: {req.exchange_size}</p>
+              <p>교환 배송비: ₩{(req.return_shipping_fee || 8000).toLocaleString()}</p>
             </div>
           )}
 
           {req.type === '반품' && (
             <div className={styles.detailSection}>
               <h3>환불 정보</h3>
-              <p>환불 금액: ₩{(req.refund_amount || req.order_items.price * req.quantity).toLocaleString()}</p>
+              <p>상품 금액: ₩{(req.order_items.price * req.quantity).toLocaleString()}</p>
+              <p>반품 배송비: -₩{(req.return_shipping_fee || 4000).toLocaleString()}</p>
+              <p style={{ fontWeight: 700 }}>환불 금액: ₩{(req.refund_amount || req.order_items.price * req.quantity - (req.return_shipping_fee || 4000)).toLocaleString()}</p>
               <p>은행: {req.refund_bank || '-'}</p>
               <p>계좌번호: {req.refund_account || '-'}</p>
               <p>예금주: {req.refund_holder || '-'}</p>

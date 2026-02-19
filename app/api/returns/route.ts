@@ -149,7 +149,12 @@ export async function POST(request: NextRequest) {
         insertData.refund_bank = refundBank;
         insertData.refund_account = refundAccount;
         insertData.refund_holder = refundHolder;
-        insertData.refund_amount = orderItem.price * returnQuantity;
+        insertData.refund_amount = orderItem.price * returnQuantity - RETURN_POLICY.returnShippingFee;
+        insertData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
+      }
+
+      if (type === '교환') {
+        insertData.return_shipping_fee = RETURN_POLICY.exchangeShippingFee;
       }
 
       const result = await supabaseAdmin

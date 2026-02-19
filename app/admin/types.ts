@@ -39,6 +39,7 @@ export interface ReturnRequest {
   refund_account: string | null;
   refund_holder: string | null;
   refund_completed: boolean;
+  return_shipping_fee: number | null;
   return_tracking_number: string | null;
   created_at: string;
   updated_at: string;

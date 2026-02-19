@@ -530,11 +530,19 @@ export default function FloatingTracker() {
                 <span>사이즈</span>
                 <span>{returnSelectedItem.size}{returnType === '교환' ? ` → ${returnExchangeSize}` : ''}</span>
               </div>
+              <div className={styles.summaryRow}>
+                <span>{returnType === '교환' ? '교환 배송비' : '반품 배송비'}</span>
+                <span>₩{(returnType === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee).toLocaleString()}</span>
+              </div>
               {returnType === '반품' && (
                 <>
                   <div className={styles.summaryRow}>
-                    <span>환불 예상 금액</span>
+                    <span>상품 금액</span>
                     <span>₩{(returnSelectedItem.price * returnSelectedItem.quantity).toLocaleString()}</span>
+                  </div>
+                  <div className={styles.summaryRow} style={{ fontWeight: 700 }}>
+                    <span>환불 예상 금액</span>
+                    <span>₩{(returnSelectedItem.price * returnSelectedItem.quantity - RETURN_POLICY.returnShippingFee).toLocaleString()}</span>
                   </div>
                   <div className={styles.summaryRow}>
                     <span>환불 계좌</span>

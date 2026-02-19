@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { BANK } from './constants';
+import { BANK, RETURN_POLICY } from './constants';
 
 function escapeHtml(str: string): string {
   return str
@@ -446,6 +446,7 @@ interface ReturnRequestEmailData {
 
 export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
   const typeLabel = data.type === '교환' ? '교환 (사이즈 변경)' : '반품 (환불)';
+  const shippingFee = data.type === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee;
   const detailHtml = data.type === '교환'
     ? `<div style="display:flex;justify-content:space-between;margin-bottom:6px;">
         <span style="font-size:13px;color:#888;">사이즈 변경</span>
@@ -490,7 +491,13 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
       </div>
 
       <div style="background:#fff8f0;border:1px solid #ffe0b2;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="font-size:13px;color:#e65100;margin:0 0 8px;font-weight:600;">
+          ${data.type} 배송비 안내
+        </p>
         <p style="font-size:13px;color:#e65100;margin:0;">
+          ${data.type} 배송비 ₩${shippingFee.toLocaleString()}은 고객 부담입니다.${data.type === '반품' ? ' 환불 금액에서 차감됩니다.' : ''}
+        </p>
+        <p style="font-size:12px;color:#888;margin:8px 0 0;">
           접수된 요청은 확인 후 순차적으로 처리됩니다. 처리 상태는 주문 조회에서 확인하실 수 있습니다.
         </p>
       </div>
