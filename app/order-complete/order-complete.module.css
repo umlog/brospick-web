@@ -80,6 +80,34 @@
   margin: var(--space-sm) 0;
 }
 
+.transferButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-top: var(--space-md);
+  padding: var(--space-md) var(--space-xl);
+  background-color: #0064FF;
+  color: #ffffff;
+  font-size: var(--size-base);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.transferButton:hover {
+  background-color: #0052d4;
+}
+
+.transferSubtext {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
 .notice {
   font-size: var(--size-sm);
   color: var(--color-text-secondary);

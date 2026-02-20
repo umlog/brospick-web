@@ -47,7 +47,7 @@ export default function Footer() {
             <li>사업자번호: 887-05-03210</li>
             <li>통신판매업: 제 2026-경기파주-0883 호</li>
             <li>주소: 경기도 화성시 동탄신리천로 270</li>
-            <li>개인정보보호 책임자: 홍주영</li>
+            <li style={{ whiteSpace: 'nowrap' }}>개인정보보호 책임자: 홍주영</li>
           </ul>
         </div>
       </div>

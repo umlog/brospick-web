@@ -6,6 +6,31 @@ import Link from 'next/link';
 import { BANK } from '../../lib/constants';
 import styles from './order-complete.module.css';
 
+function TransferButton({ amount }: { amount: number }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  }, []);
+
+  const handleToss = () => {
+    const url = `supertoss://send?amount=${amount}&bank=${encodeURIComponent(BANK.name)}&accountNo=${BANK.account}&origin=brospick`;
+    window.location.href = url;
+  };
+
+  if (!isMobile) return null;
+
+  return (
+    <button onClick={handleToss} className={styles.transferButton}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      바로 송금하기
+      <span className={styles.transferSubtext}>토스 앱으로 연결</span>
+    </button>
+  );
+}
+
 interface OrderData {
   orderNumber: string;
   totalAmount: number;
@@ -73,6 +98,7 @@ export default function OrderCompletePage() {
               <span className={styles.bankValue}>{orderData.depositorName}</span>
             </div>
           </div>
+          <TransferButton amount={orderData.totalAmount} />
           <p className={styles.notice}>
             {BANK.notice}
           </p>

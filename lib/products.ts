@@ -24,6 +24,8 @@ export const products: Record<string, Product> = {
       '/apparel/bp-detailpoint.JPG',
       '/apparel/bp-light-second.png',
       '/apparel/bp-light-main.png',
+      '/apparel/bp-thumb.png',
+      '/apparel/bp-thumb2.png',
     ],
     tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
     description:
