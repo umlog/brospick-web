@@ -125,3 +125,13 @@ INSERT INTO product_sizes (product_id, size, status) VALUES
   (1, 'L', 'available'),
   (1, 'XL', 'delayed'),
   (1, '2XL', 'available');
+
+-- ============================================
+-- 재고 수량 관리 (사이즈별)
+-- ============================================
+
+-- product_sizes에 실제 재고 수량 추가
+ALTER TABLE product_sizes ADD COLUMN stock INTEGER NOT NULL DEFAULT 0;
+
+-- order_items에 product_id 추가 (재고 연동용, 기존 주문 호환성 위해 nullable)
+ALTER TABLE order_items ADD COLUMN product_id INTEGER;

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import type { useProductSizes } from '../hooks/useProductSizes';
 import { products } from '../../../lib/products';
 import styles from '../admin.module.css';
@@ -14,8 +17,69 @@ interface ProductSizeManagerProps {
   state: ProductSizesState;
 }
 
+function StockInput({
+  productId,
+  size,
+  currentStock,
+  onUpdate,
+}: {
+  productId: number;
+  size: string;
+  currentStock: number;
+  onUpdate: (productId: number, size: string, stock: number) => Promise<void>;
+}) {
+  const [inputValue, setInputValue] = useState(String(currentStock));
+  const [saving, setSaving] = useState(false);
+
+  // 부모에서 currentStock이 변경되면 (fetchSizes 재호출 등) 입력값 동기화
+  useEffect(() => {
+    if (!saving) {
+      setInputValue(String(currentStock));
+    }
+  }, [currentStock]);
+
+  const handleSave = async () => {
+    const parsed = parseInt(inputValue, 10);
+    if (isNaN(parsed) || parsed < 0) {
+      alert('0 이상의 숫자를 입력해주세요.');
+      setInputValue(String(currentStock));
+      return;
+    }
+    setSaving(true);
+    await onUpdate(productId, size, parsed);
+    setSaving(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSave();
+    if (e.key === 'Escape') setInputValue(String(currentStock));
+  };
+
+  return (
+    <div className={styles.sizeManagerStockSection}>
+      <span className={styles.sizeManagerStockLabel}>재고</span>
+      <input
+        type="number"
+        className={styles.sizeManagerStockInput}
+        value={inputValue}
+        min={0}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={saving}
+      />
+      <button
+        className={styles.sizeManagerStockButton}
+        onClick={handleSave}
+        disabled={saving || inputValue === String(currentStock)}
+      >
+        {saving ? '저장 중...' : '저장'}
+      </button>
+    </div>
+  );
+}
+
 export function ProductSizeManager({ state }: ProductSizeManagerProps) {
-  const { sizes, loading, updateSize } = state;
+  const { sizes, loading, updateSize, updateStock } = state;
 
   if (loading) {
     return <p className={styles.loading}>로딩 중...</p>;
@@ -33,6 +97,7 @@ export function ProductSizeManager({ state }: ProductSizeManagerProps) {
               {product.sizes.map((size) => {
                 const sizeData = productSizes.find((s) => s.size === size);
                 const currentStatus = sizeData?.status || 'available';
+                const currentStock = sizeData?.stock ?? 0;
 
                 return (
                   <div key={size} className={styles.sizeManagerRow}>
@@ -55,6 +120,14 @@ export function ProductSizeManager({ state }: ProductSizeManagerProps) {
                         </button>
                       ))}
                     </div>
+                    {sizeData && (
+                      <StockInput
+                        productId={product.id}
+                        size={size}
+                        currentStock={currentStock}
+                        onUpdate={updateStock}
+                      />
+                    )}
                   </div>
                 );
               })}

@@ -68,8 +68,9 @@ export async function POST(request: NextRequest) {
     }
 
     // 주문 상품 생성
-    const orderItems = items.map((item: { productName: string; size: string; quantity: number; price: number }) => ({
+    const orderItems = items.map((item: { productId?: number; productName: string; size: string; quantity: number; price: number }) => ({
       order_id: order.id,
+      product_id: item.productId ?? null,
       product_name: item.productName,
       size: item.size,
       quantity: item.quantity,

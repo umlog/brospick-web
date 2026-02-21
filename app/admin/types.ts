@@ -66,4 +66,5 @@ export interface ProductSize {
   product_id: number;
   size: string;
   status: 'available' | 'sold_out' | 'delayed';
+  stock: number;
 }

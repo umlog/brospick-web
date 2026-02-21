@@ -44,6 +44,7 @@ export default function ProductDetailPage({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
+  const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
 
   const product = products[params.id];
 
@@ -51,11 +52,15 @@ export default function ProductDetailPage({
     fetch('/api/products/sizes')
       .then((res) => res.json())
       .then((data) => {
-        const map: Record<string, string> = {};
+        const statusMap: Record<string, string> = {};
+        const stockMap: Record<string, number> = {};
         for (const item of data.sizes || []) {
-          map[`${item.product_id}-${item.size}`] = item.status;
+          const key = `${item.product_id}-${item.size}`;
+          statusMap[key] = item.status;
+          stockMap[key] = item.stock ?? 0;
         }
-        setSizeStatuses(map);
+        setSizeStatuses(statusMap);
+        setSizeStocks(stockMap);
       })
       .catch(() => {});
   }, []);
@@ -182,9 +187,6 @@ export default function ProductDetailPage({
                   </>
                 )}
               </div>
-              {SHIPPING.freeShipping && (
-                <span className={styles.shippingInfo}>배송비 포함</span>
-              )}
 
               <div className={styles.sizeChartInline}>
                 <p className={styles.sizeUnit}>단위: cm</p>
@@ -213,9 +215,12 @@ export default function ProductDetailPage({
                 <h3>사이즈 선택</h3>
                 <div className={styles.sizeOptions}>
                   {product.sizes.map((size) => {
-                    const sizeStatus = sizeStatuses[`${product.id}-${size}`] || 'available';
+                    const key = `${product.id}-${size}`;
+                    const sizeStatus = sizeStatuses[key] || 'available';
+                    const stock = sizeStocks[key] ?? null;
                     const isSoldOut = sizeStatus === 'sold_out';
                     const isDelayed = sizeStatus === 'delayed';
+                    const showLowStock = !isSoldOut && stock !== null && stock > 0 && stock <= 5;
                     return (
                       <button
                         key={size}
@@ -237,6 +242,7 @@ export default function ProductDetailPage({
                         {size}
                         {isSoldOut && <span className={styles.soldOutLine} />}
                         {isDelayed && <span className={styles.delayedLabel}>3주 뒤 발송</span>}
+                        {showLowStock && <span className={styles.lowStockLabel}>잔여 {stock}개</span>}
                       </button>
                     );
                   })}
@@ -338,10 +344,7 @@ export default function ProductDetailPage({
                 <Accordion title="배송">
                   <div className={styles.accordionContent}>
                     <ul>
-                      <li>배송비: {SHIPPING.freeShipping
-                        ? `₩${SHIPPING.fee.toLocaleString()} → 무료 (할인)`
-                        : `₩${SHIPPING.fee.toLocaleString()}`}
-                      </li>
+                      <li>배송비: ₩{SHIPPING.fee.toLocaleString()}</li>
                       <li>입금 확인 후 1~3 영업일 이내 발송</li>
                       <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>
                       <li>제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다</li>

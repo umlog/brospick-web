@@ -270,6 +270,18 @@
   color: #fff;
 }
 
+.lowStockLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #e53935;
+  margin-top: 2px;
+}
+
+.sizeButton.selected .lowStockLabel {
+  color: #ffcdd2;
+}
+
 .quantitySection {
   display: flex;
   flex-direction: column;

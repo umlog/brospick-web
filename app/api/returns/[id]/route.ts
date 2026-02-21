@@ -11,6 +11,32 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   '수거완료': ['처리완료'],
 };
 
+// 재고 조정 헬퍼: delta < 0이면 차감, delta > 0이면 증가
+async function adjustStock(productId: number, size: string, delta: number) {
+  const { data, error } = await supabaseAdmin
+    .from('product_sizes')
+    .select('stock, status')
+    .match({ product_id: productId, size })
+    .single();
+
+  if (error || !data) return;
+
+  const newStock = Math.max(0, data.stock + delta);
+  const updateData: Record<string, unknown> = { stock: newStock, updated_at: new Date().toISOString() };
+
+  if (newStock === 0 && data.status === 'available') {
+    updateData.status = 'sold_out';
+  }
+  if (newStock > 0 && data.status === 'sold_out') {
+    updateData.status = 'available';
+  }
+
+  await supabaseAdmin
+    .from('product_sizes')
+    .update(updateData)
+    .match({ product_id: productId, size });
+}
+
 // 교환/반품 상태 변경 (관리자)
 export async function PATCH(
   request: NextRequest,
@@ -44,6 +70,7 @@ export async function PATCH(
           customer_email
         ),
         order_items (
+          product_id,
           product_name,
           size,
           quantity,
@@ -127,6 +154,23 @@ export async function PATCH(
         { status: 500 }
       );
     }
+
+    // ── 재고 조정 ──────────────────────────────────────────────────
+    const orderItem = Array.isArray(current.order_items)
+      ? current.order_items[0]
+      : current.order_items;
+    const productId = orderItem?.product_id ?? null;
+
+    // 교환 승인: 교환 요청 사이즈 재고 차감 (교환품 예약)
+    if (status === '승인' && current.type === '교환' && current.exchange_size && productId) {
+      await adjustStock(productId, current.exchange_size, -current.quantity);
+    }
+
+    // 처리완료: 반품/교환 모두 원래 사이즈 재고 증가 (반품 물건 입고)
+    if (status === '처리완료' && orderItem?.size && productId) {
+      await adjustStock(productId, orderItem.size, current.quantity);
+    }
+    // ──────────────────────────────────────────────────────────────
 
     // 알림 발송
     if (sendNotification && current.orders) {

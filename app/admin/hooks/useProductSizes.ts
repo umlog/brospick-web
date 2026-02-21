@@ -36,10 +36,11 @@ export function useProductSizes(password: string) {
         return;
       }
 
+      const result = await response.json();
       setSizes((prev) =>
         prev.map((s) =>
           s.product_id === productId && s.size === size
-            ? { ...s, status: status as ProductSize['status'] }
+            ? { ...s, status: result.size.status as ProductSize['status'] }
             : s
         )
       );
@@ -48,5 +49,35 @@ export function useProductSizes(password: string) {
     }
   };
 
-  return { sizes, loading, fetchSizes, updateSize };
+  const updateStock = async (productId: number, size: string, stock: number) => {
+    try {
+      const response = await fetch('/api/products/sizes', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ productId, size, stock }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || '재고 변경에 실패했습니다.');
+        return;
+      }
+
+      const result = await response.json();
+      setSizes((prev) =>
+        prev.map((s) =>
+          s.product_id === productId && s.size === size
+            ? { ...s, stock: result.size.stock, status: result.size.status as ProductSize['status'] }
+            : s
+        )
+      );
+    } catch {
+      alert('재고 변경에 실패했습니다.');
+    }
+  };
+
+  return { sizes, loading, fetchSizes, updateSize, updateStock };
 }

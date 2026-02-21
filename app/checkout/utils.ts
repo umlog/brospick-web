@@ -41,10 +41,11 @@ export function buildOrderPayload(
     address: formData.address,
     addressDetail: formData.addressDetail,
     totalAmount: totalPrice,
-    shippingFee: SHIPPING.freeShipping ? 0 : SHIPPING.fee,
+    shippingFee: SHIPPING.fee,
     depositorName: formData.depositorName,
     deliveryNote: formData.deliveryNote,
     items: checkoutItems.map((item) => ({
+      productId: item.id,
       productName: item.name,
       size: item.size,
       quantity: item.quantity,
