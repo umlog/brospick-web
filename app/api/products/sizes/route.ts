@@ -18,7 +18,22 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ sizes: data });
+    // stock=0인데 status가 available인 행 자동 정정
+    const toFix = data?.filter((s) => s.stock === 0 && s.status === 'available') ?? [];
+    if (toFix.length > 0) {
+      await supabaseAdmin
+        .from('product_sizes')
+        .update({ status: 'sold_out' })
+        .eq('status', 'available')
+        .eq('stock', 0);
+    }
+
+    const corrected = (data ?? []).map((s) => ({
+      ...s,
+      status: s.stock === 0 && s.status === 'available' ? 'sold_out' : s.status,
+    }));
+
+    return NextResponse.json({ sizes: corrected });
   } catch (error) {
     console.error('Product sizes API error:', error);
     return NextResponse.json(

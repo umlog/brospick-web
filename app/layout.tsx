@@ -7,6 +7,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import FloatingTracker from './components/FloatingTracker';
+import VisitTracker from './components/VisitTracker';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -25,11 +26,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'BROSPICK',
   description:
-    '대학 축구 선수들의 실력과 스토리를 기록하는 브로스픽. 인터뷰·하이라이트 콘텐츠와 함께, 하이라이트 플랫폼 픽커(Picker)를 준비 중입니다.',
+    '스포츠인들의 스토리를 기록하는 브로스픽입니다. 새롭게 출시된 의류와 다양한 컨텐츠를 만나보세요. 현재 하이라이트 커뮤니티 플랫폼 픽커 (picker)를 준비 중입니다.',
   openGraph: {
     title: 'Brospick',
     description:
-      '무명 선수의 실력을 기록하고, 그들에게 기회를 만듭니다.',
+      '선수의 실력을 기록하고, 그들에게 기회를 만듭니다.',
     type: 'website',
   },
 };
@@ -62,6 +63,7 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <FloatingTracker />
             </Suspense>
+            <VisitTracker />
           </CartProvider>
         </ThemeProvider>
       </body>

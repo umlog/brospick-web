@@ -16,8 +16,8 @@ export const products: Record<string, Product> = {
   '1': {
     id: 1,
     name: 'Half-Zip Training Top',
-    price: 29900,
-    originalPrice: 69000,
+    price: 26900,
+    originalPrice: 59000,
     image: '/apparel/bp-detail1.JPG',
     images: [
       '/apparel/bp-detail1.JPG',

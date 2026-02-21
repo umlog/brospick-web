@@ -288,6 +288,18 @@
   gap: var(--space-md);
 }
 
+.quantityRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.quantityLowStock {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: #e53935;
+}
+
 .quantityControls {
   display: flex;
   align-items: center;

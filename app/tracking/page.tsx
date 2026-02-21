@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import styles from './tracking.module.css';
+import { TRACKING } from '@/lib/constants';
 
 interface OrderItem {
   id: string;
@@ -151,12 +152,12 @@ function TrackingContent() {
                 <>
                   <div className={styles.orderRow}>
                     <span>택배사</span>
-                    <span>CJ대한통운</span>
+                    <span>{TRACKING.defaultCarrier}</span>
                   </div>
                   <div className={styles.orderRow}>
                     <span>운송장번호</span>
                     <a
-                      href={`https://trace.cjlogistics.com/next/tracking.html?wblNo=${encodeURIComponent(result.tracking_number)}`}
+                      href={`${TRACKING.cjBaseUrl}${encodeURIComponent(result.tracking_number)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.trackingNumber}

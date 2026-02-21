@@ -43,9 +43,6 @@ export default function ApparelPage() {
                     </>
                   )}
                 </div>
-                {SHIPPING.freeShipping && (
-                  <span className={styles.shippingInfo}>배송비 포함</span>
-                )}
                 <span className={styles.viewDetail}>자세히 보기 →</span>
               </div>
             </Link>

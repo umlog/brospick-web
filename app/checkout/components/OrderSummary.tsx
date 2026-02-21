@@ -33,16 +33,8 @@ export function OrderSummary({ checkoutItems, totalPrice }: OrderSummaryProps) {
         </div>
         <div className={styles.totalRow}>
           <span>배송비</span>
-          <span className={SHIPPING.freeShipping ? styles.shippingFree : undefined}>
-            {formatPrice(SHIPPING.fee)}{SHIPPING.freeShipping && ' → 무료'}
-          </span>
+          <span>{formatPrice(SHIPPING.fee)}</span>
         </div>
-        {SHIPPING.freeShipping && (
-          <div className={styles.totalRow}>
-            <span>배송비 할인</span>
-            <span className={styles.discountText}>-{formatPrice(SHIPPING.fee)}</span>
-          </div>
-        )}
         <div className={styles.totalDivider} />
         <div className={styles.totalRowFinal}>
           <span>총 결제 금액</span>

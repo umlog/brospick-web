@@ -1,4 +1,5 @@
 import styles from '../admin.module.css';
+import { CARRIERS, TRACKING } from '@/lib/constants';
 
 interface TrackingModalProps {
   title: string;
@@ -23,12 +24,10 @@ export function TrackingModal({
     <div className={styles.trackingModal}>
       <h4>{title}</h4>
       {showCarrierSelect && (
-        <select className={styles.carrierSelect} defaultValue="CJ대한통운">
-          <option value="CJ대한통운">CJ대한통운</option>
-          <option value="한진택배">한진택배</option>
-          <option value="롯데택배">롯데택배</option>
-          <option value="로젠택배">로젠택배</option>
-          <option value="우체국택배">우체국택배</option>
+        <select className={styles.carrierSelect} defaultValue={TRACKING.defaultCarrier}>
+          {CARRIERS.map((carrier) => (
+            <option key={carrier} value={carrier}>{carrier}</option>
+          ))}
         </select>
       )}
       <input

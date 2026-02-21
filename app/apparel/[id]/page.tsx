@@ -78,11 +78,28 @@ export default function ProductDetailPage({
     );
   }
 
+  const checkSelectedStock = (): boolean => {
+    const key = `${product.id}-${selectedSize}`;
+    const status = sizeStatuses[key];
+    if (status === undefined) return true; // 데이터 미로드 시 허용 (서버에서 최종 체크)
+    const stock = sizeStocks[key] ?? 0;
+    if (status === 'sold_out' || stock <= 0) {
+      alert(`${selectedSize} 사이즈가 품절되었습니다.`);
+      return false;
+    }
+    if (quantity > stock) {
+      alert(`${selectedSize} 사이즈의 재고가 부족합니다. (남은 재고: ${stock}개)`);
+      return false;
+    }
+    return true;
+  };
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
     }
+    if (!checkSelectedStock()) return;
 
     addToCart({
       id: product.id,
@@ -124,6 +141,7 @@ export default function ProductDetailPage({
       alert('사이즈를 선택해주세요.');
       return;
     }
+    if (!checkSelectedStock()) return;
 
     addToCart({
       id: product.id,
@@ -251,20 +269,36 @@ export default function ProductDetailPage({
 
               <div className={styles.quantitySection}>
                 <h3>수량</h3>
-                <div className={styles.quantityControls}>
-                  <button
-                    className={styles.quantityButton}
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    −
-                  </button>
-                  <span className={styles.quantity}>{quantity}</span>
-                  <button
-                    className={styles.quantityButton}
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    +
-                  </button>
+                <div className={styles.quantityRow}>
+                  <div className={styles.quantityControls}>
+                    <button
+                      className={styles.quantityButton}
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    >
+                      −
+                    </button>
+                    <span className={styles.quantity}>{quantity}</span>
+                    <button
+                      className={styles.quantityButton}
+                      onClick={() => {
+                        const key = `${product.id}-${selectedSize}`;
+                        const stock = selectedSize ? (sizeStocks[key] || Infinity) : Infinity;
+                        setQuantity(Math.min(quantity + 1, stock));
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                  {(() => {
+                    if (!selectedSize) return null;
+                    const key = `${product.id}-${selectedSize}`;
+                    const status = sizeStatuses[key];
+                    const stock = sizeStocks[key] ?? 0;
+                    if (status && status !== 'sold_out' && stock > 0 && stock <= 5) {
+                      return <span className={styles.quantityLowStock}>{stock}개 남음</span>;
+                    }
+                    return null;
+                  })()}
                 </div>
               </div>
 

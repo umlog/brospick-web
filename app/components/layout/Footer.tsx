@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { CONTACT } from '../../../lib/constants';
+import { CONTACT, COMPANY, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './footer.module.css';
 import symbolImg from '../../styles/txtlogo.svg';
 
@@ -21,12 +21,12 @@ export default function Footer() {
           <h3 className={styles.columnTitle}>지원</h3>
           <ul className={styles.columnList}>
             <li>
-              <a href="https://www.instagram.com/team.brospick/" target="_blank" rel="noopener noreferrer">
+              <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer">
                 인스타그램
               </a>
             </li>
             <li>
-              <a href="https://www.threads.com/@team.brospick?" target="_blank" rel="noopener noreferrer">
+              <a href={SOCIAL_MEDIA.threads} target="_blank" rel="noopener noreferrer">
                 스레드
               </a>
             </li>
@@ -40,21 +40,21 @@ export default function Footer() {
         </div>
 
         <div className={styles.column}>
-          <h3 className={styles.columnTitle}>BROSPICK</h3>
+          <h3 className={styles.columnTitle}>{COMPANY.name}</h3>
           <ul className={styles.columnList}>
-            <li>회사: BROSPICK</li>
-            <li>대표자: 홍주영</li>
-            <li>사업자번호: 887-05-03210</li>
-            <li>통신판매업: 제 2026-경기파주-0883 호</li>
-            <li>주소: 경기도 화성시 동탄신리천로 270</li>
-            <li style={{ whiteSpace: 'nowrap' }}>개인정보보호 책임자: 홍주영</li>
+            <li>회사: {COMPANY.name}</li>
+            <li>대표자: {COMPANY.representative}</li>
+            <li>사업자번호: {COMPANY.businessNumber}</li>
+            <li>통신판매업: {COMPANY.communicationSalesNumber}</li>
+            <li>주소: {COMPANY.address}</li>
+            <li style={{ whiteSpace: 'nowrap' }}>개인정보보호 책임자: {COMPANY.privacyOfficer}</li>
           </ul>
         </div>
       </div>
 
       <div className={styles.bottom}>
         <div className={styles.bottomContainer}>
-          <p>© {year} BROSPICK. All rights reserved.</p>
+          <p>© {year} {COMPANY.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

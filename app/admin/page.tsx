@@ -11,6 +11,7 @@ import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
 import { ProductSizeManager } from './components/ProductSizeManager';
+import { VisitCounter } from './components/VisitCounter';
 import styles from './admin.module.css';
 
 export default function AdminPage() {
@@ -30,7 +31,7 @@ export default function AdminPage() {
     if (tab === 'returns' && returnsState.returnRequests.length === 0) {
       returnsState.fetchReturns(auth.password);
     }
-    if (tab === 'products' && productSizesState.sizes.length === 0) {
+    if (tab === 'products') {
       productSizesState.fetchSizes();
     }
   };
@@ -81,6 +82,7 @@ export default function AdminPage() {
           <ProductSizeManager state={productSizesState} />
         )}
       </div>
+      <VisitCounter password={auth.password} />
     </main>
   );
 }
