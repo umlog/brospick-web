@@ -46,11 +46,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  margin-top: 60px;
+}
+
 .card {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
-  margin-top: 60px;
   align-items: center;
 }
 

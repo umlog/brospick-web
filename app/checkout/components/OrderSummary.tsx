@@ -38,7 +38,7 @@ export function OrderSummary({ checkoutItems, totalPrice }: OrderSummaryProps) {
         <div className={styles.totalDivider} />
         <div className={styles.totalRowFinal}>
           <span>총 결제 금액</span>
-          <span>{formatPrice(totalPrice)}</span>
+          <span>{formatPrice(totalPrice + SHIPPING.fee)}</span>
         </div>
       </div>
     </div>

@@ -40,7 +40,7 @@ export function buildOrderPayload(
     postalCode: formData.postalCode,
     address: formData.address,
     addressDetail: formData.addressDetail,
-    totalAmount: totalPrice,
+    totalAmount: totalPrice + SHIPPING.fee,
     shippingFee: SHIPPING.fee,
     depositorName: formData.depositorName,
     deliveryNote: formData.deliveryNote,
