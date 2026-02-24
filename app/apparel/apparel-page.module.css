@@ -119,6 +119,13 @@
   flex: 1;
 }
 
+@media (max-width: 768px) {
+  .productInfo {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+}
+
 .productName {
   font-size: var(--size-lg);
   font-weight: 600;

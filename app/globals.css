@@ -61,6 +61,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -69,11 +70,20 @@ body {
   color: var(--color-text-primary);
   line-height: 1.6;
   padding-top: 80px;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
   body {
-    padding-top: 60px;
+    padding-top: 71px;
+  }
+
+  h1 {
+    font-size: var(--size-2xl);
+  }
+
+  h2 {
+    font-size: var(--size-xl);
   }
 }
 

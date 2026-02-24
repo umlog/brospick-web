@@ -76,11 +76,14 @@
   display: flex;
   gap: var(--space-sm);
   margin-top: var(--space-sm);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .thumbnail {
   width: 64px;
   height: 64px;
+  min-width: 64px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow: hidden;
@@ -89,6 +92,14 @@
   background: none;
   opacity: 0.5;
   transition: all 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .thumbnail {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+  }
 }
 
 .thumbnail:hover {
@@ -116,6 +127,12 @@
   font-size: var(--size-3xl);
   margin: 0;
   color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .productName {
+    font-size: var(--size-2xl);
+  }
 }
 
 .priceSection {
@@ -156,6 +173,13 @@
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: 8px;
+  overflow-x: auto;
+}
+
+@media (max-width: 480px) {
+  .sizeChartInline {
+    padding: var(--space-sm) var(--space-md);
+  }
 }
 
 .description {
