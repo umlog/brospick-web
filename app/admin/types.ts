@@ -60,7 +60,7 @@ export interface ReturnRequest {
   };
 }
 
-export type AdminTab = 'orders' | 'returns' | 'products';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard';
 
 export interface ProductSize {
   product_id: number;

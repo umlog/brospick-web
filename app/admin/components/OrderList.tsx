@@ -15,6 +15,10 @@ export function OrderList({ ordersState }: OrderListProps) {
     orders,
     loading,
     filterStatus,
+    dateFrom,
+    dateTo,
+    setDateFrom,
+    setDateTo,
     expandedOrder,
     trackingModal,
     trackingInput,
@@ -33,6 +37,30 @@ export function OrderList({ ordersState }: OrderListProps) {
 
   return (
     <>
+      <div className={styles.dateFilter}>
+        <input
+          type="date"
+          className={styles.dateInput}
+          value={dateFrom}
+          onChange={(e) => setDateFrom(e.target.value)}
+        />
+        <span className={styles.dateSeparator}>~</span>
+        <input
+          type="date"
+          className={styles.dateInput}
+          value={dateTo}
+          onChange={(e) => setDateTo(e.target.value)}
+        />
+        {(dateFrom || dateTo) && (
+          <button
+            className={styles.dateResetBtn}
+            onClick={() => { setDateFrom(''); setDateTo(''); }}
+          >
+            초기화
+          </button>
+        )}
+      </div>
+
       <StatusFilter
         options={STATUS_OPTIONS}
         activeFilter={filterStatus}

@@ -1,22 +1,31 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
 
 export function useOrders(password: string, onAuthFailure: () => void) {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [trackingModal, setTrackingModal] = useState<string | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
   const [notifyOnChange, setNotifyOnChange] = useState(true);
 
-  const fetchOrders = useCallback(async (pw: string, status?: string) => {
+  const orders = useMemo(() => {
+    return allOrders.filter((order) => {
+      const matchStatus = !filterStatus || order.status === filterStatus;
+      const orderDate = order.created_at.split('T')[0];
+      const matchFrom = !dateFrom || orderDate >= dateFrom;
+      const matchTo = !dateTo || orderDate <= dateTo;
+      return matchStatus && matchFrom && matchTo;
+    });
+  }, [allOrders, filterStatus, dateFrom, dateTo]);
+
+  const fetchOrders = useCallback(async (pw: string) => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (status) params.set('status', status);
-
-      const response = await fetch(`/api/orders?${params}`, {
+      const response = await fetch('/api/orders', {
         headers: { 'x-admin-password': pw },
       });
       if (!response.ok) {
@@ -29,7 +38,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
       }
 
       const data = await response.json();
-      setOrders(data.orders);
+      setAllOrders(data.orders);
     } catch {
       alert('주문 조회에 실패했습니다.');
     } finally {
@@ -38,7 +47,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
   }, [onAuthFailure]);
 
   const handleStatusChange = async (orderId: string, newStatus: string, trackingNumber?: string) => {
-    const order = orders.find((o) => o.id === orderId);
+    const order = allOrders.find((o) => o.id === orderId);
     const hasEmail = order?.customer_email;
     const willNotify = notifyOnChange && hasEmail;
 
@@ -67,7 +76,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
         throw new Error(errorData?.error || `서버 오류 (${response.status})`);
       }
 
-      setOrders((prev) =>
+      setAllOrders((prev) =>
         prev.map((o) =>
           o.id === orderId ? { ...o, status: newStatus } : o
         )
@@ -128,7 +137,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
 
       if (!response.ok) throw new Error('삭제 실패');
 
-      setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
       setExpandedOrder(null);
     } catch {
       alert('주문 삭제에 실패했습니다.');
@@ -137,7 +146,6 @@ export function useOrders(password: string, onAuthFailure: () => void) {
 
   const handleFilterChange = (status: string) => {
     setFilterStatus(status);
-    fetchOrders(password, status || undefined);
   };
 
   const toggleExpanded = (orderId: string) => {
@@ -146,8 +154,13 @@ export function useOrders(password: string, onAuthFailure: () => void) {
 
   return {
     orders,
+    allOrders,
     loading,
     filterStatus,
+    dateFrom,
+    dateTo,
+    setDateFrom,
+    setDateTo,
     expandedOrder,
     trackingModal,
     trackingInput,

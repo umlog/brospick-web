@@ -11,8 +11,16 @@ import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
 import { ProductSizeManager } from './components/ProductSizeManager';
+import { Dashboard } from './components/Dashboard';
 import { VisitCounter } from './components/VisitCounter';
 import styles from './admin.module.css';
+
+const TAB_TITLES: Record<AdminTab, string> = {
+  orders: '주문 관리',
+  returns: '교환/반품 관리',
+  products: '상품 관리',
+  dashboard: '대시보드',
+};
 
 export default function AdminPage() {
   const auth = useAdminAuth();
@@ -37,8 +45,8 @@ export default function AdminPage() {
   };
 
   const handleRefresh = () => {
-    if (activeTab === 'orders') {
-      ordersState.fetchOrders(auth.password, ordersState.filterStatus || undefined);
+    if (activeTab === 'orders' || activeTab === 'dashboard') {
+      ordersState.fetchOrders(auth.password);
     } else if (activeTab === 'returns') {
       returnsState.fetchReturns(auth.password, returnsState.filterStatus || undefined);
     } else {
@@ -60,7 +68,7 @@ export default function AdminPage() {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>{activeTab === 'orders' ? '주문 관리' : activeTab === 'returns' ? '교환/반품 관리' : '상품 관리'}</h1>
+          <h1>{TAB_TITLES[activeTab]}</h1>
           <button onClick={handleRefresh} className={styles.refreshButton}>
             새로고침
           </button>
@@ -80,6 +88,9 @@ export default function AdminPage() {
         )}
         {activeTab === 'products' && (
           <ProductSizeManager state={productSizesState} />
+        )}
+        {activeTab === 'dashboard' && (
+          <Dashboard password={auth.password} allOrders={ordersState.allOrders} />
         )}
       </div>
       <VisitCounter password={auth.password} />

@@ -27,6 +27,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         상품 관리
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'dashboard' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('dashboard')}
+      >
+        대시보드
+      </button>
     </div>
   );
 }
