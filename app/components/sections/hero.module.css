@@ -57,8 +57,13 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    align-items: flex-start;
+    padding-top: 16vh;
+  }
+
   .logo {
-    width: 300px;
+    width: 220px;
   }
 }
 

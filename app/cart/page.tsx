@@ -162,7 +162,7 @@ export default function CartPage() {
                   <span>₩{selectedTotalPrice.toLocaleString()}</span>
                 </div>
                 <div className={styles.summaryRow}>
-                  <span>배송비</span>
+                  <span>배송비 <small style={{ color: '#888', fontWeight: 400 }}>(주문당 1회)</small></span>
                   <span>₩{SHIPPING.fee.toLocaleString()}</span>
                 </div>
                 <div className={styles.summaryDivider} />

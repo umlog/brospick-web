@@ -1,7 +1,29 @@
+'use client';
+import { useState } from 'react';
 import Image from 'next/image';
 import { CONTACT, COMPANY, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './footer.module.css';
 import symbolImg from '../../styles/txtlogo.svg';
+
+function FooterSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className={styles.column}>
+      <button
+        className={styles.sectionHeader}
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+      >
+        <span className={styles.columnTitle}>{title}</span>
+        <span className={`${styles.sectionToggle} ${open ? styles.sectionToggleOpen : ''}`}>+</span>
+      </button>
+      <div className={`${styles.sectionBody} ${open ? styles.sectionBodyOpen : ''}`}>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,8 +39,7 @@ export default function Footer() {
           />
         </div>
 
-        <div className={styles.column}>
-          <h3 className={styles.columnTitle}>지원</h3>
+        <FooterSection title="지원">
           <ul className={styles.columnList}>
             <li>
               <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer">
@@ -37,10 +58,9 @@ export default function Footer() {
             <li>쿠키 정책</li>
             <li>면책 조항</li>
           </ul>
-        </div>
+        </FooterSection>
 
-        <div className={styles.column}>
-          <h3 className={styles.columnTitle}>{COMPANY.name}</h3>
+        <FooterSection title={COMPANY.name}>
           <ul className={styles.columnList}>
             <li>회사: {COMPANY.name}</li>
             <li>대표자: {COMPANY.representative}</li>
@@ -49,7 +69,7 @@ export default function Footer() {
             <li>주소: {COMPANY.address}</li>
             <li style={{ whiteSpace: 'nowrap' }}>개인정보보호 책임자: {COMPANY.privacyOfficer}</li>
           </ul>
-        </div>
+        </FooterSection>
       </div>
 
       <div className={styles.bottom}>

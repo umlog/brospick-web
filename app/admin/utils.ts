@@ -1,4 +1,5 @@
 import styles from './admin.module.css';
+import { OrderStatus, ReturnStatus } from '@/lib/domain/enums';
 
 export function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -13,11 +14,11 @@ export function formatDate(dateStr: string): string {
 
 export function getStatusColor(status: string): string {
   switch (status) {
-    case '입금대기': return styles.statusPending;
-    case '입금확인': return styles.statusConfirmed;
+    case OrderStatus.PENDING_PAYMENT: return styles.statusPending;
+    case OrderStatus.PAYMENT_CONFIRMED: return styles.statusConfirmed;
     case '배송준비': return styles.statusPreparing;
-    case '배송중': return styles.statusShipping;
-    case '배송완료': return styles.statusDelivered;
+    case OrderStatus.SHIPPING: return styles.statusShipping;
+    case OrderStatus.DELIVERED: return styles.statusDelivered;
     default:
       if (/^\d+주 뒤 발송$/.test(status)) return styles.statusDelay;
       return '';
@@ -26,12 +27,12 @@ export function getStatusColor(status: string): string {
 
 export function getReturnStatusColor(status: string): string {
   switch (status) {
-    case '접수완료': return styles.returnStatusReceived;
-    case '승인': return styles.returnStatusApproved;
-    case '수거중': return styles.returnStatusCollecting;
-    case '수거완료': return styles.returnStatusCollected;
-    case '처리완료': return styles.returnStatusComplete;
-    case '거절': return styles.returnStatusRejected;
+    case ReturnStatus.RECEIVED: return styles.returnStatusReceived;
+    case ReturnStatus.APPROVED: return styles.returnStatusApproved;
+    case ReturnStatus.COLLECTING: return styles.returnStatusCollecting;
+    case ReturnStatus.COLLECTED: return styles.returnStatusCollected;
+    case ReturnStatus.COMPLETED: return styles.returnStatusComplete;
+    case ReturnStatus.REJECTED: return styles.returnStatusRejected;
     default: return '';
   }
 }

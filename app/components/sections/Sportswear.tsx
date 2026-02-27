@@ -14,17 +14,31 @@ export default function Sportswear() {
         <div className={styles.cards}>
           {productList.map((product) => (
             <div key={product.id} className={styles.card}>
-              <Link href={`/apparel/${product.id}`} className={styles.imageContainer}>
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className={styles.image}
-                  style={{ objectFit: 'cover' }}
-                  priority
-                />
-                <div className={styles.badge}>NOW AVAILABLE</div>
-              </Link>
+              {product.comingSoon ? (
+                <div className={styles.comingSoonImageContainer}>
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className={styles.image}
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                  <span className={styles.comingSoonBadge}>COMING SOON</span>
+                </div>
+              ) : (
+                <Link href={`/apparel/${product.slug}`} className={styles.imageContainer}>
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className={styles.image}
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                  <div className={styles.badge}>NOW AVAILABLE</div>
+                </Link>
+              )}
 
               <div className={styles.info}>
                 <p className={styles.label}>BROSPICK COLLECTION</p>
@@ -38,9 +52,13 @@ export default function Sportswear() {
                     </span>
                   )}
                 </div>
-                <Link href={`/apparel/${product.id}`} className={styles.shopLink}>
-                  구매하기
-                </Link>
+                {product.comingSoon ? (
+                  <span className={styles.comingSoonLabel}>출시 예정</span>
+                ) : (
+                  <Link href={`/apparel/${product.slug}`} className={styles.shopLink}>
+                    구매하기
+                  </Link>
+                )}
               </div>
             </div>
           ))}

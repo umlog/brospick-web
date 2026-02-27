@@ -1,4 +1,5 @@
 import { SolapiMessageService } from 'solapi';
+import { ReturnType } from '@/lib/domain/enums';
 
 const apiKey = process.env.SOLAPI_API_KEY || '';
 const apiSecret = process.env.SOLAPI_API_SECRET || '';
@@ -100,7 +101,7 @@ interface ReturnRequestAlimtalkData {
   customerPhone: string;
   requestNumber: string;
   orderNumber: string;
-  type: '교환' | '반품';
+  type: ReturnType | string;
   productName: string;
   siteUrl: string;
 }
@@ -145,7 +146,7 @@ interface ReturnStatusAlimtalkData {
   customerPhone: string;
   requestNumber: string;
   orderNumber: string;
-  type: '교환' | '반품';
+  type: ReturnType | string;
   status: string;
   siteUrl: string;
 }

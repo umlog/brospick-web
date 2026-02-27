@@ -17,36 +17,70 @@ export default function ApparelPage() {
         </div>
 
         <div className={styles.productsGrid}>
-          {productList.map((product) => (
-            <Link key={product.id} href={`/apparel/${product.id}`} className={styles.productCard}>
-              <div className={styles.productImage}>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  onError={(e) => {
-                    e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
-                  }}
-                />
-              </div>
-              <div className={styles.productInfo}>
-                <h3 className={styles.productName}>{product.name}</h3>
-                <div className={styles.priceContainer}>
-                  <span className={styles.price}>₩{product.price.toLocaleString()}</span>
-                  {product.originalPrice && (
-                    <>
-                      <span className={styles.originalPrice}>
-                        ₩{product.originalPrice.toLocaleString()}
-                      </span>
-                      <span className={styles.discountBadge}>
-                        {getDiscountPercent(product.price, product.originalPrice)}%
-                      </span>
-                    </>
-                  )}
+          {productList.map((product) =>
+            product.comingSoon ? (
+              <div key={product.id} className={styles.comingSoonCard}>
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    onError={(e) => {
+                      e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
+                    }}
+                  />
+                  <div className={styles.comingSoonOverlay}>
+                    <span className={styles.comingSoonBadge}>COMING SOON</span>
+                  </div>
                 </div>
-                <span className={styles.viewDetail}>자세히 보기 →</span>
+                <div className={styles.productInfo}>
+                  <h3 className={styles.productName}>{product.name}</h3>
+                  <div className={styles.priceContainer}>
+                    <span className={styles.price}>₩{product.price.toLocaleString()}</span>
+                    {product.originalPrice && (
+                      <>
+                        <span className={styles.originalPrice}>
+                          ₩{product.originalPrice.toLocaleString()}
+                        </span>
+                        <span className={styles.discountBadge}>
+                          {getDiscountPercent(product.price, product.originalPrice)}%
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <span className={styles.comingSoonText}>출시 예정</span>
+                </div>
               </div>
-            </Link>
-          ))}
+            ) : (
+              <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.productCard}>
+                <div className={styles.productImage}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    onError={(e) => {
+                      e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
+                    }}
+                  />
+                </div>
+                <div className={styles.productInfo}>
+                  <h3 className={styles.productName}>{product.name}</h3>
+                  <div className={styles.priceContainer}>
+                    <span className={styles.price}>₩{product.price.toLocaleString()}</span>
+                    {product.originalPrice && (
+                      <>
+                        <span className={styles.originalPrice}>
+                          ₩{product.originalPrice.toLocaleString()}
+                        </span>
+                        <span className={styles.discountBadge}>
+                          {getDiscountPercent(product.price, product.originalPrice)}%
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <span className={styles.viewDetail}>자세히 보기 →</span>
+                </div>
+              </Link>
+            )
+          )}
         </div>
       </div>
     </main>
