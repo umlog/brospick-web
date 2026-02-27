@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const response = NextResponse.redirect(new URL('/admin', request.url));
   response.cookies.set('admin_access', validToken, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 7, // 7일
     path: '/',
