@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { apiError, checkAdminPassword } from '@/lib/errors';
 
 // 사이즈 가용성 및 재고 조회 (공개)
 export async function GET() {
@@ -12,10 +13,7 @@ export async function GET() {
 
     if (error) {
       console.error('Product sizes fetch error:', error);
-      return NextResponse.json(
-        { error: '사이즈 정보 조회에 실패했습니다.' },
-        { status: 500 }
-      );
+      return apiError('사이즈 정보 조회에 실패했습니다.', 500);
     }
 
     // stock=0인데 status가 available인 행 자동 정정
@@ -36,10 +34,7 @@ export async function GET() {
     return NextResponse.json({ sizes: corrected });
   } catch (error) {
     console.error('Product sizes API error:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
-      { status: 500 }
-    );
+    return apiError('서버 오류가 발생했습니다.', 500);
   }
 }
 
@@ -47,18 +42,15 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   try {
     const password = request.headers.get('x-admin-password');
-    if (password !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: '권한이 없습니다.' }, { status: 401 });
+    if (!checkAdminPassword(password)) {
+      return apiError('권한이 없습니다.', 401);
     }
 
     const body = await request.json();
     const { productId, size, status, stock } = body;
 
     if (!productId || !size) {
-      return NextResponse.json(
-        { error: '상품 ID와 사이즈를 입력해주세요.' },
-        { status: 400 }
-      );
+      return apiError('상품 ID와 사이즈를 입력해주세요.', 400);
     }
 
     const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
@@ -67,10 +59,7 @@ export async function PATCH(request: NextRequest) {
     if (status !== undefined) {
       const validStatuses = ['available', 'sold_out', 'delayed'];
       if (!validStatuses.includes(status)) {
-        return NextResponse.json(
-          { error: '유효하지 않은 상태입니다.' },
-          { status: 400 }
-        );
+        return apiError('유효하지 않은 상태입니다.', 400);
       }
       updateData.status = status;
     }
@@ -79,10 +68,7 @@ export async function PATCH(request: NextRequest) {
     if (stock !== undefined) {
       const stockNum = Number(stock);
       if (!Number.isInteger(stockNum) || stockNum < 0) {
-        return NextResponse.json(
-          { error: '재고는 0 이상의 정수여야 합니다.' },
-          { status: 400 }
-        );
+        return apiError('재고는 0 이상의 정수여야 합니다.', 400);
       }
       updateData.stock = stockNum;
 
@@ -114,18 +100,12 @@ export async function PATCH(request: NextRequest) {
 
     if (error) {
       console.error('Product size update error:', error);
-      return NextResponse.json(
-        { error: '변경에 실패했습니다.' },
-        { status: 500 }
-      );
+      return apiError('변경에 실패했습니다.', 500);
     }
 
     return NextResponse.json({ success: true, size: data });
   } catch (error) {
     console.error('Product size update API error:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
-      { status: 500 }
-    );
+    return apiError('서버 오류가 발생했습니다.', 500);
   }
 }

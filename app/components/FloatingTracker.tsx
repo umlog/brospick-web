@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CONTACT, RETURN_POLICY, TRACKING } from '../../lib/constants';
+import { OrderStatus, ReturnStatus } from '../../lib/domain/enums';
 import { products } from '../../lib/products';
 import styles from './FloatingTracker.module.css';
 
@@ -58,13 +59,13 @@ const INQUIRY_STEPS = [
   { key: 'message', question: '추가 요청사항이 있으면 적어주세요.\n(없으면 "없음"이라고 입력해주세요)' },
 ] as const;
 
-const RETURN_STATUS_LABELS: Record<string, { color: string; bg: string }> = {
-  '접수완료': { color: '#ffcc00', bg: 'rgba(255, 204, 0, 0.15)' },
-  '승인': { color: '#34c759', bg: 'rgba(52, 199, 89, 0.15)' },
-  '수거중': { color: '#5856d6', bg: 'rgba(88, 86, 214, 0.15)' },
-  '수거완료': { color: '#007aff', bg: 'rgba(0, 122, 255, 0.15)' },
-  '처리완료': { color: '#34c759', bg: 'rgba(52, 199, 89, 0.15)' },
-  '거절': { color: '#ff3b30', bg: 'rgba(255, 59, 48, 0.15)' },
+const RETURN_STATUS_LABELS: Partial<Record<ReturnStatus, { color: string; bg: string }>> = {
+  [ReturnStatus.RECEIVED]: { color: '#ffcc00', bg: 'rgba(255, 204, 0, 0.15)' },
+  [ReturnStatus.APPROVED]: { color: '#34c759', bg: 'rgba(52, 199, 89, 0.15)' },
+  [ReturnStatus.COLLECTING]: { color: '#5856d6', bg: 'rgba(88, 86, 214, 0.15)' },
+  [ReturnStatus.COLLECTED]: { color: '#007aff', bg: 'rgba(0, 122, 255, 0.15)' },
+  [ReturnStatus.COMPLETED]: { color: '#34c759', bg: 'rgba(52, 199, 89, 0.15)' },
+  [ReturnStatus.REJECTED]: { color: '#ff3b30', bg: 'rgba(255, 59, 48, 0.15)' },
 };
 
 export default function FloatingTracker() {
@@ -254,7 +255,7 @@ export default function FloatingTracker() {
 
   // 교환/반품 신청 가능 여부 확인
   const canRequestReturn = () => {
-    if (!result || result.status !== '배송완료') return false;
+    if (!result || result.status !== OrderStatus.DELIVERED) return false;
     if (!result.delivered_at) return false;
     const deliveredDate = new Date(result.delivered_at);
     const now = new Date();
@@ -266,7 +267,7 @@ export default function FloatingTracker() {
   const hasActiveReturn = (itemId: string) => {
     if (!result?.return_requests) return false;
     return result.return_requests.some(
-      (r) => r.order_item_id === itemId && !['처리완료', '거절'].includes(r.status)
+      (r) => r.order_item_id === itemId && ![ReturnStatus.COMPLETED, ReturnStatus.REJECTED].includes(r.status as ReturnStatus)
     );
   };
 
@@ -622,7 +623,7 @@ export default function FloatingTracker() {
         <h4>교환/반품 현황</h4>
         {result.return_requests.map((req) => {
           const item = result.order_items.find((i) => i.id === req.order_item_id);
-          const statusStyle = RETURN_STATUS_LABELS[req.status] || { color: '#888', bg: 'rgba(136,136,136,0.15)' };
+          const statusStyle = RETURN_STATUS_LABELS[req.status as ReturnStatus] || { color: '#888', bg: 'rgba(136,136,136,0.15)' };
           return (
             <div key={req.request_number} className={styles.returnStatusCard}>
               <div className={styles.returnStatusTop}>
@@ -637,14 +638,14 @@ export default function FloatingTracker() {
                   style={{ background: statusStyle.bg, color: statusStyle.color }}
                 >
                   {req.status}
-                  {req.type === '반품' && req.refund_completed && req.status === '처리완료' && ' (환불완료)'}
+                  {req.type === '반품' && req.refund_completed && req.status === ReturnStatus.COMPLETED && ' (환불완료)'}
                 </span>
               </div>
               <div className={styles.returnStatusDetails}>
                 {item && <span>{item.product_name} ({item.size}){req.exchange_size ? ` → ${req.exchange_size}` : ''}</span>}
                 <span className={styles.returnStatusDate}>{formatDate(req.created_at)}</span>
               </div>
-              {req.status === '거절' && req.reject_reason && (
+              {req.status === ReturnStatus.REJECTED && req.reject_reason && (
                 <div className={styles.returnRejectReason}>거절 사유: {req.reject_reason}</div>
               )}
             </div>

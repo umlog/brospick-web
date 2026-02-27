@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import styles from './tracking.module.css';
 import { TRACKING } from '@/lib/constants';
+import { ReturnStatus } from '@/lib/domain/enums';
 
 interface OrderItem {
   id: string;
@@ -201,14 +202,14 @@ function TrackingContent() {
                         </span>
                         <span className={styles.returnStatusBadge} data-status={req.status}>
                           {req.status}
-                          {req.type === '반품' && req.refund_completed && req.status === '처리완료' && ' (환불완료)'}
+                          {req.type === '반품' && req.refund_completed && req.status === ReturnStatus.COMPLETED && ' (환불완료)'}
                         </span>
                       </div>
                       <div className={styles.returnDetails}>
                         {item && <span>{item.product_name} ({item.size}){req.exchange_size ? ` → ${req.exchange_size}` : ''}</span>}
                         <span className={styles.returnDate}>{formatDate(req.created_at)}</span>
                       </div>
-                      {req.status === '거절' && req.reject_reason && (
+                      {req.status === ReturnStatus.REJECTED && req.reject_reason && (
                         <div className={styles.returnRejectReason}>거절 사유: {req.reject_reason}</div>
                       )}
                     </div>

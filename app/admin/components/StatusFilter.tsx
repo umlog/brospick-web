@@ -1,7 +1,7 @@
 import styles from '../admin.module.css';
 
 interface StatusFilterProps {
-  options: string[];
+  options: readonly string[];
   activeFilter: string;
   onChange: (status: string) => void;
 }

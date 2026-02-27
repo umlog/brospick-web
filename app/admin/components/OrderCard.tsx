@@ -1,6 +1,7 @@
 import type { Order } from '../types';
 import { STATUS_OPTIONS } from '../constants';
 import { formatDate, getStatusColor } from '../utils';
+import { OrderStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
 import styles from '../admin.module.css';
 
@@ -135,7 +136,7 @@ export function OrderCard({
                     key={status}
                     className={`${styles.statusButton} ${order.status === status ? styles.statusButtonActive : ''}`}
                     onClick={() =>
-                      status === '배송중'
+                      status === OrderStatus.SHIPPING
                         ? onShippingClick(order.id)
                         : onStatusChange(order.id, status)
                     }
@@ -202,7 +203,7 @@ export function OrderCard({
             )}
           </div>
 
-          {order.status === '입금대기' && order.customer_email && (
+          {order.status === OrderStatus.PENDING_PAYMENT && order.customer_email && (
             <div className={styles.paymentReminder}>
               <button
                 className={styles.paymentReminderButton}
