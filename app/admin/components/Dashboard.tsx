@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { Order } from '../types';
+import { OrderStatus } from '@/lib/domain/enums';
 import styles from '../admin.module.css';
 
 interface VisitData {
@@ -14,14 +15,19 @@ interface Props {
   allOrders: Order[];
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  '입금대기': '입금 대기',
-  '입금확인': '입금 확인',
-  '배송중': '배송 중',
-  '배송완료': '배송 완료',
+const STATUS_LABELS: Partial<Record<OrderStatus, string>> = {
+  [OrderStatus.PENDING_PAYMENT]: '입금 대기',
+  [OrderStatus.PAYMENT_CONFIRMED]: '입금 확인',
+  [OrderStatus.SHIPPING]: '배송 중',
+  [OrderStatus.DELIVERED]: '배송 완료',
 };
 
-const STATUS_ORDER = ['입금대기', '입금확인', '배송중', '배송완료'];
+const STATUS_ORDER: OrderStatus[] = [
+  OrderStatus.PENDING_PAYMENT,
+  OrderStatus.PAYMENT_CONFIRMED,
+  OrderStatus.SHIPPING,
+  OrderStatus.DELIVERED,
+];
 
 export function Dashboard({ password, allOrders }: Props) {
   const [visitData, setVisitData] = useState<VisitData | null>(null);

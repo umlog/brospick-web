@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+import { apiError, checkAdminPassword } from '@/lib/errors';
 
 // POST /api/visits - 방문 수 증가 (세션당 1회)
 export async function POST() {
@@ -36,8 +35,8 @@ export async function POST() {
 // GET /api/visits - 방문 수 조회 (관리자 전용)
 export async function GET(request: NextRequest) {
   const password = request.headers.get('x-admin-password');
-  if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!checkAdminPassword(password)) {
+    return apiError('권한이 없습니다.', 401);
   }
 
   const today = new Date().toISOString().slice(0, 10);
@@ -53,7 +52,7 @@ export async function GET(request: NextRequest) {
     .order('date', { ascending: false });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return apiError('방문 수 조회에 실패했습니다.', 500);
   }
 
   const todayRow = data?.find((r) => r.date === today);

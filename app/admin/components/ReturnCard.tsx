@@ -1,6 +1,7 @@
 import type { ReturnRequest } from '../types';
 import { RETURN_STATUS_TRANSITIONS } from '../constants';
 import { formatDate, getReturnStatusColor } from '../utils';
+import { ReturnStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
 import styles from '../admin.module.css';
 
@@ -101,7 +102,7 @@ export function ReturnCard({
             </div>
           )}
 
-          {req.status === '거절' && req.reject_reason && (
+          {req.status === ReturnStatus.REJECTED && req.reject_reason && (
             <div className={styles.detailSection}>
               <h3>거절 사유</h3>
               <p>{req.reject_reason}</p>
@@ -138,7 +139,7 @@ export function ReturnCard({
               </div>
               <div className={styles.statusButtons}>
                 {nextStatuses.map((status) => {
-                  if (status === '거절') {
+                  if (status === ReturnStatus.REJECTED) {
                     return (
                       <button
                         key={status}
@@ -149,7 +150,7 @@ export function ReturnCard({
                       </button>
                     );
                   }
-                  if (status === '수거중') {
+                  if (status === ReturnStatus.COLLECTING) {
                     return (
                       <button
                         key={status}
@@ -160,7 +161,7 @@ export function ReturnCard({
                       </button>
                     );
                   }
-                  if (status === '처리완료' && req.type === '반품') {
+                  if (status === ReturnStatus.COMPLETED && req.type === '반품') {
                     return (
                       <button
                         key={status}
@@ -208,7 +209,7 @@ export function ReturnCard({
                           alert('거절 사유를 입력해주세요.');
                           return;
                         }
-                        onStatusChange(req.id, '거절', { rejectReason: rejectReason.trim() });
+                        onStatusChange(req.id, ReturnStatus.REJECTED, { rejectReason: rejectReason.trim() });
                       }}
                     >
                       거절 처리
@@ -227,7 +228,7 @@ export function ReturnCard({
                       alert('운송장번호를 입력해주세요.');
                       return;
                     }
-                    onStatusChange(req.id, '수거중', { returnTrackingNumber: trackingInput.trim() });
+                    onStatusChange(req.id, ReturnStatus.COLLECTING, { returnTrackingNumber: trackingInput.trim() });
                   }}
                   onCancel={onTrackingCancel}
                   submitLabel="수거중으로 변경"

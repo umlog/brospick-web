@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, CartItem } from '../../contexts/CartContext';
 import { buildOrderPayload, removePurchasedItems } from '../utils';
-import type { CheckoutFormData, OrderResponse } from '../types';
+import type { CheckoutFormData } from '../types';
+import { apiClient } from '@/lib/api-client';
 
 export function useOrderSubmission(
   formData: CheckoutFormData,
@@ -20,18 +21,7 @@ export function useOrderSubmission(
 
     try {
       const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || '주문에 실패했습니다.');
-      }
-
-      const data: OrderResponse = await response.json();
+      const data = await apiClient.orders.create(payload);
 
       const currentCart: CartItem[] = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
       const updatedItems = removePurchasedItems(currentCart, checkoutItems);

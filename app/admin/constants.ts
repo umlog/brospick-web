@@ -1,12 +1,8 @@
-export const STATUS_OPTIONS = ['입금대기', '입금확인', '발송지연', '배송중', '배송완료'];
-
-export const DELAY_STATUS_REGEX = /^(\d+)주 뒤 발송$/;
-
-export const RETURN_STATUS_OPTIONS = ['접수완료', '승인', '수거중', '수거완료', '처리완료', '거절'];
-
-export const RETURN_STATUS_TRANSITIONS: Record<string, string[]> = {
-  '접수완료': ['승인', '거절'],
-  '승인': ['수거중'],
-  '수거중': ['수거완료'],
-  '수거완료': ['처리완료'],
-};
+// 하위 호환성 유지를 위한 re-export facade
+// 기존 import 경로 (import { STATUS_OPTIONS } from '../constants') 그대로 동작
+export {
+  ORDER_STATUS_OPTIONS as STATUS_OPTIONS,
+  RETURN_STATUS_OPTIONS,
+  RETURN_STATUS_TRANSITIONS,
+} from '@/lib/domain/constants';
+export { DELAY_STATUS_REGEX } from '@/lib/domain/enums';

@@ -1,5 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
+import { apiClient, ApiClientError } from '@/lib/api-client';
+import { OrderStatus } from '@/lib/domain/enums';
 
 export function useOrders(password: string, onAuthFailure: () => void) {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
@@ -32,21 +34,14 @@ export function useOrders(password: string, onAuthFailure: () => void) {
   const fetchOrders = useCallback(async (pw: string) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/orders', {
-        headers: { 'x-admin-password': pw },
-      });
-      if (!response.ok) {
-        if (response.status === 401) {
-          alert('비밀번호가 올바르지 않습니다.');
-          onAuthFailure();
-          return;
-        }
-        throw new Error('주문 조회 실패');
-      }
-
-      const data = await response.json();
+      const data = await apiClient.orders.list(pw);
       setAllOrders(data.orders);
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiClientError && err.status === 401) {
+        alert('비밀번호가 올바르지 않습니다.');
+        onAuthFailure();
+        return;
+      }
       alert('주문 조회에 실패했습니다.');
     } finally {
       setLoading(false);
@@ -65,23 +60,11 @@ export function useOrders(password: string, onAuthFailure: () => void) {
     if (!confirm(confirmMsg)) return;
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': password,
-        },
-        body: JSON.stringify({
-          status: newStatus,
-          sendNotification: notifyOnChange,
-          ...(trackingNumber && { trackingNumber }),
-        }),
+      await apiClient.orders.updateStatus(orderId, password, {
+        status: newStatus,
+        sendNotification: notifyOnChange,
+        ...(trackingNumber && { trackingNumber }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || `서버 오류 (${response.status})`);
-      }
 
       setAllOrders((prev) =>
         prev.map((o) =>
@@ -123,7 +106,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
       alert('운송장번호를 입력해주세요.');
       return;
     }
-    handleStatusChange(trackingModal, '배송중', trackingInput.trim());
+    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim());
     setTrackingModal(null);
     setTrackingInput('');
   };
@@ -132,16 +115,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
     if (!confirm(`주문 ${orderNumber} 고객에게 입금 안내 메일을 보낼까요?`)) return;
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'POST',
-        headers: { 'x-admin-password': password },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || `서버 오류 (${response.status})`);
-      }
-
+      await apiClient.orders.sendPaymentReminder(orderId, password);
       alert('입금 안내 메일이 발송되었습니다.');
     } catch (err) {
       alert(`메일 발송 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
@@ -152,13 +126,7 @@ export function useOrders(password: string, onAuthFailure: () => void) {
     if (!confirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`)) return;
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': password },
-      });
-
-      if (!response.ok) throw new Error('삭제 실패');
-
+      await apiClient.orders.delete(orderId, password);
       setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
       setExpandedOrder(null);
     } catch {
