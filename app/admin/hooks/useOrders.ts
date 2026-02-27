@@ -11,10 +11,17 @@ export function useOrders(password: string, onAuthFailure: () => void) {
   const [trackingModal, setTrackingModal] = useState<string | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
   const [notifyOnChange, setNotifyOnChange] = useState(true);
+  const [delayModal, setDelayModal] = useState<string | null>(null);
+  const [delayWeeks, setDelayWeeks] = useState(3);
 
   const orders = useMemo(() => {
     return allOrders.filter((order) => {
-      const matchStatus = !filterStatus || order.status === filterStatus;
+      let matchStatus: boolean;
+      if (filterStatus === '발송지연') {
+        matchStatus = /^\d+주 뒤 발송$/.test(order.status);
+      } else {
+        matchStatus = !filterStatus || order.status === filterStatus;
+      }
       const orderDate = order.created_at.split('T')[0];
       const matchFrom = !dateFrom || orderDate >= dateFrom;
       const matchTo = !dateTo || orderDate <= dateTo;
@@ -95,6 +102,21 @@ export function useOrders(password: string, onAuthFailure: () => void) {
     setTrackingInput('');
   };
 
+  const handleDelayClick = (orderId: string) => {
+    const order = allOrders.find((o) => o.id === orderId);
+    if (order) {
+      const match = order.status.match(/^(\d+)주 뒤 발송$/);
+      setDelayWeeks(match ? parseInt(match[1], 10) : 3);
+    }
+    setDelayModal(orderId);
+  };
+
+  const handleDelaySubmit = () => {
+    if (!delayModal) return;
+    handleStatusChange(delayModal, `${delayWeeks}주 뒤 발송`);
+    setDelayModal(null);
+  };
+
   const handleTrackingSubmit = () => {
     if (!trackingModal) return;
     if (!trackingInput.trim()) {
@@ -168,10 +190,16 @@ export function useOrders(password: string, onAuthFailure: () => void) {
     setTrackingInput,
     setTrackingModal,
     setNotifyOnChange,
+    delayModal,
+    delayWeeks,
+    setDelayWeeks,
+    setDelayModal,
     fetchOrders,
     handleStatusChange,
     handleShippingClick,
     handleTrackingSubmit,
+    handleDelayClick,
+    handleDelaySubmit,
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,

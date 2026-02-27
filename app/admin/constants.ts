@@ -1,4 +1,6 @@
-export const STATUS_OPTIONS = ['입금대기', '입금확인', '배송중', '배송완료'];
+export const STATUS_OPTIONS = ['입금대기', '입금확인', '발송지연', '배송중', '배송완료'];
+
+export const DELAY_STATUS_REGEX = /^(\d+)주 뒤 발송$/;
 
 export const RETURN_STATUS_OPTIONS = ['접수완료', '승인', '수거중', '수거완료', '처리완료', '거절'];
 

@@ -10,6 +10,8 @@ interface OrderCardProps {
   trackingModal: string | null;
   trackingInput: string;
   notifyOnChange: boolean;
+  delayModal: string | null;
+  delayWeeks: number;
   onToggleExpand: (orderId: string) => void;
   onStatusChange: (orderId: string, newStatus: string) => void;
   onShippingClick: (orderId: string) => void;
@@ -17,6 +19,10 @@ interface OrderCardProps {
   onTrackingInputChange: (value: string) => void;
   onTrackingCancel: () => void;
   onNotifyChange: (value: boolean) => void;
+  onDelayClick: (orderId: string) => void;
+  onDelayWeeksChange: (weeks: number) => void;
+  onDelaySubmit: () => void;
+  onDelayCancel: () => void;
   onPaymentReminder: (orderId: string, orderNumber: string) => void;
   onDelete: (orderId: string, orderNumber: string) => void;
 }
@@ -27,6 +33,8 @@ export function OrderCard({
   trackingModal,
   trackingInput,
   notifyOnChange,
+  delayModal,
+  delayWeeks,
   onToggleExpand,
   onStatusChange,
   onShippingClick,
@@ -34,9 +42,15 @@ export function OrderCard({
   onTrackingInputChange,
   onTrackingCancel,
   onNotifyChange,
+  onDelayClick,
+  onDelayWeeksChange,
+  onDelaySubmit,
+  onDelayCancel,
   onPaymentReminder,
   onDelete,
 }: OrderCardProps) {
+  const isDelayStatus = /^\d+주 뒤 발송$/.test(order.status);
+
   return (
     <div className={styles.orderCard}>
       <div
@@ -104,20 +118,33 @@ export function OrderCard({
               </label>
             </div>
             <div className={styles.statusButtons}>
-              {STATUS_OPTIONS.map((status) => (
-                <button
-                  key={status}
-                  className={`${styles.statusButton} ${order.status === status ? styles.statusButtonActive : ''}`}
-                  onClick={() =>
-                    status === '배송중'
-                      ? onShippingClick(order.id)
-                      : onStatusChange(order.id, status)
-                  }
-                  disabled={order.status === status}
-                >
-                  {status}
-                </button>
-              ))}
+              {STATUS_OPTIONS.map((status) => {
+                if (status === '발송지연') {
+                  return (
+                    <button
+                      key="발송지연"
+                      className={`${styles.statusButton} ${isDelayStatus ? styles.statusButtonDelay : ''}`}
+                      onClick={() => onDelayClick(order.id)}
+                    >
+                      {isDelayStatus ? order.status : '발송 지연'}
+                    </button>
+                  );
+                }
+                return (
+                  <button
+                    key={status}
+                    className={`${styles.statusButton} ${order.status === status ? styles.statusButtonActive : ''}`}
+                    onClick={() =>
+                      status === '배송중'
+                        ? onShippingClick(order.id)
+                        : onStatusChange(order.id, status)
+                    }
+                    disabled={order.status === status}
+                  >
+                    {status}
+                  </button>
+                );
+              })}
             </div>
 
             {trackingModal === order.id && (
@@ -130,6 +157,48 @@ export function OrderCard({
                 submitLabel="배송중으로 변경"
                 showCarrierSelect
               />
+            )}
+
+            {delayModal === order.id && (
+              <div className={styles.delayPicker}>
+                <p className={styles.delayPickerTitle}>발송 지연 설정</p>
+                <div className={styles.delayPickerStepper}>
+                  <button
+                    className={styles.delayStepBtn}
+                    onClick={() => onDelayWeeksChange(Math.max(1, delayWeeks - 1))}
+                    aria-label="주수 줄이기"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    className={styles.delayWeeksInput}
+                    value={delayWeeks}
+                    min={1}
+                    max={52}
+                    onChange={(e) => {
+                      const v = parseInt(e.target.value, 10);
+                      if (!isNaN(v)) onDelayWeeksChange(Math.min(52, Math.max(1, v)));
+                    }}
+                  />
+                  <button
+                    className={styles.delayStepBtn}
+                    onClick={() => onDelayWeeksChange(Math.min(52, delayWeeks + 1))}
+                    aria-label="주수 늘리기"
+                  >
+                    +
+                  </button>
+                  <span className={styles.delayWeeksLabel}>주 뒤 발송</span>
+                </div>
+                <div className={styles.delayPickerButtons}>
+                  <button className={styles.trackingCancelButton} onClick={onDelayCancel}>
+                    취소
+                  </button>
+                  <button className={styles.trackingConfirmButton} onClick={onDelaySubmit}>
+                    설정하기
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 

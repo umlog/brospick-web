@@ -23,12 +23,18 @@ export function OrderList({ ordersState }: OrderListProps) {
     trackingModal,
     trackingInput,
     notifyOnChange,
+    delayModal,
+    delayWeeks,
+    setDelayWeeks,
+    setDelayModal,
     setTrackingInput,
     setTrackingModal,
     setNotifyOnChange,
     handleStatusChange,
     handleShippingClick,
     handleTrackingSubmit,
+    handleDelayClick,
+    handleDelaySubmit,
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,
@@ -81,6 +87,8 @@ export function OrderList({ ordersState }: OrderListProps) {
               trackingModal={trackingModal}
               trackingInput={trackingInput}
               notifyOnChange={notifyOnChange}
+              delayModal={delayModal}
+              delayWeeks={delayWeeks}
               onToggleExpand={toggleExpanded}
               onStatusChange={handleStatusChange}
               onShippingClick={handleShippingClick}
@@ -88,6 +96,10 @@ export function OrderList({ ordersState }: OrderListProps) {
               onTrackingInputChange={setTrackingInput}
               onTrackingCancel={() => setTrackingModal(null)}
               onNotifyChange={setNotifyOnChange}
+              onDelayClick={handleDelayClick}
+              onDelayWeeksChange={setDelayWeeks}
+              onDelaySubmit={handleDelaySubmit}
+              onDelayCancel={() => setDelayModal(null)}
               onPaymentReminder={handlePaymentReminder}
               onDelete={handleDeleteOrder}
             />

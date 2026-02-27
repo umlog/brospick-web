@@ -231,6 +231,11 @@
   color: #fff;
 }
 
+.statusDelay {
+  background-color: #f59e0b;
+  color: #000;
+}
+
 /* Order Detail */
 .orderDetail {
   padding: var(--space-lg);
@@ -351,6 +356,104 @@
 
 .statusButton:disabled {
   opacity: 0.5;
+}
+
+.statusButtonDelay {
+  background-color: #f59e0b;
+  color: #000;
+  border-color: #f59e0b;
+  font-weight: 600;
+}
+
+.statusButtonDelay:hover {
+  background-color: #d97706;
+  border-color: #d97706;
+  color: #000;
+}
+
+/* Delay Picker */
+.delayPicker {
+  margin-top: var(--space-md);
+  padding: var(--space-lg);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.delayPickerTitle {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-md);
+}
+
+.delayPickerStepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.delayStepBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.delayStepBtn:hover {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.delayWeeksInput {
+  width: 60px;
+  padding: var(--space-sm);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: inherit;
+  -moz-appearance: textfield;
+}
+
+.delayWeeksInput::-webkit-inner-spin-button,
+.delayWeeksInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.delayWeeksInput:focus {
+  outline: none;
+  border-color: #f59e0b;
+}
+
+.delayWeeksLabel {
+  font-size: var(--size-base);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.delayPickerButtons {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
 }
 
 /* Tracking Number Modal */

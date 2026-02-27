@@ -48,12 +48,12 @@ export const products: Record<string, Product> = {
     originalPrice: 59000,
     image: '/apparel/bp-detail1.JPG',
     images: [
+      '/apparel/bp-thumb.png',
+      '/apparel/bp-thumb2.png',
       '/apparel/bp-detail1.JPG',
       '/apparel/bp-detailpoint.JPG',
       '/apparel/bp-light-second.png',
       '/apparel/bp-light-main.png',
-      '/apparel/bp-thumb.png',
-      '/apparel/bp-thumb2.png',
     ],
     tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
     description:
@@ -66,10 +66,10 @@ export const products: Record<string, Product> = {
       { label: '빠른 건조', detail: ' — 격한 운동에도 쾌적' },
     ],
     sizeChart: [
-      { size: 'S',   length: 61, chest: 45, sleeve: 67, hem: 45 },
-      { size: 'M',   length: 64, chest: 46, sleeve: 68, hem: 48 },
-      { size: 'L',   length: 67, chest: 51, sleeve: 74, hem: 50 },
-      { size: 'XL',  length: 70, chest: 53, sleeve: 76, hem: 53 },
+      { size: 'S', length: 61, chest: 45, sleeve: 67, hem: 45 },
+      { size: 'M', length: 64, chest: 46, sleeve: 68, hem: 48 },
+      { size: 'L', length: 67, chest: 51, sleeve: 74, hem: 50 },
+      { size: 'XL', length: 70, chest: 53, sleeve: 76, hem: 53 },
       { size: '2XL', length: 73, chest: 55, sleeve: 78, hem: 55 },
     ],
     details: {

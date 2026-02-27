@@ -63,9 +63,10 @@ export async function DELETE(
       );
     }
 
-    // 입금확인 이후 상태였다면 재고 복구
+    // 입금확인 이후 상태였다면 재고 복구 (발송지연 포함)
     const stockRestoreStatuses = ['입금확인', '배송중', '배송완료'];
-    if (order && stockRestoreStatuses.includes(order.status)) {
+    const isDelayStatus = /^(\d+)주 뒤 발송$/.test(order?.status ?? '');
+    if (order && (stockRestoreStatuses.includes(order.status) || isDelayStatus)) {
       const items = Array.isArray(order.order_items) ? order.order_items : [];
       for (const item of items) {
         if (item.product_id) {
@@ -145,15 +146,19 @@ export async function PATCH(
     const body = await request.json();
     const { status, sendNotification, trackingNumber } = body;
 
+    const DELAY_STATUS_REGEX = /^(\d+)주 뒤 발송$/;
     const validStatuses = ['입금대기', '입금확인', '배송중', '배송완료'];
-    if (!validStatuses.includes(status)) {
+    if (!validStatuses.includes(status) && !DELAY_STATUS_REGEX.test(status)) {
       return NextResponse.json(
         { error: '유효하지 않은 상태입니다.' },
         { status: 400 }
       );
     }
 
-    // 현재 주문 상태 조회 (입금확인으로의 전환 감지용)
+    const isConfirmedStatus = (s: string) =>
+      s === '입금확인' || DELAY_STATUS_REGEX.test(s);
+
+    // 현재 주문 상태 조회 (재고 차감 판단용)
     const { data: currentOrder } = await supabaseAdmin
       .from('orders')
       .select('status, order_items(product_id, size, quantity)')
@@ -183,8 +188,8 @@ export async function PATCH(
       );
     }
 
-    // 입금확인으로 전환되는 경우 재고 차감
-    if (status === '입금확인' && currentOrder && currentOrder.status !== '입금확인') {
+    // 입금확인 또는 발송지연으로 전환 시 재고 차감 (아직 차감되지 않은 경우만)
+    if (isConfirmedStatus(status) && currentOrder && !isConfirmedStatus(currentOrder.status)) {
       const items = Array.isArray(currentOrder.order_items) ? currentOrder.order_items : [];
       for (const item of items) {
         if (item.product_id) {

@@ -18,7 +18,9 @@ export function getStatusColor(status: string): string {
     case '배송준비': return styles.statusPreparing;
     case '배송중': return styles.statusShipping;
     case '배송완료': return styles.statusDelivered;
-    default: return '';
+    default:
+      if (/^\d+주 뒤 발송$/.test(status)) return styles.statusDelay;
+      return '';
   }
 }
 

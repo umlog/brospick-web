@@ -21,7 +21,7 @@ export function StatusFilter({ options, activeFilter, onChange }: StatusFilterPr
           className={`${styles.filterButton} ${activeFilter === status ? styles.filterActive : ''}`}
           onClick={() => onChange(status)}
         >
-          {status}
+          {status === '발송지연' ? '발송 지연' : status}
         </button>
       ))}
     </div>
