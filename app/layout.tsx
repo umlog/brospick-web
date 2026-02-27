@@ -8,6 +8,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import FloatingTracker from './components/FloatingTracker';
 import VisitTracker from './components/VisitTracker';
+import PageTransition from './components/PageTransition';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -58,7 +59,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CartProvider>
             <Header />
-            <main>{children}</main>
+            <PageTransition>{children}</PageTransition>
             <Footer />
             <Suspense fallback={null}>
               <FloatingTracker />

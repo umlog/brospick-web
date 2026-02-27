@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CONTACT, RETURN_POLICY, TRACKING } from '../../lib/constants';
 import { OrderStatus, ReturnStatus } from '../../lib/domain/enums';
-import { products } from '../../lib/products';
+import { getProductByName } from '../../lib/products';
 import styles from './FloatingTracker.module.css';
 
 type Tab = 'track' | 'inquiry';
@@ -273,7 +273,7 @@ export default function FloatingTracker() {
 
   // 해당 상품의 사이즈 정보 가져오기
   const getProductSizes = (productName: string) => {
-    const product = Object.values(products).find((p) => p.name === productName);
+    const product = getProductByName(productName);
     if (!product) return { sizes: [], soldOut: [], delayedShipping: [] };
 
     const soldOut = product.sizes.filter(

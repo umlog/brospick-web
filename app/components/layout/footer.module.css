@@ -14,14 +14,73 @@
   gap: var(--space-2xl);
 }
 
+/* Desktop: accordion button invisible, content always visible */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  pointer-events: none;
+  text-align: left;
+  color: inherit;
+}
+
+.sectionToggle {
+  display: none;
+}
+
+.sectionBody {
+  display: block;
+}
+
 @media (max-width: 768px) {
   .container {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-bottom: 0;
   }
 
   .column:first-child {
-    grid-column: 1 / -1;
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+  }
+
+  /* Mobile: accordion active */
+  .sectionHeader {
+    padding: var(--space-lg) 0;
+    cursor: pointer;
+    pointer-events: auto;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .columnTitle {
+    margin-bottom: 0;
+  }
+
+  .sectionToggle {
+    display: inline;
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--color-text-secondary);
+    transition: transform 0.3s ease;
+  }
+
+  .sectionToggleOpen {
+    transform: rotate(45deg);
+  }
+
+  .sectionBody {
+    display: none;
+    padding: var(--space-md) 0;
+  }
+
+  .sectionBodyOpen {
+    display: block;
   }
 }
 
