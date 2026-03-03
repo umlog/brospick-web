@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { AdminTab } from './types';
 import { useAdminAuth } from './hooks/useAdminAuth';
 import { useOrders } from './hooks/useOrders';
@@ -28,6 +28,13 @@ export default function AdminPage() {
   const returnsState = useReturns(auth.password, ordersState.notifyOnChange);
   const productSizesState = useProductSizes(auth.password);
   const [activeTab, setActiveTab] = useState<AdminTab>('orders');
+
+  // 쿠키 자동 인증 후 주문 데이터 로드
+  useEffect(() => {
+    if (auth.isAuthenticated && auth.password && ordersState.allOrders.length === 0 && !ordersState.loading) {
+      ordersState.fetchOrders(auth.password);
+    }
+  }, [auth.isAuthenticated, auth.password]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
