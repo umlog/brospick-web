@@ -194,11 +194,79 @@
   overflow: hidden;
 }
 
-.imageWrapper img {
+.imageWrapper > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: brightness(0.6);
+}
+
+/* Split image — variant 두 컬러를 좌우로 분할 */
+.splitHalfLeft,
+.splitHalfRight {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.splitHalfLeft { left: 0; }
+.splitHalfRight { right: 0; }
+
+.splitHalfLeft img,
+.splitHalfRight img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.6);
+}
+
+.splitDivider {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 84%;
+  background: rgba(255, 255, 255, 0.18);
+  z-index: 1;
+}
+
+/* Variant 컬러 스워치 */
+.variantColors {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: -4px;
+}
+
+.variantItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.variantSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.variantLabel {
+  font-size: var(--size-xs, 0.75rem);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.variantSep {
+  font-size: var(--size-xs, 0.75rem);
+  color: var(--color-text-secondary);
+  opacity: 0.4;
 }
 
 .comingSoonOverlay {

@@ -47,6 +47,12 @@ export interface ProductDetails {
   material: string;
 }
 
+export interface ProductVariant {
+  label: string;
+  image: string;
+  color?: string; // CSS color for swatch dot
+}
+
 export interface Product {
   id: number;          // DB FK용 숫자 ID
   slug: ProductSlug;   // URL + 코드 식별자
@@ -62,6 +68,8 @@ export interface Product {
   sizeChart: SizeChartRow[];
   chestLabel?: string;  // 사이즈 표 가슴 열 헤더 (기본값: '가슴단면')
   comingSoon?: boolean; // true면 목록에서 Coming Soon 카드로 표시, 구매 불가
+  variants?: ProductVariant[]; // 묶어서 보여줄 컬러 variants (Coming Soon 그룹)
+  hideFromList?: boolean; // true면 productList에서 제외 (다른 상품의 variant로 표시됨)
   details: ProductDetails;
 }
 
@@ -123,6 +131,10 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_BLACK,
     name: 'Quarter-Zip Training Top (Black)',
     comingSoon: true,
+    variants: [
+      { label: 'Black', image: '/apparel/quarter-zip-training-top-black/thumb.png', color: '#1a1a1a' },
+      { label: 'Gray', image: '/apparel/quarter-zip-training-top-gray/thumb.png', color: '#888888' },
+    ],
     price: 26900,
     originalPrice: 59000,
     image: '/apparel/quarter-zip-training-top-black/thumb.png',
@@ -208,16 +220,25 @@ export const products: Record<ProductSlug, Product> = {
 };
 
 // 목록 페이지용 간략 상품 리스트
-export const productList = Object.values(products).map((p) => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  price: p.price,
-  originalPrice: p.originalPrice,
-  image: p.images[0],
-  description: p.tagline,
-  comingSoon: p.comingSoon ?? false,
-}));
+// hideFromList: true 상품은 제외 (다른 상품의 variant 카드로 표시됨)
+//
+// ✅ 상품 출시 시 체크리스트 (예: Quarter-Zip Training Top 출시):
+//   1. 해당 상품의 comingSoon: false 로 변경
+//   2. hideFromList: true 인 variant 상품도 comingSoon: false + hideFromList 제거
+//   3. Supabase product_sizes 테이블에 재고 입력
+export const productList = Object.values(products)
+  .filter((p) => !p.hideFromList)
+  .map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    name: p.name,
+    price: p.price,
+    originalPrice: p.originalPrice,
+    image: p.images[0],
+    description: p.tagline,
+    comingSoon: p.comingSoon ?? false,
+    variants: p.variants,
+  }));
 
 // 할인율 계산 헬퍼
 export function getDiscountPercent(price: number, originalPrice: number): number {

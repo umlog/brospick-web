@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { productList, getDiscountPercent } from '../../lib/products';
-import { SHIPPING } from '../../lib/constants';
 import styles from './apparel-page.module.css';
 
 export default function ApparelPage() {
