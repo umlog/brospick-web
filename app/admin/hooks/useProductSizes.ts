@@ -18,18 +18,42 @@ export function useProductSizes(password: string) {
     }
   }, []);
 
-  const updateSize = async (productId: number, size: string, status: string) => {
+  const updateSize = async (productId: number, size: string, status: string, delayText?: string | null) => {
     try {
-      const result = await apiClient.productSizes.update(password, { productId, size, status });
+      const result = await apiClient.productSizes.update(password, {
+        productId,
+        size,
+        status,
+        ...(delayText !== undefined && { delay_text: delayText }),
+      });
       setSizes((prev) =>
         prev.map((s) =>
           s.product_id === productId && s.size === size
-            ? { ...s, status: result.size.status as ProductSize['status'] }
+            ? { ...s, status: result.size.status as ProductSize['status'], delay_text: result.size.delay_text }
             : s
         )
       );
     } catch (err) {
       alert(err instanceof Error ? err.message : '변경에 실패했습니다.');
+    }
+  };
+
+  const updateDelayText = async (productId: number, size: string, delayText: string | null) => {
+    try {
+      const result = await apiClient.productSizes.update(password, {
+        productId,
+        size,
+        delay_text: delayText,
+      });
+      setSizes((prev) =>
+        prev.map((s) =>
+          s.product_id === productId && s.size === size
+            ? { ...s, delay_text: result.size.delay_text }
+            : s
+        )
+      );
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '지연배송 텍스트 변경에 실패했습니다.');
     }
   };
 
@@ -48,5 +72,5 @@ export function useProductSizes(password: string) {
     }
   };
 
-  return { sizes, loading, fetchSizes, updateSize, updateStock };
+  return { sizes, loading, fetchSizes, updateSize, updateStock, updateDelayText };
 }

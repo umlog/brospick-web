@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const { data, error } = await supabaseAdmin
       .from('product_sizes')
-      .select('product_id, size, status, stock')
+      .select('product_id, size, status, stock, delay_text')
       .order('product_id')
       .order('size');
 
@@ -47,7 +47,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { productId, size, status, stock } = body;
+    const { productId, size, status, stock, delay_text } = body;
 
     if (!productId || !size) {
       return apiError('상품 ID와 사이즈를 입력해주세요.', 400);
@@ -62,6 +62,15 @@ export async function PATCH(request: NextRequest) {
         return apiError('유효하지 않은 상태입니다.', 400);
       }
       updateData.status = status;
+      // 지연배송이 아닌 상태로 변경 시 delay_text 초기화
+      if (status !== 'delayed') {
+        updateData.delay_text = null;
+      }
+    }
+
+    // 지연배송 텍스트 설정
+    if (delay_text !== undefined) {
+      updateData.delay_text = delay_text || null;
     }
 
     // 재고 수량 직접 설정
@@ -95,7 +104,7 @@ export async function PATCH(request: NextRequest) {
       .from('product_sizes')
       .update(updateData)
       .match({ product_id: productId, size })
-      .select('product_id, size, status, stock')
+      .select('product_id, size, status, stock, delay_text')
       .single();
 
     if (error) {

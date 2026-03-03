@@ -25,7 +25,9 @@ export function OrderList({ ordersState }: OrderListProps) {
     notifyOnChange,
     delayModal,
     delayWeeks,
+    delayUnit,
     setDelayWeeks,
+    setDelayUnit,
     setDelayModal,
     setTrackingInput,
     setTrackingModal,
@@ -89,6 +91,7 @@ export function OrderList({ ordersState }: OrderListProps) {
               notifyOnChange={notifyOnChange}
               delayModal={delayModal}
               delayWeeks={delayWeeks}
+              delayUnit={delayUnit}
               onToggleExpand={toggleExpanded}
               onStatusChange={handleStatusChange}
               onShippingClick={handleShippingClick}
@@ -98,6 +101,7 @@ export function OrderList({ ordersState }: OrderListProps) {
               onNotifyChange={setNotifyOnChange}
               onDelayClick={handleDelayClick}
               onDelayWeeksChange={setDelayWeeks}
+              onDelayUnitChange={setDelayUnit}
               onDelaySubmit={handleDelaySubmit}
               onDelayCancel={() => setDelayModal(null)}
               onPaymentReminder={handlePaymentReminder}

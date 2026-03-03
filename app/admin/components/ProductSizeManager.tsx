@@ -31,7 +31,6 @@ function StockInput({
   const [inputValue, setInputValue] = useState(String(currentStock));
   const [saving, setSaving] = useState(false);
 
-  // 부모에서 currentStock이 변경되면 (fetchSizes 재호출 등) 입력값 동기화
   useEffect(() => {
     if (!saving) {
       setInputValue(String(currentStock));
@@ -78,8 +77,64 @@ function StockInput({
   );
 }
 
+function DelayTextInput({
+  productId,
+  size,
+  currentDelayText,
+  onUpdate,
+}: {
+  productId: number;
+  size: string;
+  currentDelayText: string | null | undefined;
+  onUpdate: (productId: number, size: string, delayText: string | null) => Promise<void>;
+}) {
+  const [inputValue, setInputValue] = useState(currentDelayText || '');
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!saving) {
+      setInputValue(currentDelayText || '');
+    }
+  }, [currentDelayText]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onUpdate(productId, size, inputValue.trim() || null);
+    setSaving(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSave();
+    if (e.key === 'Escape') setInputValue(currentDelayText || '');
+  };
+
+  const isDirty = inputValue !== (currentDelayText || '');
+
+  return (
+    <div className={styles.sizeManagerStockSection}>
+      <span className={styles.sizeManagerStockLabel}>지연기간</span>
+      <input
+        type="text"
+        className={styles.sizeManagerDelayTextInput}
+        value={inputValue}
+        placeholder="예: 3주, 5일, 2주 이상"
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={saving}
+      />
+      <button
+        className={styles.sizeManagerStockButton}
+        onClick={handleSave}
+        disabled={saving || !isDirty}
+      >
+        {saving ? '저장 중...' : '저장'}
+      </button>
+    </div>
+  );
+}
+
 export function ProductSizeManager({ state }: ProductSizeManagerProps) {
-  const { sizes, loading, updateSize, updateStock } = state;
+  const { sizes, loading, updateSize, updateStock, updateDelayText } = state;
 
   if (loading) {
     return <p className={styles.loading}>로딩 중...</p>;
@@ -98,6 +153,7 @@ export function ProductSizeManager({ state }: ProductSizeManagerProps) {
                 const sizeData = productSizes.find((s) => s.size === size);
                 const currentStatus = sizeData?.status || 'available';
                 const currentStock = sizeData?.stock ?? 0;
+                const currentDelayText = sizeData?.delay_text;
 
                 return (
                   <div key={size} className={styles.sizeManagerRow}>
@@ -126,6 +182,14 @@ export function ProductSizeManager({ state }: ProductSizeManagerProps) {
                         size={size}
                         currentStock={currentStock}
                         onUpdate={updateStock}
+                      />
+                    )}
+                    {sizeData && currentStatus === 'delayed' && (
+                      <DelayTextInput
+                        productId={product.id}
+                        size={size}
+                        currentDelayText={currentDelayText}
+                        onUpdate={updateDelayText}
                       />
                     )}
                   </div>

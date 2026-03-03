@@ -20,7 +20,7 @@ export function getStatusColor(status: string): string {
     case OrderStatus.SHIPPING: return styles.statusShipping;
     case OrderStatus.DELIVERED: return styles.statusDelivered;
     default:
-      if (/^\d+주 뒤 발송$/.test(status)) return styles.statusDelay;
+      if (/^(\d+)(주|일) 뒤 발송$/.test(status)) return styles.statusDelay;
       return '';
   }
 }

@@ -86,6 +86,7 @@ export interface ProductSize {
   size: string;
   status: SizeStatus;
   stock: number;
+  delay_text?: string | null;
 }
 
 // -----------------------------------------------------------------------------

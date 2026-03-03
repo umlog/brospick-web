@@ -138,7 +138,7 @@ export const apiClient = {
 
     update: (
       password: string,
-      body: { productId: number; size: string; status?: string; stock?: number }
+      body: { productId: number; size: string; status?: string; stock?: number; delay_text?: string | null }
     ) =>
       request<{ success: true; size: ProductSize }>('/api/products/sizes', {
         method: 'PATCH',

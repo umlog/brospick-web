@@ -11,15 +11,15 @@ export enum OrderStatus {
   DELIVERED = '배송완료',
 }
 
-// 발송 지연 상태는 동적 문자열 패턴 (예: "2주 뒤 발송")
-export const DELAY_STATUS_REGEX = /^(\d+)주 뒤 발송$/;
+// 발송 지연 상태는 동적 문자열 패턴 (예: "2주 뒤 발송", "5일 뒤 발송")
+export const DELAY_STATUS_REGEX = /^(\d+)(주|일) 뒤 발송$/;
 
 export function isDelayStatus(status: string): boolean {
   return DELAY_STATUS_REGEX.test(status);
 }
 
-export function makeDelayStatus(weeks: number): string {
-  return `${weeks}주 뒤 발송`;
+export function makeDelayStatus(value: number, unit: '주' | '일' = '주'): string {
+  return `${value}${unit} 뒤 발송`;
 }
 
 // 재고 조정이 필요한 "확정" 상태인지 확인

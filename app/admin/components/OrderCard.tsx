@@ -13,6 +13,7 @@ interface OrderCardProps {
   notifyOnChange: boolean;
   delayModal: string | null;
   delayWeeks: number;
+  delayUnit: '주' | '일';
   onToggleExpand: (orderId: string) => void;
   onStatusChange: (orderId: string, newStatus: string) => void;
   onShippingClick: (orderId: string) => void;
@@ -22,6 +23,7 @@ interface OrderCardProps {
   onNotifyChange: (value: boolean) => void;
   onDelayClick: (orderId: string) => void;
   onDelayWeeksChange: (weeks: number) => void;
+  onDelayUnitChange: (unit: '주' | '일') => void;
   onDelaySubmit: () => void;
   onDelayCancel: () => void;
   onPaymentReminder: (orderId: string, orderNumber: string) => void;
@@ -36,6 +38,7 @@ export function OrderCard({
   notifyOnChange,
   delayModal,
   delayWeeks,
+  delayUnit,
   onToggleExpand,
   onStatusChange,
   onShippingClick,
@@ -45,12 +48,13 @@ export function OrderCard({
   onNotifyChange,
   onDelayClick,
   onDelayWeeksChange,
+  onDelayUnitChange,
   onDelaySubmit,
   onDelayCancel,
   onPaymentReminder,
   onDelete,
 }: OrderCardProps) {
-  const isDelayStatus = /^\d+주 뒤 발송$/.test(order.status);
+  const isDelayStatus = /^(\d+)(주|일) 뒤 발송$/.test(order.status);
 
   return (
     <div className={styles.orderCard}>
@@ -167,7 +171,7 @@ export function OrderCard({
                   <button
                     className={styles.delayStepBtn}
                     onClick={() => onDelayWeeksChange(Math.max(1, delayWeeks - 1))}
-                    aria-label="주수 줄이기"
+                    aria-label="수량 줄이기"
                   >
                     −
                   </button>
@@ -176,20 +180,34 @@ export function OrderCard({
                     className={styles.delayWeeksInput}
                     value={delayWeeks}
                     min={1}
-                    max={52}
+                    max={365}
                     onChange={(e) => {
                       const v = parseInt(e.target.value, 10);
-                      if (!isNaN(v)) onDelayWeeksChange(Math.min(52, Math.max(1, v)));
+                      if (!isNaN(v)) onDelayWeeksChange(Math.min(365, Math.max(1, v)));
                     }}
                   />
                   <button
                     className={styles.delayStepBtn}
-                    onClick={() => onDelayWeeksChange(Math.min(52, delayWeeks + 1))}
-                    aria-label="주수 늘리기"
+                    onClick={() => onDelayWeeksChange(Math.min(365, delayWeeks + 1))}
+                    aria-label="수량 늘리기"
                   >
                     +
                   </button>
-                  <span className={styles.delayWeeksLabel}>주 뒤 발송</span>
+                  <div className={styles.delayUnitToggle}>
+                    <button
+                      className={`${styles.delayUnitBtn} ${delayUnit === '주' ? styles.delayUnitBtnActive : ''}`}
+                      onClick={() => onDelayUnitChange('주')}
+                    >
+                      주
+                    </button>
+                    <button
+                      className={`${styles.delayUnitBtn} ${delayUnit === '일' ? styles.delayUnitBtnActive : ''}`}
+                      onClick={() => onDelayUnitChange('일')}
+                    >
+                      일
+                    </button>
+                  </div>
+                  <span className={styles.delayWeeksLabel}>뒤 발송</span>
                 </div>
                 <div className={styles.delayPickerButtons}>
                   <button className={styles.trackingCancelButton} onClick={onDelayCancel}>

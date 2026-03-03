@@ -45,6 +45,7 @@ export default function ProductDetailPage({
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
+  const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
 
   const product = products[params.slug as ProductSlug];
 
@@ -54,13 +55,16 @@ export default function ProductDetailPage({
       .then((data) => {
         const statusMap: Record<string, string> = {};
         const stockMap: Record<string, number> = {};
+        const delayTextMap: Record<string, string> = {};
         for (const item of data.sizes || []) {
           const key = `${item.product_id}-${item.size}`;
           statusMap[key] = item.status;
           stockMap[key] = item.stock ?? 0;
+          if (item.delay_text) delayTextMap[key] = item.delay_text;
         }
         setSizeStatuses(statusMap);
         setSizeStocks(stockMap);
+        setSizeDelayTexts(delayTextMap);
       })
       .catch(() => {});
   }, []);
@@ -250,6 +254,7 @@ export default function ProductDetailPage({
                         const stock = sizeStocks[key] ?? null;
                         const isSoldOut = sizeStatus === 'sold_out';
                         const isDelayed = sizeStatus === 'delayed';
+                        const delayText = sizeDelayTexts[key] || '지연배송';
                         const showLowStock = !isSoldOut && stock !== null && stock > 0 && stock <= 5;
                         return (
                           <button
@@ -260,7 +265,7 @@ export default function ProductDetailPage({
                             onClick={() => {
                               if (isSoldOut) return;
                               if (isDelayed) {
-                                if (confirm('해당 사이즈는 주문 후 약 3주 뒤 발송됩니다.\n주문하시겠습니까?')) {
+                                if (confirm(`해당 사이즈는 ${delayText} 상품입니다.\n주문하시겠습니까?`)) {
                                   setSelectedSize(size);
                                 }
                                 return;
@@ -271,7 +276,7 @@ export default function ProductDetailPage({
                           >
                             {size}
                             {isSoldOut && <span className={styles.soldOutLine} />}
-                            {isDelayed && <span className={styles.delayedLabel}>3주 뒤 발송</span>}
+                            {isDelayed && <span className={styles.delayedLabel}>{delayText}</span>}
                             {showLowStock && <span className={styles.lowStockLabel}>잔여 {stock}개</span>}
                           </button>
                         );
