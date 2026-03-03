@@ -54,6 +54,16 @@ export default function AdminPage() {
     }
   };
 
+  if (auth.isLoading) {
+    return (
+      <main className={styles.main}>
+        <div className={styles.loginContainer}>
+          <p>로딩 중...</p>
+        </div>
+      </main>
+    );
+  }
+
   if (!auth.isAuthenticated) {
     return (
       <LoginForm
