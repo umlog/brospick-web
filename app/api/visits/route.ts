@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { apiError, checkAdminPassword } from '@/lib/errors';
+import { apiError, checkAdminSession } from '@/lib/errors';
 
 // POST /api/visits - 방문 수 증가 (세션당 1회)
 export async function POST() {
@@ -34,8 +34,7 @@ export async function POST() {
 
 // GET /api/visits - 방문 수 조회 (관리자 전용)
 export async function GET(request: NextRequest) {
-  const password = request.headers.get('x-admin-password');
-  if (!checkAdminPassword(password)) {
+  if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
     return apiError('권한이 없습니다.', 401);
   }
 

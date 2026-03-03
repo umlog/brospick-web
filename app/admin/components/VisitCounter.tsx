@@ -8,22 +8,16 @@ interface VisitData {
   recent: { date: string; count: number }[];
 }
 
-interface Props {
-  password: string;
-}
-
-export function VisitCounter({ password }: Props) {
+export function VisitCounter() {
   const [data, setData] = useState<VisitData | null>(null);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    fetch('/api/visits', {
-      headers: { 'x-admin-password': password },
-    })
+    fetch('/api/visits')
       .then((r) => r.json())
       .then((d) => setData(d))
       .catch(() => {});
-  }, [password]);
+  }, []);
 
   if (!data) return null;
 

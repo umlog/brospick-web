@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import type { AdminTab } from './types';
-import { useAdminAuth } from './hooks/useAdminAuth';
 import { useOrders } from './hooks/useOrders';
 import { useReturns } from './hooks/useReturns';
 import { useProductSizes } from './hooks/useProductSizes';
-import { LoginForm } from './components/LoginForm';
 import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
@@ -23,28 +22,20 @@ const TAB_TITLES: Record<AdminTab, string> = {
 };
 
 export default function AdminPage() {
-  const auth = useAdminAuth();
-  const ordersState = useOrders(auth.password, auth.handleAuthFailure);
-  const returnsState = useReturns(auth.password, ordersState.notifyOnChange);
-  const productSizesState = useProductSizes(auth.password);
+  const router = useRouter();
+  const ordersState = useOrders();
+  const returnsState = useReturns(ordersState.notifyOnChange);
+  const productSizesState = useProductSizes();
   const [activeTab, setActiveTab] = useState<AdminTab>('orders');
 
-  // 쿠키 자동 인증 후 주문 데이터 로드
   useEffect(() => {
-    if (auth.isAuthenticated && auth.password && ordersState.allOrders.length === 0 && !ordersState.loading) {
-      ordersState.fetchOrders(auth.password);
-    }
-  }, [auth.isAuthenticated, auth.password]);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    ordersState.fetchOrders(auth.password).then(() => auth.handleLoginSuccess());
-  };
+    ordersState.fetchOrders();
+  }, []);
 
   const handleTabChange = (tab: AdminTab) => {
     setActiveTab(tab);
     if (tab === 'returns' && returnsState.returnRequests.length === 0) {
-      returnsState.fetchReturns(auth.password);
+      returnsState.fetchReturns();
     }
     if (tab === 'products') {
       productSizesState.fetchSizes();
@@ -53,42 +44,32 @@ export default function AdminPage() {
 
   const handleRefresh = () => {
     if (activeTab === 'orders' || activeTab === 'dashboard') {
-      ordersState.fetchOrders(auth.password);
+      ordersState.fetchOrders();
     } else if (activeTab === 'returns') {
-      returnsState.fetchReturns(auth.password, returnsState.filterStatus || undefined);
+      returnsState.fetchReturns(returnsState.filterStatus || undefined);
     } else {
       productSizesState.fetchSizes();
     }
   };
 
-  if (auth.isLoading) {
-    return (
-      <main className={styles.main}>
-        <div className={styles.loginContainer}>
-          <p>로딩 중...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!auth.isAuthenticated) {
-    return (
-      <LoginForm
-        password={auth.password}
-        onPasswordChange={auth.setPassword}
-        onSubmit={handleLogin}
-      />
-    );
-  }
+  const handleLogout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' });
+    router.push('/admin/login');
+  };
 
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.header}>
           <h1>{TAB_TITLES[activeTab]}</h1>
-          <button onClick={handleRefresh} className={styles.refreshButton}>
-            새로고침
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button onClick={handleRefresh} className={styles.refreshButton}>
+              새로고침
+            </button>
+            <button onClick={handleLogout} className={styles.refreshButton}>
+              로그아웃
+            </button>
+          </div>
         </div>
 
         <AdminTabs activeTab={activeTab} onTabChange={handleTabChange} />
@@ -107,10 +88,10 @@ export default function AdminPage() {
           <ProductSizeManager state={productSizesState} />
         )}
         {activeTab === 'dashboard' && (
-          <Dashboard password={auth.password} allOrders={ordersState.allOrders} />
+          <Dashboard allOrders={ordersState.allOrders} />
         )}
       </div>
-      <VisitCounter password={auth.password} />
+      <VisitCounter />
     </main>
   );
 }

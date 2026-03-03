@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import type { ProductSize } from '../types';
 import { apiClient } from '@/lib/api-client';
 
-export function useProductSizes(password: string) {
+export function useProductSizes() {
   const [sizes, setSizes] = useState<ProductSize[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ export function useProductSizes(password: string) {
 
   const updateSize = async (productId: number, size: string, status: string, delayText?: string | null) => {
     try {
-      const result = await apiClient.productSizes.update(password, {
+      const result = await apiClient.productSizes.update({
         productId,
         size,
         status,
@@ -40,7 +40,7 @@ export function useProductSizes(password: string) {
 
   const updateDelayText = async (productId: number, size: string, delayText: string | null) => {
     try {
-      const result = await apiClient.productSizes.update(password, {
+      const result = await apiClient.productSizes.update({
         productId,
         size,
         delay_text: delayText,
@@ -59,7 +59,7 @@ export function useProductSizes(password: string) {
 
   const updateStock = async (productId: number, size: string, stock: number) => {
     try {
-      const result = await apiClient.productSizes.update(password, { productId, size, stock });
+      const result = await apiClient.productSizes.update({ productId, size, stock });
       setSizes((prev) =>
         prev.map((s) =>
           s.product_id === productId && s.size === size

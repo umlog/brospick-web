@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 import type { ReturnRequest } from '../types';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, ApiClientError } from '@/lib/api-client';
 import { ReturnStatus } from '@/lib/domain/enums';
 
-export function useReturns(password: string, notifyOnChange: boolean) {
+export function useReturns(notifyOnChange: boolean) {
   const [returnRequests, setReturnRequests] = useState<ReturnRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
@@ -13,12 +13,16 @@ export function useReturns(password: string, notifyOnChange: boolean) {
   const [rejectModal, setRejectModal] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
 
-  const fetchReturns = useCallback(async (pw: string, status?: string) => {
+  const fetchReturns = useCallback(async (status?: string) => {
     setLoading(true);
     try {
-      const data = await apiClient.returns.list(pw, status ? { status } : undefined);
+      const data = await apiClient.returns.list(status ? { status } : undefined);
       setReturnRequests(data.requests);
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiClientError && err.status === 401) {
+        window.location.href = '/admin/login';
+        return;
+      }
       alert('교환/반품 조회에 실패했습니다.');
     } finally {
       setLoading(false);
@@ -30,13 +34,13 @@ export function useReturns(password: string, notifyOnChange: boolean) {
     if (!confirm(confirmMsg)) return;
 
     try {
-      await apiClient.returns.updateStatus(requestId, password, {
+      await apiClient.returns.updateStatus(requestId, {
         status: newStatus,
         sendNotification: notifyOnChange,
         ...extra,
       });
 
-      fetchReturns(password, filterStatus || undefined);
+      fetchReturns(filterStatus || undefined);
       setRejectModal(null);
       setRejectReason('');
       setTrackingModal(null);
@@ -50,7 +54,7 @@ export function useReturns(password: string, notifyOnChange: boolean) {
     if (!confirm(`요청 ${requestNumber}을(를) 정말 삭제할까요?`)) return;
 
     try {
-      await apiClient.returns.delete(requestId, password);
+      await apiClient.returns.delete(requestId);
       setReturnRequests((prev) => prev.filter((r) => r.id !== requestId));
       setExpandedReturn(null);
     } catch {
@@ -60,20 +64,20 @@ export function useReturns(password: string, notifyOnChange: boolean) {
 
   const handleFilterChange = (status: string) => {
     setFilterStatus(status);
-    fetchReturns(password, status || undefined);
+    fetchReturns(status || undefined);
   };
 
   const handleRefundComplete = async (requestId: string) => {
     if (!confirm('환불 완료로 처리할까요?')) return;
 
     try {
-      await apiClient.returns.updateStatus(requestId, password, {
+      await apiClient.returns.updateStatus(requestId, {
         status: ReturnStatus.COMPLETED,
         refundCompleted: true,
         sendNotification: notifyOnChange,
       });
 
-      fetchReturns(password, filterStatus || undefined);
+      fetchReturns(filterStatus || undefined);
     } catch (err) {
       alert(err instanceof Error ? err.message : '처리에 실패했습니다.');
     }

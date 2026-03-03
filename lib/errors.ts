@@ -41,11 +41,11 @@ export function apiSuccess(data?: Record<string, unknown>, status = 200): NextRe
   return NextResponse.json(data ?? { success: true }, { status });
 }
 
-// 어드민 비밀번호 검증 헬퍼 - 중복 제거
-export function checkAdminPassword(headerPassword: string | null): boolean {
+// 어드민 세션 쿠키 검증 헬퍼
+export function checkAdminSession(cookieValue: string | null | undefined): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) return false;
-  return headerPassword === adminPassword;
+  return cookieValue === adminPassword;
 }
 
 // 라우트 에러 경계 래퍼 - unhandled exception 처리

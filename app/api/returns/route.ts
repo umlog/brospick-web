@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { apiError, checkAdminPassword, withErrorHandler } from '@/lib/errors';
+import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { returnService } from '@/lib/services';
 
 // 교환/반품 신청 (고객)
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 // 교환/반품 목록 조회 (관리자)
 export async function GET(request: NextRequest) {
   return withErrorHandler(async () => {
-    if (!checkAdminPassword(request.headers.get('x-admin-password'))) {
+    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
     }
 

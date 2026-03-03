@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { apiError, checkAdminPassword } from '@/lib/errors';
+import { apiError, checkAdminSession } from '@/lib/errors';
 
 // 사이즈 가용성 및 재고 조회 (공개)
 export async function GET() {
@@ -41,8 +41,7 @@ export async function GET() {
 // 사이즈 상태/재고 변경 (관리자)
 export async function PATCH(request: NextRequest) {
   try {
-    const password = request.headers.get('x-admin-password');
-    if (!checkAdminPassword(password)) {
+    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
     }
 

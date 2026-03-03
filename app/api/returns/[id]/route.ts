@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { apiError, checkAdminPassword, withErrorHandler } from '@/lib/errors';
+import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { returnService } from '@/lib/services';
 
 // 교환/반품 상태 변경 (관리자)
@@ -8,7 +8,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   return withErrorHandler(async () => {
-    if (!checkAdminPassword(request.headers.get('x-admin-password'))) {
+    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
     }
 
@@ -32,7 +32,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   return withErrorHandler(async () => {
-    if (!checkAdminPassword(request.headers.get('x-admin-password'))) {
+    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
     }
 

@@ -1,6 +1,6 @@
 // =============================================================================
 // 클라이언트 사이드 API 클라이언트
-// 모든 hook에서 반복되는 fetch() + x-admin-password 헤더 패턴을 추상화
+// 쿠키 기반 인증 - x-admin-password 헤더 불필요
 // =============================================================================
 
 import type { Order, ReturnRequest, ProductSize, OrderResponse } from '@/lib/domain/types';
@@ -9,7 +9,6 @@ type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 interface RequestOptions {
   method?: HttpMethod;
-  adminPassword?: string;
   body?: unknown;
 }
 
@@ -25,11 +24,10 @@ export class ApiClientError extends Error {
 }
 
 async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', adminPassword, body } = options;
+  const { method = 'GET', body } = options;
 
   const headers: Record<string, string> = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
-  if (adminPassword) headers['x-admin-password'] = adminPassword;
 
   const response = await fetch(url, {
     method,
@@ -57,11 +55,9 @@ async function request<T>(url: string, options: RequestOptions = {}): Promise<T>
 
 export const apiClient = {
   orders: {
-    list: (password: string, params?: { status?: string }) => {
+    list: (params?: { status?: string }) => {
       const qs = params?.status ? `?status=${encodeURIComponent(params.status)}` : '';
-      return request<{ orders: Order[] }>(`/api/orders${qs}`, {
-        adminPassword: password,
-      });
+      return request<{ orders: Order[] }>(`/api/orders${qs}`);
     },
 
     create: (payload: unknown) =>
@@ -72,34 +68,28 @@ export const apiClient = {
 
     updateStatus: (
       id: string,
-      password: string,
       body: { status: string; sendNotification?: boolean; trackingNumber?: string }
     ) =>
       request<{ order: Order }>(`/api/orders/${id}`, {
         method: 'PATCH',
-        adminPassword: password,
         body,
       }),
 
-    delete: (id: string, password: string) =>
+    delete: (id: string) =>
       request<{ success: true }>(`/api/orders/${id}`, {
         method: 'DELETE',
-        adminPassword: password,
       }),
 
-    sendPaymentReminder: (id: string, password: string) =>
+    sendPaymentReminder: (id: string) =>
       request<{ success: true }>(`/api/orders/${id}`, {
         method: 'POST',
-        adminPassword: password,
       }),
   },
 
   returns: {
-    list: (password: string, params?: { status?: string }) => {
+    list: (params?: { status?: string }) => {
       const qs = params?.status ? `?status=${encodeURIComponent(params.status)}` : '';
-      return request<{ requests: ReturnRequest[] }>(`/api/returns${qs}`, {
-        adminPassword: password,
-      });
+      return request<{ requests: ReturnRequest[] }>(`/api/returns${qs}`);
     },
 
     create: (payload: unknown) =>
@@ -110,7 +100,6 @@ export const apiClient = {
 
     updateStatus: (
       id: string,
-      password: string,
       body: {
         status: string;
         rejectReason?: string;
@@ -121,14 +110,12 @@ export const apiClient = {
     ) =>
       request<{ request: ReturnRequest }>(`/api/returns/${id}`, {
         method: 'PATCH',
-        adminPassword: password,
         body,
       }),
 
-    delete: (id: string, password: string) =>
+    delete: (id: string) =>
       request<{ success: true }>(`/api/returns/${id}`, {
         method: 'DELETE',
-        adminPassword: password,
       }),
   },
 
@@ -137,12 +124,10 @@ export const apiClient = {
       request<{ sizes: ProductSize[] }>('/api/products/sizes'),
 
     update: (
-      password: string,
       body: { productId: number; size: string; status?: string; stock?: number; delay_text?: string | null }
     ) =>
       request<{ success: true; size: ProductSize }>('/api/products/sizes', {
         method: 'PATCH',
-        adminPassword: password,
         body,
       }),
   },

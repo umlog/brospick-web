@@ -11,7 +11,6 @@ interface VisitData {
 }
 
 interface Props {
-  password: string;
   allOrders: Order[];
 }
 
@@ -29,17 +28,15 @@ const STATUS_ORDER: OrderStatus[] = [
   OrderStatus.DELIVERED,
 ];
 
-export function Dashboard({ password, allOrders }: Props) {
+export function Dashboard({ allOrders }: Props) {
   const [visitData, setVisitData] = useState<VisitData | null>(null);
 
   useEffect(() => {
-    fetch('/api/visits', {
-      headers: { 'x-admin-password': password },
-    })
+    fetch('/api/visits')
       .then((r) => r.json())
       .then((d) => setVisitData(d))
       .catch(() => {});
-  }, [password]);
+  }, []);
 
   const today = new Date().toISOString().split('T')[0];
 

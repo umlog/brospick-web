@@ -48,6 +48,7 @@
   align-items: center;
   justify-content: center;
   animation: fadeIn 1s ease-out;
+  margin-bottom: 5%;
 }
 
 .logo {
@@ -63,7 +64,7 @@
   }
 
   .logo {
-    width: 220px;
+    width: 160px;
   }
 }
 

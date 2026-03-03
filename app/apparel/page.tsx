@@ -11,7 +11,7 @@ export default function ApparelPage() {
         <div className={styles.header}>
           <h1>브로스픽 의류</h1>
           <p className={styles.subtitle}>
-            선수와 팬이 함께 입는 브로스픽 의류
+            컬렉션<br />COLLECTION
           </p>
         </div>
 
