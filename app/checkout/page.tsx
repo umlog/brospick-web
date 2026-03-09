@@ -12,7 +12,7 @@ import styles from './checkout-page.module.css';
 
 export default function CheckoutPage() {
   const { checkoutItems, selectedTotalPrice, isLoading } = useCheckoutItems();
-  const { formData, handleInputChange, openAddressSearch } = useCheckoutForm();
+  const { formData, handleInputChange, handleMarketingConsentChange, openAddressSearch } = useCheckoutForm();
   const { isSubmitting, handleSubmit } = useOrderSubmission(
     formData,
     checkoutItems,
@@ -42,6 +42,7 @@ export default function CheckoutPage() {
               <PaymentSection
                 formData={formData}
                 onInputChange={handleInputChange}
+                onMarketingConsentChange={handleMarketingConsentChange}
               />
               <button
                 type="submit"

@@ -11,6 +11,7 @@ const INITIAL_FORM_DATA: CheckoutFormData = {
   postalCode: '',
   depositorName: '',
   deliveryNote: '',
+  marketingConsent: false,
 };
 
 export function useCheckoutForm() {
@@ -21,6 +22,10 @@ export function useCheckoutForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleMarketingConsentChange = (checked: boolean) => {
+    setFormData((prev) => ({ ...prev, marketingConsent: checked }));
   };
 
   const openAddressSearch = () => {
@@ -39,5 +44,5 @@ export function useCheckoutForm() {
     }).open();
   };
 
-  return { formData, handleInputChange, openAddressSearch };
+  return { formData, handleInputChange, handleMarketingConsentChange, openAddressSearch };
 }

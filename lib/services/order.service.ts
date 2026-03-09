@@ -28,6 +28,7 @@ interface CreateOrderPayload {
   shippingFee: number;
   depositorName?: string;
   deliveryNote?: string;
+  marketingConsent?: boolean;
   items: CreateOrderItem[];
 }
 
@@ -65,7 +66,7 @@ export class OrderService {
     const {
       customerName, customerPhone, customerEmail,
       postalCode, address, addressDetail,
-      totalAmount, shippingFee, depositorName, deliveryNote, items,
+      totalAmount, shippingFee, depositorName, deliveryNote, marketingConsent, items,
     } = payload;
 
     // 필수 필드 검증
@@ -96,6 +97,7 @@ export class OrderService {
         shipping_fee: shippingFee,
         depositor_name: depositorName || null,
         delivery_note: deliveryNote || null,
+        marketing_consent: marketingConsent ?? false,
         payment_method: '무통장입금',
         status: OrderStatus.PENDING_PAYMENT,
       })

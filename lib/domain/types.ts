@@ -32,6 +32,7 @@ export interface Order {
   depositor_name: string | null;
   delivery_note: string | null;
   payment_method: string;
+  marketing_consent: boolean | null;
   tracking_number?: string | null;
   delivered_at?: string | null;
   created_at: string;
@@ -108,6 +109,7 @@ export interface CheckoutFormData {
   postalCode: string;
   depositorName: string;
   deliveryNote: string;
+  marketingConsent: boolean;
 }
 
 export interface OrderResponse {
