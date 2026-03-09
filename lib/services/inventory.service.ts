@@ -73,6 +73,9 @@ export class InventoryService {
 
       if (!data) continue; // product_sizes에 등록 안 된 상품 → 재고 관리 대상 아님
 
+      // 지연발송 상태는 재고 수량과 무관하게 주문 허용
+      if (data.status === SizeStatus.DELAYED) continue;
+
       if (data.status === SizeStatus.SOLD_OUT || data.stock <= 0) {
         return {
           ok: false,
