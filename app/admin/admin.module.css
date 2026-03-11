@@ -1056,6 +1056,92 @@
   color: var(--color-text-primary);
 }
 
+/* Marketing Filter & Badge */
+.marketingBadge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #22c55e;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.marketingFilter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.marketingFilterLabel {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin-right: 4px;
+}
+
+.marketingFilterBtn {
+  padding: 4px 12px;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  transition: all 0.2s ease;
+}
+
+.marketingFilterBtn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.marketingFilterBtnActive {
+  background-color: #22c55e;
+  color: #fff;
+  border-color: #22c55e;
+}
+
+.marketingFilterBtnActive:hover {
+  color: #fff;
+}
+
+.csvExportBtn {
+  padding: 4px 12px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.csvExportBtn:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* Marketing Revoke */
+.revokeMarketingButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: transparent;
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.revokeMarketingButton:hover {
+  background-color: #f59e0b;
+  color: #000;
+}
+
 /* ============================
    Dashboard
    ============================ */
@@ -1111,6 +1197,63 @@
 .statLabel {
   font-size: 0.8rem;
   color: var(--color-text-secondary);
+}
+
+/* Data Retention */
+.retentionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-lg);
+}
+
+.retentionDesc {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.retentionRunBtn {
+  align-self: flex-start;
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.retentionRunBtn:hover:not(:disabled) {
+  background-color: #ff5a52;
+}
+
+.retentionRunBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.retentionResult {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--size-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-primary);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.retentionTime {
+  color: var(--color-text-secondary);
+  margin-left: auto;
 }
 
 /* Bar Chart */

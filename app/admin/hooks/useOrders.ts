@@ -7,6 +7,7 @@ export function useOrders() {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
+  const [filterMarketing, setFilterMarketing] = useState<boolean | null>(null);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
@@ -28,9 +29,11 @@ export function useOrders() {
       const orderDate = order.created_at.split('T')[0];
       const matchFrom = !dateFrom || orderDate >= dateFrom;
       const matchTo = !dateTo || orderDate <= dateTo;
-      return matchStatus && matchFrom && matchTo;
+      const matchMarketing =
+        filterMarketing === null || order.marketing_consent === filterMarketing;
+      return matchStatus && matchFrom && matchTo && matchMarketing;
     });
-  }, [allOrders, filterStatus, dateFrom, dateTo]);
+  }, [allOrders, filterStatus, filterMarketing, dateFrom, dateTo]);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -144,6 +147,18 @@ export function useOrders() {
     setFilterStatus(status);
   };
 
+  const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
+    if (!confirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`)) return;
+    try {
+      await apiClient.orders.revokeMarketing(orderId);
+      setAllOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, marketing_consent: false } : o))
+      );
+    } catch (err) {
+      alert(`마케팅 동의 철회에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+    }
+  };
+
   const toggleExpanded = (orderId: string) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
@@ -153,6 +168,8 @@ export function useOrders() {
     allOrders,
     loading,
     filterStatus,
+    filterMarketing,
+    setFilterMarketing,
     dateFrom,
     dateTo,
     setDateFrom,
@@ -179,6 +196,7 @@ export function useOrders() {
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,
+    handleRevokeMarketing,
     toggleExpanded,
   };
 }

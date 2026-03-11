@@ -20,6 +20,7 @@
     "swiper": "^12.0.3"
   },
   "devDependencies": {
+    "@netlify/functions": "^5.1.2",
     "@types/node": "^20.0.0",
     "@types/nodemailer": "^7.0.9",
     "@types/react": "^18.2.0",

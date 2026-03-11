@@ -28,6 +28,7 @@ interface OrderCardProps {
   onDelayCancel: () => void;
   onPaymentReminder: (orderId: string, orderNumber: string) => void;
   onDelete: (orderId: string, orderNumber: string) => void;
+  onRevokeMarketing: (orderId: string, orderNumber: string) => void;
 }
 
 export function OrderCard({
@@ -53,6 +54,7 @@ export function OrderCard({
   onDelayCancel,
   onPaymentReminder,
   onDelete,
+  onRevokeMarketing,
 }: OrderCardProps) {
   const isDelayStatus = /^(\d+)(주|일) 뒤 발송$/.test(order.status);
 
@@ -68,6 +70,9 @@ export function OrderCard({
         </div>
         <div className={styles.orderQuick}>
           <span className={styles.orderCustomer}>{order.customer_name}</span>
+          {order.marketing_consent && (
+            <span className={styles.marketingBadge}>마케팅</span>
+          )}
           <span className={styles.orderAmount}>
             ₩{order.total_amount.toLocaleString()}
           </span>
@@ -81,6 +86,9 @@ export function OrderCard({
         <div className={styles.orderDetail}>
           <div className={styles.detailSection}>
             <h3>고객 정보</h3>
+            {order.marketing_consent && (
+              <p><span className={styles.marketingBadge}>마케팅 수신 동의</span></p>
+            )}
             <p>이름: {order.customer_name}</p>
             <p>전화: {order.customer_phone}</p>
             {order.customer_email && <p>이메일: {order.customer_email}</p>}
@@ -220,6 +228,17 @@ export function OrderCard({
               </div>
             )}
           </div>
+
+          {order.marketing_consent && (
+            <div className={styles.paymentReminder}>
+              <button
+                className={styles.revokeMarketingButton}
+                onClick={() => onRevokeMarketing(order.id, order.order_number)}
+              >
+                마케팅 수신 동의 철회
+              </button>
+            </div>
+          )}
 
           {order.status === OrderStatus.PENDING_PAYMENT && order.customer_email && (
             <div className={styles.paymentReminder}>

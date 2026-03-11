@@ -15,6 +15,8 @@ export function OrderList({ ordersState }: OrderListProps) {
     orders,
     loading,
     filterStatus,
+    filterMarketing,
+    setFilterMarketing,
     dateFrom,
     dateTo,
     setDateFrom,
@@ -40,8 +42,29 @@ export function OrderList({ ordersState }: OrderListProps) {
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,
+    handleRevokeMarketing,
     toggleExpanded,
   } = ordersState;
+
+  const handleExportCSV = () => {
+    const marketingOrders = orders.filter((o) => o.marketing_consent);
+    if (marketingOrders.length === 0) {
+      alert('마케팅 수신 동의 고객이 없습니다.');
+      return;
+    }
+    const header = '이름,전화번호,이메일,주문번호,주문일자';
+    const rows = marketingOrders.map((o) =>
+      [o.customer_name, o.customer_phone, o.customer_email ?? '', o.order_number, o.created_at.split('T')[0]].join(',')
+    );
+    const csv = [header, ...rows].join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `마케팅동의고객_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <>
@@ -75,6 +98,31 @@ export function OrderList({ ordersState }: OrderListProps) {
         onChange={handleFilterChange}
       />
 
+      <div className={styles.marketingFilter}>
+        <span className={styles.marketingFilterLabel}>마케팅 동의</span>
+        <button
+          className={`${styles.marketingFilterBtn} ${filterMarketing === null ? styles.marketingFilterBtnActive : ''}`}
+          onClick={() => setFilterMarketing(null)}
+        >
+          전체
+        </button>
+        <button
+          className={`${styles.marketingFilterBtn} ${filterMarketing === true ? styles.marketingFilterBtnActive : ''}`}
+          onClick={() => setFilterMarketing(true)}
+        >
+          동의
+        </button>
+        <button
+          className={`${styles.marketingFilterBtn} ${filterMarketing === false ? styles.marketingFilterBtnActive : ''}`}
+          onClick={() => setFilterMarketing(false)}
+        >
+          미동의
+        </button>
+        <button className={styles.csvExportBtn} onClick={handleExportCSV}>
+          CSV 내보내기
+        </button>
+      </div>
+
       {loading ? (
         <p className={styles.loading}>로딩 중...</p>
       ) : orders.length === 0 ? (
@@ -106,6 +154,7 @@ export function OrderList({ ordersState }: OrderListProps) {
               onDelayCancel={() => setDelayModal(null)}
               onPaymentReminder={handlePaymentReminder}
               onDelete={handleDeleteOrder}
+              onRevokeMarketing={handleRevokeMarketing}
             />
           ))}
         </div>

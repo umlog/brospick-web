@@ -84,6 +84,11 @@ export const apiClient = {
       request<{ success: true }>(`/api/orders/${id}`, {
         method: 'POST',
       }),
+
+    revokeMarketing: (id: string) =>
+      request<{ success: true }>(`/api/orders/${id}/marketing-consent`, {
+        method: 'DELETE',
+      }),
   },
 
   returns: {
