@@ -15,6 +15,7 @@ export const BANK = {
 
 export const CONTACT = {
   email: 'team.brospick@gmail.com',
+  phone: '010-6604-6269',
 } as const;
 
 export const RETURN_POLICY = {
@@ -27,9 +28,9 @@ export const RETURN_POLICY = {
 export const COMPANY = {
   name: 'BROSPICK',
   representative: '홍주영',
-  businessNumber: '887-05-03210',
+  businessNumber: '847-07-03351',
   communicationSalesNumber: '제 2026-경기파주-0883 호',
-  address: '경기도 화성시 동탄신리천로 270',
+  address: '경기도 파주시 금정20길 19',
   privacyOfficer: '홍주영',
 } as const;
 

@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
           customerName, customerPhone, customerEmail,
           postalCode, address, addressDetail,
           totalAmount, shippingFee, deliveryNote, items,
-          paymentMethod: 'kakao',
         },
         siteUrl
       );

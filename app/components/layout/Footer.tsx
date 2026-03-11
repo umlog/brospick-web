@@ -58,6 +58,9 @@ export default function Footer() {
                 <a href={`mailto:${CONTACT.email}`}>이메일 문의</a>
               </li>
               <li>
+                <a href={`tel:${CONTACT.phone}`}>전화 문의</a>
+              </li>
+              <li>
                 <button className={styles.legalBtn} onClick={() => setLegalModal('privacy')}>
                   개인정보 처리방침
                 </button>
