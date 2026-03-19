@@ -85,6 +85,7 @@ export default function Footer() {
               <li>사업자번호: {COMPANY.businessNumber}</li>
               <li>통신판매업: {COMPANY.communicationSalesNumber}</li>
               <li>주소: {COMPANY.address}</li>
+              <li>전화번호: {CONTACT.phone}</li>
               <li style={{ whiteSpace: 'nowrap' }}>개인정보보호 책임자: {COMPANY.privacyOfficer}</li>
             </ul>
           </FooterSection>
