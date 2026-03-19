@@ -132,4 +132,20 @@ export const players: Player[] = [
     excerpt: '국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기.',
     image: '/players/junyong/action-1.png',
   },
+  {
+    id: 4,
+    name: '이은표',
+    team: 'Canberra White Eagles (호주 NPL)',
+    position: 'LW, RW, ST',
+    excerpt: '10년 사이드백에서 공격수로 전향, 진주시민축구단을 거쳐 브로스픽을 통해 호주 NPL Canberra White Eagles에 진출한 이은표 선수의 이야기.',
+    image: '/players/eunpyo/profile.jpeg',
+  },
+  {
+    id: 5,
+    name: '유은철',
+    team: '동국대학교',
+    position: 'LW, RB',
+    excerpt: '7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기.',
+    image: '/players/yooeuncheol/profile.jpeg',
+  },
 ];
