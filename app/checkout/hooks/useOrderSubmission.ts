@@ -17,6 +17,12 @@ export function useOrderSubmission(
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (!formData.privacyConsent || !formData.thirdPartyConsent) {
+      alert('필수 약관에 동의해 주세요.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {

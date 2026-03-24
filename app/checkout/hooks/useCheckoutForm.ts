@@ -11,6 +11,8 @@ const INITIAL_FORM_DATA: CheckoutFormData = {
   postalCode: '',
   depositorName: '',
   deliveryNote: '',
+  privacyConsent: false,
+  thirdPartyConsent: false,
   marketingConsent: false,
 };
 
@@ -24,8 +26,17 @@ export function useCheckoutForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMarketingConsentChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, marketingConsent: checked }));
+  const handleConsentChange = (field: 'privacyConsent' | 'thirdPartyConsent' | 'marketingConsent', checked: boolean) => {
+    setFormData((prev) => ({ ...prev, [field]: checked }));
+  };
+
+  const handleAllConsentChange = (checked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      privacyConsent: checked,
+      thirdPartyConsent: checked,
+      marketingConsent: checked,
+    }));
   };
 
   const openAddressSearch = () => {
@@ -44,5 +55,5 @@ export function useCheckoutForm() {
     }).open();
   };
 
-  return { formData, handleInputChange, handleMarketingConsentChange, openAddressSearch };
+  return { formData, handleInputChange, handleConsentChange, handleAllConsentChange, openAddressSearch };
 }

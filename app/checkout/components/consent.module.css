@@ -1,9 +1,79 @@
-.consentBox {
-  margin-top: var(--space-lg);
+/* ── 모두 동의 박스 ─────────────────────────────────── */
+.allConsentBox {
   padding: var(--space-lg);
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  margin-bottom: var(--space-md);
+}
+
+.allConsentLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.allConsentCheckbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.allConsentText {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.allConsentDesc {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-xs) 0 0;
+  padding-left: calc(22px + var(--space-sm));
+  line-height: 1.5;
+}
+
+/* ── 구분선 ─────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin-bottom: var(--space-md);
+}
+
+/* ── 개별 항목 목록 ──────────────────────────────────── */
+.consentList {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--color-border);
   border-radius: 4px;
+  overflow: hidden;
+}
+
+.consentItem {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.consentItem:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 480px) {
+  .consentItem {
+    padding: var(--space-md);
+  }
+}
+
+.consentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  min-height: 44px;
 }
 
 .consentLabel {
@@ -11,12 +81,13 @@
   align-items: center;
   gap: var(--space-sm);
   cursor: pointer;
-  margin-bottom: var(--space-sm);
+  flex: 1;
+  min-height: 44px;
 }
 
 .consentCheckbox {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
   accent-color: var(--color-accent);
   flex-shrink: 0;
@@ -27,7 +98,19 @@
   align-items: center;
   gap: var(--space-sm);
   font-size: var(--size-sm);
+  font-weight: 600;
   color: var(--color-text-primary);
+  flex-wrap: wrap;
+}
+
+.requiredBadge {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  white-space: nowrap;
 }
 
 .optionalBadge {
@@ -36,27 +119,125 @@
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
   border-radius: 3px;
-  padding: 1px 5px;
+  padding: 2px 6px;
+  white-space: nowrap;
 }
 
-.consentDesc {
+/* 터치 타겟 확보 */
+.expandButton {
+  background: none;
+  border: none;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.expandButton:hover {
+  opacity: 0.6;
+}
+
+/* ── 요약 텍스트 (접힌 상태) ─────────────────────────── */
+.consentSummary {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-xs) 0 0;
+  padding-left: calc(18px + var(--space-sm));
+  line-height: 1.5;
+}
+
+/* ── 상세 내용 (펼친 상태) ───────────────────────────── */
+.consentDetail {
+  margin-top: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-bg-primary);
+  border-radius: 4px;
   font-size: var(--size-sm);
   color: var(--color-text-secondary);
   line-height: 1.6;
-  margin: 0 0 var(--space-sm);
-  padding-left: calc(16px + var(--space-sm));
+}
+
+.consentDetail table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-sm);
+}
+
+.consentDetail th,
+.consentDetail td {
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+  font-size: var(--size-sm);
+}
+
+.consentDetail th {
+  width: 90px;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* 모바일: 테이블을 스택형으로 */
+@media (max-width: 480px) {
+  .consentDetail table,
+  .consentDetail tbody,
+  .consentDetail tr {
+    display: block;
+  }
+
+  .consentDetail tr {
+    margin-bottom: var(--space-sm);
+  }
+
+  .consentDetail th {
+    display: block;
+    width: auto;
+    padding-bottom: 2px;
+    white-space: normal;
+  }
+
+  .consentDetail td {
+    display: block;
+    padding-top: 0;
+    padding-left: var(--space-sm);
+  }
+}
+
+.consentDetail p {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+/* ── 필수 경고 + 정책 링크 ───────────────────────────── */
+.requiredHint {
+  font-size: var(--size-sm);
+  color: #e53e3e;
+  margin: var(--space-sm) 0 0;
 }
 
 .policyLink {
   background: none;
   border: none;
   padding: 0;
+  margin-top: var(--space-md);
   font-size: var(--size-sm);
   color: var(--color-accent);
   cursor: pointer;
   text-decoration: underline;
-  padding-left: calc(16px + var(--space-sm));
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
   transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .policyLink:hover {

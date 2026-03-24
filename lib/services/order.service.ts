@@ -28,6 +28,8 @@ interface CreateOrderPayload {
   shippingFee: number;
   depositorName?: string;
   deliveryNote?: string;
+  privacyConsent?: boolean;
+  thirdPartyConsent?: boolean;
   marketingConsent?: boolean;
   items: CreateOrderItem[];
 }
@@ -66,7 +68,8 @@ export class OrderService {
     const {
       customerName, customerPhone, customerEmail,
       postalCode, address, addressDetail,
-      totalAmount, shippingFee, depositorName, deliveryNote, marketingConsent, items,
+      totalAmount, shippingFee, depositorName, deliveryNote,
+      privacyConsent, thirdPartyConsent, marketingConsent, items,
     } = payload;
 
     // 필수 필드 검증
@@ -97,6 +100,8 @@ export class OrderService {
         shipping_fee: shippingFee,
         depositor_name: depositorName || null,
         delivery_note: deliveryNote || null,
+        privacy_consent: privacyConsent ?? true,
+        third_party_consent: thirdPartyConsent ?? true,
         marketing_consent: marketingConsent ?? false,
         payment_method: '무통장입금',
         status: OrderStatus.PENDING_PAYMENT,

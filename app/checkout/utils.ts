@@ -44,6 +44,8 @@ export function buildOrderPayload(
     shippingFee: SHIPPING.fee,
     depositorName: formData.depositorName,
     deliveryNote: formData.deliveryNote,
+    privacyConsent: formData.privacyConsent,
+    thirdPartyConsent: formData.thirdPartyConsent,
     marketingConsent: formData.marketingConsent,
     items: checkoutItems.map((item) => ({
       productId: item.id,
