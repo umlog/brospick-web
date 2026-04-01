@@ -157,7 +157,14 @@ export class OrderService {
       console.error('Order items creation error:', itemsError);
     }
 
-    // 재고 차감 없음 - 무통장입금 특성상 입금 확인 시점에 차감 (updateOrderStatus 참고)
+    // 재고 즉시 차감 (주문 생성 시점에 재고 선점)
+    // 주의: updateOrderStatus에서 입금확인 전환 시 추가 차감이 발생하는 이중 차감 버그가 있음.
+    // 트래픽이 높아지면 아래 두 가지를 함께 수정할 것:
+    //   1. 이 줄을 제거하고 입금확인 시점에만 차감
+    //   2. deleteOrder에서 PENDING_PAYMENT 상태도 재고 복구 대상에 포함
+    inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
+      console.error('Stock decrement failed:', err)
+    );
 
     // 알림 발송 (비동기)
     notificationService.notifyOrderCreated({

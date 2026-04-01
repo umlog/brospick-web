@@ -16,7 +16,8 @@
       "mcp__claude_ai_Supabase__list_projects",
       "Bash(python3:*)",
       "Bash(identify:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(./deploy.sh)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"
