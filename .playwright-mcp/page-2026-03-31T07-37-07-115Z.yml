@@ -1,0 +1,131 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Motion Tech Shorts 1"
+              - generic [ref=e27]:
+                - img "Motion Tech Shorts 2"
+              - generic [ref=e28]:
+                - img "Motion Tech Shorts 3"
+            - generic [ref=e30]:
+              - button "Motion Tech Shorts 1" [ref=e31] [cursor=pointer]:
+                - img "Motion Tech Shorts 1" [ref=e32]
+              - button "Motion Tech Shorts 2" [ref=e33] [cursor=pointer]:
+                - img "Motion Tech Shorts 2" [ref=e34]
+              - button "Motion Tech Shorts 3" [ref=e35] [cursor=pointer]:
+                - img "Motion Tech Shorts 3" [ref=e36]
+          - generic [ref=e38]:
+            - heading "Motion Tech Shorts" [level=1] [ref=e39]
+            - generic [ref=e40]:
+              - generic [ref=e41]: ₩36,000
+              - generic [ref=e42]: ₩61,000
+              - generic [ref=e43]: 41%
+            - generic [ref=e44]:
+              - paragraph [ref=e45]: "단위: cm"
+              - table [ref=e46]:
+                - rowgroup [ref=e47]:
+                  - row "사이즈 총장 가슴단면 소매길이" [ref=e48]:
+                    - columnheader "사이즈" [ref=e49]
+                    - columnheader "총장" [ref=e50]
+                    - columnheader "가슴단면" [ref=e51]
+                    - columnheader "소매길이" [ref=e52]
+                - rowgroup
+              - paragraph [ref=e53]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e54]:
+              - heading "사이즈 선택" [level=3] [ref=e55]
+              - generic [ref=e56]:
+                - button "M" [ref=e57] [cursor=pointer]
+                - button "L" [ref=e58] [cursor=pointer]
+                - button "XL" [ref=e59] [cursor=pointer]
+                - button "2XL" [ref=e60] [cursor=pointer]
+            - generic [ref=e61]:
+              - heading "수량" [level=3] [ref=e62]
+              - generic [ref=e64]:
+                - button "−" [ref=e65] [cursor=pointer]
+                - generic [ref=e66]: "1"
+                - button "+" [ref=e67] [cursor=pointer]
+            - generic [ref=e68]:
+              - button "장바구니에 추가" [ref=e69] [cursor=pointer]
+              - button "바로 구매하기" [ref=e70] [cursor=pointer]
+            - generic [ref=e71]:
+              - generic [ref=e72]: 허리 밴딩 구조
+              - generic [ref=e73]: 활동성 강화 사이드 슬릿
+              - generic [ref=e74]: 사이드 지퍼 포켓
+              - generic [ref=e75]: 뒷면 행거 루프
+              - generic [ref=e76]: 빛반사 스카치 로고 + 측면 반사 패치
+            - generic [ref=e77]:
+              - button "제품 설명 +" [ref=e79] [cursor=pointer]:
+                - generic [ref=e80]: 제품 설명
+                - generic [ref=e81]: +
+              - button "사이즈 가이드 +" [ref=e83] [cursor=pointer]:
+                - generic [ref=e84]: 사이즈 가이드
+                - generic [ref=e85]: +
+              - button "배송 +" [ref=e87] [cursor=pointer]:
+                - generic [ref=e88]: 배송
+                - generic [ref=e89]: +
+              - button "반품 & 교환 +" [ref=e91] [cursor=pointer]:
+                - generic [ref=e92]: 반품 & 교환
+                - generic [ref=e93]: +
+  - contentinfo [ref=e94]:
+    - generic [ref=e95]:
+      - img "Brospick" [ref=e97]
+      - generic [ref=e98]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e100]:
+          - listitem [ref=e101]:
+            - link "인스타그램" [ref=e102] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e103]:
+            - link "스레드" [ref=e104] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e105]:
+            - link "이메일 문의" [ref=e106] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e107]:
+            - link "전화 문의" [ref=e108] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e109]:
+            - button "개인정보 처리방침" [ref=e110] [cursor=pointer]
+          - listitem [ref=e111]:
+            - button "쿠키 정책" [ref=e112] [cursor=pointer]
+          - listitem [ref=e113]:
+            - button "면책 조항" [ref=e114] [cursor=pointer]
+      - generic [ref=e115]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e117]:
+          - listitem [ref=e118]: "회사: BROSPICK"
+          - listitem [ref=e119]: "대표자: 홍주영"
+          - listitem [ref=e120]: "사업자번호: 847-07-03351"
+          - listitem [ref=e121]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e122]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e123]: "전화번호: 010-6604-6269"
+          - listitem [ref=e124]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e127]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e128] [cursor=pointer]:
+    - img [ref=e129]
+  - alert [ref=e131]

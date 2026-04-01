@@ -1,0 +1,158 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - generic [ref=e6]:
+        - button "테마 전환" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - button "메뉴" [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Half-Zip Training Top 1"
+              - generic [ref=e27]:
+                - img "Half-Zip Training Top 2"
+              - generic [ref=e28]:
+                - img "Half-Zip Training Top 3"
+              - generic [ref=e29]:
+                - img "Half-Zip Training Top 4"
+              - generic [ref=e30]:
+                - img "Half-Zip Training Top 5"
+              - generic [ref=e31]:
+                - img "Half-Zip Training Top 6"
+              - generic [ref=e32]:
+                - img "Half-Zip Training Top 7"
+            - generic [ref=e33]:
+              - button "이미지 1" [ref=e34] [cursor=pointer]
+              - button "이미지 2" [ref=e35] [cursor=pointer]
+              - button "이미지 3" [ref=e36] [cursor=pointer]
+              - button "이미지 4" [ref=e37] [cursor=pointer]
+              - button "이미지 5" [ref=e38] [cursor=pointer]
+              - button "이미지 6" [ref=e39] [cursor=pointer]
+              - button "이미지 7" [ref=e40] [cursor=pointer]
+            - generic [ref=e42]:
+              - button "Half-Zip Training Top 1" [ref=e43] [cursor=pointer]:
+                - img "Half-Zip Training Top 1" [ref=e44]
+              - button "Half-Zip Training Top 2" [ref=e45] [cursor=pointer]:
+                - img "Half-Zip Training Top 2" [ref=e46]
+              - button "Half-Zip Training Top 3" [ref=e47] [cursor=pointer]:
+                - img "Half-Zip Training Top 3" [ref=e48]
+              - button "Half-Zip Training Top 4" [ref=e49] [cursor=pointer]:
+                - img "Half-Zip Training Top 4" [ref=e50]
+              - button "Half-Zip Training Top 5" [ref=e51] [cursor=pointer]:
+                - img "Half-Zip Training Top 5" [ref=e52]
+              - button "Half-Zip Training Top 6" [ref=e53] [cursor=pointer]:
+                - img "Half-Zip Training Top 6" [ref=e54]
+              - button "Half-Zip Training Top 7" [ref=e55] [cursor=pointer]:
+                - img "Half-Zip Training Top 7" [ref=e56]
+          - generic [ref=e58]:
+            - heading "Half-Zip Training Top" [level=1] [ref=e59]
+            - generic [ref=e60]:
+              - generic [ref=e61]: ₩26,900
+              - generic [ref=e62]: ₩59,000
+              - generic [ref=e63]: 54%
+            - generic [ref=e64]:
+              - paragraph [ref=e65]: "단위: cm"
+              - table [ref=e66]:
+                - rowgroup [ref=e67]:
+                  - row "사이즈 총장 가슴단면 소매길이 밑단" [ref=e68]:
+                    - columnheader "사이즈" [ref=e69]
+                    - columnheader "총장" [ref=e70]
+                    - columnheader "가슴단면" [ref=e71]
+                    - columnheader "소매길이" [ref=e72]
+                    - columnheader "밑단" [ref=e73]
+                - rowgroup [ref=e74]:
+                  - row "S 61 45 67 45" [ref=e75]:
+                    - cell "S" [ref=e76]
+                    - cell "61" [ref=e77]
+                    - cell "45" [ref=e78]
+                    - cell "67" [ref=e79]
+                    - cell "45" [ref=e80]
+                  - row "M 64 46 68 48" [ref=e81]:
+                    - cell "M" [ref=e82]
+                    - cell "64" [ref=e83]
+                    - cell "46" [ref=e84]
+                    - cell "68" [ref=e85]
+                    - cell "48" [ref=e86]
+                  - row "L 67 51 74 50" [ref=e87]:
+                    - cell "L" [ref=e88]
+                    - cell "67" [ref=e89]
+                    - cell "51" [ref=e90]
+                    - cell "74" [ref=e91]
+                    - cell "50" [ref=e92]
+                  - row "XL 70 53 76 53" [ref=e93]:
+                    - cell "XL" [ref=e94]
+                    - cell "70" [ref=e95]
+                    - cell "53" [ref=e96]
+                    - cell "76" [ref=e97]
+                    - cell "53" [ref=e98]
+                  - row "2XL 73 55 78 55" [ref=e99]:
+                    - cell "2XL" [ref=e100]
+                    - cell "73" [ref=e101]
+                    - cell "55" [ref=e102]
+                    - cell "78" [ref=e103]
+                    - cell "55" [ref=e104]
+              - paragraph [ref=e105]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e106]:
+              - heading "사이즈 선택" [level=3] [ref=e107]
+              - generic [ref=e108]:
+                - button "S" [ref=e109] [cursor=pointer]
+                - button "M" [ref=e110] [cursor=pointer]
+                - button "L" [ref=e111] [cursor=pointer]
+                - button "XL" [ref=e112] [cursor=pointer]
+                - button "2XL" [ref=e113] [cursor=pointer]
+            - generic [ref=e114]:
+              - heading "수량" [level=3] [ref=e115]
+              - generic [ref=e117]:
+                - button "−" [ref=e118] [cursor=pointer]
+                - generic [ref=e119]: "1"
+                - button "+" [ref=e120] [cursor=pointer]
+            - generic [ref=e121]:
+              - button "장바구니에 추가" [ref=e122] [cursor=pointer]
+              - button "바로 구매하기" [ref=e123] [cursor=pointer]
+            - generic [ref=e124]:
+              - generic [ref=e125]: 편안한 착용감
+              - generic [ref=e126]: 고탄성 원단
+              - generic [ref=e127]: 자유로운 움직임
+              - generic [ref=e128]: 빠른 건조
+            - generic [ref=e129]:
+              - button "제품 설명 +" [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]: 제품 설명
+                - generic [ref=e133]: +
+              - button "사이즈 가이드 +" [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]: 사이즈 가이드
+                - generic [ref=e137]: +
+              - button "배송 +" [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]: 배송
+                - generic [ref=e141]: +
+              - button "반품 & 교환 +" [ref=e143] [cursor=pointer]:
+                - generic [ref=e144]: 반품 & 교환
+                - generic [ref=e145]: +
+      - generic [ref=e147]:
+        - generic [ref=e148]:
+          - generic [ref=e149]: ₩26,900
+          - generic [ref=e150]: 사이즈를 선택하세요
+        - generic [ref=e151]:
+          - button "장바구니" [ref=e152] [cursor=pointer]
+          - button "바로 구매" [ref=e153] [cursor=pointer]
+  - contentinfo [ref=e154]:
+    - generic [ref=e155]:
+      - img "Brospick" [ref=e157]
+      - button "지원 +" [ref=e159] [cursor=pointer]:
+        - generic [ref=e160]: 지원
+        - generic [ref=e161]: +
+      - button "BROSPICK +" [ref=e163] [cursor=pointer]:
+        - generic [ref=e164]: BROSPICK
+        - generic [ref=e165]: +
+    - paragraph [ref=e168]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e169] [cursor=pointer]:
+    - img [ref=e170]
+  - alert [ref=e172]

@@ -77,8 +77,36 @@ export class OrderService {
       throw Object.assign(new Error('필수 정보가 누락되었습니다.'), { status: 400 });
     }
 
+    // 서버에서 상품 가격/이름 조회 (클라이언트 전송 값 무시)
+    const productIds = items.map((i) => i.productId).filter((id): id is number => id != null);
+    const { data: dbProducts, error: productError } = await supabaseAdmin
+      .from('products')
+      .select('id, name, price')
+      .in('id', productIds);
+
+    if (productError) throw new Error(`상품 정보 조회에 실패했습니다: ${productError.message}`);
+
+    const productMap = new Map((dbProducts ?? []).map((p) => [p.id, p]));
+
+    const verifiedItems = items.map((item) => {
+      const dbProduct = item.productId != null ? productMap.get(item.productId) : null;
+      return {
+        ...item,
+        productName: dbProduct?.name ?? item.productName,
+        price: dbProduct?.price ?? item.price,
+      };
+    });
+
+    const verifiedTotal = verifiedItems.reduce((sum, i) => sum + i.price * i.quantity, 0) + shippingFee;
+    if (verifiedTotal !== totalAmount) {
+      throw Object.assign(
+        new Error(`결제 금액이 올바르지 않습니다. (expected: ${verifiedTotal}, received: ${totalAmount})`),
+        { status: 400 }
+      );
+    }
+
     // 재고 확인
-    const stockCheck = await inventoryService.checkStock(items as StockableItem[]);
+    const stockCheck = await inventoryService.checkStock(verifiedItems as StockableItem[]);
     if (!stockCheck.ok) {
       throw Object.assign(new Error(stockCheck.message ?? '재고가 부족합니다.'), { status: 409 });
     }
@@ -114,8 +142,8 @@ export class OrderService {
       throw new Error(`주문 생성에 실패했습니다: ${orderError.message}`);
     }
 
-    // 주문 상품 생성
-    const orderItems = items.map((item) => ({
+    // 주문 상품 생성 (서버에서 검증된 가격/이름 사용)
+    const orderItems = verifiedItems.map((item) => ({
       order_id: order.id,
       product_id: item.productId ?? null,
       product_name: item.productName,
@@ -130,7 +158,7 @@ export class OrderService {
     }
 
     // 재고 차감 (비동기 - 응답 지연시키지 않음)
-    inventoryService.decrementStock(items as StockableItem[]).catch((err) =>
+    inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
       console.error('Stock decrement failed:', err)
     );
 
@@ -143,7 +171,7 @@ export class OrderService {
       totalAmount: order.total_amount,
       shippingFee: order.shipping_fee,
       depositorName: depositorName || customerName,
-      items: items.map((i) => ({
+      items: verifiedItems.map((i) => ({
         productName: i.productName,
         size: i.size,
         quantity: i.quantity,

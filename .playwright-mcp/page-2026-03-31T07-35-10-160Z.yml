@@ -1,0 +1,183 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "GRID ZIP HOODIE 1"
+              - generic [ref=e27]:
+                - img "GRID ZIP HOODIE 2"
+              - generic [ref=e28]:
+                - img "GRID ZIP HOODIE 3"
+              - generic [ref=e29]:
+                - img "GRID ZIP HOODIE 4"
+              - generic [ref=e30]:
+                - img "GRID ZIP HOODIE 5"
+              - generic [ref=e31]:
+                - img "GRID ZIP HOODIE 6"
+              - generic [ref=e32]:
+                - img "GRID ZIP HOODIE 7"
+              - generic [ref=e33]:
+                - img "GRID ZIP HOODIE 8"
+              - generic [ref=e34]:
+                - img "GRID ZIP HOODIE 9"
+              - generic [ref=e35]:
+                - img "GRID ZIP HOODIE 10"
+              - generic [ref=e36]:
+                - img "GRID ZIP HOODIE 11"
+            - generic [ref=e38]:
+              - button "GRID ZIP HOODIE 1" [ref=e39] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 1" [ref=e40]
+              - button "GRID ZIP HOODIE 2" [ref=e41] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 2" [ref=e42]
+              - button "GRID ZIP HOODIE 3" [ref=e43] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 3" [ref=e44]
+              - button "GRID ZIP HOODIE 4" [ref=e45] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 4" [ref=e46]
+              - button "GRID ZIP HOODIE 5" [ref=e47] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 5" [ref=e48]
+              - button "GRID ZIP HOODIE 6" [ref=e49] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 6" [ref=e50]
+              - button "GRID ZIP HOODIE 7" [ref=e51] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 7" [ref=e52]
+              - button "GRID ZIP HOODIE 8" [ref=e53] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 8" [ref=e54]
+              - button "GRID ZIP HOODIE 9" [ref=e55] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 9" [ref=e56]
+              - button "GRID ZIP HOODIE 10" [ref=e57] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 10" [ref=e58]
+              - button "GRID ZIP HOODIE 11" [ref=e59] [cursor=pointer]:
+                - img "GRID ZIP HOODIE 11" [ref=e60]
+          - generic [ref=e62]:
+            - heading "GRID ZIP HOODIE" [level=1] [ref=e63]
+            - generic [ref=e64]:
+              - generic [ref=e65]: ₩39,900
+              - generic [ref=e66]: ₩59,000
+              - generic [ref=e67]: 32%
+            - generic [ref=e68]:
+              - paragraph [ref=e69]: "단위: cm"
+              - table [ref=e70]:
+                - rowgroup [ref=e71]:
+                  - row "사이즈 총장 가슴둘레 소매길이" [ref=e72]:
+                    - columnheader "사이즈" [ref=e73]
+                    - columnheader "총장" [ref=e74]
+                    - columnheader "가슴둘레" [ref=e75]
+                    - columnheader "소매길이" [ref=e76]
+                - rowgroup [ref=e77]:
+                  - row "M 67 110 77" [ref=e78]:
+                    - cell "M" [ref=e79]
+                    - cell "67" [ref=e80]
+                    - cell "110" [ref=e81]
+                    - cell "77" [ref=e82]
+                  - row "L 69 114 79" [ref=e83]:
+                    - cell "L" [ref=e84]
+                    - cell "69" [ref=e85]
+                    - cell "114" [ref=e86]
+                    - cell "79" [ref=e87]
+                  - row "XL 71 118 81" [ref=e88]:
+                    - cell "XL" [ref=e89]
+                    - cell "71" [ref=e90]
+                    - cell "118" [ref=e91]
+                    - cell "81" [ref=e92]
+                  - row "2XL 73 122 83" [ref=e93]:
+                    - cell "2XL" [ref=e94]
+                    - cell "73" [ref=e95]
+                    - cell "122" [ref=e96]
+                    - cell "83" [ref=e97]
+              - paragraph [ref=e98]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e99]:
+              - heading "사이즈 선택" [level=3] [ref=e100]
+              - generic [ref=e101]:
+                - button "M" [ref=e102] [cursor=pointer]
+                - button "L" [ref=e103] [cursor=pointer]
+                - button "XL" [ref=e104] [cursor=pointer]
+                - button "2XL" [ref=e105] [cursor=pointer]
+            - generic [ref=e106]:
+              - heading "수량" [level=3] [ref=e107]
+              - generic [ref=e109]:
+                - button "−" [ref=e110] [cursor=pointer]
+                - generic [ref=e111]: "1"
+                - button "+" [ref=e112] [cursor=pointer]
+            - generic [ref=e113]:
+              - button "장바구니에 추가" [ref=e114] [cursor=pointer]
+              - button "바로 구매하기" [ref=e115] [cursor=pointer]
+            - generic [ref=e116]:
+              - generic [ref=e117]: 히든 지퍼 포켓
+              - generic [ref=e118]: 전면 빛반사 로고
+              - generic [ref=e119]: 통기성
+              - generic [ref=e120]: 가벼운 착용감
+              - generic [ref=e121]: 피부 친화 · 부드러운 촉감
+            - generic [ref=e122]:
+              - button "제품 설명 +" [ref=e124] [cursor=pointer]:
+                - generic [ref=e125]: 제품 설명
+                - generic [ref=e126]: +
+              - button "사이즈 가이드 +" [ref=e128] [cursor=pointer]:
+                - generic [ref=e129]: 사이즈 가이드
+                - generic [ref=e130]: +
+              - button "배송 +" [ref=e132] [cursor=pointer]:
+                - generic [ref=e133]: 배송
+                - generic [ref=e134]: +
+              - button "반품 & 교환 +" [ref=e136] [cursor=pointer]:
+                - generic [ref=e137]: 반품 & 교환
+                - generic [ref=e138]: +
+  - contentinfo [ref=e139]:
+    - generic [ref=e140]:
+      - img "Brospick" [ref=e142]
+      - generic [ref=e143]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e145]:
+          - listitem [ref=e146]:
+            - link "인스타그램" [ref=e147] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e148]:
+            - link "스레드" [ref=e149] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e150]:
+            - link "이메일 문의" [ref=e151] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e152]:
+            - link "전화 문의" [ref=e153] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e154]:
+            - button "개인정보 처리방침" [ref=e155] [cursor=pointer]
+          - listitem [ref=e156]:
+            - button "쿠키 정책" [ref=e157] [cursor=pointer]
+          - listitem [ref=e158]:
+            - button "면책 조항" [ref=e159] [cursor=pointer]
+      - generic [ref=e160]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e162]:
+          - listitem [ref=e163]: "회사: BROSPICK"
+          - listitem [ref=e164]: "대표자: 홍주영"
+          - listitem [ref=e165]: "사업자번호: 847-07-03351"
+          - listitem [ref=e166]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e167]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e168]: "전화번호: 010-6604-6269"
+          - listitem [ref=e169]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e172]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e173] [cursor=pointer]:
+    - img [ref=e174]
+  - alert [ref=e176]

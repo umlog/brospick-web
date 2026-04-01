@@ -1,3 +1,14 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .main {
   min-height: calc(100vh - 80px);
   padding: var(--space-2xl) 0;
@@ -21,6 +32,7 @@
   color: var(--color-text-secondary);
   font-size: var(--size-sm);
   transition: color 0.3s ease;
+  animation: fadeInUp 0.3s ease both;
 }
 
 .backLink:hover {
@@ -30,8 +42,9 @@
 .article {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: var(--space-2xl);
+  animation: fadeInUp 0.4s ease 0.05s both;
 }
 
 .header {
@@ -40,13 +53,6 @@
   margin-bottom: var(--space-2xl);
   padding-bottom: var(--space-xl);
   border-bottom: 1px solid var(--color-border);
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: var(--space-lg);
-  }
 }
 
 .imageContainer {
@@ -71,10 +77,12 @@
   border-radius: 8px;
   object-fit: cover;
   border: 1px solid var(--color-border);
+  display: block;
 }
 
 .headerInfo {
   flex: 1;
+  min-width: 0;
 }
 
 .headerInfo h1 {
@@ -85,6 +93,7 @@
 .meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-sm);
   margin-bottom: var(--space-sm);
   font-size: var(--size-base);
@@ -148,23 +157,11 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  .videoSection {
-    max-width: 450px;
-  }
-}
-
-@media (max-width: 480px) {
-  .videoSection {
-    max-width: 100%;
-  }
-}
-
 .content {
   line-height: 1.8;
 }
 
-/* 블로그 스타일 헤딩 */
+/* 헤딩 */
 .content h1 {
   font-size: 32px;
   font-weight: 700;
@@ -201,9 +198,9 @@
   border-radius: 2px;
 }
 
-/* 인용구 스타일 */
+/* 인용구 */
 .content blockquote {
-  font-size: 20px;
+  font-size: 18px;
   font-style: italic;
   color: var(--color-text-primary);
   margin: var(--space-2xl) 0;
@@ -225,7 +222,7 @@
   margin-bottom: 0;
 }
 
-/* 본문 이미지 스타일 */
+/* 본문 이미지 */
 .articleImage {
   margin: var(--space-2xl) 0;
   border-radius: 12px;
@@ -242,11 +239,18 @@
   object-fit: contain;
 }
 
-/* 표 스타일 */
+/* 테이블 래퍼 */
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: var(--space-xl) 0;
+  border-radius: 8px;
+}
+
+/* 표 */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin: var(--space-xl) 0;
   background-color: var(--color-bg-primary);
   border-radius: 8px;
   overflow: hidden;
@@ -264,6 +268,7 @@
   font-weight: 600;
   color: white;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
 }
 
 .table td {
@@ -271,6 +276,7 @@
   font-size: 15px;
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
 }
 
 .table tbody tr:last-child td {
@@ -285,7 +291,7 @@
   background-color: var(--color-bg-secondary);
 }
 
-/* 리스트 스타일 */
+/* 리스트 */
 .list {
   margin: var(--space-lg) 0;
   padding-left: var(--space-xl);
@@ -304,7 +310,28 @@
   color: var(--color-accent);
 }
 
+/* 모바일 */
 @media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .imageContainer {
+    width: 100%;
+  }
+
+  .profileImage {
+    width: 100% !important;
+    height: 220px !important;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .headerInfo h1 {
+    font-size: var(--size-2xl);
+  }
+
   .content h1 {
     font-size: 26px;
   }
@@ -314,7 +341,7 @@
   }
 
   .content blockquote {
-    font-size: 17px;
+    font-size: 16px;
     padding: var(--space-md) var(--space-lg);
   }
 
@@ -326,10 +353,66 @@
     margin: var(--space-xl) 0;
   }
 
-  .table th,
-  .table td {
-    padding: var(--space-sm) var(--space-md);
-    font-size: 14px;
+  .videoSection {
+    max-width: 450px;
   }
 }
 
+@media (max-width: 480px) {
+  .main {
+    padding: var(--space-xl) 0;
+  }
+
+  .article {
+    padding: var(--space-lg);
+    border-radius: 10px;
+  }
+
+  .profileImage {
+    height: 180px !important;
+  }
+
+  .headerInfo h1 {
+    font-size: 22px;
+  }
+
+  .meta {
+    font-size: var(--size-sm);
+    gap: var(--space-xs);
+  }
+
+  .content h1 {
+    font-size: 22px;
+  }
+
+  .content h2 {
+    font-size: 18px;
+  }
+
+  .content blockquote {
+    font-size: 15px;
+    padding: var(--space-md);
+  }
+
+  .content p {
+    font-size: 15px;
+  }
+
+  .table th,
+  .table td {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 13px;
+  }
+
+  .highlights {
+    padding: var(--space-md);
+  }
+
+  .highlights li {
+    font-size: var(--size-sm);
+  }
+
+  .videoSection {
+    max-width: 100%;
+  }
+}

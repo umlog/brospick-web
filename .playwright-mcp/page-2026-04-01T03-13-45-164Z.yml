@@ -1,0 +1,197 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - generic [ref=e6]:
+        - button "테마 전환" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - button "메뉴" [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "브로스픽 의류" [level=1] [ref=e22]
+          - paragraph [ref=e23]:
+            - text: 컬렉션
+            - text: COLLECTION
+        - generic [ref=e24]:
+          - button "전체" [ref=e25] [cursor=pointer]
+          - button "트레이닝 탑" [ref=e26] [cursor=pointer]
+          - button "반팔" [ref=e27] [cursor=pointer]
+          - button "긴팔" [ref=e28] [cursor=pointer]
+          - button "후드" [ref=e29] [cursor=pointer]
+          - button "반바지" [ref=e30] [cursor=pointer]
+          - button "팬츠" [ref=e31] [cursor=pointer]
+        - generic [ref=e32]:
+          - link "Half-Zip Training Top Half-Zip Training Top ₩26,900 ₩59,000 54% 자세히 보기 →" [ref=e33] [cursor=pointer]:
+            - /url: /apparel/half-zip-training-top
+            - img "Half-Zip Training Top" [ref=e35]
+            - generic [ref=e36]:
+              - heading "Half-Zip Training Top" [level=3] [ref=e37]
+              - generic [ref=e38]:
+                - generic [ref=e39]: ₩26,900
+                - generic [ref=e40]: ₩59,000
+                - generic [ref=e41]: 54%
+              - generic [ref=e42]: 자세히 보기 →
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - img "Quarter-Zip Training Top (Black)" [ref=e45]
+              - generic [ref=e47]: COMING SOON
+            - generic [ref=e48]:
+              - heading "Quarter-Zip Training Top (Black)" [level=3] [ref=e49]
+              - generic [ref=e50]:
+                - generic [ref=e51]: ₩26,900
+                - generic [ref=e52]: ₩59,000
+                - generic [ref=e53]: 54%
+              - generic [ref=e54]: 출시 예정
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - img "Camel Gray Short Sleeve" [ref=e57]
+              - generic [ref=e59]: COMING SOON
+            - generic [ref=e60]:
+              - heading "Camel Gray Short Sleeve" [level=3] [ref=e61]
+              - generic [ref=e62]:
+                - generic [ref=e63]: ₩19,900
+                - generic [ref=e64]: ₩29,900
+                - generic [ref=e65]: 33%
+              - generic [ref=e66]: 출시 예정
+          - generic [ref=e67]:
+            - generic [ref=e68]:
+              - img "Quarter-Zip Training Top (Gray)" [ref=e69]
+              - generic [ref=e71]: COMING SOON
+            - generic [ref=e72]:
+              - heading "Quarter-Zip Training Top (Gray)" [level=3] [ref=e73]
+              - generic [ref=e74]:
+                - generic [ref=e75]: ₩26,900
+                - generic [ref=e76]: ₩59,000
+                - generic [ref=e77]: 54%
+              - generic [ref=e78]: 출시 예정
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - img "Running Long Sleeve Top (Gray)" [ref=e81]
+              - generic [ref=e83]: COMING SOON
+            - generic [ref=e84]:
+              - heading "Running Long Sleeve Top (Gray)" [level=3] [ref=e85]
+              - generic [ref=e86]:
+                - generic [ref=e87]: ₩19,900
+                - generic [ref=e88]: ₩29,900
+                - generic [ref=e89]: 33%
+              - generic [ref=e90]: 출시 예정
+          - generic [ref=e91]:
+            - generic [ref=e92]:
+              - img "Running Long Sleeve Top (Black)" [ref=e93]
+              - generic [ref=e95]: COMING SOON
+            - generic [ref=e96]:
+              - heading "Running Long Sleeve Top (Black)" [level=3] [ref=e97]
+              - generic [ref=e98]:
+                - generic [ref=e99]: ₩19,900
+                - generic [ref=e100]: ₩29,900
+                - generic [ref=e101]: 33%
+              - generic [ref=e102]: 출시 예정
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - img "GRID ZIP HOODIE" [ref=e105]
+              - generic [ref=e107]: COMING SOON
+            - generic [ref=e108]:
+              - heading "GRID ZIP HOODIE" [level=3] [ref=e109]
+              - generic [ref=e110]:
+                - generic [ref=e111]: ₩39,900
+                - generic [ref=e112]: ₩59,000
+                - generic [ref=e113]: 32%
+              - generic [ref=e114]: 출시 예정
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - img "Tech Training Shorts (Black)" [ref=e117]
+              - generic [ref=e119]: COMING SOON
+            - generic [ref=e120]:
+              - heading "Tech Training Shorts (Black)" [level=3] [ref=e121]
+              - generic [ref=e122]:
+                - generic [ref=e123]: ₩29,900
+                - generic [ref=e124]: ₩49,000
+                - generic [ref=e125]: 39%
+              - generic [ref=e126]: 출시 예정
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - img "Tech Training Shorts (Gray)" [ref=e129]
+              - generic [ref=e131]: COMING SOON
+            - generic [ref=e132]:
+              - heading "Tech Training Shorts (Gray)" [level=3] [ref=e133]
+              - generic [ref=e134]:
+                - generic [ref=e135]: ₩29,900
+                - generic [ref=e136]: ₩49,000
+                - generic [ref=e137]: 39%
+              - generic [ref=e138]: 출시 예정
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - img "Motion Tech Shorts (Black)" [ref=e141]
+              - generic [ref=e143]: COMING SOON
+            - generic [ref=e144]:
+              - heading "Motion Tech Shorts (Black)" [level=3] [ref=e145]
+              - generic [ref=e146]:
+                - generic [ref=e147]: ₩36,000
+                - generic [ref=e148]: ₩61,000
+                - generic [ref=e149]: 41%
+              - generic [ref=e150]: 출시 예정
+          - generic [ref=e151]:
+            - generic [ref=e152]:
+              - img "Quarter-Zip Flex (Blue)" [ref=e153]
+              - generic [ref=e155]: COMING SOON
+            - generic [ref=e156]:
+              - heading "Quarter-Zip Flex (Blue)" [level=3] [ref=e157]
+              - generic [ref=e158]:
+                - generic [ref=e159]: ₩36,900
+                - generic [ref=e160]: ₩59,000
+                - generic [ref=e161]: 37%
+              - generic [ref=e162]: 출시 예정
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - img "Motion Tech Shorts (Gray)" [ref=e165]
+              - generic [ref=e167]: COMING SOON
+            - generic [ref=e168]:
+              - heading "Motion Tech Shorts (Gray)" [level=3] [ref=e169]
+              - generic [ref=e170]:
+                - generic [ref=e171]: ₩36,000
+                - generic [ref=e172]: ₩61,000
+                - generic [ref=e173]: 41%
+              - generic [ref=e174]: 출시 예정
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - img "Quarter-Zip Flex (Light Green)" [ref=e177]
+              - generic [ref=e179]: COMING SOON
+            - generic [ref=e180]:
+              - heading "Quarter-Zip Flex (Light Green)" [level=3] [ref=e181]
+              - generic [ref=e182]:
+                - generic [ref=e183]: ₩36,900
+                - generic [ref=e184]: ₩59,000
+                - generic [ref=e185]: 37%
+              - generic [ref=e186]: 출시 예정
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - img "Motion Training Pants (Black)" [ref=e189]
+              - generic [ref=e191]: COMING SOON
+            - generic [ref=e192]:
+              - heading "Motion Training Pants (Black)" [level=3] [ref=e193]
+              - generic [ref=e195]: ₩49,000
+              - generic [ref=e196]: 출시 예정
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - img "Motion Training Pants (Gray)" [ref=e199]
+              - generic [ref=e201]: COMING SOON
+            - generic [ref=e202]:
+              - heading "Motion Training Pants (Gray)" [level=3] [ref=e203]
+              - generic [ref=e205]: ₩49,000
+              - generic [ref=e206]: 출시 예정
+  - contentinfo [ref=e207]:
+    - generic [ref=e208]:
+      - img "Brospick" [ref=e210]
+      - button "지원 +" [ref=e212] [cursor=pointer]:
+        - generic [ref=e213]: 지원
+        - generic [ref=e214]: +
+      - button "BROSPICK +" [ref=e216] [cursor=pointer]:
+        - generic [ref=e217]: BROSPICK
+        - generic [ref=e218]: +
+    - paragraph [ref=e221]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e222] [cursor=pointer]:
+    - img [ref=e223]

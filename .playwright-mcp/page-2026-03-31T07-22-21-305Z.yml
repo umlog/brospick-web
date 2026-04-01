@@ -1,0 +1,289 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - img "Brospick" [ref=e22]
+    - generic [ref=e24]:
+      - heading "Sportswear" [level=2] [ref=e25]
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - link "Half-Zip Training Top NOW AVAILABLE" [ref=e29] [cursor=pointer]:
+              - /url: /apparel/half-zip-training-top
+              - img "Half-Zip Training Top" [ref=e30]
+              - generic [ref=e31]: NOW AVAILABLE
+            - generic [ref=e32]:
+              - paragraph [ref=e33]: BROSPICK COLLECTION
+              - heading "Half-Zip Training Top" [level=3] [ref=e34]
+              - paragraph [ref=e35]: 가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑
+              - generic [ref=e36]:
+                - generic [ref=e37]: ₩26,900
+                - generic [ref=e38]: ₩59,000
+              - link "구매하기" [ref=e39] [cursor=pointer]:
+                - /url: /apparel/half-zip-training-top
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - img "Quarter-Zip Training Top (Black)" [ref=e42]
+              - generic [ref=e43]: COMING SOON
+            - generic [ref=e44]:
+              - paragraph [ref=e45]: BROSPICK COLLECTION
+              - heading "Quarter-Zip Training Top (Black)" [level=3] [ref=e46]
+              - paragraph [ref=e47]: 바디 라인을 정돈하며, 격한 움직임도 자유롭게 — 쿼터집 트레이닝 탑 (블랙)
+              - generic [ref=e48]:
+                - generic [ref=e49]: ₩26,900
+                - generic [ref=e50]: ₩59,000
+              - generic [ref=e51]: 출시 예정
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - img "Camel Gray Short Sleeve" [ref=e54]
+              - generic [ref=e55]: COMING SOON
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: BROSPICK COLLECTION
+              - heading "Camel Gray Short Sleeve" [level=3] [ref=e58]
+              - paragraph [ref=e59]: 가볍고, 빠르게 마르고, 형태는 그대로
+              - generic [ref=e60]:
+                - generic [ref=e61]: ₩19,900
+                - generic [ref=e62]: ₩29,900
+              - generic [ref=e63]: 출시 예정
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - img "Quarter-Zip Training Top (Gray)" [ref=e66]
+              - generic [ref=e67]: COMING SOON
+            - generic [ref=e68]:
+              - paragraph [ref=e69]: BROSPICK COLLECTION
+              - heading "Quarter-Zip Training Top (Gray)" [level=3] [ref=e70]
+              - paragraph [ref=e71]: 벌집 구조 원단으로 통기성과 쿨링을 동시에 — 쿼터집 트레이닝 탑 (그레이)
+              - generic [ref=e72]:
+                - generic [ref=e73]: ₩26,900
+                - generic [ref=e74]: ₩59,000
+              - generic [ref=e75]: 출시 예정
+          - generic [ref=e76]:
+            - link "Running Long Sleeve Top — Gray NOW AVAILABLE" [ref=e77] [cursor=pointer]:
+              - /url: /apparel/running-long-sleeve-top-gray
+              - img "Running Long Sleeve Top — Gray" [ref=e78]
+              - generic [ref=e79]: NOW AVAILABLE
+            - generic [ref=e80]:
+              - paragraph [ref=e81]: BROSPICK COLLECTION
+              - heading "Running Long Sleeve Top — Gray" [level=3] [ref=e82]
+              - paragraph [ref=e83]: 가볍게, 빠르게, 그리고 멀리.
+              - generic [ref=e84]:
+                - generic [ref=e85]: ₩19,900
+                - generic [ref=e86]: ₩29,900
+              - link "구매하기" [ref=e87] [cursor=pointer]:
+                - /url: /apparel/running-long-sleeve-top-gray
+          - generic [ref=e88]:
+            - link "Running Long Sleeve Top — Black NOW AVAILABLE" [ref=e89] [cursor=pointer]:
+              - /url: /apparel/running-long-sleeve-top-black
+              - img "Running Long Sleeve Top — Black" [ref=e90]
+              - generic [ref=e91]: NOW AVAILABLE
+            - generic [ref=e92]:
+              - paragraph [ref=e93]: BROSPICK COLLECTION
+              - heading "Running Long Sleeve Top — Black" [level=3] [ref=e94]
+              - paragraph [ref=e95]: 가볍게, 빠르게, 그리고 멀리.
+              - generic [ref=e96]:
+                - generic [ref=e97]: ₩19,900
+                - generic [ref=e98]: ₩29,900
+              - link "구매하기" [ref=e99] [cursor=pointer]:
+                - /url: /apparel/running-long-sleeve-top-black
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - img "GRID ZIP HOODIE" [ref=e102]
+              - generic [ref=e103]: COMING SOON
+            - generic [ref=e104]:
+              - paragraph [ref=e105]: BROSPICK COLLECTION
+              - heading "GRID ZIP HOODIE" [level=3] [ref=e106]
+              - paragraph [ref=e107]: 부드러운 기능성 와플 텍스처 원단에 히든 지퍼 포켓과 전면 반사 로고 디테일을 더한 일상용 후드집업.
+              - generic [ref=e108]:
+                - generic [ref=e109]: ₩39,900
+                - generic [ref=e110]: ₩59,000
+              - generic [ref=e111]: 출시 예정
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - img "Tech Training Shorts (Black)" [ref=e114]
+              - generic [ref=e115]: COMING SOON
+            - generic [ref=e116]:
+              - paragraph [ref=e117]: BROSPICK COLLECTION
+              - heading "Tech Training Shorts (Black)" [level=3] [ref=e118]
+              - paragraph [ref=e119]: 경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.
+              - generic [ref=e120]:
+                - generic [ref=e121]: ₩29,900
+                - generic [ref=e122]: ₩49,000
+              - generic [ref=e123]: 출시 예정
+          - generic [ref=e124]:
+            - generic [ref=e125]:
+              - img "Motion Tech Shorts" [ref=e126]
+              - generic [ref=e127]: COMING SOON
+            - generic [ref=e128]:
+              - paragraph [ref=e129]: BROSPICK COLLECTION
+              - heading "Motion Tech Shorts" [level=3] [ref=e130]
+              - paragraph [ref=e131]: 언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.
+              - generic [ref=e132]:
+                - generic [ref=e133]: ₩36,000
+                - generic [ref=e134]: ₩61,000
+              - generic [ref=e135]: 출시 예정
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - img "Quarter Zip Flex" [ref=e138]
+              - generic [ref=e139]: COMING SOON
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: BROSPICK COLLECTION
+              - heading "Quarter Zip Flex" [level=3] [ref=e142]
+              - paragraph [ref=e143]: 편안한 넥라인과 컬러 배색, 슬림한 퍼포먼스 핏으로 활동성과 스타일을 모두 갖춘 쿼터 집업.
+              - generic [ref=e144]:
+                - generic [ref=e145]: ₩36,900
+                - generic [ref=e146]: ₩59,000
+              - generic [ref=e147]: 출시 예정
+        - generic [ref=e148]:
+          - button "슬라이드 1" [ref=e149] [cursor=pointer]
+          - button "슬라이드 2" [ref=e150] [cursor=pointer]
+          - button "슬라이드 3" [ref=e151] [cursor=pointer]
+          - button "슬라이드 4" [ref=e152] [cursor=pointer]
+          - button "슬라이드 5" [ref=e153] [cursor=pointer]
+          - button "슬라이드 6" [ref=e154] [cursor=pointer]
+          - button "슬라이드 7" [ref=e155] [cursor=pointer]
+          - button "슬라이드 8" [ref=e156] [cursor=pointer]
+          - button "슬라이드 9" [ref=e157] [cursor=pointer]
+          - button "슬라이드 10" [ref=e158] [cursor=pointer]
+    - generic [ref=e160]:
+      - heading "Blog" [level=2] [ref=e161]
+      - generic [ref=e162]:
+        - link "유은철 유은철 동국대학교 · LW, RB 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기. 더 알아보기 →" [ref=e163] [cursor=pointer]:
+          - /url: /interviews/5
+          - img "유은철" [ref=e165]
+          - generic [ref=e166]:
+            - heading "유은철" [level=3] [ref=e167]
+            - paragraph [ref=e168]: 동국대학교 · LW, RB
+            - paragraph [ref=e169]: 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기.
+            - generic [ref=e170]: 더 알아보기 →
+        - link "이은표 이은표 Canberra White Eagles (호주 NPL) · LW, RW, ST 10년 사이드백에서 공격수로 전향, 진주시민축구단을 거쳐 브로스픽을 통해 호주 NPL Canberra White Eagles에 진출한 이은표 선수의 이야기. 더 알아보기 →" [ref=e171] [cursor=pointer]:
+          - /url: /interviews/4
+          - img "이은표" [ref=e173]
+          - generic [ref=e174]:
+            - heading "이은표" [level=3] [ref=e175]
+            - paragraph [ref=e176]: Canberra White Eagles (호주 NPL) · LW, RW, ST
+            - paragraph [ref=e177]: 10년 사이드백에서 공격수로 전향, 진주시민축구단을 거쳐 브로스픽을 통해 호주 NPL Canberra White Eagles에 진출한 이은표 선수의 이야기.
+            - generic [ref=e178]: 더 알아보기 →
+        - link "김준용 김준용 Sydney Olympic FC (호주 NPL NSW) · CM, DMF, AMF 국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기. 더 알아보기 →" [ref=e179] [cursor=pointer]:
+          - /url: /interviews/3
+          - img "김준용" [ref=e181]
+          - generic [ref=e182]:
+            - heading "김준용" [level=3] [ref=e183]
+            - paragraph [ref=e184]: Sydney Olympic FC (호주 NPL NSW) · CM, DMF, AMF
+            - paragraph [ref=e185]: 국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기.
+            - generic [ref=e186]: 더 알아보기 →
+    - generic [ref=e188]:
+      - heading "BROSPICK" [level=2] [ref=e190]
+      - generic [ref=e191]:
+        - generic [ref=e192]:
+          - generic [ref=e194]:
+            - heading "브로스픽의 철학" [level=3] [ref=e195]
+            - paragraph [ref=e196]: 브로스픽은 한국 축구 선수들이 마주한 현실적인 한계를 깨기 위해 탄생했습니다. 선수를 위한 새로운 시스템이 필요하다는 믿음에서 시작됐습니다.
+          - generic [ref=e197]:
+            - button "Previous slide" [ref=e198] [cursor=pointer]: ‹
+            - generic [ref=e199]:
+              - button "Go to slide 1" [ref=e200] [cursor=pointer]
+              - button "Go to slide 2" [ref=e201] [cursor=pointer]
+              - button "Go to slide 3" [ref=e202] [cursor=pointer]
+            - button "Next slide" [ref=e203] [cursor=pointer]: ›
+        - img "Manifesto" [ref=e206]
+    - generic [ref=e208]:
+      - heading "What We Do" [level=2] [ref=e210]
+      - generic [ref=e212]:
+        - paragraph [ref=e213]: 시스템이 놓친 선수, 우리가 다시 선택합니다.
+        - paragraph [ref=e214]: 우리는 유명한 선수를 찾지 않습니다.
+        - paragraph [ref=e215]: 사라지기엔 아까운 선수를 찾습니다.
+        - paragraph [ref=e216]: 평가가 아니라, 발견을 위해 움직입니다.
+      - generic [ref=e217]:
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - generic [ref=e221]: "1"
+            - heading "선수 발굴" [level=3] [ref=e222]
+          - paragraph [ref=e223]: 무명 대학 선수부터 성인·하부리그 선수까지 직접 찾습니다
+        - generic [ref=e225]:
+          - generic [ref=e226]:
+            - generic [ref=e227]: "2"
+            - heading "해외 리그 진출 서포트" [level=3] [ref=e228]
+          - paragraph [ref=e229]: 기존 에이전시의 높은 비용 구조를 변화시킵니다.
+        - generic [ref=e231]:
+          - generic [ref=e232]:
+            - generic [ref=e233]: "3"
+            - heading "선수 홍보" [level=3] [ref=e234]
+          - paragraph [ref=e235]: 의류 협찬 및 인터뷰·플레이 영상으로 선수를 시장에 노출합니다
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]: "4"
+            - heading "브로스픽의 플랫폼화" [level=3] [ref=e240]
+          - paragraph [ref=e241]: 컨텐츠를 넘어, 기록·연결·커뮤니티를 담은 어플을 준비 중입니다.
+    - generic [ref=e243]:
+      - heading "Our Services" [level=2] [ref=e245]
+      - generic [ref=e246]:
+        - generic [ref=e248]:
+          - generic [ref=e249]:
+            - generic [ref=e250]: "01"
+            - heading "해외리그 진출 서포트" [level=3] [ref=e251]
+          - paragraph [ref=e252]: 해외리그 기회를 얻기 원하는 선수의 진출 기회를 연결합니다.
+        - generic [ref=e254]:
+          - generic [ref=e255]:
+            - generic [ref=e256]: "02"
+            - heading "개인/팀 웨어" [level=3] [ref=e257]
+          - paragraph [ref=e258]: 각 팀마다 비슷한 디자인 웨어에서 벗어나, 트렌드와 협업으로 새로운 스타일을 제안합니다.
+        - generic [ref=e260]:
+          - generic [ref=e261]:
+            - generic [ref=e262]: "03"
+            - heading "선수 기록 플랫폼" [level=3] [ref=e263]
+          - paragraph [ref=e264]: 선수 개인 커리어를 기반으로 해외 진출 기회를 연결하는 플레이어 마켓형 플랫폼입니다.
+  - contentinfo [ref=e265]:
+    - generic [ref=e266]:
+      - img "Brospick" [ref=e268]
+      - generic [ref=e269]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e271]:
+          - listitem [ref=e272]:
+            - link "인스타그램" [ref=e273] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e274]:
+            - link "스레드" [ref=e275] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e276]:
+            - link "이메일 문의" [ref=e277] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e278]:
+            - link "전화 문의" [ref=e279] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e280]:
+            - button "개인정보 처리방침" [ref=e281] [cursor=pointer]
+          - listitem [ref=e282]:
+            - button "쿠키 정책" [ref=e283] [cursor=pointer]
+          - listitem [ref=e284]:
+            - button "면책 조항" [ref=e285] [cursor=pointer]
+      - generic [ref=e286]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e288]:
+          - listitem [ref=e289]: "회사: BROSPICK"
+          - listitem [ref=e290]: "대표자: 홍주영"
+          - listitem [ref=e291]: "사업자번호: 847-07-03351"
+          - listitem [ref=e292]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e293]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e294]: "전화번호: 010-6604-6269"
+          - listitem [ref=e295]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e298]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e299] [cursor=pointer]:
+    - img [ref=e300]
+  - alert [ref=e302]

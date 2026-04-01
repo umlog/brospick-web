@@ -33,6 +33,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         대시보드
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'blog' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('blog')}
+      >
+        블로그 관리
+      </button>
     </div>
   );
 }

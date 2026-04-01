@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug } from '../../../lib/products';
 import { SHIPPING, CONTACT } from '../../../lib/constants';
@@ -41,8 +42,9 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const [showSuccess, setShowSuccess] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [thumbRef, thumbApi] = useEmblaCarousel({ dragFree: true, containScroll: 'keepSnaps', align: 'start' });
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
@@ -118,27 +120,26 @@ export default function ProductDetailPage({
     setTimeout(() => setShowSuccess(false), 2000);
   };
 
-  const minSwipeDistance = 50;
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setCurrentImage(emblaApi.selectedScrollSnap());
+    emblaApi.on('select', onSelect);
+    return () => { emblaApi.off('select', onSelect); };
+  }, [emblaApi]);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
+  useEffect(() => {
+    if (!thumbApi) return;
+    const onScroll = () => {
+      setScrollProgress(Math.max(0, Math.min(1, thumbApi.scrollProgress())) * 100);
+    };
+    thumbApi.on('scroll', onScroll);
+    onScroll();
+    return () => { thumbApi.off('scroll', onScroll); };
+  }, [thumbApi]);
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    if (distance > minSwipeDistance && currentImage < product.images.length - 1) {
-      setCurrentImage(currentImage + 1);
-    }
-    if (distance < -minSwipeDistance && currentImage > 0) {
-      setCurrentImage(currentImage - 1);
-    }
-  };
+  const onThumbClick = useCallback((index: number) => {
+    emblaApi?.scrollTo(index);
+  }, [emblaApi]);
 
   const handleBuyNow = () => {
     if (!selectedSize) {
@@ -168,28 +169,45 @@ export default function ProductDetailPage({
 
           <div className={styles.productDetail}>
             <div className={styles.imageSection}>
-              <div
-                className={styles.mainImage}
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-              >
-                <img
-                  src={product.images[currentImage]}
-                  alt={`${product.name} ${currentImage + 1}`}
-                  draggable={false}
-                />
+              <div className={styles.mainImage} ref={emblaRef}>
+                <div className={styles.emblaContainer}>
+                  {product.images.map((img, index) => (
+                    <div className={styles.emblaSlide} key={index}>
+                      <img
+                        src={img}
+                        alt={`${product.name} ${index + 1}`}
+                        draggable={false}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className={styles.thumbnails}>
-                {product.images.map((img, index) => (
+              <div className={styles.dotRow}>
+                {product.images.map((_, index) => (
                   <button
                     key={index}
-                    className={`${styles.thumbnail} ${index === currentImage ? styles.thumbnailActive : ''}`}
-                    onClick={() => setCurrentImage(index)}
-                  >
-                    <img src={img} alt={`${product.name} ${index + 1}`} />
-                  </button>
+                    className={`${styles.dot} ${index === currentImage ? styles.dotActive : ''}`}
+                    onClick={() => emblaApi?.scrollTo(index)}
+                    aria-label={`이미지 ${index + 1}`}
+                  />
                 ))}
+              </div>
+
+              <div className={styles.thumbEmbla} ref={thumbRef}>
+                <div className={styles.thumbContainer}>
+                  {product.images.map((img, index) => (
+                    <button
+                      key={index}
+                      className={`${styles.thumbnail} ${index === currentImage ? styles.thumbnailActive : ''}`}
+                      onClick={() => onThumbClick(index)}
+                    >
+                      <img src={img} alt={`${product.name} ${index + 1}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className={styles.progressTrack}>
+                <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }} />
               </div>
             </div>
 
@@ -210,32 +228,84 @@ export default function ProductDetailPage({
                 )}
               </div>
 
-              <div className={styles.sizeChartInline}>
+              {product.sizeChart.length > 0 && <div className={styles.sizeChartInline}>
                 <p className={styles.sizeUnit}>단위: cm</p>
                 <table className={styles.sizeTable}>
-                  <thead>
-                    <tr>
-                      <th>사이즈</th>
-                      <th>총장</th>
-                      <th>{product.chestLabel ?? '가슴단면'}</th>
-                      <th>소매길이</th>
-                      {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {product.sizeChart.map((row) => (
-                      <tr key={row.size}>
-                        <td>{row.size}</td>
-                        <td>{row.length}</td>
-                        <td>{row.chest}</td>
-                        <td>{row.sleeve}</td>
-                        {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                      </tr>
-                    ))}
-                  </tbody>
+                  {product.sizeChartType === 'shorts' ? (
+                    <>
+                      <thead>
+                        <tr>
+                          <th>사이즈</th>
+                          <th>총장</th>
+                          <th>허리(반둘레)</th>
+                          {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
+                          {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {product.sizeChart.map((row) => (
+                          <tr key={row.size}>
+                            <td>{row.size}</td>
+                            <td>{row.length}</td>
+                            <td>{row.waist ?? '—'}</td>
+                            {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
+                            {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  ) : product.sizeChartType === 'pants' ? (
+                    <>
+                      <thead>
+                        <tr>
+                          <th>사이즈</th>
+                          <th>총장</th>
+                          <th>엉덩이</th>
+                          <th>허리</th>
+                          <th>앞밑위</th>
+                          <th>밑단</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {product.sizeChart.map((row) => (
+                          <tr key={row.size}>
+                            <td>{row.size}</td>
+                            <td>{row.length}</td>
+                            <td>{row.hip ?? '—'}</td>
+                            <td>{row.waist ?? '—'}</td>
+                            <td>{row.rise ?? '—'}</td>
+                            <td>{row.hem ?? '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  ) : (
+                    <>
+                      <thead>
+                        <tr>
+                          <th>사이즈</th>
+                          <th>총장</th>
+                          <th>{product.chestLabel ?? '가슴단면'}</th>
+                          <th>소매길이</th>
+                          {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {product.sizeChart.map((row) => (
+                          <tr key={row.size}>
+                            <td>{row.size}</td>
+                            <td>{row.length}</td>
+                            <td>{row.chest}</td>
+                            <td>{row.sleeve}</td>
+                            {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  )}
                 </table>
                 <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
-              </div>
+              </div>}
 
               {product.comingSoon ? (
                 <div className={styles.comingSoonNotice}>
@@ -374,26 +444,78 @@ export default function ProductDetailPage({
                   <div className={styles.accordionContent}>
                     <p className={styles.sizeUnit}>단위: cm</p>
                     <table className={styles.sizeTable}>
-                      <thead>
-                        <tr>
-                          <th>사이즈</th>
-                          <th>총장</th>
-                          <th>{product.chestLabel ?? '가슴단면'}</th>
-                          <th>소매길이</th>
-                          {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {product.sizeChart.map((row) => (
-                          <tr key={row.size}>
-                            <td>{row.size}</td>
-                            <td>{row.length}</td>
-                            <td>{row.chest}</td>
-                            <td>{row.sleeve}</td>
-                            {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                          </tr>
-                        ))}
-                      </tbody>
+                      {product.sizeChartType === 'shorts' ? (
+                        <>
+                          <thead>
+                            <tr>
+                              <th>사이즈</th>
+                              <th>총장</th>
+                              <th>허리(반둘레)</th>
+                              {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
+                              {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {product.sizeChart.map((row) => (
+                              <tr key={row.size}>
+                                <td>{row.size}</td>
+                                <td>{row.length}</td>
+                                <td>{row.waist ?? '—'}</td>
+                                {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
+                                {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </>
+                      ) : product.sizeChartType === 'pants' ? (
+                        <>
+                          <thead>
+                            <tr>
+                              <th>사이즈</th>
+                              <th>총장</th>
+                              <th>엉덩이</th>
+                              <th>허리</th>
+                              <th>앞밑위</th>
+                              <th>밑단</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {product.sizeChart.map((row) => (
+                              <tr key={row.size}>
+                                <td>{row.size}</td>
+                                <td>{row.length}</td>
+                                <td>{row.hip ?? '—'}</td>
+                                <td>{row.waist ?? '—'}</td>
+                                <td>{row.rise ?? '—'}</td>
+                                <td>{row.hem ?? '—'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </>
+                      ) : (
+                        <>
+                          <thead>
+                            <tr>
+                              <th>사이즈</th>
+                              <th>총장</th>
+                              <th>{product.chestLabel ?? '가슴단면'}</th>
+                              <th>소매길이</th>
+                              {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {product.sizeChart.map((row) => (
+                              <tr key={row.size}>
+                                <td>{row.size}</td>
+                                <td>{row.length}</td>
+                                <td>{row.chest}</td>
+                                <td>{row.sleeve}</td>
+                                {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </>
+                      )}
                     </table>
                     <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
                   </div>
@@ -427,6 +549,31 @@ export default function ProductDetailPage({
             </div>
           </div>
         </div>
+
+        {!product.comingSoon && (
+          <div className={styles.stickyBuyBar}>
+            <div className={styles.stickyBuyBarInner}>
+              <div className={styles.stickyBuyBarInfo}>
+                <span className={styles.stickyBuyBarPrice}>₩{product.price.toLocaleString()}</span>
+                <span className={styles.stickyBuyBarSize}>
+                  {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
+                </span>
+              </div>
+              <div className={styles.stickyBuyBarActions}>
+                <button
+                  className={styles.stickyCartButton}
+                  onClick={handleAddToCart}
+                  disabled={showSuccess}
+                >
+                  {showSuccess ? '✓' : '장바구니'}
+                </button>
+                <button className={styles.stickyBuyButton} onClick={handleBuyNow}>
+                  바로 구매
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
   );
 }

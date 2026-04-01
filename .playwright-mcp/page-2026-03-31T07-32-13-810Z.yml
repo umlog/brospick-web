@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Quarter-Zip Training Top (Black) 1"
+              - generic [ref=e27]:
+                - img "Quarter-Zip Training Top (Black) 2"
+            - generic [ref=e29]:
+              - button "Quarter-Zip Training Top (Black) 1" [ref=e30] [cursor=pointer]:
+                - img "Quarter-Zip Training Top (Black) 1" [ref=e31]
+              - button "Quarter-Zip Training Top (Black) 2" [ref=e32] [cursor=pointer]:
+                - img "Quarter-Zip Training Top (Black) 2" [ref=e33]
+          - generic [ref=e35]:
+            - heading "Quarter-Zip Training Top (Black)" [level=1] [ref=e36]
+            - generic [ref=e37]:
+              - generic [ref=e38]: ₩26,900
+              - generic [ref=e39]: ₩59,000
+              - generic [ref=e40]: 54%
+            - generic [ref=e41]:
+              - paragraph [ref=e42]: "단위: cm"
+              - table [ref=e43]:
+                - rowgroup [ref=e44]:
+                  - row "사이즈 총장 가슴둘레 소매길이" [ref=e45]:
+                    - columnheader "사이즈" [ref=e46]
+                    - columnheader "총장" [ref=e47]
+                    - columnheader "가슴둘레" [ref=e48]
+                    - columnheader "소매길이" [ref=e49]
+                - rowgroup [ref=e50]:
+                  - row "S 63 92 68" [ref=e51]:
+                    - cell "S" [ref=e52]
+                    - cell "63" [ref=e53]
+                    - cell "92" [ref=e54]
+                    - cell "68" [ref=e55]
+                  - row "M 66 98 71" [ref=e56]:
+                    - cell "M" [ref=e57]
+                    - cell "66" [ref=e58]
+                    - cell "98" [ref=e59]
+                    - cell "71" [ref=e60]
+                  - row "L 69 104 74" [ref=e61]:
+                    - cell "L" [ref=e62]
+                    - cell "69" [ref=e63]
+                    - cell "104" [ref=e64]
+                    - cell "74" [ref=e65]
+                  - row "XL 72 110 77" [ref=e66]:
+                    - cell "XL" [ref=e67]
+                    - cell "72" [ref=e68]
+                    - cell "110" [ref=e69]
+                    - cell "77" [ref=e70]
+                  - row "2XL 75 116 80" [ref=e71]:
+                    - cell "2XL" [ref=e72]
+                    - cell "75" [ref=e73]
+                    - cell "116" [ref=e74]
+                    - cell "80" [ref=e75]
+              - paragraph [ref=e76]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e77]:
+              - heading "사이즈 선택" [level=3] [ref=e78]
+              - generic [ref=e79]:
+                - button "S" [ref=e80] [cursor=pointer]
+                - button "M" [ref=e81] [cursor=pointer]
+                - button "L" [ref=e82] [cursor=pointer]
+                - button "XL" [ref=e83] [cursor=pointer]
+                - button "2XL" [ref=e84] [cursor=pointer]
+            - generic [ref=e85]:
+              - heading "수량" [level=3] [ref=e86]
+              - generic [ref=e88]:
+                - button "−" [ref=e89] [cursor=pointer]
+                - generic [ref=e90]: "1"
+                - button "+" [ref=e91] [cursor=pointer]
+            - generic [ref=e92]:
+              - button "장바구니에 추가" [ref=e93] [cursor=pointer]
+              - button "바로 구매하기" [ref=e94] [cursor=pointer]
+            - generic [ref=e95]:
+              - generic [ref=e96]: 편안함과 슬림한 핏의 균형
+              - generic [ref=e97]: 탄탄한 고신축 원단
+              - generic [ref=e98]: 자유로운 활동성
+              - generic [ref=e99]: 빠른 수분 배출 시스템
+            - generic [ref=e100]:
+              - button "제품 설명 +" [ref=e102] [cursor=pointer]:
+                - generic [ref=e103]: 제품 설명
+                - generic [ref=e104]: +
+              - button "사이즈 가이드 +" [ref=e106] [cursor=pointer]:
+                - generic [ref=e107]: 사이즈 가이드
+                - generic [ref=e108]: +
+              - button "배송 +" [ref=e110] [cursor=pointer]:
+                - generic [ref=e111]: 배송
+                - generic [ref=e112]: +
+              - button "반품 & 교환 +" [ref=e114] [cursor=pointer]:
+                - generic [ref=e115]: 반품 & 교환
+                - generic [ref=e116]: +
+  - contentinfo [ref=e117]:
+    - generic [ref=e118]:
+      - img "Brospick" [ref=e120]
+      - generic [ref=e121]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e123]:
+          - listitem [ref=e124]:
+            - link "인스타그램" [ref=e125] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e126]:
+            - link "스레드" [ref=e127] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e128]:
+            - link "이메일 문의" [ref=e129] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e130]:
+            - link "전화 문의" [ref=e131] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e132]:
+            - button "개인정보 처리방침" [ref=e133] [cursor=pointer]
+          - listitem [ref=e134]:
+            - button "쿠키 정책" [ref=e135] [cursor=pointer]
+          - listitem [ref=e136]:
+            - button "면책 조항" [ref=e137] [cursor=pointer]
+      - generic [ref=e138]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e140]:
+          - listitem [ref=e141]: "회사: BROSPICK"
+          - listitem [ref=e142]: "대표자: 홍주영"
+          - listitem [ref=e143]: "사업자번호: 847-07-03351"
+          - listitem [ref=e144]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e145]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e146]: "전화번호: 010-6604-6269"
+          - listitem [ref=e147]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e150]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e151] [cursor=pointer]:
+    - img [ref=e152]

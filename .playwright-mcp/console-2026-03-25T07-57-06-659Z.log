@@ -1,0 +1,27 @@
+[     101ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/interviews/1:0
+[     289ms] Error: Jest worker encountered 2 child process exceptions, exceeding retry limit
+    at ChildProcessWorker.initialize (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:11580)
+    at ChildProcessWorker._onExit (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:12545)
+    at ChildProcess.emit (node:events:508:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+[   30051ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[   30526ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[   31085ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/interviews/1:0
+[   31907ms] Error: Jest worker encountered 2 child process exceptions, exceeding retry limit
+    at ChildProcessWorker.initialize (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:11580)
+    at ChildProcessWorker._onExit (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:12545)
+    at ChildProcess.emit (node:events:508:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+[   41857ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[   42378ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/interviews/1:0
+[   43191ms] Error: Jest worker encountered 2 child process exceptions, exceeding retry limit
+    at ChildProcessWorker.initialize (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:11580)
+    at ChildProcessWorker._onExit (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\jest-worker\index.js:1:12545)
+    at ChildProcess.emit (node:events:508:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+[  270711ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/websocket.js:63
+[  274048ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/websocket.js:63
+[  280701ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/2467d19ed747ddd3.webpack.hot-update.json:0
+[  280701ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[  281363ms] [WARNING] Image with src "/players/guno/guno-profile.jpg" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
+Read more: https://nextjs.org/docs/api-reference/next/image#priority @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/utils/warn-once.js:15

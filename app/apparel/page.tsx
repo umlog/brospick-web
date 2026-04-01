@@ -1,10 +1,21 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { productList, getDiscountPercent } from '../../lib/products';
+import { productList, getDiscountPercent, PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory } from '../../lib/products';
 import styles from './apparel-page.module.css';
 
+const ALL = 'all';
+
 export default function ApparelPage() {
+  const [activeCategory, setActiveCategory] = useState<ProductCategory | typeof ALL>(ALL);
+
+  const usedCategories = [...new Set(productList.map((p) => p.category))];
+
+  const filtered = activeCategory === ALL
+    ? productList
+    : productList.filter((p) => p.category === activeCategory);
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -15,8 +26,26 @@ export default function ApparelPage() {
           </p>
         </div>
 
+        <div className={styles.categories}>
+          <button
+            className={`${styles.categoryButton} ${activeCategory === ALL ? styles.active : ''}`}
+            onClick={() => setActiveCategory(ALL)}
+          >
+            전체
+          </button>
+          {usedCategories.map((cat) => (
+            <button
+              key={cat}
+              className={`${styles.categoryButton} ${activeCategory === cat ? styles.active : ''}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {CATEGORY_LABELS[cat]}
+            </button>
+          ))}
+        </div>
+
         <div className={styles.productsGrid}>
-          {productList.map((product) =>
+          {filtered.map((product) =>
             product.comingSoon ? (
               <div key={product.id} className={styles.comingSoonCard}>
                 <div className={styles.imageWrapper}>
@@ -24,7 +53,7 @@ export default function ApparelPage() {
                     src={product.image}
                     alt={product.name}
                     onError={(e) => {
-                      e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
+                      e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                     }}
                   />
                   <div className={styles.comingSoonOverlay}>
@@ -56,7 +85,7 @@ export default function ApparelPage() {
                     src={product.image}
                     alt={product.name}
                     onError={(e) => {
-                      e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
+                      e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                     }}
                   />
                 </div>

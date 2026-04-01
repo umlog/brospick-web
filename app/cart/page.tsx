@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { SHIPPING } from '../../lib/constants';
+import { PRODUCT_FALLBACK_IMAGE } from '../../lib/products';
 import styles from './cart-page.module.css';
 
 export default function CartPage() {
@@ -78,47 +79,47 @@ export default function CartPage() {
 
   return (
     <main className={styles.main}>
-        <div className={styles.container}>
-          <h1>장바구니</h1>
+      <div className={styles.container}>
+        <h1>장바구니</h1>
 
-          <div className={styles.cartContent}>
-            <div className={styles.cartItems}>
-              {cart.length > 0 && (
-                <div className={styles.selectAll}>
-                  <label className={styles.checkboxLabel}>
+        <div className={styles.cartContent}>
+          <div className={styles.cartItems}>
+            {cart.length > 0 && (
+              <div className={styles.selectAll}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.size === cart.length && cart.length > 0}
+                    onChange={toggleAll}
+                    className={styles.checkbox}
+                  />
+                  <span>전체 선택</span>
+                </label>
+              </div>
+            )}
+            {cart.map((item, index) => {
+              const key = `${item.id}-${item.size}-${index}`;
+              const isSelected = selectedItems.has(key);
+              return (
+                <div key={key} className={`${styles.cartItem} ${isSelected ? styles.selected : ''}`}>
+                  <label className={styles.itemCheckbox}>
                     <input
                       type="checkbox"
-                      checked={selectedItems.size === cart.length && cart.length > 0}
-                      onChange={toggleAll}
+                      checked={isSelected}
+                      onChange={() => toggleItem(item, index)}
                       className={styles.checkbox}
                     />
-                    <span>전체 선택</span>
                   </label>
-                </div>
-              )}
-              {cart.map((item, index) => {
-                const key = `${item.id}-${item.size}-${index}`;
-                const isSelected = selectedItems.has(key);
-                return (
-                  <div key={key} className={`${styles.cartItem} ${isSelected ? styles.selected : ''}`}>
-                    <label className={styles.itemCheckbox}>
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleItem(item, index)}
-                        className={styles.checkbox}
-                      />
-                    </label>
-                    <div className={styles.itemImage}>
+                  <div className={styles.itemImage}>
                     <img
                       src={item.image}
                       alt={item.name}
                       onError={(e) => {
-                        e.currentTarget.src = '/apparel/brospick-sportswear-1.png';
+                        e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                       }}
                     />
-                    </div>
-                    <div className={styles.itemInfo}>
+                  </div>
+                  <div className={styles.itemInfo}>
                     <h3 className={styles.itemName}>{item.name}</h3>
                     <p className={styles.itemSize}>사이즈: {item.size}</p>
                     <p className={styles.itemPrice}>₩{item.price.toLocaleString()}</p>
@@ -146,45 +147,45 @@ export default function CartPage() {
                       삭제
                     </button>
                   </div>
-                    <div className={styles.itemTotal}>
-                      ₩{(item.price * item.quantity).toLocaleString()}
-                    </div>
+                  <div className={styles.itemTotal}>
+                    ₩{(item.price * item.quantity).toLocaleString()}
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <div className={styles.cartSummary}>
-              <div className={styles.summaryContent}>
-                <h2>주문 요약</h2>
-                <div className={styles.summaryRow}>
-                  <span>선택된 상품 ({selectedCartItems.length}개)</span>
-                  <span>₩{selectedTotalPrice.toLocaleString()}</span>
-                </div>
-                <div className={styles.summaryRow}>
-                  <span>배송비 <small style={{ color: '#888', fontWeight: 400 }}>(주문당 1회)</small></span>
-                  <span>₩{SHIPPING.fee.toLocaleString()}</span>
-                </div>
-                <div className={styles.summaryDivider} />
-                <div className={styles.summaryRowTotal}>
-                  <span>총 결제 금액</span>
-                  <span>₩{(selectedTotalPrice + SHIPPING.fee).toLocaleString()}</span>
-                </div>
-                <button
-                  className={styles.checkoutButton}
-                  onClick={handleCheckout}
-                  disabled={selectedCartItems.length === 0}
-                >
-                  결제하기 ({selectedCartItems.length}개)
-                </button>
-                <Link href="/apparel" className={styles.continueShopping}>
-                  쇼핑 계속하기
-                </Link>
+          <div className={styles.cartSummary}>
+            <div className={styles.summaryContent}>
+              <h2>주문 요약</h2>
+              <div className={styles.summaryRow}>
+                <span>선택된 상품 ({selectedCartItems.length}개)</span>
+                <span>₩{selectedTotalPrice.toLocaleString()}</span>
               </div>
+              <div className={styles.summaryRow}>
+                <span>배송비 <small style={{ color: '#888', fontWeight: 400 }}>(주문당 1회)</small></span>
+                <span>₩{SHIPPING.fee.toLocaleString()}</span>
+              </div>
+              <div className={styles.summaryDivider} />
+              <div className={styles.summaryRowTotal}>
+                <span>총 결제 금액</span>
+                <span>₩{(selectedTotalPrice + SHIPPING.fee).toLocaleString()}</span>
+              </div>
+              <button
+                className={styles.checkoutButton}
+                onClick={handleCheckout}
+                disabled={selectedCartItems.length === 0}
+              >
+                결제하기 ({selectedCartItems.length}개)
+              </button>
+              <Link href="/apparel" className={styles.continueShopping}>
+                쇼핑 계속하기
+              </Link>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
   );
 }
 

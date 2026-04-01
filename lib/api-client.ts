@@ -3,7 +3,7 @@
 // 쿠키 기반 인증 - x-admin-password 헤더 불필요
 // =============================================================================
 
-import type { Order, ReturnRequest, ProductSize, OrderResponse } from '@/lib/domain/types';
+import type { Order, ReturnRequest, ProductSize, OrderResponse, BlogPost, AdminProduct } from '@/lib/domain/types';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
@@ -135,5 +135,33 @@ export const apiClient = {
         method: 'PATCH',
         body,
       }),
+  },
+
+  products: {
+    list: () =>
+      request<{ products: AdminProduct[] }>('/api/admin/products'),
+
+    update: (
+      id: number,
+      body: { name?: string; price?: number; original_price?: number | null }
+    ) =>
+      request<{ product: AdminProduct }>('/api/admin/products', {
+        method: 'PATCH',
+        body: { id, ...body },
+      }),
+  },
+
+  blog: {
+    list: () =>
+      request<{ posts: BlogPost[] }>('/api/admin/blog'),
+
+    create: (body: Omit<BlogPost, 'id' | 'created_at'>) =>
+      request<{ post: BlogPost }>('/api/admin/blog', { method: 'POST', body }),
+
+    update: (id: number, body: Omit<BlogPost, 'id' | 'created_at'>) =>
+      request<{ post: BlogPost }>(`/api/admin/blog/${id}`, { method: 'PUT', body }),
+
+    delete: (id: number) =>
+      request<{ success: true }>(`/api/admin/blog/${id}`, { method: 'DELETE' }),
   },
 };

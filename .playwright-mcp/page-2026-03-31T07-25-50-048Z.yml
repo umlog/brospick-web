@@ -1,0 +1,276 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Half-Zip Training Top 1"
+              - generic [ref=e27]:
+                - img "Half-Zip Training Top 2"
+              - generic [ref=e28]:
+                - img "Half-Zip Training Top 3"
+              - generic [ref=e29]:
+                - img "Half-Zip Training Top 4"
+              - generic [ref=e30]:
+                - img "Half-Zip Training Top 5"
+              - generic [ref=e31]:
+                - img "Half-Zip Training Top 6"
+              - generic [ref=e32]:
+                - img "Half-Zip Training Top 7"
+            - generic [ref=e34]:
+              - button "Half-Zip Training Top 1" [ref=e35] [cursor=pointer]:
+                - img "Half-Zip Training Top 1" [ref=e36]
+              - button "Half-Zip Training Top 2" [ref=e37] [cursor=pointer]:
+                - img "Half-Zip Training Top 2" [ref=e38]
+              - button "Half-Zip Training Top 3" [ref=e39] [cursor=pointer]:
+                - img "Half-Zip Training Top 3" [ref=e40]
+              - button "Half-Zip Training Top 4" [ref=e41] [cursor=pointer]:
+                - img "Half-Zip Training Top 4" [ref=e42]
+              - button "Half-Zip Training Top 5" [ref=e43] [cursor=pointer]:
+                - img "Half-Zip Training Top 5" [ref=e44]
+              - button "Half-Zip Training Top 6" [ref=e45] [cursor=pointer]:
+                - img "Half-Zip Training Top 6" [ref=e46]
+              - button "Half-Zip Training Top 7" [ref=e47] [cursor=pointer]:
+                - img "Half-Zip Training Top 7" [ref=e48]
+          - generic [ref=e50]:
+            - heading "Half-Zip Training Top" [level=1] [ref=e51]
+            - generic [ref=e52]:
+              - generic [ref=e53]: ₩26,900
+              - generic [ref=e54]: ₩59,000
+              - generic [ref=e55]: 54%
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: "단위: cm"
+              - table [ref=e58]:
+                - rowgroup [ref=e59]:
+                  - row "사이즈 총장 가슴단면 소매길이 밑단" [ref=e60]:
+                    - columnheader "사이즈" [ref=e61]
+                    - columnheader "총장" [ref=e62]
+                    - columnheader "가슴단면" [ref=e63]
+                    - columnheader "소매길이" [ref=e64]
+                    - columnheader "밑단" [ref=e65]
+                - rowgroup [ref=e66]:
+                  - row "S 61 45 67 45" [ref=e67]:
+                    - cell "S" [ref=e68]
+                    - cell "61" [ref=e69]
+                    - cell "45" [ref=e70]
+                    - cell "67" [ref=e71]
+                    - cell "45" [ref=e72]
+                  - row "M 64 46 68 48" [ref=e73]:
+                    - cell "M" [ref=e74]
+                    - cell "64" [ref=e75]
+                    - cell "46" [ref=e76]
+                    - cell "68" [ref=e77]
+                    - cell "48" [ref=e78]
+                  - row "L 67 51 74 50" [ref=e79]:
+                    - cell "L" [ref=e80]
+                    - cell "67" [ref=e81]
+                    - cell "51" [ref=e82]
+                    - cell "74" [ref=e83]
+                    - cell "50" [ref=e84]
+                  - row "XL 70 53 76 53" [ref=e85]:
+                    - cell "XL" [ref=e86]
+                    - cell "70" [ref=e87]
+                    - cell "53" [ref=e88]
+                    - cell "76" [ref=e89]
+                    - cell "53" [ref=e90]
+                  - row "2XL 73 55 78 55" [ref=e91]:
+                    - cell "2XL" [ref=e92]
+                    - cell "73" [ref=e93]
+                    - cell "55" [ref=e94]
+                    - cell "78" [ref=e95]
+                    - cell "55" [ref=e96]
+              - paragraph [ref=e97]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e98]:
+              - heading "사이즈 선택" [level=3] [ref=e99]
+              - generic [ref=e100]:
+                - button "S" [ref=e101] [cursor=pointer]
+                - button "M" [ref=e102] [cursor=pointer]
+                - button "L" [ref=e103] [cursor=pointer]
+                - button "XL" [ref=e104] [cursor=pointer]
+                - button "2XL" [ref=e105] [cursor=pointer]
+            - generic [ref=e106]:
+              - heading "수량" [level=3] [ref=e107]
+              - generic [ref=e109]:
+                - button "−" [ref=e110] [cursor=pointer]
+                - generic [ref=e111]: "1"
+                - button "+" [ref=e112] [cursor=pointer]
+            - generic [ref=e113]:
+              - button "장바구니에 추가" [ref=e114] [cursor=pointer]
+              - button "바로 구매하기" [ref=e115] [cursor=pointer]
+            - generic [ref=e116]:
+              - generic [ref=e117]: 편안한 착용감
+              - generic [ref=e118]: 고탄성 원단
+              - generic [ref=e119]: 자유로운 움직임
+              - generic [ref=e120]: 빠른 건조
+            - generic [ref=e121]:
+              - generic [ref=e122]:
+                - button "제품 설명 +" [expanded] [ref=e123] [cursor=pointer]:
+                  - generic [ref=e124]: 제품 설명
+                  - generic [ref=e125]: +
+                - generic [ref=e177]:
+                  - heading "기능" [level=4] [ref=e178]
+                  - list [ref=e179]:
+                    - listitem [ref=e180]:
+                      - text: •
+                      - strong [ref=e181]: 핑거홀 디자인
+                      - text: — 핑거홀 디자인으로 안정적인 착용감
+                    - listitem [ref=e182]:
+                      - text: •
+                      - strong [ref=e183]: 퀵드라이
+                      - text: — 땀 흡수 후 빠른 건조
+                    - listitem [ref=e184]:
+                      - text: •
+                      - strong [ref=e185]: 4방향 스트레치
+                      - text: — 러닝, 웨이트, 축구 모두 커버
+                    - listitem [ref=e186]:
+                      - text: •
+                      - strong [ref=e187]: 라이트웨이트
+                      - text: — 가벼운 착용감, 레이어드에도 부담 없음
+                    - listitem [ref=e188]:
+                      - text: •
+                      - strong [ref=e189]: 통기성
+                      - text: — 장시간 착용에도 쾌적
+                  - heading "디자인" [level=4] [ref=e190]
+                  - list [ref=e191]:
+                    - listitem [ref=e192]:
+                      - text: •
+                      - strong [ref=e193]: 어깨 체크 패턴
+                      - text: — 단색 상의에서도 포인트 연출
+                    - listitem [ref=e194]:
+                      - text: •
+                      - strong [ref=e195]: 하프 집업 넥
+                      - text: — 체온 조절이 쉬운 반집업, 보온성 강화
+                    - listitem [ref=e196]:
+                      - text: •
+                      - strong [ref=e197]: 슬림 실루엣
+                      - text: — 옆 라인을 따라 몸매를 정리해 주는 핏
+                    - listitem [ref=e198]:
+                      - text: •
+                      - strong [ref=e199]: 미니멀 로고
+                      - text: — 전면 BR 로고, 후면 BROSPICK 레터링
+                    - listitem [ref=e200]:
+                      - text: •
+                      - strong [ref=e201]: 리플렉티브 디테일
+                      - text: — 야간 러닝 시 안전성 향상, 조명 아래 하이라이트 연출
+                  - heading "소재" [level=4] [ref=e202]
+                  - paragraph [ref=e203]: 프리미엄 기능성 폴리에스터 + 스판 혼방. 부드러운 터치감과 높은 신축성, 세탁 시 수축과 뒤틀림을 최소화한 내구성.
+              - generic [ref=e126]:
+                - button "사이즈 가이드 +" [expanded] [ref=e127] [cursor=pointer]:
+                  - generic [ref=e128]: 사이즈 가이드
+                  - generic [ref=e129]: +
+                - generic [ref=e205]:
+                  - paragraph [ref=e206]: "단위: cm"
+                  - table [ref=e207]:
+                    - rowgroup [ref=e208]:
+                      - row "사이즈 총장 가슴단면 소매길이 밑단" [ref=e209]:
+                        - columnheader "사이즈" [ref=e210]
+                        - columnheader "총장" [ref=e211]
+                        - columnheader "가슴단면" [ref=e212]
+                        - columnheader "소매길이" [ref=e213]
+                        - columnheader "밑단" [ref=e214]
+                    - rowgroup [ref=e215]:
+                      - row "S 61 45 67 45" [ref=e216]:
+                        - cell "S" [ref=e217]
+                        - cell "61" [ref=e218]
+                        - cell "45" [ref=e219]
+                        - cell "67" [ref=e220]
+                        - cell "45" [ref=e221]
+                      - row "M 64 46 68 48" [ref=e222]:
+                        - cell "M" [ref=e223]
+                        - cell "64" [ref=e224]
+                        - cell "46" [ref=e225]
+                        - cell "68" [ref=e226]
+                        - cell "48" [ref=e227]
+                      - row "L 67 51 74 50" [ref=e228]:
+                        - cell "L" [ref=e229]
+                        - cell "67" [ref=e230]
+                        - cell "51" [ref=e231]
+                        - cell "74" [ref=e232]
+                        - cell "50" [ref=e233]
+                      - row "XL 70 53 76 53" [ref=e234]:
+                        - cell "XL" [ref=e235]
+                        - cell "70" [ref=e236]
+                        - cell "53" [ref=e237]
+                        - cell "76" [ref=e238]
+                        - cell "53" [ref=e239]
+                      - row "2XL 73 55 78 55" [ref=e240]:
+                        - cell "2XL" [ref=e241]
+                        - cell "73" [ref=e242]
+                        - cell "55" [ref=e243]
+                        - cell "78" [ref=e244]
+                        - cell "55" [ref=e245]
+                  - paragraph [ref=e246]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+              - generic [ref=e130]:
+                - button "배송 +" [expanded] [active] [ref=e131] [cursor=pointer]:
+                  - generic [ref=e132]: 배송
+                  - generic [ref=e133]: +
+                - list [ref=e249]:
+                  - listitem [ref=e250]: "• 배송비: ₩3,000 (주문당 1회 청구)"
+                  - listitem [ref=e251]: • 여러 상품을 함께 구매해도 배송비는 1회만 청구됩니다
+                  - listitem [ref=e252]: • 입금 확인 후 1~3 영업일 이내 발송
+                  - listitem [ref=e253]: • 발송 후 1~2일 이내 수령 (지역에 따라 상이)
+                  - listitem [ref=e254]: • 제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다
+              - button "반품 & 교환 +" [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]: 반품 & 교환
+                - generic [ref=e137]: +
+  - contentinfo [ref=e138]:
+    - generic [ref=e139]:
+      - img "Brospick" [ref=e141]
+      - generic [ref=e142]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e144]:
+          - listitem [ref=e145]:
+            - link "인스타그램" [ref=e146] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e147]:
+            - link "스레드" [ref=e148] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e149]:
+            - link "이메일 문의" [ref=e150] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e151]:
+            - link "전화 문의" [ref=e152] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e153]:
+            - button "개인정보 처리방침" [ref=e154] [cursor=pointer]
+          - listitem [ref=e155]:
+            - button "쿠키 정책" [ref=e156] [cursor=pointer]
+          - listitem [ref=e157]:
+            - button "면책 조항" [ref=e158] [cursor=pointer]
+      - generic [ref=e159]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e161]:
+          - listitem [ref=e162]: "회사: BROSPICK"
+          - listitem [ref=e163]: "대표자: 홍주영"
+          - listitem [ref=e164]: "사업자번호: 847-07-03351"
+          - listitem [ref=e165]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e166]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e167]: "전화번호: 010-6604-6269"
+          - listitem [ref=e168]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e171]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e172] [cursor=pointer]:
+    - img [ref=e173]
+  - alert [ref=e175]

@@ -1,0 +1,144 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - generic [ref=e6]:
+        - button "테마 전환" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - button "메뉴" [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Running Long Sleeve Top (Gray) 1"
+              - generic [ref=e27]:
+                - img "Running Long Sleeve Top (Gray) 2"
+              - generic [ref=e28]:
+                - img "Running Long Sleeve Top (Gray) 3"
+              - generic [ref=e29]:
+                - img "Running Long Sleeve Top (Gray) 4"
+              - generic [ref=e30]:
+                - img "Running Long Sleeve Top (Gray) 5"
+              - generic [ref=e31]:
+                - img "Running Long Sleeve Top (Gray) 6"
+              - generic [ref=e32]:
+                - img "Running Long Sleeve Top (Gray) 7"
+              - generic [ref=e33]:
+                - img "Running Long Sleeve Top (Gray) 8"
+              - generic [ref=e34]:
+                - img "Running Long Sleeve Top (Gray) 9"
+              - generic [ref=e35]:
+                - img "Running Long Sleeve Top (Gray) 10"
+              - generic [ref=e36]:
+                - img "Running Long Sleeve Top (Gray) 11"
+              - generic [ref=e37]:
+                - img "Running Long Sleeve Top (Gray) 12"
+              - generic [ref=e38]:
+                - img "Running Long Sleeve Top (Gray) 13"
+            - generic [ref=e40]:
+              - button "Running Long Sleeve Top (Gray) 1" [ref=e41] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 1" [ref=e42]
+              - button "Running Long Sleeve Top (Gray) 2" [ref=e43] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 2" [ref=e44]
+              - button "Running Long Sleeve Top (Gray) 3" [ref=e45] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 3" [ref=e46]
+              - button "Running Long Sleeve Top (Gray) 4" [ref=e47] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 4" [ref=e48]
+              - button "Running Long Sleeve Top (Gray) 5" [ref=e49] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 5" [ref=e50]
+              - button "Running Long Sleeve Top (Gray) 6" [ref=e51] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 6" [ref=e52]
+              - button "Running Long Sleeve Top (Gray) 7" [ref=e53] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 7" [ref=e54]
+              - button "Running Long Sleeve Top (Gray) 8" [ref=e55] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 8" [ref=e56]
+              - button "Running Long Sleeve Top (Gray) 9" [ref=e57] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 9" [ref=e58]
+              - button "Running Long Sleeve Top (Gray) 10" [ref=e59] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 10" [ref=e60]
+              - button "Running Long Sleeve Top (Gray) 11" [ref=e61] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 11" [ref=e62]
+              - button "Running Long Sleeve Top (Gray) 12" [ref=e63] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 12" [ref=e64]
+              - button "Running Long Sleeve Top (Gray) 13" [ref=e65] [cursor=pointer]:
+                - img "Running Long Sleeve Top (Gray) 13" [ref=e66]
+          - generic [ref=e68]:
+            - heading "Running Long Sleeve Top (Gray)" [level=1] [ref=e69]
+            - generic [ref=e70]:
+              - generic [ref=e71]: ₩19,900
+              - generic [ref=e72]: ₩29,900
+              - generic [ref=e73]: 33%
+            - generic [ref=e74]:
+              - paragraph [ref=e75]: "단위: cm"
+              - table [ref=e76]:
+                - rowgroup [ref=e77]:
+                  - row "사이즈 총장 가슴단면 소매길이" [ref=e78]:
+                    - columnheader "사이즈" [ref=e79]
+                    - columnheader "총장" [ref=e80]
+                    - columnheader "가슴단면" [ref=e81]
+                    - columnheader "소매길이" [ref=e82]
+                - rowgroup [ref=e83]:
+                  - row "M 70 54 61.5" [ref=e84]:
+                    - cell "M" [ref=e85]
+                    - cell "70" [ref=e86]
+                    - cell "54" [ref=e87]
+                    - cell "61.5" [ref=e88]
+                  - row "L 72 56 63.1" [ref=e89]:
+                    - cell "L" [ref=e90]
+                    - cell "72" [ref=e91]
+                    - cell "56" [ref=e92]
+                    - cell "63.1" [ref=e93]
+                  - row "XL 74 58 64.7" [ref=e94]:
+                    - cell "XL" [ref=e95]
+                    - cell "74" [ref=e96]
+                    - cell "58" [ref=e97]
+                    - cell "64.7" [ref=e98]
+                  - row "2XL 76 60 66.5" [ref=e99]:
+                    - cell "2XL" [ref=e100]
+                    - cell "76" [ref=e101]
+                    - cell "60" [ref=e102]
+                    - cell "66.5" [ref=e103]
+              - paragraph [ref=e104]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e105]:
+              - generic [ref=e106]: COMING SOON
+              - paragraph [ref=e107]: 해당 상품은 현재 출시 준비 중입니다.
+              - paragraph [ref=e108]: 출시 소식은 인스타그램을 통해 먼저 확인하세요.
+            - generic [ref=e109]:
+              - generic [ref=e110]: 초경량 160G
+              - generic [ref=e111]: 소매 핑거홀 디자인
+              - generic [ref=e112]: 히든 지퍼 포켓
+              - generic [ref=e113]: 전·후면 빛반사 로고
+              - generic [ref=e114]: Polyester 100%
+            - generic [ref=e115]:
+              - button "제품 설명 +" [ref=e117] [cursor=pointer]:
+                - generic [ref=e118]: 제품 설명
+                - generic [ref=e119]: +
+              - button "사이즈 가이드 +" [ref=e121] [cursor=pointer]:
+                - generic [ref=e122]: 사이즈 가이드
+                - generic [ref=e123]: +
+              - button "배송 +" [ref=e125] [cursor=pointer]:
+                - generic [ref=e126]: 배송
+                - generic [ref=e127]: +
+              - button "반품 & 교환 +" [ref=e129] [cursor=pointer]:
+                - generic [ref=e130]: 반품 & 교환
+                - generic [ref=e131]: +
+  - contentinfo [ref=e132]:
+    - generic [ref=e133]:
+      - img "Brospick" [ref=e135]
+      - button "지원 +" [ref=e137] [cursor=pointer]:
+        - generic [ref=e138]: 지원
+        - generic [ref=e139]: +
+      - button "BROSPICK +" [ref=e141] [cursor=pointer]:
+        - generic [ref=e142]: BROSPICK
+        - generic [ref=e143]: +
+    - paragraph [ref=e146]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e147] [cursor=pointer]:
+    - img [ref=e148]
+  - alert [ref=e150]

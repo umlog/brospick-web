@@ -44,6 +44,7 @@
   position: sticky;
   top: 100px;
   height: fit-content;
+  min-width: 0;
 }
 
 @media (max-width: 968px) {
@@ -59,11 +60,25 @@
   border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
-  touch-action: pan-y;
   cursor: grab;
 }
 
-.mainImage img {
+.mainImage:active {
+  cursor: grabbing;
+}
+
+.emblaContainer {
+  display: flex;
+  height: 100%;
+}
+
+.emblaSlide {
+  flex: 0 0 100%;
+  min-width: 0;
+  height: 100%;
+}
+
+.emblaSlide img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -72,12 +87,29 @@
   pointer-events: none;
 }
 
-.thumbnails {
+.thumbEmbla {
+  overflow: hidden;
+  margin-top: var(--space-sm);
+}
+
+.thumbContainer {
   display: flex;
   gap: var(--space-sm);
+}
+
+.progressTrack {
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
   margin-top: var(--space-sm);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+  transition: width 0.15s ease;
 }
 
 .thumbnail {
@@ -576,5 +608,126 @@
   color: var(--color-text-secondary);
   font-size: var(--size-sm);
   line-height: 1.6;
+}
+
+/* Dot indicators */
+.dotRow {
+  display: none;
+  justify-content: center;
+  gap: 6px;
+  margin-top: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+  .dotRow {
+    display: flex;
+  }
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.dot:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.dotActive {
+  background-color: var(--color-accent);
+  width: 18px;
+  border-radius: 3px;
+}
+
+/* Sticky bottom buy bar (mobile only) */
+.stickyBuyBar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .stickyBuyBar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--color-bg-primary);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-sm) var(--space-md);
+    padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
+  }
+
+  .main {
+    padding-bottom: 80px;
+  }
+}
+
+.stickyBuyBarInner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.stickyBuyBarInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stickyBuyBarPrice {
+  font-size: var(--size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.stickyBuyBarSize {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stickyBuyBarActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.stickyCartButton,
+.stickyBuyButton {
+  padding: 10px 16px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.stickyCartButton {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.stickyCartButton:disabled {
+  opacity: 0.7;
+}
+
+.stickyBuyButton {
+  background-color: var(--color-accent);
+  color: #fff;
 }
 

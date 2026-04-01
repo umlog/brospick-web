@@ -1,0 +1,187 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Running Long Sleeve Top — Black 1"
+              - generic [ref=e27]:
+                - img "Running Long Sleeve Top — Black 2"
+              - generic [ref=e28]:
+                - img "Running Long Sleeve Top — Black 3"
+              - generic [ref=e29]:
+                - img "Running Long Sleeve Top — Black 4"
+              - generic [ref=e30]:
+                - img "Running Long Sleeve Top — Black 5"
+              - generic [ref=e31]:
+                - img "Running Long Sleeve Top — Black 6"
+              - generic [ref=e32]:
+                - img "Running Long Sleeve Top — Black 7"
+              - generic [ref=e33]:
+                - img "Running Long Sleeve Top — Black 8"
+              - generic [ref=e34]:
+                - img "Running Long Sleeve Top — Black 9"
+              - generic [ref=e35]:
+                - img "Running Long Sleeve Top — Black 10"
+              - generic [ref=e36]:
+                - img "Running Long Sleeve Top — Black 11"
+              - generic [ref=e37]:
+                - img "Running Long Sleeve Top — Black 12"
+            - generic [ref=e39]:
+              - button "Running Long Sleeve Top — Black 1" [ref=e40] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 1" [ref=e41]
+              - button "Running Long Sleeve Top — Black 2" [ref=e42] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 2" [ref=e43]
+              - button "Running Long Sleeve Top — Black 3" [ref=e44] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 3" [ref=e45]
+              - button "Running Long Sleeve Top — Black 4" [ref=e46] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 4" [ref=e47]
+              - button "Running Long Sleeve Top — Black 5" [ref=e48] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 5" [ref=e49]
+              - button "Running Long Sleeve Top — Black 6" [ref=e50] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 6" [ref=e51]
+              - button "Running Long Sleeve Top — Black 7" [ref=e52] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 7" [ref=e53]
+              - button "Running Long Sleeve Top — Black 8" [ref=e54] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 8" [ref=e55]
+              - button "Running Long Sleeve Top — Black 9" [ref=e56] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 9" [ref=e57]
+              - button "Running Long Sleeve Top — Black 10" [ref=e58] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 10" [ref=e59]
+              - button "Running Long Sleeve Top — Black 11" [ref=e60] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 11" [ref=e61]
+              - button "Running Long Sleeve Top — Black 12" [ref=e62] [cursor=pointer]:
+                - img "Running Long Sleeve Top — Black 12" [ref=e63]
+          - generic [ref=e65]:
+            - heading "Running Long Sleeve Top — Black" [level=1] [ref=e66]
+            - generic [ref=e67]:
+              - generic [ref=e68]: ₩19,900
+              - generic [ref=e69]: ₩29,900
+              - generic [ref=e70]: 33%
+            - generic [ref=e71]:
+              - paragraph [ref=e72]: "단위: cm"
+              - table [ref=e73]:
+                - rowgroup [ref=e74]:
+                  - row "사이즈 총장 가슴단면 소매길이" [ref=e75]:
+                    - columnheader "사이즈" [ref=e76]
+                    - columnheader "총장" [ref=e77]
+                    - columnheader "가슴단면" [ref=e78]
+                    - columnheader "소매길이" [ref=e79]
+                - rowgroup [ref=e80]:
+                  - row "M 70 54 61.5" [ref=e81]:
+                    - cell "M" [ref=e82]
+                    - cell "70" [ref=e83]
+                    - cell "54" [ref=e84]
+                    - cell "61.5" [ref=e85]
+                  - row "L 72 56 63.1" [ref=e86]:
+                    - cell "L" [ref=e87]
+                    - cell "72" [ref=e88]
+                    - cell "56" [ref=e89]
+                    - cell "63.1" [ref=e90]
+                  - row "XL 74 58 64.7" [ref=e91]:
+                    - cell "XL" [ref=e92]
+                    - cell "74" [ref=e93]
+                    - cell "58" [ref=e94]
+                    - cell "64.7" [ref=e95]
+                  - row "2XL 76 60 66.5" [ref=e96]:
+                    - cell "2XL" [ref=e97]
+                    - cell "76" [ref=e98]
+                    - cell "60" [ref=e99]
+                    - cell "66.5" [ref=e100]
+              - paragraph [ref=e101]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e102]:
+              - heading "사이즈 선택" [level=3] [ref=e103]
+              - generic [ref=e104]:
+                - button "M" [ref=e105] [cursor=pointer]
+                - button "L" [ref=e106] [cursor=pointer]
+                - button "XL" [ref=e107] [cursor=pointer]
+                - button "2XL" [ref=e108] [cursor=pointer]
+            - generic [ref=e109]:
+              - heading "수량" [level=3] [ref=e110]
+              - generic [ref=e112]:
+                - button "−" [ref=e113] [cursor=pointer]
+                - generic [ref=e114]: "1"
+                - button "+" [ref=e115] [cursor=pointer]
+            - generic [ref=e116]:
+              - button "장바구니에 추가" [ref=e117] [cursor=pointer]
+              - button "바로 구매하기" [ref=e118] [cursor=pointer]
+            - generic [ref=e119]:
+              - generic [ref=e120]: 초경량 160G
+              - generic [ref=e121]: 소매 핑거홀 디자인
+              - generic [ref=e122]: 히든 지퍼 포켓
+              - generic [ref=e123]: 전·후면 빛반사 로고
+              - generic [ref=e124]: Polyester 100%
+            - generic [ref=e125]:
+              - button "제품 설명 +" [ref=e127] [cursor=pointer]:
+                - generic [ref=e128]: 제품 설명
+                - generic [ref=e129]: +
+              - button "사이즈 가이드 +" [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]: 사이즈 가이드
+                - generic [ref=e133]: +
+              - button "배송 +" [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]: 배송
+                - generic [ref=e137]: +
+              - button "반품 & 교환 +" [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]: 반품 & 교환
+                - generic [ref=e141]: +
+  - contentinfo [ref=e142]:
+    - generic [ref=e143]:
+      - img "Brospick" [ref=e145]
+      - generic [ref=e146]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e148]:
+          - listitem [ref=e149]:
+            - link "인스타그램" [ref=e150] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e151]:
+            - link "스레드" [ref=e152] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e153]:
+            - link "이메일 문의" [ref=e154] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e155]:
+            - link "전화 문의" [ref=e156] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e157]:
+            - button "개인정보 처리방침" [ref=e158] [cursor=pointer]
+          - listitem [ref=e159]:
+            - button "쿠키 정책" [ref=e160] [cursor=pointer]
+          - listitem [ref=e161]:
+            - button "면책 조항" [ref=e162] [cursor=pointer]
+      - generic [ref=e163]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e165]:
+          - listitem [ref=e166]: "회사: BROSPICK"
+          - listitem [ref=e167]: "대표자: 홍주영"
+          - listitem [ref=e168]: "사업자번호: 847-07-03351"
+          - listitem [ref=e169]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e170]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e171]: "전화번호: 010-6604-6269"
+          - listitem [ref=e172]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e175]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e176] [cursor=pointer]:
+    - img [ref=e177]
+  - alert [ref=e179]

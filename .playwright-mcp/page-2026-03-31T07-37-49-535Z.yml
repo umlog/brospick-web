@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e11]
+        - button "테마 전환" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+  - main [ref=e18]:
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - link "← 의류 목록으로 돌아가기" [ref=e21] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e25]:
+              - generic [ref=e26]:
+                - img "Quarter Zip Flex 1"
+              - generic [ref=e27]:
+                - img "Quarter Zip Flex 2"
+              - generic [ref=e28]:
+                - img "Quarter Zip Flex 3"
+              - generic [ref=e29]:
+                - img "Quarter Zip Flex 4"
+              - generic [ref=e30]:
+                - img "Quarter Zip Flex 5"
+            - generic [ref=e32]:
+              - button "Quarter Zip Flex 1" [ref=e33] [cursor=pointer]:
+                - img "Quarter Zip Flex 1" [ref=e34]
+              - button "Quarter Zip Flex 2" [ref=e35] [cursor=pointer]:
+                - img "Quarter Zip Flex 2" [ref=e36]
+              - button "Quarter Zip Flex 3" [ref=e37] [cursor=pointer]:
+                - img "Quarter Zip Flex 3" [ref=e38]
+              - button "Quarter Zip Flex 4" [ref=e39] [cursor=pointer]:
+                - img "Quarter Zip Flex 4" [ref=e40]
+              - button "Quarter Zip Flex 5" [ref=e41] [cursor=pointer]:
+                - img "Quarter Zip Flex 5" [ref=e42]
+          - generic [ref=e44]:
+            - heading "Quarter Zip Flex" [level=1] [ref=e45]
+            - generic [ref=e46]:
+              - generic [ref=e47]: ₩36,900
+              - generic [ref=e48]: ₩59,000
+              - generic [ref=e49]: 37%
+            - generic [ref=e50]:
+              - paragraph [ref=e51]: "단위: cm"
+              - table [ref=e52]:
+                - rowgroup [ref=e53]:
+                  - row "사이즈 총장 가슴단면 소매길이" [ref=e54]:
+                    - columnheader "사이즈" [ref=e55]
+                    - columnheader "총장" [ref=e56]
+                    - columnheader "가슴단면" [ref=e57]
+                    - columnheader "소매길이" [ref=e58]
+                - rowgroup
+              - paragraph [ref=e59]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e60]:
+              - heading "사이즈 선택" [level=3] [ref=e61]
+              - generic [ref=e62]:
+                - button "M" [ref=e63] [cursor=pointer]
+                - button "L" [ref=e64] [cursor=pointer]
+                - button "XL" [ref=e65] [cursor=pointer]
+                - button "2XL" [ref=e66] [cursor=pointer]
+            - generic [ref=e67]:
+              - heading "수량" [level=3] [ref=e68]
+              - generic [ref=e70]:
+                - button "−" [ref=e71] [cursor=pointer]
+                - generic [ref=e72]: "1"
+                - button "+" [ref=e73] [cursor=pointer]
+            - generic [ref=e74]:
+              - button "장바구니에 추가" [ref=e75] [cursor=pointer]
+              - button "바로 구매하기" [ref=e76] [cursor=pointer]
+            - generic [ref=e77]:
+              - generic [ref=e78]: 쿼터 집업 넥
+              - generic [ref=e79]: 슬림핏 실루엣
+              - generic [ref=e80]: 라글란 소매 설계
+              - generic [ref=e81]: 소매 핑거홀
+              - generic [ref=e82]: 빛반사 로고
+            - generic [ref=e83]:
+              - button "제품 설명 +" [ref=e85] [cursor=pointer]:
+                - generic [ref=e86]: 제품 설명
+                - generic [ref=e87]: +
+              - button "사이즈 가이드 +" [ref=e89] [cursor=pointer]:
+                - generic [ref=e90]: 사이즈 가이드
+                - generic [ref=e91]: +
+              - button "배송 +" [ref=e93] [cursor=pointer]:
+                - generic [ref=e94]: 배송
+                - generic [ref=e95]: +
+              - button "반품 & 교환 +" [ref=e97] [cursor=pointer]:
+                - generic [ref=e98]: 반품 & 교환
+                - generic [ref=e99]: +
+  - contentinfo [ref=e100]:
+    - generic [ref=e101]:
+      - img "Brospick" [ref=e103]
+      - generic [ref=e104]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e106]:
+          - listitem [ref=e107]:
+            - link "인스타그램" [ref=e108] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e109]:
+            - link "스레드" [ref=e110] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e111]:
+            - link "이메일 문의" [ref=e112] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e113]:
+            - link "전화 문의" [ref=e114] [cursor=pointer]:
+              - /url: tel:010-6604-6269
+          - listitem [ref=e115]:
+            - button "개인정보 처리방침" [ref=e116] [cursor=pointer]
+          - listitem [ref=e117]:
+            - button "쿠키 정책" [ref=e118] [cursor=pointer]
+          - listitem [ref=e119]:
+            - button "면책 조항" [ref=e120] [cursor=pointer]
+      - generic [ref=e121]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e123]:
+          - listitem [ref=e124]: "회사: BROSPICK"
+          - listitem [ref=e125]: "대표자: 홍주영"
+          - listitem [ref=e126]: "사업자번호: 847-07-03351"
+          - listitem [ref=e127]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e128]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e129]: "전화번호: 010-6604-6269"
+          - listitem [ref=e130]: "개인정보보호 책임자: 홍주영"
+    - paragraph [ref=e133]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e134] [cursor=pointer]:
+    - img [ref=e135]
+  - alert [ref=e137]

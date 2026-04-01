@@ -93,10 +93,40 @@ export interface ProductSize {
 }
 
 // -----------------------------------------------------------------------------
+// 블로그 포스트
+// -----------------------------------------------------------------------------
+
+export interface BlogPost {
+  id: number;
+  player_name: string;
+  team: string;
+  position: string;
+  status: string;
+  date: string;
+  image: string;
+  profile_image: string | null;
+  excerpt: string;
+  content: string;
+  highlights: string[];
+  video_url: string | null;
+  created_at: string;
+}
+
+// -----------------------------------------------------------------------------
 // 어드민 UI
 // -----------------------------------------------------------------------------
 
-export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog';
+
+export interface AdminProduct {
+  id: number;
+  slug: string;
+  name: string;
+  category: string;
+  price: number;
+  original_price: number | null;
+  updated_at: string;
+}
 
 // -----------------------------------------------------------------------------
 // 체크아웃 관련 (app/checkout/types.ts 에서 통합)

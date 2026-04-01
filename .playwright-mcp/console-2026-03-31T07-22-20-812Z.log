@@ -1,0 +1,58 @@
+[     332ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[     461ms] [WARNING] Image with src "http://localhost:3002/_next/static/media/txtlogo.88cac6f8.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/utils/warn-once.js:15
+[   22587ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   22693ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   22863ms] [LOG] [Fast Refresh] done in 169ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[   22951ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3002/?_rsc=1p60s:0
+[   22979ms] [ERROR] Failed to fetch RSC payload for http://localhost:3002/. Falling back to browser navigation. Error: Could not find the module "c:\brospick-web\brospick-web\node_modules\next\dist\client\components\layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:268131
+    at eD (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:268326)
+    at eL (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:273210)
+    at C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267040
+    at Array.toJSON (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267504)
+    at stringify (<anonymous>)
+    at eJ (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:275872)
+    at eR (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:266017)
+    at eC (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:265059)
+    at e (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:269321)
+    at eL (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:269809)
+    at C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267040
+    at Array.toJSON (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267504)
+    at stringify (<anonymous>)
+    at eJ (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:275872)
+    at eV (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:276390)
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Timeout._onTimeout (C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:284753)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   23030ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   23479ms] [LOG] [Fast Refresh] done in 449ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[   23753ms] [ERROR] Failed to fetch RSC payload for http://localhost:3002/. Falling back to browser navigation. TypeError: Failed to fetch
+    at fetchServerResponse (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/router-reducer/fetch-server-response.js:59:27)
+    at fastRefreshReducerImpl (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/router-reducer/reducers/fast-refresh-reducer.js:33:67)
+    at clientReducer (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/router-reducer/router-reducer.js:41:67)
+    at Object.action (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/router/action-queue.js:150:55)
+    at runAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/router/action-queue.js:56:38)
+    at dispatchAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/router/action-queue.js:113:9)
+    at Object.dispatch (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/router/action-queue.js:145:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-reducer-with-devtools.js:130:21)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:304:25)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:2597:25)
+    at Object.fastRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:303:48)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:297:31)
+    at WebSocket.handler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:395:17) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   23755ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3002/:0
+[   23950ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///./node_modules/react-dom/cjs/react-dom.development.js:29889
+[   23993ms] Error: Could not find the module "c:\brospick-web\brospick-web\node_modules\next\dist\client\components\app-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at <unknown> (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:268131)
+    at eD (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:268326)
+    at eL (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:273210)
+    at <unknown> (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267040)
+    at Array.toJSON (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:267504)
+    at stringify (<anonymous>)
+    at eJ (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:275872)
+    at eV (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:276390)
+    at Timeout._onTimeout (file://C:\brospick-web\brospick-web\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:35:266177)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[   23993ms] [LOG] [HMR] connected @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/websocket.js:38
