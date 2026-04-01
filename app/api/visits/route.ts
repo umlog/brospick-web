@@ -10,22 +10,27 @@ export async function POST() {
   const { error: rpcError } = await supabaseAdmin.rpc('increment_visit', { visit_date: today });
 
   if (rpcError) {
-    // RPC 없는 경우: 직접 select → update/insert
-    const { data: existing } = await supabaseAdmin
+    // RPC 없는 경우: upsert로 insert 시도 후 update
+    // 주의: select→update 방식은 동시 요청 시 race condition 발생 가능.
+    // 실제 환경에서는 increment_visit RPC 함수 생성 권장.
+    const { error: insertError } = await supabaseAdmin
       .from('page_visits')
-      .select('count')
-      .eq('date', today)
-      .single();
+      .insert({ date: today, count: 1 });
 
-    if (existing) {
-      await supabaseAdmin
+    if (insertError) {
+      // 이미 레코드가 존재하는 경우 (unique constraint 충돌)
+      const { data: existing } = await supabaseAdmin
         .from('page_visits')
-        .update({ count: existing.count + 1 })
-        .eq('date', today);
-    } else {
-      await supabaseAdmin
-        .from('page_visits')
-        .insert({ date: today, count: 1 });
+        .select('count')
+        .eq('date', today)
+        .single();
+
+      if (existing) {
+        await supabaseAdmin
+          .from('page_visits')
+          .update({ count: existing.count + 1 })
+          .eq('date', today);
+      }
     }
   }
 

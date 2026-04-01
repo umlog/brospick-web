@@ -48,6 +48,7 @@ export function useOrderSubmission(
           depositorName: formData.depositorName,
         })
       );
+      setIsSubmitting(false);
       router.push('/order-complete');
     } catch (error) {
       alert(error instanceof Error ? error.message : '주문에 실패했습니다. 다시 시도해주세요.');

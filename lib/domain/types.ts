@@ -158,6 +158,20 @@ export interface ParsedAddress {
 }
 
 // -----------------------------------------------------------------------------
+// 다음 우편번호 API
+// -----------------------------------------------------------------------------
+
+export interface DaumPostcodeData {
+  userSelectedType: 'R' | 'J';
+  roadAddress: string;
+  jibunAddress: string;
+  bname: string;
+  buildingName: string;
+  apartment: string;
+  zonecode: string;
+}
+
+// -----------------------------------------------------------------------------
 // 이메일 데이터 타입 (lib/email.ts 인라인 타입에서 통합)
 // -----------------------------------------------------------------------------
 

@@ -1,12 +1,12 @@
 import { CartItem } from '../contexts/CartContext';
 import { SHIPPING } from '../../lib/constants';
-import type { CheckoutFormData, ParsedAddress } from './types';
+import type { CheckoutFormData, DaumPostcodeData, ParsedAddress } from './types';
 
 export function formatPrice(amount: number): string {
   return `₩${amount.toLocaleString()}`;
 }
 
-export function parsePostcodeResult(data: any): ParsedAddress {
+export function parsePostcodeResult(data: DaumPostcodeData): ParsedAddress {
   let addr = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
   let extraAddr = '';
 
@@ -75,7 +75,7 @@ export function removePurchasedItems(
       const purchased = purchasedItems.find(
         (p) => p.id === item.id && p.size === item.size
       );
-      if (purchased && item.quantity > purchased.quantity) {
+      if (purchased) {
         return { ...item, quantity: item.quantity - purchased.quantity };
       }
       return item;

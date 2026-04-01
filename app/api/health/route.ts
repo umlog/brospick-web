@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 // Supabase 헬스체크 - 주기적으로 호출하여 무료 플랜 비활성 방지
 export async function GET() {
   try {
-    const { count, error } = await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from('orders')
       .select('*', { count: 'exact', head: true });
 
@@ -18,7 +18,6 @@ export async function GET() {
     return NextResponse.json({
       status: 'ok',
       timestamp: new Date().toISOString(),
-      orders: count,
     });
   } catch (error) {
     return NextResponse.json(

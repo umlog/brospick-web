@@ -157,10 +157,7 @@ export class OrderService {
       console.error('Order items creation error:', itemsError);
     }
 
-    // 재고 차감 (비동기 - 응답 지연시키지 않음)
-    inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
-      console.error('Stock decrement failed:', err)
-    );
+    // 재고 차감 없음 - 무통장입금 특성상 입금 확인 시점에 차감 (updateOrderStatus 참고)
 
     // 알림 발송 (비동기)
     notificationService.notifyOrderCreated({

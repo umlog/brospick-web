@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { NextResponse } from 'next/server';
+import { createHmac, timingSafeEqual } from 'crypto';
 
 // 에러 코드 상수
 export const ErrorCode = {
@@ -41,11 +42,30 @@ export function apiSuccess(data?: Record<string, unknown>, status = 200): NextRe
   return NextResponse.json(data ?? { success: true }, { status });
 }
 
-// 어드민 세션 쿠키 검증 헬퍼
+// 어드민 세션 쿠키 검증 헬퍼 (HMAC 서명 토큰 방식)
 export function checkAdminSession(cookieValue: string | null | undefined): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) return false;
-  return cookieValue === adminPassword;
+  if (!adminPassword || !cookieValue) return false;
+
+  const parts = cookieValue.split('.');
+  if (parts.length !== 3) return false;
+
+  const [nonce, timestamp, receivedHmac] = parts;
+
+  // 토큰 만료 검사 (7일)
+  const tokenAge = Date.now() - parseInt(timestamp, 10);
+  if (isNaN(tokenAge) || tokenAge < 0 || tokenAge > 7 * 24 * 60 * 60 * 1000) return false;
+
+  try {
+    const payload = `${nonce}.${timestamp}`;
+    const expectedHmac = createHmac('sha256', adminPassword).update(payload).digest('hex');
+    const receivedBuf = Buffer.from(receivedHmac, 'hex');
+    const expectedBuf = Buffer.from(expectedHmac, 'hex');
+    if (receivedBuf.length !== expectedBuf.length) return false;
+    return timingSafeEqual(receivedBuf, expectedBuf);
+  } catch {
+    return false;
+  }
 }
 
 // 라우트 에러 경계 래퍼 - unhandled exception 처리

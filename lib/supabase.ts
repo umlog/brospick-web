@@ -20,7 +20,12 @@ let supabaseAdmin: SupabaseClient;
 if (supabaseUrl && supabaseUrl.startsWith('http') && supabaseServiceRoleKey) {
   supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
 } else {
-  // service_role key 미설정 시 anon 클라이언트로 폴백
+  if (supabaseUrl && supabaseUrl.startsWith('http') && !supabaseServiceRoleKey) {
+    console.error(
+      '[supabase] SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다. ' +
+      'supabaseAdmin이 anon 클라이언트로 폴백됩니다 — 어드민 작업이 조용히 실패할 수 있습니다.'
+    );
+  }
   supabaseAdmin = supabase;
 }
 

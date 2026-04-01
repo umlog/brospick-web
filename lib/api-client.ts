@@ -5,7 +5,7 @@
 
 import type { Order, ReturnRequest, ProductSize, OrderResponse, BlogPost, AdminProduct } from '@/lib/domain/types';
 
-type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface RequestOptions {
   method?: HttpMethod;

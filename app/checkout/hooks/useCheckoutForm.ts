@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CheckoutFormData } from '../types';
+import type { CheckoutFormData, DaumPostcodeData } from '../types';
 import { parsePostcodeResult } from '../utils';
 
 const INITIAL_FORM_DATA: CheckoutFormData = {
@@ -43,7 +43,7 @@ export function useCheckoutForm() {
     if (typeof window === 'undefined' || !window.daum?.Postcode) return;
 
     new window.daum.Postcode({
-      oncomplete: (data: any) => {
+      oncomplete: (data: DaumPostcodeData) => {
         const parsed = parsePostcodeResult(data);
         setFormData((prev) => ({ ...prev, ...parsed }));
 
