@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { productList, getDiscountPercent, PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory } from '../../lib/products';
 import styles from './apparel-page.module.css';
@@ -9,6 +9,20 @@ const ALL = 'all';
 
 export default function ApparelPage() {
   const [activeCategory, setActiveCategory] = useState<ProductCategory | typeof ALL>(ALL);
+  const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
+
+  useEffect(() => {
+    fetch('/api/products/prices')
+      .then((res) => res.json())
+      .then((data) => {
+        const map: Record<number, { price: number; original_price: number | null }> = {};
+        for (const item of data.prices || []) {
+          map[item.id] = { price: item.price, original_price: item.original_price };
+        }
+        setDbPrices(map);
+      })
+      .catch(() => {});
+  }, []);
 
   const usedCategories = [...new Set(productList.map((p) => p.category))];
 
@@ -45,8 +59,11 @@ export default function ApparelPage() {
         </div>
 
         <div className={styles.productsGrid}>
-          {filtered.map((product) =>
-            product.comingSoon ? (
+          {filtered.map((product) => {
+            const dbPrice = dbPrices[product.id];
+            const price = dbPrice?.price ?? product.price;
+            const originalPrice = dbPrice !== undefined ? dbPrice.original_price : product.originalPrice ?? null;
+            return product.comingSoon ? (
               <div key={product.id} className={styles.comingSoonCard}>
                 <div className={styles.imageWrapper}>
                   <img
@@ -63,14 +80,14 @@ export default function ApparelPage() {
                 <div className={styles.productInfo}>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <div className={styles.priceContainer}>
-                    <span className={styles.price}>₩{product.price.toLocaleString()}</span>
-                    {product.originalPrice && (
+                    <span className={styles.price}>₩{price.toLocaleString()}</span>
+                    {originalPrice && (
                       <>
                         <span className={styles.originalPrice}>
-                          ₩{product.originalPrice.toLocaleString()}
+                          ₩{originalPrice.toLocaleString()}
                         </span>
                         <span className={styles.discountBadge}>
-                          {getDiscountPercent(product.price, product.originalPrice)}%
+                          {getDiscountPercent(price, originalPrice)}%
                         </span>
                       </>
                     )}
@@ -92,14 +109,14 @@ export default function ApparelPage() {
                 <div className={styles.productInfo}>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <div className={styles.priceContainer}>
-                    <span className={styles.price}>₩{product.price.toLocaleString()}</span>
-                    {product.originalPrice && (
+                    <span className={styles.price}>₩{price.toLocaleString()}</span>
+                    {originalPrice && (
                       <>
                         <span className={styles.originalPrice}>
-                          ₩{product.originalPrice.toLocaleString()}
+                          ₩{originalPrice.toLocaleString()}
                         </span>
                         <span className={styles.discountBadge}>
-                          {getDiscountPercent(product.price, product.originalPrice)}%
+                          {getDiscountPercent(price, originalPrice)}%
                         </span>
                       </>
                     )}
@@ -107,8 +124,8 @@ export default function ApparelPage() {
                   <span className={styles.viewDetail}>자세히 보기 →</span>
                 </div>
               </Link>
-            )
-          )}
+            );
+          })}
         </div>
       </div>
     </main>

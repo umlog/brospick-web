@@ -17,7 +17,8 @@
       "Bash(python3:*)",
       "Bash(identify:*)",
       "Bash(node:*)",
-      "Bash(./deploy.sh)"
+      "Bash(./deploy.sh)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

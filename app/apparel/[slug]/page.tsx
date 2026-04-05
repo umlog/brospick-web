@@ -48,8 +48,20 @@ export default function ProductDetailPage({
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
+  const [dbPrice, setDbPrice] = useState<{ price: number; original_price: number | null } | null>(null);
 
   const product = products[params.slug as ProductSlug];
+
+  useEffect(() => {
+    if (!product) return;
+    fetch('/api/products/prices')
+      .then((res) => res.json())
+      .then((data) => {
+        const found = (data.prices || []).find((p: { id: number }) => p.id === product.id);
+        if (found) setDbPrice({ price: found.price, original_price: found.original_price });
+      })
+      .catch(() => {});
+  }, [product?.id]);
 
   useEffect(() => {
     fetch('/api/products/sizes')
@@ -70,6 +82,9 @@ export default function ProductDetailPage({
       })
       .catch(() => {});
   }, []);
+
+  const price = dbPrice?.price ?? product?.price ?? 0;
+  const originalPrice = dbPrice !== null ? dbPrice.original_price : product?.originalPrice ?? null;
 
   if (!product) {
     return (
@@ -110,7 +125,7 @@ export default function ProductDetailPage({
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price,
       size: selectedSize,
       image: product.image,
       quantity,
@@ -151,7 +166,7 @@ export default function ProductDetailPage({
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price,
       size: selectedSize,
       image: product.image,
       quantity,
@@ -215,14 +230,14 @@ export default function ProductDetailPage({
               <h1 className={styles.productName}>{product.name}</h1>
 
               <div className={styles.priceSection}>
-                <span className={styles.price}>₩{product.price.toLocaleString()}</span>
-                {product.originalPrice && (
+                <span className={styles.price}>₩{price.toLocaleString()}</span>
+                {originalPrice && (
                   <>
                     <span className={styles.originalPrice}>
-                      ₩{product.originalPrice.toLocaleString()}
+                      ₩{originalPrice.toLocaleString()}
                     </span>
                     <span className={styles.discountBadge}>
-                      {getDiscountPercent(product.price, product.originalPrice)}%
+                      {getDiscountPercent(price, originalPrice)}%
                     </span>
                   </>
                 )}
@@ -554,7 +569,7 @@ export default function ProductDetailPage({
           <div className={styles.stickyBuyBar}>
             <div className={styles.stickyBuyBarInner}>
               <div className={styles.stickyBuyBarInfo}>
-                <span className={styles.stickyBuyBarPrice}>₩{product.price.toLocaleString()}</span>
+                <span className={styles.stickyBuyBarPrice}>₩{price.toLocaleString()}</span>
                 <span className={styles.stickyBuyBarSize}>
                   {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
                 </span>
