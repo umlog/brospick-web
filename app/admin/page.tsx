@@ -11,11 +11,11 @@ import { useBlogPosts } from './hooks/useBlogPosts';
 import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
-import { ProductSizeManager } from './components/ProductSizeManager';
-import { ProductCatalogManager } from './components/ProductCatalogManager';
+import { ProductManager } from './components/ProductManager';
 import { Dashboard } from './components/Dashboard';
 import { BlogManager } from './components/BlogManager';
 import { VisitCounter } from './components/VisitCounter';
+import { Toasts } from './components/Toasts';
 import styles from './admin.module.css';
 
 const TAB_TITLES: Record<AdminTab, string> = {
@@ -98,10 +98,7 @@ export default function AdminPage() {
           />
         )}
         {activeTab === 'products' && (
-          <>
-            <ProductSizeManager state={productSizesState} />
-            <ProductCatalogManager state={productCatalogState} />
-          </>
+          <ProductManager catalogState={productCatalogState} sizesState={productSizesState} />
         )}
         {activeTab === 'dashboard' && (
           <Dashboard allOrders={ordersState.allOrders} />
@@ -111,6 +108,7 @@ export default function AdminPage() {
         )}
       </div>
       <VisitCounter />
+      <Toasts />
     </main>
   );
 }

@@ -2,12 +2,15 @@ import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 import { OrderStatus } from '@/lib/domain/enums';
+import { showToast } from '../lib/toast';
 
 export function useOrders() {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
+  const [processingOrders, setProcessingOrders] = useState<Set<string>>(new Set());
   const [filterStatus, setFilterStatus] = useState('');
   const [filterMarketing, setFilterMarketing] = useState<boolean | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
@@ -19,6 +22,7 @@ export function useOrders() {
   const [delayUnit, setDelayUnit] = useState<'주' | '일'>('주');
 
   const orders = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     return allOrders.filter((order) => {
       let matchStatus: boolean;
       if (filterStatus === '발송지연') {
@@ -31,9 +35,23 @@ export function useOrders() {
       const matchTo = !dateTo || orderDate <= dateTo;
       const matchMarketing =
         filterMarketing === null || order.marketing_consent === filterMarketing;
-      return matchStatus && matchFrom && matchTo && matchMarketing;
+      const matchSearch =
+        !q ||
+        order.order_number.toLowerCase().includes(q) ||
+        order.customer_name.toLowerCase().includes(q) ||
+        order.customer_phone.includes(q);
+      return matchStatus && matchFrom && matchTo && matchMarketing && matchSearch;
     });
-  }, [allOrders, filterStatus, filterMarketing, dateFrom, dateTo]);
+  }, [allOrders, filterStatus, filterMarketing, searchQuery, dateFrom, dateTo]);
+
+  const setProcessing = (orderId: string, value: boolean) => {
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      if (value) next.add(orderId);
+      else next.delete(orderId);
+      return next;
+    });
+  };
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -45,7 +63,7 @@ export function useOrders() {
         window.location.href = '/admin/login';
         return;
       }
-      alert('주문 조회에 실패했습니다.');
+      showToast('주문 조회에 실패했습니다.', 'error');
     } finally {
       setLoading(false);
     }
@@ -62,6 +80,7 @@ export function useOrders() {
 
     if (!confirm(confirmMsg)) return;
 
+    setProcessing(orderId, true);
     try {
       await apiClient.orders.updateStatus(orderId, {
         status: newStatus,
@@ -70,16 +89,18 @@ export function useOrders() {
       });
 
       setAllOrders((prev) =>
-        prev.map((o) =>
-          o.id === orderId ? { ...o, status: newStatus } : o
-        )
+        prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
 
       if (willNotify) {
-        alert(`상태 변경 완료! ${order.customer_email}로 알림을 발송했습니다.`);
+        showToast(`상태 변경 완료! ${order.customer_email}로 알림 발송`, 'success');
+      } else {
+        showToast(`"${newStatus}"(으)로 변경되었습니다.`, 'success');
       }
     } catch (err) {
-      alert(`상태 변경에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      showToast(`상태 변경 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
+    } finally {
+      setProcessing(orderId, false);
     }
   };
 
@@ -112,7 +133,7 @@ export function useOrders() {
   const handleTrackingSubmit = () => {
     if (!trackingModal) return;
     if (!trackingInput.trim()) {
-      alert('운송장번호를 입력해주세요.');
+      showToast('운송장번호를 입력해주세요.', 'error');
       return;
     }
     handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim());
@@ -123,23 +144,30 @@ export function useOrders() {
   const handlePaymentReminder = async (orderId: string, orderNumber: string) => {
     if (!confirm(`주문 ${orderNumber} 고객에게 입금 안내 메일을 보낼까요?`)) return;
 
+    setProcessing(orderId, true);
     try {
       await apiClient.orders.sendPaymentReminder(orderId);
-      alert('입금 안내 메일이 발송되었습니다.');
+      showToast('입금 안내 메일이 발송되었습니다.', 'success');
     } catch (err) {
-      alert(`메일 발송 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      showToast(`메일 발송 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
+    } finally {
+      setProcessing(orderId, false);
     }
   };
 
   const handleDeleteOrder = async (orderId: string, orderNumber: string) => {
     if (!confirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`)) return;
 
+    setProcessing(orderId, true);
     try {
       await apiClient.orders.delete(orderId);
       setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
       setExpandedOrder(null);
+      showToast('주문이 삭제되었습니다.', 'success');
     } catch {
-      alert('주문 삭제에 실패했습니다.');
+      showToast('주문 삭제에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(orderId, false);
     }
   };
 
@@ -149,13 +177,18 @@ export function useOrders() {
 
   const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
     if (!confirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`)) return;
+
+    setProcessing(orderId, true);
     try {
       await apiClient.orders.revokeMarketing(orderId);
       setAllOrders((prev) =>
         prev.map((o) => (o.id === orderId ? { ...o, marketing_consent: false } : o))
       );
+      showToast('마케팅 동의가 철회되었습니다.', 'success');
     } catch (err) {
-      alert(`마케팅 동의 철회에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      showToast(`마케팅 동의 철회 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
+    } finally {
+      setProcessing(orderId, false);
     }
   };
 
@@ -167,9 +200,12 @@ export function useOrders() {
     orders,
     allOrders,
     loading,
+    processingOrders,
     filterStatus,
     filterMarketing,
     setFilterMarketing,
+    searchQuery,
+    setSearchQuery,
     dateFrom,
     dateTo,
     setDateFrom,

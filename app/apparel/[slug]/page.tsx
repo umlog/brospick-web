@@ -48,7 +48,7 @@ export default function ProductDetailPage({
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
-  const [dbPrice, setDbPrice] = useState<{ price: number; original_price: number | null } | null>(null);
+  const [dbPrice, setDbPrice] = useState<{ price: number; original_price: number | null } | undefined>(undefined);
 
   const product = products[params.slug as ProductSlug];
 
@@ -83,8 +83,8 @@ export default function ProductDetailPage({
       .catch(() => {});
   }, []);
 
-  const price = dbPrice?.price ?? product?.price ?? 0;
-  const originalPrice = dbPrice !== null ? dbPrice.original_price : product?.originalPrice ?? null;
+  const price = dbPrice?.price;
+  const originalPrice = dbPrice?.original_price ?? null;
 
   if (!product) {
     return (
@@ -120,6 +120,7 @@ export default function ProductDetailPage({
       alert('사이즈를 선택해주세요.');
       return;
     }
+    if (price === undefined) return;
     if (!checkSelectedStock()) return;
 
     addToCart({
@@ -161,6 +162,7 @@ export default function ProductDetailPage({
       alert('사이즈를 선택해주세요.');
       return;
     }
+    if (price === undefined) return;
     if (!checkSelectedStock()) return;
 
     addToCart({
@@ -230,16 +232,22 @@ export default function ProductDetailPage({
               <h1 className={styles.productName}>{product.name}</h1>
 
               <div className={styles.priceSection}>
-                <span className={styles.price}>₩{price.toLocaleString()}</span>
-                {originalPrice && (
+                {price !== undefined ? (
                   <>
-                    <span className={styles.originalPrice}>
-                      ₩{originalPrice.toLocaleString()}
-                    </span>
-                    <span className={styles.discountBadge}>
-                      {getDiscountPercent(price, originalPrice)}%
-                    </span>
+                    <span className={styles.price}>₩{price.toLocaleString()}</span>
+                    {originalPrice && (
+                      <>
+                        <span className={styles.originalPrice}>
+                          ₩{originalPrice.toLocaleString()}
+                        </span>
+                        <span className={styles.discountBadge}>
+                          {getDiscountPercent(price, originalPrice)}%
+                        </span>
+                      </>
+                    )}
                   </>
+                ) : (
+                  <span className={styles.price}>—</span>
                 )}
               </div>
 
@@ -408,11 +416,11 @@ export default function ProductDetailPage({
                     <button
                       className={styles.addToCartButton}
                       onClick={handleAddToCart}
-                      disabled={showSuccess}
+                      disabled={showSuccess || price === undefined}
                     >
                       {showSuccess ? '장바구니에 추가됨 ✓' : '장바구니에 추가'}
                     </button>
-                    <button className={styles.buyNowButton} onClick={handleBuyNow}>
+                    <button className={styles.buyNowButton} onClick={handleBuyNow} disabled={price === undefined}>
                       바로 구매하기
                     </button>
                   </div>
@@ -569,7 +577,7 @@ export default function ProductDetailPage({
           <div className={styles.stickyBuyBar}>
             <div className={styles.stickyBuyBarInner}>
               <div className={styles.stickyBuyBarInfo}>
-                <span className={styles.stickyBuyBarPrice}>₩{price.toLocaleString()}</span>
+                <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
                 <span className={styles.stickyBuyBarSize}>
                   {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
                 </span>
@@ -578,11 +586,11 @@ export default function ProductDetailPage({
                 <button
                   className={styles.stickyCartButton}
                   onClick={handleAddToCart}
-                  disabled={showSuccess}
+                  disabled={showSuccess || price === undefined}
                 >
                   {showSuccess ? '✓' : '장바구니'}
                 </button>
-                <button className={styles.stickyBuyButton} onClick={handleBuyNow}>
+                <button className={styles.stickyBuyButton} onClick={handleBuyNow} disabled={price === undefined}>
                   바로 구매
                 </button>
               </div>

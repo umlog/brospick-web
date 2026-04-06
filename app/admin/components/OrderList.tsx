@@ -1,3 +1,4 @@
+import { showToast } from '../lib/toast';
 import type { useOrders } from '../hooks/useOrders';
 import { STATUS_OPTIONS } from '../constants';
 import { StatusFilter } from './StatusFilter';
@@ -14,9 +15,12 @@ export function OrderList({ ordersState }: OrderListProps) {
   const {
     orders,
     loading,
+    processingOrders,
     filterStatus,
     filterMarketing,
     setFilterMarketing,
+    searchQuery,
+    setSearchQuery,
     dateFrom,
     dateTo,
     setDateFrom,
@@ -49,7 +53,7 @@ export function OrderList({ ordersState }: OrderListProps) {
   const handleExportCSV = () => {
     const marketingOrders = orders.filter((o) => o.marketing_consent);
     if (marketingOrders.length === 0) {
-      alert('마케팅 수신 동의 고객이 없습니다.');
+      showToast('마케팅 수신 동의 고객이 없습니다.', 'info');
       return;
     }
     const header = '이름,전화번호,이메일,주문번호,주문일자';
@@ -68,6 +72,21 @@ export function OrderList({ ordersState }: OrderListProps) {
 
   return (
     <>
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="주문번호, 고객명, 전화번호 검색..."
+        />
+        {searchQuery && (
+          <button className={styles.searchClearBtn} onClick={() => setSearchQuery('')}>
+            ✕
+          </button>
+        )}
+      </div>
+
       <div className={styles.dateFilter}>
         <input
           type="date"
@@ -140,6 +159,7 @@ export function OrderList({ ordersState }: OrderListProps) {
               delayModal={delayModal}
               delayWeeks={delayWeeks}
               delayUnit={delayUnit}
+              processing={processingOrders.has(order.id)}
               onToggleExpand={toggleExpanded}
               onStatusChange={handleStatusChange}
               onShippingClick={handleShippingClick}

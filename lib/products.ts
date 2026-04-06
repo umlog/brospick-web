@@ -105,8 +105,6 @@ export interface Product {
   slug: ProductSlug;   // URL + 코드 식별자
   name: string;
   category: ProductCategory;
-  price: number;
-  originalPrice?: number;
   image: string;
   images: string[];
   tagline: string;
@@ -128,8 +126,6 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.HALF_ZIP_TRAINING_TOP,
     name: 'Half-Zip Training Top',
     category: 'training-top',
-    price: 26900,
-    originalPrice: 59000,
     image: '/apparel/training-top/half-zip/half-zip-training-top/detail-1.jpg',
     images: [
       '/apparel/training-top/half-zip/half-zip-training-top/thumb.png',
@@ -183,8 +179,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Training Top (Black)',
     category: 'training-top',
     comingSoon: true,
-    price: 26900,
-    originalPrice: 59000,
     image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
@@ -228,8 +222,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Camel Gray Short Sleeve',
     category: 'short-sleeve',
     comingSoon: true,
-    price: 19900,
-    originalPrice: 29900,
     image: '/apparel/short-sleeve/camel-gray/1-camel-gray-short-sleeve-1.png',
     images: [
       '/apparel/short-sleeve/camel-gray/1-camel-gray-short-sleeve-1.png',
@@ -278,8 +270,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Training Top (Gray)',
     category: 'training-top',
     comingSoon: true,
-    price: 26900,
-    originalPrice: 59000,
     image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
@@ -326,8 +316,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Running Long Sleeve Top (Gray)',
     category: 'long-sleeve',
     comingSoon: true,
-    price: 19900,
-    originalPrice: 29900,
     image: '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
     images: [
       '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
@@ -381,8 +369,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Running Long Sleeve Top (Black)',
     category: 'long-sleeve',
     comingSoon: true,
-    price: 19900,
-    originalPrice: 29900,
     image: '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
     images: [
       '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
@@ -435,8 +421,6 @@ export const products: Record<ProductSlug, Product> = {
     category: 'hoodie',
     name: 'GRID ZIP HOODIE',
     comingSoon: true,
-    price: 39900,
-    originalPrice: 59000,
     image: '/apparel/hoodie/1-grid-zip-hoodie-1.png',
     images: [
       '/apparel/hoodie/1-grid-zip-hoodie-1.png',
@@ -492,8 +476,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Tech Training Shorts (Black)',
     category: 'shorts',
     comingSoon: true,
-    price: 29900,
-    originalPrice: 49000,
     image: '/apparel/shorts/training-shorts/tech-training-shorts/black/1-tech-training-shorts-black-1.png',
     images: [
       '/apparel/shorts/training-shorts/tech-training-shorts/black/1-tech-training-shorts-black-1.png',
@@ -540,8 +522,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Tech Training Shorts (Gray)',
     category: 'shorts',
     comingSoon: true,
-    price: 29900,
-    originalPrice: 49000,
     image: '/apparel/shorts/training-shorts/tech-training-shorts/gray/1-tech-training-shorts-gray-1.png',
     images: [
       '/apparel/shorts/training-shorts/tech-training-shorts/gray/1-tech-training-shorts-gray-1.png',
@@ -588,8 +568,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Motion Tech Shorts (Black)',
     category: 'shorts',
     comingSoon: true,
-    price: 36000,
-    originalPrice: 61000,
     image: '/apparel/shorts/training-shorts/motion-training-shorts/black/1-motion-training-shorts-black-1.png',
     images: [
       '/apparel/shorts/training-shorts/motion-training-shorts/black/1-motion-training-shorts-black-1.png',
@@ -639,8 +617,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Flex (Blue)',
     category: 'training-top',
     comingSoon: true,
-    price: 36900,
-    originalPrice: 59000,
     image: '/apparel/training-top/quarter-zip/quarter-zip-flex/blue/1-blue-1.png',
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-flex/blue/1-blue-1.png',
@@ -686,8 +662,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Motion Tech Shorts (Gray)',
     category: 'shorts',
     comingSoon: true,
-    price: 36000,
-    originalPrice: 61000,
     image: '/apparel/shorts/training-shorts/motion-training-shorts/gray/1-motion-training-shorts-gray-1.png',
     images: [
       '/apparel/shorts/training-shorts/motion-training-shorts/gray/1-motion-training-shorts-gray-1.png',
@@ -737,8 +711,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Flex (Light Green)',
     category: 'training-top',
     comingSoon: true,
-    price: 36900,
-    originalPrice: 59000,
     image: '/apparel/training-top/quarter-zip/quarter-zip-flex/light-green/1-light-green-1.png',
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-flex/light-green/1-light-green-1.png',
@@ -784,8 +756,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Cross C Taping (Black)',
     category: 'taping',
     comingSoon: true,
-    price: 2500,
-    originalPrice: 3250,
     image: '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
     images: [
       '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
@@ -823,8 +793,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Cross C Taping (Gold)',
     category: 'taping',
     comingSoon: true,
-    price: 2500,
-    originalPrice: 3250,
     image: '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
     images: [
       '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
@@ -862,8 +830,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Philippians 4:13 C Taping',
     category: 'taping',
     comingSoon: true,
-    price: 2900,
-    originalPrice: 3770,
     image: '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
     images: [
       '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
@@ -901,8 +867,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Motion Tech Pants (Black)',
     category: 'pants',
     comingSoon: true,
-    price: 39000,
-    originalPrice: 62000,
     image: '/apparel/pants/traning-pants/motion-training-pants/black/1-motion-tech-training-pants-black-1.png',
     images: [
       '/apparel/pants/traning-pants/motion-training-pants/black/1-motion-tech-training-pants-black-1.png',
@@ -952,8 +916,6 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Motion Tech Pants (Gray)',
     category: 'pants',
     comingSoon: true,
-    price: 39000,
-    originalPrice: 62000,
     image: '/apparel/pants/traning-pants/motion-training-pants/gray/1-motion-tech-traning-pants-gray-1.png',
     images: [
       '/apparel/pants/traning-pants/motion-training-pants/gray/1-motion-tech-traning-pants-gray-1.png',
@@ -1011,8 +973,6 @@ export const productList = Object.values(products)
     id: p.id,
     slug: p.slug,
     name: p.name,
-    price: p.price,
-    originalPrice: p.originalPrice,
     image: p.images[0],
     description: p.tagline,
     category: p.category,

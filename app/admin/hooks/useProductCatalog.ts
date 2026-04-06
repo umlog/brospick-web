@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { apiClient } from '@/lib/api-client';
 import type { AdminProduct } from '@/lib/domain/types';
+import { showToast } from '../lib/toast';
 
 export function useProductCatalog() {
   const [products, setProducts] = useState<AdminProduct[]>([]);
@@ -30,8 +31,11 @@ export function useProductCatalog() {
       try {
         const data = await apiClient.products.update(id, updates);
         setProducts((prev) => prev.map((p) => (p.id === id ? data.product : p)));
+        showToast('저장되었습니다.', 'success');
       } catch (e) {
-        setError(e instanceof Error ? e.message : '상품 수정 실패');
+        const msg = e instanceof Error ? e.message : '상품 수정 실패';
+        setError(msg);
+        showToast(msg, 'error');
       } finally {
         setSaving(null);
       }

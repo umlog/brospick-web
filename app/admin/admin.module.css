@@ -75,21 +75,28 @@
 
 .header h1 {
   color: var(--color-text-primary);
+  font-size: var(--size-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
 }
 
 .refreshButton {
   padding: var(--space-sm) var(--space-lg);
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-primary);
+  background-color: transparent;
+  color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: var(--size-sm);
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .refreshButton:hover {
-  background-color: var(--color-border);
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
 
 /* Filters */
@@ -146,8 +153,9 @@
 .orderCard {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .orderHeader {
@@ -160,7 +168,7 @@
 }
 
 .orderHeader:hover {
-  background-color: var(--color-bg-primary);
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .orderMeta {
@@ -199,41 +207,47 @@
 }
 
 .statusBadge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: var(--size-sm);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .statusPending {
-  background-color: #ff9800;
-  color: #000;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .statusConfirmed {
-  background-color: #2196F3;
-  color: #fff;
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
 .statusPreparing {
-  background-color: #9C27B0;
-  color: #fff;
+  background-color: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.25);
 }
 
 .statusShipping {
-  background-color: #00BCD4;
-  color: #000;
+  background-color: rgba(6, 182, 212, 0.12);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.25);
 }
 
 .statusDelivered {
-  background-color: #4CAF50;
-  color: #fff;
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
 }
 
 .statusDelay {
-  background-color: #f59e0b;
-  color: #000;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 /* Order Detail */
@@ -253,10 +267,9 @@
 
 .detailSection h3 {
   font-size: var(--size-sm);
-  font-weight: 700;
-  color: var(--color-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
   margin-bottom: 4px;
 }
 
@@ -318,10 +331,9 @@
 
 .statusControl h3 {
   font-size: var(--size-sm);
-  font-weight: 700;
-  color: var(--color-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
   margin-bottom: var(--space-sm);
 }
 
@@ -332,12 +344,12 @@
 }
 
 .statusButton {
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--color-bg-primary);
+  padding: 6px var(--space-md);
+  background-color: transparent;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-size: var(--size-sm);
+  border-radius: 20px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -348,9 +360,10 @@
 }
 
 .statusButtonActive {
-  background-color: var(--color-accent);
-  color: #ffffff;
-  border-color: var(--color-accent);
+  background-color: rgba(255, 59, 48, 0.15);
+  color: #ff3b30;
+  border-color: rgba(255, 59, 48, 0.35);
+  font-weight: 600;
   cursor: default;
 }
 
@@ -489,9 +502,10 @@
 .trackingModal {
   margin-top: var(--space-md);
   padding: var(--space-lg);
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .trackingModal h4 {
@@ -544,13 +558,13 @@
 }
 
 .trackingCancelButton {
-  padding: var(--space-sm) var(--space-lg);
-  background-color: var(--color-bg-secondary);
+  padding: 6px var(--space-lg);
+  background-color: transparent;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-size: var(--size-sm);
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -561,19 +575,19 @@
 }
 
 .trackingConfirmButton {
-  padding: var(--space-sm) var(--space-lg);
+  padding: 6px var(--space-lg);
   background-color: var(--color-accent);
   color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-size: var(--size-sm);
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .trackingConfirmButton:hover {
-  background-color: #ff5a52;
+  opacity: 0.85;
 }
 
 /* Payment Reminder */
@@ -584,19 +598,20 @@
 }
 
 .paymentReminderButton {
-  padding: var(--space-sm) var(--space-lg);
-  background-color: #ff9500;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  font-size: var(--size-sm);
+  padding: 6px var(--space-lg);
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .paymentReminderButton:hover {
-  background-color: #e08600;
+  background-color: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
 }
 
 /* Danger Zone */
@@ -608,20 +623,21 @@
 }
 
 .deleteButton {
-  padding: var(--space-sm) var(--space-lg);
+  padding: 6px var(--space-lg);
   background-color: transparent;
-  color: #e53935;
-  border: 1px solid #e53935;
-  border-radius: 4px;
-  font-size: var(--size-sm);
-  font-weight: 600;
+  color: rgba(239, 68, 68, 0.7);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .deleteButton:hover {
-  background-color: #e53935;
-  color: #ffffff;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 /* Admin Tabs */
@@ -633,15 +649,16 @@
 }
 
 .adminTab {
-  padding: var(--space-md) var(--space-xl);
+  padding: var(--space-sm) var(--space-lg);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   color: var(--color-text-secondary);
-  font-size: var(--size-base);
+  font-size: var(--size-sm);
   font-weight: 500;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.01em;
 }
 
 .adminTab:hover {
@@ -649,59 +666,67 @@
 }
 
 .adminTabActive {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-text-primary);
   font-weight: 600;
 }
 
 /* Type Badge */
 .typeBadge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: var(--size-sm);
-  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
 .typeBadgeExchange {
-  background-color: rgba(0, 122, 255, 0.15);
-  color: #007aff;
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
 .typeBadgeReturn {
-  background-color: rgba(255, 149, 0, 0.15);
-  color: #ff9500;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 /* Return Status Badges */
 .returnStatusReceived {
-  background-color: #ff9800;
-  color: #000;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .returnStatusApproved {
-  background-color: #4CAF50;
-  color: #fff;
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
 }
 
 .returnStatusCollecting {
-  background-color: #9C27B0;
-  color: #fff;
+  background-color: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.25);
 }
 
 .returnStatusCollected {
-  background-color: #2196F3;
-  color: #fff;
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
 .returnStatusComplete {
-  background-color: #4CAF50;
-  color: #fff;
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
 }
 
 .returnStatusRejected {
-  background-color: #e53935;
-  color: #fff;
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 /* Reject Button */
@@ -1059,11 +1084,12 @@
 /* Marketing Filter & Badge */
 .marketingBadge {
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 11px;
-  font-weight: 600;
-  background-color: #22c55e;
-  color: #fff;
+  font-weight: 500;
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
   white-space: nowrap;
 }
 
@@ -1126,20 +1152,21 @@
 
 /* Marketing Revoke */
 .revokeMarketingButton {
-  padding: var(--space-sm) var(--space-lg);
+  padding: 6px var(--space-lg);
   background-color: transparent;
-  color: #f59e0b;
-  border: 1px solid #f59e0b;
-  border-radius: 4px;
+  color: rgba(245, 158, 11, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
   cursor: pointer;
-  font-size: var(--size-sm);
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .revokeMarketingButton:hover {
-  background-color: #f59e0b;
-  color: #000;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.5);
 }
 
 /* ============================
@@ -1437,6 +1464,14 @@
   flex-shrink: 0;
 }
 
+.catalogDiscountBadge {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: #e53e3e;
+  flex-shrink: 0;
+  min-width: 36px;
+}
+
 .catalogSaveButton {
   padding: var(--space-sm);
   font-size: var(--size-sm);
@@ -1481,4 +1516,444 @@
   .catalogPriceInput {
     width: 80px;
   }
+}
+
+/* ── ProductManager ──────────────────────────────── */
+.pmContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pmPageHeader {
+  margin-bottom: 12px;
+}
+
+.pmTitle {
+  font-size: var(--size-base);
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.pmDesc {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.pmList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Card */
+.pmCard {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+  transition: border-color 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.pmCardDirty {
+  border-color: var(--color-accent, #3b82f6);
+  border-left: 3px solid var(--color-accent, #3b82f6);
+}
+
+/* Card header: id | name | price group | save */
+.pmCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  flex-wrap: wrap;
+}
+
+.pmCardId {
+  font-size: var(--size-xs, 11px);
+  color: var(--color-text-secondary);
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.pmThumbnail {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+}
+
+.pmNameInput {
+  flex: 1 1 160px;
+  min-width: 120px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.pmNameInput:focus {
+  border-color: var(--color-accent, #3b82f6);
+}
+
+.pmPriceGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.pmPriceField {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pmPriceInput {
+  width: 90px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  outline: none;
+  text-align: right;
+}
+
+.pmPriceInput:focus {
+  border-color: var(--color-accent, #3b82f6);
+}
+
+.pmPriceInputOriginal {
+  opacity: 0.75;
+}
+
+.pmPriceUnit {
+  font-size: var(--size-xs, 11px);
+  color: var(--color-text-secondary);
+}
+
+.pmDiscountBadge {
+  font-size: var(--size-xs, 11px);
+  font-weight: 700;
+  color: #e53e3e;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.pmSaveBtn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  background: var(--color-accent, #3b82f6);
+  color: #fff;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.12s;
+  flex-shrink: 0;
+}
+
+.pmSaveBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Sizes section */
+.pmSizesSection {
+  border-top: 1px solid var(--color-border);
+  padding: 8px 0;
+}
+
+.pmSizeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  flex-wrap: wrap;
+}
+
+.pmSizeRow:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-subtle, #f0f0f0);
+}
+
+.pmSizeLabel {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  min-width: 32px;
+  color: var(--color-text-primary);
+}
+
+/* Status toggle pills */
+.pmStatusToggle {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pmStatusBtn {
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  font-size: var(--size-xs, 11px);
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.12s;
+}
+
+.pmStatusBtn:not(:disabled):hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.pmStatusBtn:disabled:not(.pmStatus_available):not(.pmStatus_sold_out):not(.pmStatus_delayed) {
+  cursor: default;
+}
+
+.pmStatus_available {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #16a34a;
+  font-weight: 700;
+  cursor: default;
+}
+
+.pmStatus_sold_out {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+  font-weight: 700;
+  cursor: default;
+}
+
+.pmStatus_delayed {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #d97706;
+  font-weight: 700;
+  cursor: default;
+}
+
+/* Stock stepper */
+.pmStockStepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pmStepBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  transition: background 0.1s;
+}
+
+.pmStepBtn:hover:not(:disabled) {
+  background: var(--color-bg-hover, #e5e7eb);
+}
+
+.pmStepBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.pmStockInput {
+  width: 48px;
+  padding: 4px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.pmInlineSaveBtn {
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: none;
+  background: var(--color-accent, #3b82f6);
+  color: #fff;
+  font-size: var(--size-xs, 11px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+
+.pmInlineSaveBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Delay text */
+.pmDelayRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pmDelayInput {
+  width: 100px;
+  padding: 4px 8px;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  background: #fffbeb;
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .pmCardHeader {
+    gap: 8px;
+  }
+  .pmPriceInput {
+    width: 72px;
+  }
+  .pmNameInput {
+    min-width: 100px;
+  }
+}
+
+/* ── Toast ───────────────────────────────────────── */
+.toastContainer {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none;
+  align-items: center;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  pointer-events: auto;
+  cursor: pointer;
+  animation: toastIn 0.2s ease;
+  white-space: nowrap;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.toast_success {
+  background: #22c55e;
+  color: #fff;
+}
+
+.toast_error {
+  background: #ef4444;
+  color: #fff;
+}
+
+.toast_info {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.toastIcon {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ── Search ──────────────────────────────────────── */
+.searchBar {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus {
+  border-color: var(--color-accent);
+}
+
+.searchClearBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* ── Reject templates ────────────────────────────── */
+.rejectTemplates {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.rejectTemplateBtn {
+  text-align: left;
+  padding: 7px 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.rejectTemplateBtn:hover {
+  background: var(--color-bg-hover, #e5e7eb);
 }

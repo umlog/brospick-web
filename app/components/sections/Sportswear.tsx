@@ -11,6 +11,20 @@ const SLIDE_INTERVAL = 7000;
 export default function Sportswear() {
   const [current, setCurrent] = useState(0);
   const pausedRef = useRef(false);
+  const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
+
+  useEffect(() => {
+    fetch('/api/products/prices')
+      .then((res) => res.json())
+      .then((data) => {
+        const map: Record<number, { price: number; original_price: number | null }> = {};
+        for (const item of data.prices || []) {
+          map[item.id] = { price: item.price, original_price: item.original_price };
+        }
+        setDbPrices(map);
+      })
+      .catch(() => {});
+  }, []);
 
   const next = useCallback(() => {
     setCurrent((c) => (c + 1) % productList.length);
@@ -37,7 +51,11 @@ export default function Sportswear() {
             className={styles.track}
             style={{ transform: `translateX(-${current * 100}%)` }}
           >
-            {productList.map((product) => (
+            {productList.map((product) => {
+              const dbPrice = dbPrices[product.id];
+              const price = dbPrice?.price;
+              const originalPrice = dbPrice?.original_price ?? null;
+              return (
               <div key={product.id} className={styles.slide}>
                 {product.comingSoon ? (
                   <div className={styles.comingSoonImageContainer}>
@@ -69,14 +87,16 @@ export default function Sportswear() {
                   <p className={styles.label}>BROSPICK COLLECTION</p>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <p className={styles.description}>{product.description}</p>
-                  <div className={styles.priceRow}>
-                    <span className={styles.price}>₩{product.price.toLocaleString()}</span>
-                    {product.originalPrice && (
-                      <span className={styles.originalPrice}>
-                        ₩{product.originalPrice.toLocaleString()}
-                      </span>
-                    )}
-                  </div>
+                  {price !== undefined && (
+                    <div className={styles.priceRow}>
+                      <span className={styles.price}>₩{price.toLocaleString()}</span>
+                      {originalPrice && (
+                        <span className={styles.originalPrice}>
+                          ₩{originalPrice.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   {product.comingSoon ? (
                     <span className={styles.comingSoonLabel}>출시 예정</span>
                   ) : (
@@ -86,7 +106,8 @@ export default function Sportswear() {
                   )}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* 도트 네비게이션 */}

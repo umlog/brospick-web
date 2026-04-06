@@ -61,8 +61,8 @@ export default function ApparelPage() {
         <div className={styles.productsGrid}>
           {filtered.map((product) => {
             const dbPrice = dbPrices[product.id];
-            const price = dbPrice?.price ?? product.price;
-            const originalPrice = dbPrice !== undefined ? dbPrice.original_price : product.originalPrice ?? null;
+            const price = dbPrice?.price;
+            const originalPrice = dbPrice?.original_price ?? null;
             return product.comingSoon ? (
               <div key={product.id} className={styles.comingSoonCard}>
                 <div className={styles.imageWrapper}>
@@ -80,15 +80,19 @@ export default function ApparelPage() {
                 <div className={styles.productInfo}>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <div className={styles.priceContainer}>
-                    <span className={styles.price}>₩{price.toLocaleString()}</span>
-                    {originalPrice && (
+                    {price !== undefined && (
                       <>
-                        <span className={styles.originalPrice}>
-                          ₩{originalPrice.toLocaleString()}
-                        </span>
-                        <span className={styles.discountBadge}>
-                          {getDiscountPercent(price, originalPrice)}%
-                        </span>
+                        <span className={styles.price}>₩{price.toLocaleString()}</span>
+                        {originalPrice && (
+                          <>
+                            <span className={styles.originalPrice}>
+                              ₩{originalPrice.toLocaleString()}
+                            </span>
+                            <span className={styles.discountBadge}>
+                              {getDiscountPercent(price, originalPrice)}%
+                            </span>
+                          </>
+                        )}
                       </>
                     )}
                   </div>
@@ -109,15 +113,19 @@ export default function ApparelPage() {
                 <div className={styles.productInfo}>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <div className={styles.priceContainer}>
-                    <span className={styles.price}>₩{price.toLocaleString()}</span>
-                    {originalPrice && (
+                    {price !== undefined && (
                       <>
-                        <span className={styles.originalPrice}>
-                          ₩{originalPrice.toLocaleString()}
-                        </span>
-                        <span className={styles.discountBadge}>
-                          {getDiscountPercent(price, originalPrice)}%
-                        </span>
+                        <span className={styles.price}>₩{price.toLocaleString()}</span>
+                        {originalPrice && (
+                          <>
+                            <span className={styles.originalPrice}>
+                              ₩{originalPrice.toLocaleString()}
+                            </span>
+                            <span className={styles.discountBadge}>
+                              {getDiscountPercent(price, originalPrice)}%
+                            </span>
+                          </>
+                        )}
                       </>
                     )}
                   </div>

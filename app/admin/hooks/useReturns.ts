@@ -2,16 +2,27 @@ import { useState, useCallback } from 'react';
 import type { ReturnRequest } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 import { ReturnStatus } from '@/lib/domain/enums';
+import { showToast } from '../lib/toast';
 
 export function useReturns(notifyOnChange: boolean) {
   const [returnRequests, setReturnRequests] = useState<ReturnRequest[]>([]);
   const [loading, setLoading] = useState(false);
+  const [processingReturns, setProcessingReturns] = useState<Set<string>>(new Set());
   const [filterStatus, setFilterStatus] = useState('');
   const [expandedReturn, setExpandedReturn] = useState<string | null>(null);
   const [trackingModal, setTrackingModal] = useState<string | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
   const [rejectModal, setRejectModal] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
+
+  const setProcessing = (id: string, value: boolean) => {
+    setProcessingReturns((prev) => {
+      const next = new Set(prev);
+      if (value) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  };
 
   const fetchReturns = useCallback(async (status?: string) => {
     setLoading(true);
@@ -23,7 +34,7 @@ export function useReturns(notifyOnChange: boolean) {
         window.location.href = '/admin/login';
         return;
       }
-      alert('교환/반품 조회에 실패했습니다.');
+      showToast('교환/반품 조회에 실패했습니다.', 'error');
     } finally {
       setLoading(false);
     }
@@ -33,6 +44,7 @@ export function useReturns(notifyOnChange: boolean) {
     const confirmMsg = `상태를 "${newStatus}"(으)로 변경할까요?`;
     if (!confirm(confirmMsg)) return;
 
+    setProcessing(requestId, true);
     try {
       await apiClient.returns.updateStatus(requestId, {
         status: newStatus,
@@ -45,20 +57,27 @@ export function useReturns(notifyOnChange: boolean) {
       setRejectReason('');
       setTrackingModal(null);
       setTrackingInput('');
+      showToast(`"${newStatus}"(으)로 변경되었습니다.`, 'success');
     } catch (err) {
-      alert(err instanceof Error ? err.message : '상태 변경에 실패했습니다.');
+      showToast(err instanceof Error ? err.message : '상태 변경에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(requestId, false);
     }
   };
 
   const handleDelete = async (requestId: string, requestNumber: string) => {
     if (!confirm(`요청 ${requestNumber}을(를) 정말 삭제할까요?`)) return;
 
+    setProcessing(requestId, true);
     try {
       await apiClient.returns.delete(requestId);
       setReturnRequests((prev) => prev.filter((r) => r.id !== requestId));
       setExpandedReturn(null);
+      showToast('요청이 삭제되었습니다.', 'success');
     } catch {
-      alert('삭제에 실패했습니다.');
+      showToast('삭제에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(requestId, false);
     }
   };
 
@@ -70,6 +89,7 @@ export function useReturns(notifyOnChange: boolean) {
   const handleRefundComplete = async (requestId: string) => {
     if (!confirm('환불 완료로 처리할까요?')) return;
 
+    setProcessing(requestId, true);
     try {
       await apiClient.returns.updateStatus(requestId, {
         status: ReturnStatus.COMPLETED,
@@ -78,8 +98,11 @@ export function useReturns(notifyOnChange: boolean) {
       });
 
       fetchReturns(filterStatus || undefined);
+      showToast('환불 완료 처리되었습니다.', 'success');
     } catch (err) {
-      alert(err instanceof Error ? err.message : '처리에 실패했습니다.');
+      showToast(err instanceof Error ? err.message : '처리에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(requestId, false);
     }
   };
 
@@ -90,6 +113,7 @@ export function useReturns(notifyOnChange: boolean) {
   return {
     returnRequests,
     loading,
+    processingReturns,
     filterStatus,
     expandedReturn,
     trackingModal,

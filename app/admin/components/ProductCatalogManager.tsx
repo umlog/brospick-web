@@ -94,6 +94,18 @@ function ProductRow({
           min={0}
         />
         <span className={styles.catalogPriceSep}>원</span>
+        {(() => {
+          const p = parseInt(price, 10);
+          const op = parseInt(originalPrice, 10);
+          if (!isNaN(p) && !isNaN(op) && op > p && op > 0) {
+            return (
+              <span className={styles.catalogDiscountBadge}>
+                {Math.round((1 - p / op) * 100)}%
+              </span>
+            );
+          }
+          return null;
+        })()}
       </div>
       <button
         className={styles.catalogSaveButton}

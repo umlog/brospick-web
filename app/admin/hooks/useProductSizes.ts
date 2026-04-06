@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { ProductSize } from '../types';
 import { apiClient } from '@/lib/api-client';
+import { showToast } from '../lib/toast';
 
 export function useProductSizes() {
   const [sizes, setSizes] = useState<ProductSize[]>([]);
@@ -12,7 +13,7 @@ export function useProductSizes() {
       const data = await apiClient.productSizes.list();
       setSizes(data.sizes);
     } catch {
-      alert('사이즈 정보 조회에 실패했습니다.');
+      showToast('사이즈 정보 조회에 실패했습니다.', 'error');
     } finally {
       setLoading(false);
     }
@@ -34,7 +35,7 @@ export function useProductSizes() {
         )
       );
     } catch (err) {
-      alert(err instanceof Error ? err.message : '변경에 실패했습니다.');
+      showToast(err instanceof Error ? err.message : '변경에 실패했습니다.', 'error');
     }
   };
 

@@ -16,6 +16,7 @@ export function ReturnList({ returnsState, notifyOnChange, onNotifyChange }: Ret
   const {
     returnRequests,
     loading,
+    processingReturns,
     filterStatus,
     expandedReturn,
     trackingModal,
@@ -57,6 +58,7 @@ export function ReturnList({ returnsState, notifyOnChange, onNotifyChange }: Ret
               rejectModal={rejectModal}
               rejectReason={rejectReason}
               notifyOnChange={notifyOnChange}
+              processing={processingReturns.has(req.id)}
               onToggleExpand={toggleExpanded}
               onStatusChange={handleStatusChange}
               onRefundComplete={handleRefundComplete}

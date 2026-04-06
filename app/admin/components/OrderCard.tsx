@@ -14,6 +14,7 @@ interface OrderCardProps {
   delayModal: string | null;
   delayWeeks: number;
   delayUnit: '주' | '일';
+  processing: boolean;
   onToggleExpand: (orderId: string) => void;
   onStatusChange: (orderId: string, newStatus: string) => void;
   onShippingClick: (orderId: string) => void;
@@ -40,6 +41,7 @@ export function OrderCard({
   delayModal,
   delayWeeks,
   delayUnit,
+  processing,
   onToggleExpand,
   onStatusChange,
   onShippingClick,
@@ -138,6 +140,7 @@ export function OrderCard({
                       key="발송지연"
                       className={`${styles.statusButton} ${isDelayStatus ? styles.statusButtonDelay : ''}`}
                       onClick={() => onDelayClick(order.id)}
+                      disabled={processing}
                     >
                       {isDelayStatus ? order.status : '발송 지연'}
                     </button>
@@ -152,7 +155,7 @@ export function OrderCard({
                         ? onShippingClick(order.id)
                         : onStatusChange(order.id, status)
                     }
-                    disabled={order.status === status}
+                    disabled={order.status === status || processing}
                   >
                     {status}
                   </button>
@@ -255,8 +258,9 @@ export function OrderCard({
             <button
               className={styles.deleteButton}
               onClick={() => onDelete(order.id, order.order_number)}
+              disabled={processing}
             >
-              주문 삭제
+              {processing ? '처리 중...' : '주문 삭제'}
             </button>
           </div>
         </div>

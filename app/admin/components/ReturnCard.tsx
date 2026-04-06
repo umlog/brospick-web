@@ -1,9 +1,18 @@
+import { showToast } from '../lib/toast';
 import type { ReturnRequest } from '../types';
 import { RETURN_STATUS_TRANSITIONS } from '../constants';
 import { formatDate, getReturnStatusColor } from '../utils';
 import { ReturnStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
 import styles from '../admin.module.css';
+
+const REJECT_REASON_TEMPLATES = [
+  '고객 변심으로 인한 반품/교환은 불가합니다.',
+  '착용 또는 세탁 후 반품/교환은 불가합니다.',
+  '상품 태그 제거 후 반품/교환은 불가합니다.',
+  '반품 기간(7일)이 초과되었습니다.',
+  '단순 변심으로 인한 교환은 불가합니다.',
+];
 
 interface ReturnCardProps {
   request: ReturnRequest;
@@ -24,6 +33,7 @@ interface ReturnCardProps {
   onRejectReasonChange: (value: string) => void;
   onRejectCancel: () => void;
   onNotifyChange: (value: boolean) => void;
+  processing: boolean;
 }
 
 export function ReturnCard({
@@ -45,6 +55,7 @@ export function ReturnCard({
   onRejectReasonChange,
   onRejectCancel,
   onNotifyChange,
+  processing,
 }: ReturnCardProps) {
   const nextStatuses = RETURN_STATUS_TRANSITIONS[req.status] || [];
 
@@ -145,6 +156,7 @@ export function ReturnCard({
                         key={status}
                         className={`${styles.statusButton} ${styles.rejectStatusButton}`}
                         onClick={() => onRejectModalOpen(req.id)}
+                        disabled={processing}
                       >
                         거절
                       </button>
@@ -156,6 +168,7 @@ export function ReturnCard({
                         key={status}
                         className={styles.statusButton}
                         onClick={() => onTrackingModalOpen(req.id)}
+                        disabled={processing}
                       >
                         수거중
                       </button>
@@ -167,8 +180,9 @@ export function ReturnCard({
                         key={status}
                         className={styles.statusButton}
                         onClick={() => onRefundComplete(req.id)}
+                        disabled={processing}
                       >
-                        환불 완료 처리
+                        {processing ? '처리 중...' : '환불 완료 처리'}
                       </button>
                     );
                   }
@@ -177,6 +191,7 @@ export function ReturnCard({
                       key={status}
                       className={styles.statusButton}
                       onClick={() => onStatusChange(req.id, status)}
+                      disabled={processing}
                     >
                       {status}
                     </button>
@@ -187,12 +202,22 @@ export function ReturnCard({
               {rejectModal === req.id && (
                 <div className={styles.trackingModal}>
                   <h4>거절 사유 입력</h4>
+                  <div className={styles.rejectTemplates}>
+                    {REJECT_REASON_TEMPLATES.map((tpl) => (
+                      <button
+                        key={tpl}
+                        className={styles.rejectTemplateBtn}
+                        onClick={() => onRejectReasonChange(tpl)}
+                      >
+                        {tpl}
+                      </button>
+                    ))}
+                  </div>
                   <textarea
                     className={styles.rejectTextarea}
                     value={rejectReason}
                     onChange={(e) => onRejectReasonChange(e.target.value)}
-                    placeholder="거절 사유를 입력하세요"
-                    autoFocus
+                    placeholder="거절 사유를 입력하거나 위에서 선택하세요"
                     rows={3}
                   />
                   <div className={styles.trackingModalButtons}>
@@ -204,15 +229,16 @@ export function ReturnCard({
                     </button>
                     <button
                       className={styles.trackingConfirmButton}
+                      disabled={processing}
                       onClick={() => {
                         if (!rejectReason.trim()) {
-                          alert('거절 사유를 입력해주세요.');
+                          showToast('거절 사유를 입력해주세요.', 'error');
                           return;
                         }
                         onStatusChange(req.id, ReturnStatus.REJECTED, { rejectReason: rejectReason.trim() });
                       }}
                     >
-                      거절 처리
+                      {processing ? '처리 중...' : '거절 처리'}
                     </button>
                   </div>
                 </div>
