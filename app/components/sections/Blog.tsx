@@ -25,7 +25,15 @@ export default async function Blog() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Blog</h2>
+        <div className={styles.sectionHeader}>
+          <div>
+            <p className={styles.eyebrow}>BROSPICK BLOG</p>
+            <h2 className={styles.title}>선수 이야기</h2>
+          </div>
+          <Link href="/interviews" className={styles.viewAll}>
+            전체 보기 <span>→</span>
+          </Link>
+        </div>
 
         <div className={styles.grid}>
           {featuredPosts.map((post, index) => (

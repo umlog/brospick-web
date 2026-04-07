@@ -21,29 +21,47 @@
   padding: 0 24px;
 }
 
-.title {
-  text-align: center;
-  margin-bottom: 16px;
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
 }
 
-.title::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+.eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.viewAll {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--anim-fast), gap var(--anim-fast);
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+.viewAll:hover {
+  color: var(--color-text-primary);
+  gap: 10px;
 }
 
 @keyframes fadeInUp {
@@ -158,8 +176,11 @@
     padding: 0 16px;
   }
 
-  .title {
-    font-size: 1.5rem;
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
   }
 
   .grid {
