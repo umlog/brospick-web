@@ -6,66 +6,143 @@
   z-index: 1000;
   background-color: var(--color-bg-primary);
   border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--anim-fast), border-color var(--anim-fast), backdrop-filter var(--anim-fast);
+}
+
+.header.scrolled {
+  background-color: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme='light'] .header.scrolled {
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 var(--space-md);
-  height: 100px;
+  height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .container {
+    height: 60px;
+  }
+}
+
+/* ===== 로고 ===== */
 .logo {
   display: flex;
   align-items: center;
   text-decoration: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--anim-fast);
+  z-index: 1100;
+  position: relative;
 }
 
 .logo:hover {
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .logoImage {
-  height: 50px;
+  height: 44px;
   width: auto;
   object-fit: contain;
 }
 
 @media (max-width: 768px) {
-  .container {
-    height: 70px;
-  }
-
   .logoImage {
-    height: 22px;
+    height: 24px;
   }
 }
 
+/* ===== 데스크탑 네비 ===== */
 .navDesktop {
   display: none;
-  gap: var(--space-lg);
+  align-items: center;
+  gap: var(--space-xl);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .navDesktop {
     display: flex;
   }
 }
 
 .navLink {
+  position: relative;
   font-size: var(--size-sm);
+  font-weight: 500;
+  letter-spacing: 0.05em;
   color: var(--color-text-secondary);
-  transition: color 0.3s ease;
+  text-decoration: none;
+  transition: color var(--anim-fast);
+  padding-bottom: 2px;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--anim-fast);
 }
 
 .navLink:hover {
-  color: var(--color-accent);
+  color: var(--color-text-primary);
 }
 
+.navLink:hover::after {
+  transform: scaleX(1);
+}
+
+/* ===== 카트 ===== */
+.cartLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  transition: color var(--anim-fast);
+  touch-action: manipulation;
+}
+
+.cartLink:hover {
+  color: var(--color-text-primary);
+}
+
+.cartIcon {
+  display: block;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--color-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ===== 테마 토글 ===== */
 .themeToggle {
   background: none;
   border: none;
@@ -74,26 +151,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation;
 }
 
 .toggleTrack {
-  width: 56px;
-  height: 28px;
+  width: 52px;
+  height: 26px;
   background: var(--color-bg-secondary);
-  border: 2px solid var(--color-border);
-  border-radius: 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color var(--anim-fast);
 }
 
 .themeToggle:hover .toggleTrack {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.1);
 }
 
 .toggleThumb {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   background: var(--color-accent);
   border-radius: 50%;
   position: absolute;
@@ -102,36 +179,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--anim-default);
   color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .toggleThumbDark {
-  transform: translateX(28px);
+  transform: translateX(26px);
 }
 
 .toggleIcon {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   stroke-width: 2.5;
 }
 
-.themeToggle:active .toggleThumb {
-  transform: scale(0.9);
-}
-
-.themeToggle:active .toggleThumbDark {
-  transform: translateX(28px) scale(0.9);
-}
-
+/* ===== 모바일 액션 영역 ===== */
 .mobileActions {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
+  z-index: 1100;
+  position: relative;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .mobileActions {
     display: none;
   }
@@ -146,90 +218,147 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-primary);
-  transition: color 0.3s ease;
+  transition: color var(--anim-fast);
+  touch-action: manipulation;
 }
 
-.themeToggleMobileIcon:hover {
-  color: var(--color-accent);
-}
-
+/* ===== 햄버거 → X 버튼 ===== */
 .menuButton {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  justify-content: center;
+  gap: 0;
   background: none;
   border: none;
   cursor: pointer;
   padding: var(--space-xs);
+  width: 36px;
+  height: 36px;
+  position: relative;
+  touch-action: manipulation;
 }
 
 .menuButton span {
+  position: absolute;
+  left: 6px;
   width: 24px;
-  height: 2px;
+  height: 1.5px;
   background-color: var(--color-text-primary);
-  transition: 0.3s ease;
+  border-radius: 2px;
+  transition: transform var(--anim-default), opacity var(--anim-fast);
 }
 
+.menuButton span:nth-child(1) {
+  top: 10px;
+}
+
+.menuButton span:nth-child(2) {
+  top: 17px;
+}
+
+.menuButton span:nth-child(3) {
+  top: 24px;
+}
+
+/* 열렸을 때 X 변환 */
+.menuButton.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menuButton.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menuButton.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== 모바일 풀스크린 메뉴 ===== */
 .navMobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: var(--color-bg-primary);
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-secondary);
-  padding: var(--space-md);
-  gap: var(--space-sm);
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-xl);
+  z-index: 1050;
+  animation: menuOpen 0.4s cubic-bezier(.6, 0, .4, 1) both;
+}
+
+@keyframes menuOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .navLinkMobile {
-  color: var(--color-text-secondary);
-  padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.themeToggleMobile {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary);
-  padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
-  font-size: var(--size-sm);
-  cursor: pointer;
-  text-align: left;
-  transition: color 0.3s ease;
-  font-family: var(--font-body);
-}
-
-.themeToggleMobile:hover {
-  color: var(--color-accent);
-}
-
-.cartLink {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  transition: opacity 0.3s ease;
-}
-
-.cartLink:hover {
-  opacity: 0.8;
-}
-
-.cartIcon {
-  font-size: 24px;
-  line-height: 1;
-}
-
-.cartBadge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: var(--color-accent);
-  color: var(--color-text-primary);
-  font-size: 10px;
+  font-size: 2.2rem;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 10px;
-  min-width: 18px;
-  text-align: center;
-  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: var(--space-sm) 0;
+  border-bottom: none;
+  transition: color var(--anim-fast), transform var(--anim-fast);
+  opacity: 0;
+  animation: linkFadeIn 0.5s var(--anim-default) both;
+}
+
+.navLinkMobile:nth-child(1) { animation-delay: 0.05s; }
+.navLinkMobile:nth-child(2) { animation-delay: 0.1s; }
+.navLinkMobile:nth-child(3) { animation-delay: 0.15s; }
+.navLinkMobile:nth-child(4) { animation-delay: 0.2s; }
+.navLinkMobile:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes linkFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navLinkMobile:hover {
+  color: var(--color-accent);
+  transform: translateX(6px);
+}
+
+.menuDivider {
+  width: 40px;
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-sm) 0;
+  opacity: 0;
+  animation: linkFadeIn 0.5s var(--anim-default) 0.3s both;
+}
+
+.menuCartLink {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--anim-fast);
+  opacity: 0;
+  animation: linkFadeIn 0.5s var(--anim-default) 0.32s both;
+  touch-action: manipulation;
+}
+
+.menuCartLink:hover {
+  color: var(--color-text-primary);
 }

@@ -24,10 +24,14 @@ export default function Hero() {
           src={txtLogo}
           alt="Brospick"
           className={styles.logo}
-          width={400}
+          width={420}
           height={150}
           priority
         />
+      </div>
+
+      <div className={styles.scrollIndicator}>
+        <div className={styles.scrollLine} />
       </div>
     </section>
   );

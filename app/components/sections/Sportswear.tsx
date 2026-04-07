@@ -11,6 +11,7 @@ const SLIDE_INTERVAL = 7000;
 export default function Sportswear() {
   const [current, setCurrent] = useState(0);
   const pausedRef = useRef(false);
+  const touchStartX = useRef<number | null>(null);
   const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
 
   useEffect(() => {
@@ -30,12 +31,31 @@ export default function Sportswear() {
     setCurrent((c) => (c + 1) % productList.length);
   }, []);
 
+  const prev = useCallback(() => {
+    setCurrent((c) => (c - 1 + productList.length) % productList.length);
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (!pausedRef.current) next();
     }, SLIDE_INTERVAL);
     return () => clearInterval(timer);
   }, [next]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    pausedRef.current = true;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 50) {
+      delta < 0 ? next() : prev();
+    }
+    touchStartX.current = null;
+    pausedRef.current = false;
+  };
 
   return (
     <section className={styles.section}>
@@ -46,6 +66,8 @@ export default function Sportswear() {
           className={styles.carousel}
           onMouseEnter={() => { pausedRef.current = true; }}
           onMouseLeave={() => { pausedRef.current = false; }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <div
             className={styles.track}

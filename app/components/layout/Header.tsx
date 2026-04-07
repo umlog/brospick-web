@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../../contexts/CartContext';
@@ -10,8 +10,23 @@ import symbolImg from '../../styles/symbol.svg';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { getTotalItems } = useCart();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // 메뉴 열릴 때 스크롤 잠금
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen]);
+
+  const closeMenu = () => setIsMenuOpen(false);
 
   const navItems = [
     { label: 'BROSPICK', href: '/#manifesto' },
@@ -20,9 +35,9 @@ export default function Header() {
   ];
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} onClick={closeMenu}>
           <Image
             src={symbolImg}
             alt="Brospick"
@@ -31,6 +46,7 @@ export default function Header() {
           />
         </Link>
 
+        {/* 데스크탑 네비 */}
         <nav className={styles.navDesktop}>
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className={styles.navLink}>
@@ -45,11 +61,7 @@ export default function Header() {
               <span className={styles.cartBadge}>{getTotalItems()}</span>
             )}
           </Link>
-          <button
-            onClick={toggleTheme}
-            className={styles.themeToggle}
-            aria-label="테마 전환"
-          >
+          <button onClick={toggleTheme} className={styles.themeToggle} aria-label="테마 전환">
             <div className={styles.toggleTrack}>
               <div className={`${styles.toggleThumb} ${theme === 'dark' ? styles.toggleThumbDark : ''}`}>
                 {theme === 'dark' ? (
@@ -74,12 +86,9 @@ export default function Header() {
           </button>
         </nav>
 
+        {/* 모바일 액션 */}
         <div className={styles.mobileActions}>
-          <button
-            onClick={toggleTheme}
-            className={styles.themeToggleMobileIcon}
-            aria-label="테마 전환"
-          >
+          <button onClick={toggleTheme} className={styles.themeToggleMobileIcon} aria-label="테마 전환">
             {theme === 'dark' ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="5" />
@@ -99,9 +108,10 @@ export default function Header() {
             )}
           </button>
           <button
-            className={styles.menuButton}
+            className={`${styles.menuButton} ${isMenuOpen ? styles.open : ''}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="메뉴"
+            aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+            aria-expanded={isMenuOpen}
           >
             <span />
             <span />
@@ -110,6 +120,7 @@ export default function Header() {
         </div>
       </div>
 
+      {/* 모바일 풀스크린 메뉴 */}
       {isMenuOpen && (
         <nav className={styles.navMobile}>
           {navItems.map((item) => (
@@ -117,16 +128,13 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={styles.navLinkMobile}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={closeMenu}
             >
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/cart"
-            className={styles.navLinkMobile}
-            onClick={() => setIsMenuOpen(false)}
-          >
+          <div className={styles.menuDivider} />
+          <Link href="/cart" className={styles.menuCartLink} onClick={closeMenu}>
             장바구니 {getTotalItems() > 0 && `(${getTotalItems()})`}
           </Link>
         </nav>

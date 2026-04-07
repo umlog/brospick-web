@@ -117,7 +117,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: transform var(--anim-default), box-shadow var(--anim-default), border-color var(--anim-fast);
   position: relative;
   overflow: hidden;
 }
@@ -236,7 +236,7 @@
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-left: none;
-  transition: all 0.3s ease;
+  transition: transform var(--anim-default), box-shadow var(--anim-default), border-color var(--anim-fast);
 }
 
 .imageWrapper:hover {
