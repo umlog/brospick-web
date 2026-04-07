@@ -7,6 +7,7 @@ import Blog from './components/sections/Blog';
 import Future from './components/sections/Future';
 // import PickerApp from './components/sections/PickerApp';
 import Sportswear from './components/sections/Sportswear';
+import BrandStory from './components/sections/BrandStory';
 // import Contact from './components/sections/Contact';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <>
       <Hero />
       <Sportswear />
+      <BrandStory />
       <Blog />
       <Manifesto />
       <Project />

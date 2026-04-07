@@ -114,7 +114,7 @@
 .columnList a {
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--anim-fast);
 }
 
 .columnList a:hover {
@@ -129,7 +129,7 @@
   color: var(--color-text-secondary);
   cursor: pointer;
   text-align: left;
-  transition: color 0.3s ease;
+  transition: color var(--anim-fast);
 }
 
 .legalBtn:hover {

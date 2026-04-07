@@ -1,0 +1,93 @@
+.section {
+  padding: 80px 0 100px;
+  overflow: hidden;
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* ===== 이미지 ===== */
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ===== 텍스트 ===== */
+.textCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+.heading {
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin: 0 0 28px;
+}
+
+.body {
+  font-size: var(--size-base);
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  margin: 0 0 16px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 4px;
+  transition: gap var(--anim-fast), border-color var(--anim-fast);
+  width: fit-content;
+}
+
+.cta:hover {
+  gap: 12px;
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0 72px;
+  }
+
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 0 var(--space-md);
+  }
+
+  .imageWrap {
+    aspect-ratio: 4 / 3;
+  }
+}

@@ -36,10 +36,18 @@
   --anim-fast: 0.3s cubic-bezier(.7, 0, .3, 1);
 
   /* 카드/버튼 공통 */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-pill: 999px;
+
+  /* 상태 색상 */
+  --color-accent-hover: #e02e24;
+  --color-error: #ff4d4f;
+  --color-error-bg: rgba(255, 77, 79, 0.1);
+  --color-warning: #ff9800;
+  --color-low-stock: #e53935;
 }
 
 /* 라이트 모드 */

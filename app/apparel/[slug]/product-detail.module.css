@@ -20,7 +20,7 @@
   margin-bottom: var(--space-xl);
   color: var(--color-text-secondary);
   font-size: var(--size-sm);
-  transition: color 0.3s ease;
+  transition: color var(--anim-fast);
 }
 
 .backLink:hover {
@@ -58,7 +58,7 @@
   aspect-ratio: 1;
   background-color: #111;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   cursor: grab;
 }
@@ -117,13 +117,14 @@
   height: 64px;
   min-width: 64px;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   overflow: hidden;
   cursor: pointer;
   padding: 0;
   background: none;
   opacity: 0.5;
-  transition: all 0.3s ease;
+  transition: opacity var(--anim-fast), border-color var(--anim-fast);
+  touch-action: manipulation;
 }
 
 @media (max-width: 480px) {
@@ -188,10 +189,10 @@
 .discountBadge {
   font-size: var(--size-base);
   font-weight: 700;
-  color: #ff4d4f;
-  background-color: rgba(255, 77, 79, 0.1);
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .shippingInfo {
@@ -204,7 +205,7 @@
   padding: var(--space-md) var(--space-lg);
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow-x: auto;
 }
 
@@ -251,9 +252,10 @@
   font-size: var(--size-base);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 4px;
+  transition: border-color var(--anim-fast), color var(--anim-fast), background-color var(--anim-fast);
+  border-radius: var(--radius-xs);
   min-width: 60px;
+  touch-action: manipulation;
 }
 
 .sizeButton:hover:not(:disabled) {
@@ -280,7 +282,7 @@
 
 .sizeButton.delayed {
   position: relative;
-  border-color: #ff9800;
+  border-color: var(--color-warning);
   color: var(--color-text-primary);
 }
 
@@ -288,7 +290,7 @@
   display: block;
   font-size: 10px;
   font-weight: 500;
-  color: #ff9800;
+  color: var(--color-warning);
   margin-top: 2px;
 }
 
@@ -306,12 +308,12 @@
   display: block;
   font-size: 10px;
   font-weight: 600;
-  color: #e53935;
+  color: var(--color-low-stock);
   margin-top: 2px;
 }
 
 .sizeButton.selected .lowStockLabel {
-  color: #ffcdd2;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .quantitySection {
@@ -329,7 +331,7 @@
 .quantityLowStock {
   font-size: var(--size-sm);
   font-weight: 600;
-  color: #e53935;
+  color: var(--color-low-stock);
 }
 
 .quantityControls {
@@ -348,11 +350,12 @@
   font-size: var(--size-xl);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 4px;
+  transition: background-color var(--anim-fast), border-color var(--anim-fast);
+  border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation;
 }
 
 .quantityButton:hover {
@@ -393,9 +396,10 @@
   font-size: var(--size-base);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 4px;
+  transition: background-color var(--anim-fast), border-color var(--anim-fast), color var(--anim-fast);
+  border-radius: var(--radius-xs);
   border: none;
+  touch-action: manipulation;
 }
 
 .addToCartButton {
@@ -420,7 +424,7 @@
 }
 
 .buyNowButton:hover {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-hover);
 }
 
 /* Accordion */
@@ -450,6 +454,7 @@
   font-size: var(--size-base);
   font-weight: 500;
   gap: var(--space-sm);
+  touch-action: manipulation;
 }
 
 .accordionHeader:hover {
@@ -464,7 +469,7 @@
 .accordionToggle {
   font-size: 1.25rem;
   font-weight: 300;
-  transition: transform 0.3s ease;
+  transition: transform var(--anim-fast);
   color: var(--color-text-secondary);
 }
 
@@ -589,7 +594,7 @@
   gap: var(--space-md);
   padding: var(--space-xl);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background-color: var(--color-bg-secondary);
 }
 
@@ -600,7 +605,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   padding: 6px 14px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .comingSoonNotice p {
@@ -632,7 +637,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color var(--anim-fast), width var(--anim-fast);
   flex-shrink: 0;
 }
 
@@ -709,11 +714,12 @@
   padding: 10px 16px;
   font-size: var(--size-sm);
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   cursor: pointer;
   border: none;
   min-height: 44px;
   white-space: nowrap;
+  touch-action: manipulation;
 }
 
 .stickyCartButton {
