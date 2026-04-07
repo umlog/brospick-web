@@ -37,6 +37,25 @@
   gap: 16px;
 }
 
+@media (max-width: 768px) {
+  .categoryCards {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* 양쪽 패딩으로 첫/마지막 카드 살짝 보이게 */
+    padding: 0 var(--space-md) 8px;
+    margin: 0 calc(-1 * var(--space-md));
+  }
+
+  .categoryCards::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .categoryCard {
   display: flex;
   flex-direction: column;
@@ -97,12 +116,17 @@
   }
 
   .categorySectionInner {
-    padding: 0 var(--space-md);
+    padding: 0;
   }
 
-  .categoryCards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  .categoryHeader {
+    padding: 0 var(--space-md);
+    margin-bottom: 28px;
+  }
+
+  .categoryCard {
+    flex: 0 0 140px;
+    scroll-snap-align: start;
   }
 
   .categoryCardLabel {
