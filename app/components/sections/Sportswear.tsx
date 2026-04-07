@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './sportswear.module.css';
@@ -11,6 +11,7 @@ type Filter = ProductCategory | typeof ALL;
 
 export default function Sportswear() {
   const [active, setActive] = useState<Filter>(ALL);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
 
   useEffect(() => {
@@ -29,6 +30,11 @@ export default function Sportswear() {
   const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
   const filtered = active === ALL ? productList : productList.filter((p) => p.category === active);
 
+  const changeCategory = (cat: Filter) => {
+    setActive(cat);
+    if (scrollRef.current) scrollRef.current.scrollLeft = 0;
+  };
+
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
@@ -42,7 +48,7 @@ export default function Sportswear() {
         <div className={styles.tabs}>
           <button
             className={`${styles.tab} ${active === ALL ? styles.tabActive : ''}`}
-            onClick={() => setActive(ALL)}
+            onClick={() => changeCategory(ALL)}
           >
             전체
           </button>
@@ -50,7 +56,7 @@ export default function Sportswear() {
             <button
               key={cat}
               className={`${styles.tab} ${active === cat ? styles.tabActive : ''}`}
-              onClick={() => setActive(cat)}
+              onClick={() => changeCategory(cat)}
             >
               {CATEGORY_LABELS[cat]}
             </button>
@@ -58,7 +64,7 @@ export default function Sportswear() {
         </div>
 
         {/* 가로 스크롤 카드 */}
-        <div className={styles.scrollTrack}>
+        <div className={styles.scrollTrack} ref={scrollRef}>
           {filtered.map((product) => {
             const dbPrice = dbPrices[product.id];
             const price = dbPrice?.price;
