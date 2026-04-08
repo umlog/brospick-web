@@ -102,23 +102,14 @@ export function PaymentSection({ formData, onInputChange, onConsentChange, onAll
         <h2>결제 방법</h2>
 
         <div className={styles.paymentMethodGroup}>
-          <label className={`${styles.paymentMethodOption} ${formData.paymentMethod === 'kakaopay' ? styles.paymentMethodSelected : ''}`}>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="kakaopay"
-              checked={formData.paymentMethod === 'kakaopay'}
-              onChange={onInputChange}
-            />
-            <span className={styles.paymentMethodLabel}>카카오페이</span>
-          </label>
-          <label className={`${styles.paymentMethodOption} ${formData.paymentMethod === 'bank' ? styles.paymentMethodSelected : ''}`}>
+          <label className={`${styles.paymentMethodOption} ${styles.paymentMethodSelected}`}>
             <input
               type="radio"
               name="paymentMethod"
               value="bank"
-              checked={formData.paymentMethod === 'bank'}
+              checked={true}
               onChange={onInputChange}
+              readOnly
             />
             <span className={styles.paymentMethodLabel}>무통장입금</span>
           </label>
