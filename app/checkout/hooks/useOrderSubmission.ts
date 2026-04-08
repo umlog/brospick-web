@@ -66,9 +66,6 @@ export function useOrderSubmission(
 
     const data = await res.json();
 
-    // 카카오 결제창으로 이동 전 장바구니 정리
-    clearCheckoutCart(checkoutItems);
-
     window.location.href = data.redirectUrl;
   };
 

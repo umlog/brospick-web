@@ -4,6 +4,8 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { BANK } from '../../lib/constants';
+import { useCart, CartItem } from '../contexts/CartContext';
+import { removePurchasedItems } from '../checkout/utils';
 import styles from './order-complete.module.css';
 
 function TransferButton({ amount }: { amount: number }) {
@@ -43,6 +45,7 @@ function OrderCompletePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const { clearCart } = useCart();
 
   useEffect(() => {
     const method = searchParams.get('method');
@@ -52,6 +55,21 @@ function OrderCompletePage() {
 
     // 카카오페이 결제 완료 (URL 파라미터로 전달)
     if (method === 'kakao' && orderNumber && amount) {
+      // 결제 성공 시점에 장바구니 정리
+      const storedItems = sessionStorage.getItem('checkoutItems');
+      if (storedItems) {
+        try {
+          const checkoutItems: CartItem[] = JSON.parse(storedItems);
+          const currentCart: CartItem[] = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
+          const updatedItems = removePurchasedItems(currentCart, checkoutItems);
+          localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
+          if (updatedItems.length === 0) clearCart();
+        } catch {
+          // 장바구니 정리 실패해도 주문 완료 페이지는 정상 표시
+        }
+        sessionStorage.removeItem('checkoutItems');
+      }
+
       setOrderData({
         orderNumber,
         totalAmount: parseInt(amount, 10),

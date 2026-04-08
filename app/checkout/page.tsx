@@ -8,6 +8,7 @@ import { ShippingForm } from './components/ShippingForm';
 import { PaymentSection } from './components/PaymentSection';
 import { OrderSummary } from './components/OrderSummary';
 import { formatPrice } from './utils';
+import { SHIPPING } from '../../lib/constants';
 import styles from './checkout-page.module.css';
 
 export default function CheckoutPage() {
@@ -50,7 +51,7 @@ export default function CheckoutPage() {
                 className={styles.submitButton}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? '주문 처리 중...' : `${formatPrice(selectedTotalPrice)} 주문하기`}
+                {isSubmitting ? '주문 처리 중...' : `${formatPrice(selectedTotalPrice + SHIPPING.fee)} 주문하기`}
               </button>
             </form>
             <OrderSummary

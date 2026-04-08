@@ -20,7 +20,8 @@
       "Bash(./deploy.sh)",
       "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
       "WebFetch(domain:lucier.kr)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

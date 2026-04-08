@@ -9,7 +9,7 @@ const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
 
 interface Props {
-  initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean }>;
+  initialPrices: Record<number, { price: number; original_price: number | null }>;
 }
 
 export default function Sportswear({ initialPrices }: Props) {
@@ -102,9 +102,8 @@ export default function Sportswear({ initialPrices }: Props) {
             const dbPrice = dbPrices[product.id];
             const price = dbPrice?.price;
             const originalPrice = dbPrice?.original_price ?? null;
-            const isComingSoon = dbPrice?.coming_soon ?? product.comingSoon;
 
-            if (isComingSoon) {
+            if (product.comingSoon) {
               return (
                 <div key={product.id} className={styles.card}>
                   <div className={styles.imageWrap}>
