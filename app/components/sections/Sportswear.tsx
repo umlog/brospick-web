@@ -8,25 +8,16 @@ import { productList, getDiscountPercent, CATEGORY_LABELS, ProductCategory, PROD
 const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
 
-export default function Sportswear() {
+interface Props {
+  initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean }>;
+}
+
+export default function Sportswear({ initialPrices }: Props) {
   const [active, setActive] = useState<Filter>(ALL);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
+  const dbPrices = initialPrices;
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-
-  useEffect(() => {
-    fetch('/api/products/prices')
-      .then((res) => res.json())
-      .then((data) => {
-        const map: Record<number, { price: number; original_price: number | null }> = {};
-        for (const item of data.prices || []) {
-          map[item.id] = { price: item.price, original_price: item.original_price };
-        }
-        setDbPrices(map);
-      })
-      .catch(() => {});
-  }, []);
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -111,8 +102,9 @@ export default function Sportswear() {
             const dbPrice = dbPrices[product.id];
             const price = dbPrice?.price;
             const originalPrice = dbPrice?.original_price ?? null;
+            const isComingSoon = dbPrice?.coming_soon ?? product.comingSoon;
 
-            if (product.comingSoon) {
+            if (isComingSoon) {
               return (
                 <div key={product.id} className={styles.card}>
                   <div className={styles.imageWrap}>

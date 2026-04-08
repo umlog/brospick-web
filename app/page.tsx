@@ -9,12 +9,24 @@ import Future from './components/sections/Future';
 import Sportswear from './components/sections/Sportswear';
 import BrandStory from './components/sections/BrandStory';
 // import Contact from './components/sections/Contact';
+import { supabaseAdmin } from '@/lib/supabase';
 
-export default function Home() {
+async function getPrices(): Promise<Record<number, { price: number; original_price: number | null; coming_soon: boolean }>> {
+  const { data } = await supabaseAdmin.from('products').select('id, price, original_price, coming_soon');
+  const map: Record<number, { price: number; original_price: number | null; coming_soon: boolean }> = {};
+  for (const item of data || []) {
+    map[item.id] = { price: item.price, original_price: item.original_price, coming_soon: item.coming_soon ?? false };
+  }
+  return map;
+}
+
+export default async function Home() {
+  const prices = await getPrices();
+
   return (
     <>
       <Hero />
-      <Sportswear />
+      <Sportswear initialPrices={prices} />
       <BrandStory />
       <Blog />
       <Manifesto />
