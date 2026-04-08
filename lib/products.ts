@@ -269,7 +269,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_GRAY,
     name: 'Quarter-Zip Training Top (Gray)',
     category: 'training-top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
@@ -315,7 +315,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_GRAY,
     name: 'Running Long Sleeve Top (Gray)',
     category: 'long-sleeve',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
     images: [
       '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
@@ -368,7 +368,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_BLACK,
     name: 'Running Long Sleeve Top (Black)',
     category: 'long-sleeve',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
     images: [
       '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
@@ -755,7 +755,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.CROSS_C_TAPING_BLACK,
     name: 'Cross C Taping (Black)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
     images: [
       '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
@@ -792,7 +792,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.CROSS_C_TAPING_GOLD,
     name: 'Cross C Taping (Gold)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
     images: [
       '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
@@ -829,7 +829,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.PHILIPPIANS_413_C_TAPING,
     name: 'Philippians 4:13 C Taping',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
     images: [
       '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
@@ -888,9 +888,9 @@ export const products: Record<ProductSlug, Product> = {
     ],
     sizeChartType: 'pants',
     sizeChart: [
-      { size: 'M',   length: 95,  hip: 103, waist: 75, rise: 28, hem: 26 },
-      { size: 'L',   length: 97,  hip: 107, waist: 78, rise: 29, hem: 27 },
-      { size: 'XL',  length: 99,  hip: 111, waist: 81, rise: 30, hem: 28 },
+      { size: 'M', length: 95, hip: 103, waist: 75, rise: 28, hem: 26 },
+      { size: 'L', length: 97, hip: 107, waist: 78, rise: 29, hem: 27 },
+      { size: 'XL', length: 99, hip: 111, waist: 81, rise: 30, hem: 28 },
       { size: '2XL', length: 101, hip: 115, waist: 83, rise: 31, hem: 29 },
     ],
     details: {
@@ -937,9 +937,9 @@ export const products: Record<ProductSlug, Product> = {
     ],
     sizeChartType: 'pants',
     sizeChart: [
-      { size: 'M',   length: 95,  hip: 103, waist: 75, rise: 28, hem: 26 },
-      { size: 'L',   length: 97,  hip: 107, waist: 78, rise: 29, hem: 27 },
-      { size: 'XL',  length: 99,  hip: 111, waist: 81, rise: 30, hem: 28 },
+      { size: 'M', length: 95, hip: 103, waist: 75, rise: 28, hem: 26 },
+      { size: 'L', length: 97, hip: 107, waist: 78, rise: 29, hem: 27 },
+      { size: 'XL', length: 99, hip: 111, waist: 81, rise: 30, hem: 28 },
       { size: '2XL', length: 101, hip: 115, waist: 83, rise: 31, hem: 29 },
     ],
     details: {
