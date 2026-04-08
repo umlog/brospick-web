@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withErrorHandler, apiError } from '@/lib/errors';
 import { orderService } from '@/lib/services';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getKakaoPayConfig } from '@/lib/kakao-pay';
+import { OrderStatus } from '@/lib/domain/enums';
 
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
     const body = await request.json();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || '';
-    const secretKey = process.env.KAKAO_PAY_SECRET_KEY;
-    const cid = process.env.KAKAO_PAY_CID;
 
-    if (!secretKey || !cid) {
+    let kakaoConfig;
+    try {
+      kakaoConfig = getKakaoPayConfig();
+    } catch {
       return apiError('카카오페이 설정이 없습니다.', 500);
     }
 
@@ -18,9 +21,10 @@ export async function POST(request: NextRequest) {
       customerName, customerPhone, customerEmail,
       postalCode, address, addressDetail,
       totalAmount, shippingFee, deliveryNote, items,
+      privacyConsent, thirdPartyConsent, marketingConsent,
     } = body;
 
-    // 주문 먼저 생성 (kakao_tid는 나중에 업데이트)
+    // 주문 생성 (재고 차감/알림은 approve 시점에 처리)
     let orderNumber: string;
     try {
       const result = await orderService.createOrder(
@@ -28,8 +32,11 @@ export async function POST(request: NextRequest) {
           customerName, customerPhone, customerEmail,
           postalCode, address, addressDetail,
           totalAmount, shippingFee, deliveryNote, items,
+          privacyConsent, thirdPartyConsent, marketingConsent,
+          paymentMethod: '카카오페이',
         },
-        siteUrl
+        siteUrl,
+        { skipStockDecrement: true, skipNotification: true }
       );
       orderNumber = result.orderNumber;
     } catch (err: unknown) {
@@ -46,11 +53,11 @@ export async function POST(request: NextRequest) {
     const kakaoRes = await fetch('https://open-api.kakaopay.com/online/v1/payment/ready', {
       method: 'POST',
       headers: {
-        'Authorization': `SECRET_KEY ${secretKey}`,
+        'Authorization': `SECRET_KEY ${kakaoConfig.secretKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        cid,
+        cid: kakaoConfig.cid,
         partner_order_id: orderNumber,
         partner_user_id: customerPhone,
         item_name: itemName,
@@ -74,10 +81,10 @@ export async function POST(request: NextRequest) {
 
     const kakaoData = await kakaoRes.json();
 
-    // 주문에 kakao_tid 업데이트
+    // 주문 상태를 '카카오페이 결제중'으로 변경 + TID 저장
     await supabaseAdmin
       .from('orders')
-      .update({ kakao_tid: kakaoData.tid })
+      .update({ kakao_tid: kakaoData.tid, status: OrderStatus.KAKAO_PAY_PENDING })
       .eq('order_number', orderNumber);
 
     const isMobile = /Android|iPhone|iPad|iPod/i.test(request.headers.get('user-agent') || '');

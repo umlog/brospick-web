@@ -244,6 +244,12 @@
   border: 1px solid rgba(34, 197, 94, 0.25);
 }
 
+.statusKakaoPending {
+  background-color: rgba(255, 193, 7, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
 .statusDelay {
   background-color: rgba(245, 158, 11, 0.12);
   color: #f59e0b;

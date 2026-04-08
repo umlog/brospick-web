@@ -31,7 +31,13 @@ interface CreateOrderPayload {
   privacyConsent?: boolean;
   thirdPartyConsent?: boolean;
   marketingConsent?: boolean;
+  paymentMethod?: string;
   items: CreateOrderItem[];
+}
+
+interface CreateOrderOptions {
+  skipStockDecrement?: boolean;
+  skipNotification?: boolean;
 }
 
 function generateOrderNumber(): string {
@@ -64,12 +70,13 @@ export class OrderService {
   }
 
   // 주문 생성
-  async createOrder(payload: CreateOrderPayload, siteUrl: string) {
+  async createOrder(payload: CreateOrderPayload, siteUrl: string, options: CreateOrderOptions = {}) {
     const {
       customerName, customerPhone, customerEmail,
       postalCode, address, addressDetail,
       totalAmount, shippingFee, depositorName, deliveryNote,
-      privacyConsent, thirdPartyConsent, marketingConsent, items,
+      privacyConsent, thirdPartyConsent, marketingConsent,
+      paymentMethod, items,
     } = payload;
 
     // 필수 필드 검증
@@ -131,7 +138,7 @@ export class OrderService {
         privacy_consent: privacyConsent ?? true,
         third_party_consent: thirdPartyConsent ?? true,
         marketing_consent: marketingConsent ?? false,
-        payment_method: '무통장입금',
+        payment_method: paymentMethod ?? '무통장입금',
         status: OrderStatus.PENDING_PAYMENT,
       })
       .select()
@@ -157,16 +164,15 @@ export class OrderService {
       console.error('Order items creation error:', itemsError);
     }
 
-    // 재고 즉시 차감 (주문 생성 시점에 재고 선점)
-    // 주의: updateOrderStatus에서 입금확인 전환 시 추가 차감이 발생하는 이중 차감 버그가 있음.
-    // 트래픽이 높아지면 아래 두 가지를 함께 수정할 것:
-    //   1. 이 줄을 제거하고 입금확인 시점에만 차감
-    //   2. deleteOrder에서 PENDING_PAYMENT 상태도 재고 복구 대상에 포함
-    inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
-      console.error('Stock decrement failed:', err)
-    );
+    // 재고 즉시 차감 (무통장입금만 - 카카오페이는 approve 시점에 차감)
+    if (!options.skipStockDecrement) {
+      inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
+        console.error('Stock decrement failed:', err)
+      );
+    }
 
-    // 알림 발송 (비동기)
+    // 알림 발송 (비동기, 카카오페이는 approve 시점에 발송)
+    if (!options.skipNotification) {
     notificationService.notifyOrderCreated({
       orderNumber: order.order_number,
       customerName,
@@ -185,6 +191,7 @@ export class OrderService {
       addressDetail: addressDetail ?? null,
       siteUrl,
     });
+    }
 
     return {
       orderNumber: order.order_number,

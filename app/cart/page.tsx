@@ -5,8 +5,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { SHIPPING } from '../../lib/constants';
-import { PRODUCT_FALLBACK_IMAGE } from '../../lib/products';
+import { PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory, productList } from '../../lib/products';
 import styles from './cart-page.module.css';
+
+const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
+
+function getCategoryImage(category: ProductCategory): string {
+  return productList.find((p) => p.category === category)?.image ?? PRODUCT_FALLBACK_IMAGE;
+}
 
 export default function CartPage() {
   const router = useRouter();
@@ -68,9 +74,24 @@ export default function CartPage() {
           <h1>장바구니</h1>
           <div className={styles.emptyCart}>
             <p>장바구니가 비어있습니다.</p>
-            <Link href="/apparel" className={styles.shopLink}>
-              쇼핑하러 가기 →
-            </Link>
+          </div>
+
+          <div className={styles.emptyCategories}>
+            <p className={styles.emptyCategoriesLabel}>카테고리 둘러보기</p>
+            <div className={styles.emptyCategoryGrid}>
+              {usedCategories.map((cat) => (
+                <Link key={cat} href={`/apparel?category=${cat}`} className={styles.emptyCategoryCard}>
+                  <div className={styles.emptyCategoryImage}>
+                    <img
+                      src={getCategoryImage(cat)}
+                      alt={CATEGORY_LABELS[cat]}
+                      onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                    />
+                  </div>
+                  <span className={styles.emptyCategoryCardLabel}>{CATEGORY_LABELS[cat]}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </main>

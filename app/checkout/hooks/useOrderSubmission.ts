@@ -23,37 +23,72 @@ export function useOrderSubmission(
       return;
     }
 
+    if (formData.paymentMethod === 'bank' && !formData.depositorName.trim()) {
+      alert('입금자명을 입력해 주세요.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
-      const data = await apiClient.orders.create(payload);
-
-      const currentCart: CartItem[] = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
-      const updatedItems = removePurchasedItems(currentCart, checkoutItems);
-
-      localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
-      sessionStorage.removeItem('checkoutItems');
-
-      if (updatedItems.length === 0) {
-        clearCart();
+      if (formData.paymentMethod === 'kakaopay') {
+        await handleKakaoPaySubmit();
+      } else {
+        await handleBankSubmit();
       }
-
-      sessionStorage.setItem(
-        'orderComplete',
-        JSON.stringify({
-          orderNumber: data.orderNumber,
-          totalAmount: data.totalAmount,
-          shippingFee: data.shippingFee,
-          depositorName: formData.depositorName,
-        })
-      );
-      setIsSubmitting(false);
-      router.push('/order-complete');
     } catch (error) {
       alert(error instanceof Error ? error.message : '주문에 실패했습니다. 다시 시도해주세요.');
       setIsSubmitting(false);
     }
+  };
+
+  const clearCheckoutCart = (checkoutItems: CartItem[]) => {
+    const currentCart: CartItem[] = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
+    const updatedItems = removePurchasedItems(currentCart, checkoutItems);
+    localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
+    sessionStorage.removeItem('checkoutItems');
+    if (updatedItems.length === 0) clearCart();
+  };
+
+  const handleKakaoPaySubmit = async () => {
+    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
+
+    const res = await fetch('/api/payment/kakao/ready', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || '카카오페이 결제 준비에 실패했습니다.');
+    }
+
+    const data = await res.json();
+
+    // 카카오 결제창으로 이동 전 장바구니 정리
+    clearCheckoutCart(checkoutItems);
+
+    window.location.href = data.redirectUrl;
+  };
+
+  const handleBankSubmit = async () => {
+    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
+    const data = await apiClient.orders.create(payload);
+
+    clearCheckoutCart(checkoutItems);
+
+    sessionStorage.setItem(
+      'orderComplete',
+      JSON.stringify({
+        orderNumber: data.orderNumber,
+        totalAmount: data.totalAmount,
+        shippingFee: data.shippingFee,
+        depositorName: formData.depositorName,
+      })
+    );
+    setIsSubmitting(false);
+    router.push('/order-complete');
   };
 
   return { isSubmitting, handleSubmit };

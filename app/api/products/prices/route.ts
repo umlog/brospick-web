@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+
 // 상품 가격 조회 (공개)
 export async function GET() {
   try {

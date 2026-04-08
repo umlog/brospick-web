@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { CONTACT, RETURN_POLICY, TRACKING } from '../../lib/constants';
 import { OrderStatus, ReturnStatus } from '../../lib/domain/enums';
 import { getProductByName } from '../../lib/products';
@@ -70,6 +70,7 @@ const RETURN_STATUS_LABELS: Partial<Record<ReturnStatus, { color: string; bg: st
 
 export default function FloatingTracker() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('track');
 
@@ -654,6 +655,8 @@ export default function FloatingTracker() {
       </div>
     );
   };
+
+  if (pathname !== '/') return null;
 
   return (
     <>

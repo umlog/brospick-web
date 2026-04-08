@@ -15,6 +15,7 @@ export function formatDate(dateStr: string): string {
 export function getStatusColor(status: string): string {
   switch (status) {
     case OrderStatus.PENDING_PAYMENT: return styles.statusPending;
+    case OrderStatus.KAKAO_PAY_PENDING: return styles.statusKakaoPending;
     case OrderStatus.PAYMENT_CONFIRMED: return styles.statusConfirmed;
     case '배송준비': return styles.statusPreparing;
     case OrderStatus.SHIPPING: return styles.statusShipping;

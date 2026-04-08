@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, checkAdminSession } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+
 // 사이즈 가용성 및 재고 조회 (공개)
 export async function GET() {
   try {

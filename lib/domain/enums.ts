@@ -6,6 +6,7 @@
 // 주문 상태
 export enum OrderStatus {
   PENDING_PAYMENT = '입금대기',
+  KAKAO_PAY_PENDING = '카카오페이 결제중',
   PAYMENT_CONFIRMED = '입금확인',
   SHIPPING = '배송중',
   DELIVERED = '배송완료',

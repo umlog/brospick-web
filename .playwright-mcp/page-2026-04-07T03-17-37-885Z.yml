@@ -1,0 +1,237 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - generic [ref=e6]:
+        - button "테마 전환" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - button "메뉴 열기" [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - img "Brospick" [ref=e22]
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - paragraph [ref=e26]: COLLECTION
+        - heading "브로스픽 의류" [level=2] [ref=e27]
+      - generic [ref=e28]:
+        - button "전체" [ref=e29] [cursor=pointer]
+        - button "트레이닝 탑" [ref=e30] [cursor=pointer]
+        - button "반팔" [ref=e31] [cursor=pointer]
+        - button "긴팔" [ref=e32] [cursor=pointer]
+        - button "후드" [ref=e33] [cursor=pointer]
+        - button "반바지" [ref=e34] [cursor=pointer]
+        - button "테이핑" [ref=e35] [cursor=pointer]
+        - button "팬츠" [ref=e36] [cursor=pointer]
+      - generic [ref=e37]:
+        - link "Half-Zip Training Top Half-Zip Training Top" [ref=e38] [cursor=pointer]:
+          - /url: /apparel/half-zip-training-top
+          - img "Half-Zip Training Top" [ref=e40]
+          - paragraph [ref=e42]: Half-Zip Training Top
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - img "Quarter-Zip Training Top (Black)" [ref=e45]
+            - generic [ref=e47]: COMING SOON
+          - paragraph [ref=e49]: Quarter-Zip Training Top (Black)
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - img "Camel Gray Short Sleeve" [ref=e52]
+            - generic [ref=e54]: COMING SOON
+          - paragraph [ref=e56]: Camel Gray Short Sleeve
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - img "Quarter-Zip Training Top (Gray)" [ref=e59]
+            - generic [ref=e61]: COMING SOON
+          - paragraph [ref=e63]: Quarter-Zip Training Top (Gray)
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - img "Running Long Sleeve Top (Gray)" [ref=e66]
+            - generic [ref=e68]: COMING SOON
+          - paragraph [ref=e70]: Running Long Sleeve Top (Gray)
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - img "Running Long Sleeve Top (Black)" [ref=e73]
+            - generic [ref=e75]: COMING SOON
+          - paragraph [ref=e77]: Running Long Sleeve Top (Black)
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - img "GRID ZIP HOODIE" [ref=e80]
+            - generic [ref=e82]: COMING SOON
+          - paragraph [ref=e84]: GRID ZIP HOODIE
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - img "Tech Training Shorts (Black)" [ref=e87]
+            - generic [ref=e89]: COMING SOON
+          - paragraph [ref=e91]: Tech Training Shorts (Black)
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - img "Tech Training Shorts (Gray)" [ref=e94]
+            - generic [ref=e96]: COMING SOON
+          - paragraph [ref=e98]: Tech Training Shorts (Gray)
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - img "Motion Tech Shorts (Black)" [ref=e101]
+            - generic [ref=e103]: COMING SOON
+          - paragraph [ref=e105]: Motion Tech Shorts (Black)
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - img "Quarter-Zip Flex (Blue)" [ref=e108]
+            - generic [ref=e110]: COMING SOON
+          - paragraph [ref=e112]: Quarter-Zip Flex (Blue)
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - img "Motion Tech Shorts (Gray)" [ref=e115]
+            - generic [ref=e117]: COMING SOON
+          - paragraph [ref=e119]: Motion Tech Shorts (Gray)
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - img "Quarter-Zip Flex (Light Green)" [ref=e122]
+            - generic [ref=e124]: COMING SOON
+          - paragraph [ref=e126]: Quarter-Zip Flex (Light Green)
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - img "Cross C Taping (Black)" [ref=e129]
+            - generic [ref=e131]: COMING SOON
+          - paragraph [ref=e133]: Cross C Taping (Black)
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - img "Cross C Taping (Gold)" [ref=e136]
+            - generic [ref=e138]: COMING SOON
+          - paragraph [ref=e140]: Cross C Taping (Gold)
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - img "Philippians 4:13 C Taping" [ref=e143]
+            - generic [ref=e145]: COMING SOON
+          - paragraph [ref=e147]: Philippians 4:13 C Taping
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - img "Motion Tech Pants (Black)" [ref=e150]
+            - generic [ref=e152]: COMING SOON
+          - paragraph [ref=e154]: Motion Tech Pants (Black)
+        - generic [ref=e155]:
+          - generic [ref=e156]:
+            - img "Motion Tech Pants (Gray)" [ref=e157]
+            - generic [ref=e159]: COMING SOON
+          - paragraph [ref=e161]: Motion Tech Pants (Gray)
+      - link "모두 보기" [ref=e163] [cursor=pointer]:
+        - /url: /apparel
+    - generic [ref=e165]:
+      - img "브로스픽 스포츠웨어" [ref=e169]
+      - generic [ref=e171]:
+        - paragraph [ref=e172]: BROSPICK SPORTSWEAR
+        - heading "브로스픽은 선수의 움직임에 맞게 설계합니다." [level=2] [ref=e173]:
+          - text: 브로스픽은 선수의 움직임에
+          - text: 맞게 설계합니다.
+        - paragraph [ref=e174]: 트레이닝의 모든 순간을 함께하는 의류. 경기장 밖에서도 선수다운 스타일을 유지할 수 있도록, 기능성과 디자인을 동시에 담았습니다.
+        - paragraph [ref=e175]: 브로스픽 스포츠웨어는 단순한 운동복이 아닙니다. 선수가 자신을 표현하는 방식입니다.
+        - link "컬렉션 보기 →" [ref=e176] [cursor=pointer]:
+          - /url: /apparel
+          - text: 컬렉션 보기
+          - generic [ref=e177]: →
+    - generic [ref=e179]:
+      - generic [ref=e180]:
+        - generic [ref=e181]:
+          - paragraph [ref=e182]: BROSPICK BLOG
+          - heading "선수 이야기" [level=2] [ref=e183]
+        - link "전체 보기 →" [ref=e184] [cursor=pointer]:
+          - /url: /interviews
+          - text: 전체 보기
+          - generic [ref=e185]: →
+      - generic [ref=e186]:
+        - link "유은철 유은철 동국대학교 · LW, RB 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기. 더 알아보기 →" [ref=e187] [cursor=pointer]:
+          - /url: /interviews/5
+          - img "유은철" [ref=e189]
+          - generic [ref=e190]:
+            - heading "유은철" [level=3] [ref=e191]
+            - paragraph [ref=e192]: 동국대학교 · LW, RB
+            - paragraph [ref=e193]: 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기.
+            - generic [ref=e194]: 더 알아보기 →
+        - link "이은표 이은표 Canberra White Eagles (호주 NPL) · LW, RW, ST 10년 사이드백에서 공격수로 전향, 진주시민축구단을 거쳐 브로스픽을 통해 호주 NPL Canberra White Eagles에 진출한 이은표 선수의 이야기. 더 알아보기 →" [ref=e195] [cursor=pointer]:
+          - /url: /interviews/4
+          - img "이은표" [ref=e197]
+          - generic [ref=e198]:
+            - heading "이은표" [level=3] [ref=e199]
+            - paragraph [ref=e200]: Canberra White Eagles (호주 NPL) · LW, RW, ST
+            - paragraph [ref=e201]: 10년 사이드백에서 공격수로 전향, 진주시민축구단을 거쳐 브로스픽을 통해 호주 NPL Canberra White Eagles에 진출한 이은표 선수의 이야기.
+            - generic [ref=e202]: 더 알아보기 →
+        - link "김준용 김준용 Sydney Olympic FC (호주 NPL NSW) · CM, DMF, AMF 국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기. 더 알아보기 →" [ref=e203] [cursor=pointer]:
+          - /url: /interviews/3
+          - img "김준용" [ref=e205]
+          - generic [ref=e206]:
+            - heading "김준용" [level=3] [ref=e207]
+            - paragraph [ref=e208]: Sydney Olympic FC (호주 NPL NSW) · CM, DMF, AMF
+            - paragraph [ref=e209]: 국내 상위리그의 벽 앞에서 포기하지 않고, 브로스픽을 통해 호주 NPL NSW Sydney Olympic FC에 입단한 김준용 선수의 이야기.
+            - generic [ref=e210]: 더 알아보기 →
+    - generic [ref=e212]:
+      - heading "BROSPICK" [level=2] [ref=e214]
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - generic [ref=e218]:
+            - heading "브로스픽의 철학" [level=3] [ref=e219]
+            - paragraph [ref=e220]: 브로스픽은 한국 축구 선수들이 마주한 현실적인 한계를 깨기 위해 탄생했습니다. 선수를 위한 새로운 시스템이 필요하다는 믿음에서 시작됐습니다.
+          - generic [ref=e221]:
+            - button "Previous slide" [ref=e222] [cursor=pointer]: ‹
+            - generic [ref=e223]:
+              - button "Go to slide 1" [ref=e224] [cursor=pointer]
+              - button "Go to slide 2" [ref=e225] [cursor=pointer]
+              - button "Go to slide 3" [ref=e226] [cursor=pointer]
+            - button "Next slide" [ref=e227] [cursor=pointer]: ›
+        - img "Manifesto" [ref=e230]
+    - generic [ref=e232]:
+      - heading "What We Do" [level=2] [ref=e234]
+      - generic [ref=e236]:
+        - paragraph [ref=e237]: 시스템이 놓친 선수, 우리가 다시 선택합니다.
+        - paragraph [ref=e238]: 우리는 유명한 선수를 찾지 않습니다.
+        - paragraph [ref=e239]: 사라지기엔 아까운 선수를 찾습니다.
+        - paragraph [ref=e240]: 평가가 아니라, 발견을 위해 움직입니다.
+      - generic [ref=e241]:
+        - generic [ref=e243]:
+          - generic [ref=e244]:
+            - generic [ref=e245]: "1"
+            - heading "선수 발굴" [level=3] [ref=e246]
+          - paragraph [ref=e247]: 무명 대학 선수부터 성인·하부리그 선수까지 직접 찾습니다
+        - generic [ref=e249]:
+          - generic [ref=e250]:
+            - generic [ref=e251]: "2"
+            - heading "해외 리그 진출 서포트" [level=3] [ref=e252]
+          - paragraph [ref=e253]: 기존 에이전시의 높은 비용 구조를 변화시킵니다.
+        - generic [ref=e255]:
+          - generic [ref=e256]:
+            - generic [ref=e257]: "3"
+            - heading "선수 홍보" [level=3] [ref=e258]
+          - paragraph [ref=e259]: 의류 협찬 및 인터뷰·플레이 영상으로 선수를 시장에 노출합니다
+        - generic [ref=e261]:
+          - generic [ref=e262]:
+            - generic [ref=e263]: "4"
+            - heading "브로스픽의 플랫폼화" [level=3] [ref=e264]
+          - paragraph [ref=e265]: 컨텐츠를 넘어, 기록·연결·커뮤니티를 담은 어플을 준비 중입니다.
+    - generic [ref=e267]:
+      - heading "Our Services" [level=2] [ref=e269]
+      - generic [ref=e270]:
+        - generic [ref=e272]:
+          - generic [ref=e273]:
+            - generic [ref=e274]: "01"
+            - heading "해외리그 진출 서포트" [level=3] [ref=e275]
+          - paragraph [ref=e276]: 해외리그 기회를 얻기 원하는 선수의 진출 기회를 연결합니다.
+        - generic [ref=e278]:
+          - generic [ref=e279]:
+            - generic [ref=e280]: "02"
+            - heading "개인/팀 웨어" [level=3] [ref=e281]
+          - paragraph [ref=e282]: 각 팀마다 비슷한 디자인 웨어에서 벗어나, 트렌드와 협업으로 새로운 스타일을 제안합니다.
+        - generic [ref=e284]:
+          - generic [ref=e285]:
+            - generic [ref=e286]: "03"
+            - heading "선수 기록 플랫폼" [level=3] [ref=e287]
+          - paragraph [ref=e288]: 선수 개인 커리어를 기반으로 해외 진출 기회를 연결하는 플레이어 마켓형 플랫폼입니다.
+  - contentinfo [ref=e289]:
+    - generic [ref=e290]:
+      - img "Brospick" [ref=e292]
+      - button "지원 +" [ref=e294] [cursor=pointer]:
+        - generic [ref=e295]: 지원
+        - generic [ref=e296]: +
+      - button "BROSPICK +" [ref=e298] [cursor=pointer]:
+        - generic [ref=e299]: BROSPICK
+        - generic [ref=e300]: +
+    - paragraph [ref=e303]: © 2026 BROSPICK. All rights reserved.
+  - button "주문 도우미" [ref=e304] [cursor=pointer]:
+    - img [ref=e305]

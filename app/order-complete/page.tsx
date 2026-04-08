@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { BANK } from '../../lib/constants';
 import styles from './order-complete.module.css';
@@ -36,17 +36,37 @@ interface OrderData {
   totalAmount: number;
   shippingFee: number;
   depositorName: string;
+  paymentMethod?: 'kakaopay' | 'bank';
 }
 
-export default function OrderCompletePage() {
+function OrderCompletePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
 
   useEffect(() => {
+    const method = searchParams.get('method');
+    const orderNumber = searchParams.get('order');
+    const amount = searchParams.get('amount');
+    const shippingFee = searchParams.get('shippingFee');
+
+    // 카카오페이 결제 완료 (URL 파라미터로 전달)
+    if (method === 'kakao' && orderNumber && amount) {
+      setOrderData({
+        orderNumber,
+        totalAmount: parseInt(amount, 10),
+        shippingFee: parseInt(shippingFee || '0', 10),
+        depositorName: '',
+        paymentMethod: 'kakaopay',
+      });
+      return;
+    }
+
+    // 무통장입금 (sessionStorage로 전달)
     const stored = sessionStorage.getItem('orderComplete');
     if (stored) {
       try {
-        setOrderData(JSON.parse(stored));
+        setOrderData({ ...JSON.parse(stored), paymentMethod: 'bank' });
         sessionStorage.removeItem('orderComplete');
       } catch {
         router.push('/');
@@ -54,11 +74,13 @@ export default function OrderCompletePage() {
     } else {
       router.push('/');
     }
-  }, [router]);
+  }, [router, searchParams]);
 
   if (!orderData) {
     return null;
   }
+
+  const isKakao = orderData.paymentMethod === 'kakaopay';
 
   return (
     <main className={styles.main}>
@@ -73,36 +95,56 @@ export default function OrderCompletePage() {
         <h1 className={styles.title}>주문이 완료되었습니다</h1>
         <p className={styles.orderNumber}>주문번호: {orderData.orderNumber}</p>
 
-        <div className={styles.bankSection}>
-          <h2>입금 안내</h2>
-          <div className={styles.bankCard}>
-            <div className={styles.bankRow}>
-              <span className={styles.bankLabel}>입금 은행</span>
-              <span className={styles.bankValue}>{BANK.name}</span>
+        {isKakao ? (
+          <div className={styles.bankSection}>
+            <h2>결제 완료</h2>
+            <div className={styles.bankCard}>
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>결제 수단</span>
+                <span className={styles.bankValue}>카카오페이</span>
+              </div>
+              <div className={styles.divider} />
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>결제 금액</span>
+                <span className={styles.bankAmount}>₩{orderData.totalAmount.toLocaleString()}</span>
+              </div>
             </div>
-            <div className={styles.bankRow}>
-              <span className={styles.bankLabel}>계좌번호</span>
-              <span className={styles.bankValue}>{BANK.account}</span>
-            </div>
-            <div className={styles.bankRow}>
-              <span className={styles.bankLabel}>예금주</span>
-              <span className={styles.bankValue}>{BANK.holder}</span>
-            </div>
-            <div className={styles.divider} />
-            <div className={styles.bankRow}>
-              <span className={styles.bankLabel}>입금 금액</span>
-              <span className={styles.bankAmount}>₩{orderData.totalAmount.toLocaleString()}</span>
-            </div>
-            <div className={styles.bankRow}>
-              <span className={styles.bankLabel}>입금자명</span>
-              <span className={styles.bankValue}>{orderData.depositorName}</span>
-            </div>
+            <p className={styles.notice}>
+              결제가 정상적으로 완료되었습니다. 주문 확인 후 배송이 진행됩니다.
+            </p>
           </div>
-          <TransferButton amount={orderData.totalAmount} />
-          <p className={styles.notice}>
-            {BANK.notice}
-          </p>
-        </div>
+        ) : (
+          <div className={styles.bankSection}>
+            <h2>입금 안내</h2>
+            <div className={styles.bankCard}>
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>입금 은행</span>
+                <span className={styles.bankValue}>{BANK.name}</span>
+              </div>
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>계좌번호</span>
+                <span className={styles.bankValue}>{BANK.account}</span>
+              </div>
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>예금주</span>
+                <span className={styles.bankValue}>{BANK.holder}</span>
+              </div>
+              <div className={styles.divider} />
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>입금 금액</span>
+                <span className={styles.bankAmount}>₩{orderData.totalAmount.toLocaleString()}</span>
+              </div>
+              <div className={styles.bankRow}>
+                <span className={styles.bankLabel}>입금자명</span>
+                <span className={styles.bankValue}>{orderData.depositorName}</span>
+              </div>
+            </div>
+            <TransferButton amount={orderData.totalAmount} />
+            <p className={styles.notice}>
+              {BANK.notice}
+            </p>
+          </div>
+        )}
 
         <div className={styles.actions}>
           <Link href="/" className={styles.homeButton}>
@@ -114,5 +156,13 @@ export default function OrderCompletePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function OrderCompletePageWrapper() {
+  return (
+    <Suspense>
+      <OrderCompletePage />
+    </Suspense>
   );
 }

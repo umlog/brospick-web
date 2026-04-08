@@ -139,6 +139,7 @@ export interface CheckoutFormData {
   address: string;
   addressDetail: string;
   postalCode: string;
+  paymentMethod: 'kakaopay' | 'bank';
   depositorName: string;
   deliveryNote: string;
   privacyConsent: boolean;

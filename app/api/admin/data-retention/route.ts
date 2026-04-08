@@ -27,8 +27,22 @@ export async function POST(request: NextRequest) {
     }
 
     const now = new Date().toISOString();
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const threeYearsAgo = new Date(Date.now() - 3 * 365.25 * 24 * 60 * 60 * 1000).toISOString();
     const fiveYearsAgo = new Date(Date.now() - 5 * 365.25 * 24 * 60 * 60 * 1000).toISOString();
+
+    // 0) 1시간 이상 된 '카카오페이 결제중' 주문 삭제 (결제창 이탈 등으로 미완료된 주문)
+    // 카카오페이 TID 자체 만료 시간이 15분이므로 1시간이면 충분히 안전
+    const { data: kakaoExpiredData, error: kakaoExpiredError } = await supabaseAdmin
+      .from('orders')
+      .delete()
+      .eq('status', '카카오페이 결제중')
+      .lt('created_at', oneHourAgo)
+      .select('id');
+
+    if (kakaoExpiredError) {
+      console.error('[data-retention] 카카오페이 미완료 주문 삭제 오류:', kakaoExpiredError);
+    }
 
     // 1) 3년 초과 마케팅 동의 초기화
     const { data: marketingData, error: marketingError } = await supabaseAdmin
@@ -65,6 +79,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      kakao_expired: kakaoExpiredData?.length ?? 0,
       marketing_cleared: marketingData?.length ?? 0,
       pii_anonymized: piiData?.length ?? 0,
       ran_at: now,

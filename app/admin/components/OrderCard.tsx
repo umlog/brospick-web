@@ -243,7 +243,7 @@ export function OrderCard({
             </div>
           )}
 
-          {order.status === OrderStatus.PENDING_PAYMENT && order.customer_email && (
+          {order.status === OrderStatus.PENDING_PAYMENT && order.payment_method !== '카카오페이' && order.customer_email && (
             <div className={styles.paymentReminder}>
               <button
                 className={styles.paymentReminderButton}

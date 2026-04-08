@@ -7,8 +7,11 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 // 공개 클라이언트 (anon key - RLS 적용됨)
 let supabase: SupabaseClient;
 
+const fetchNoCache: typeof fetch = (url, options) =>
+  fetch(url, { ...options, cache: 'no-store' });
+
 if (supabaseUrl && supabaseUrl.startsWith('http')) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabase = createClient(supabaseUrl, supabaseAnonKey, { global: { fetch: fetchNoCache } });
 } else {
   supabase = createClient('https://placeholder.supabase.co', 'placeholder');
 }
@@ -18,7 +21,7 @@ if (supabaseUrl && supabaseUrl.startsWith('http')) {
 let supabaseAdmin: SupabaseClient;
 
 if (supabaseUrl && supabaseUrl.startsWith('http') && supabaseServiceRoleKey) {
-  supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
+  supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, { global: { fetch: fetchNoCache } });
 } else {
   if (supabaseUrl && supabaseUrl.startsWith('http') && !supabaseServiceRoleKey) {
     console.error(

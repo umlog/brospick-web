@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './sportswear.module.css';
 import { productList, getDiscountPercent, CATEGORY_LABELS, ProductCategory, PRODUCT_FALLBACK_IMAGE } from '@/lib/products';
 
@@ -13,6 +12,8 @@ export default function Sportswear() {
   const [active, setActive] = useState<Filter>(ALL);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   useEffect(() => {
     fetch('/api/products/prices')
@@ -26,6 +27,32 @@ export default function Sportswear() {
       })
       .catch(() => {});
   }, []);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener('scroll', updateArrows, { passive: true });
+    return () => el.removeEventListener('scroll', updateArrows);
+  }, [updateArrows]);
+
+  // 카테고리 바뀔 때 화살표 상태 재계산
+  useEffect(() => {
+    setTimeout(updateArrows, 50);
+  }, [active, updateArrows]);
+
+  const scroll = (dir: 'left' | 'right') => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === 'right' ? el.clientWidth * 0.8 : -el.clientWidth * 0.8, behavior: 'smooth' });
+  };
 
   const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
   const filtered = active === ALL ? productList : productList.filter((p) => p.category === active);
@@ -64,6 +91,21 @@ export default function Sportswear() {
         </div>
 
         {/* 가로 스크롤 카드 */}
+        <div className={styles.sliderWrapper}>
+          <button
+            className={`${styles.arrowBtn} ${styles.arrowLeft} ${!canScrollLeft ? styles.arrowHidden : ''}`}
+            onClick={() => scroll('left')}
+            aria-label="이전"
+          >
+            ‹
+          </button>
+          <button
+            className={`${styles.arrowBtn} ${styles.arrowRight} ${!canScrollRight ? styles.arrowHidden : ''}`}
+            onClick={() => scroll('right')}
+            aria-label="다음"
+          >
+            ›
+          </button>
         <div className={styles.scrollTrack} ref={scrollRef}>
           {filtered.map((product) => {
             const dbPrice = dbPrices[product.id];
@@ -129,6 +171,7 @@ export default function Sportswear() {
               </Link>
             );
           })}
+        </div>
         </div>
 
         {/* 전체 보기 */}

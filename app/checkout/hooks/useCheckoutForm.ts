@@ -9,6 +9,7 @@ const INITIAL_FORM_DATA: CheckoutFormData = {
   address: '',
   addressDetail: '',
   postalCode: '',
+  paymentMethod: 'kakaopay',
   depositorName: '',
   deliveryNote: '',
   privacyConsent: false,

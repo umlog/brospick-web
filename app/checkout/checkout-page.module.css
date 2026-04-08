@@ -124,6 +124,39 @@
   background-color: #ff5a52;
 }
 
+.paymentMethodGroup {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.paymentMethodOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+  flex: 1;
+  justify-content: center;
+}
+
+.paymentMethodOption input[type='radio'] {
+  accent-color: var(--color-accent);
+}
+
+.paymentMethodSelected {
+  border-color: var(--color-accent);
+  background-color: rgba(255, 90, 82, 0.06);
+}
+
+.paymentMethodLabel {
+  font-size: var(--size-base);
+  font-weight: 500;
+}
+
 .bankInfo {
   padding: var(--space-lg);
   background-color: var(--color-bg-primary);

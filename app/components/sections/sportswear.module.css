@@ -79,6 +79,58 @@
   transform: scaleX(1);
 }
 
+/* ===== 슬라이더 래퍼 + 화살표 ===== */
+.sliderWrapper {
+  position: relative;
+}
+
+/* 데스크탑(마우스) 환경에서만 화살표 표시 */
+.arrowBtn {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .arrowBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: opacity 0.2s, background-color 0.2s;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .arrowBtn:hover {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .arrowLeft {
+    left: -22px;
+  }
+
+  .arrowRight {
+    right: -22px;
+  }
+
+  .arrowHidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 /* ===== 가로 스크롤 트랙 ===== */
 .scrollTrack {
   display: flex;
