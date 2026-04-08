@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -49,6 +49,10 @@ export default function ProductDetailPage({
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
   const [dbPrice, setDbPrice] = useState<{ price: number; original_price: number | null } | undefined>(undefined);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const lensRef = useRef<HTMLDivElement>(null);
+  const zoomPanelRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   const product = products[params.slug as ProductSlug];
 
@@ -132,8 +136,33 @@ export default function ProductDetailPage({
       quantity,
     });
 
+    setQuantity(1);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 2000);
+  };
+
+  useEffect(() => {
+    if (!product) return;
+    if (product.sizes.includes('XL')) {
+      setSelectedSize('XL');
+    } else {
+      setSelectedSize(product.sizes[0]);
+    }
+  }, [product?.slug]);
+
+  // sold-out 자동선택 보정: sizeStatuses 로드 후 현재 선택이 품절이면 첫 available로 교체
+  useEffect(() => {
+    if (!product || Object.keys(sizeStatuses).length === 0 || !selectedSize) return;
+    const currentKey = `${product.id}-${selectedSize}`;
+    if (sizeStatuses[currentKey] === 'sold_out') {
+      const fallback = product.sizes.find((s) => sizeStatuses[`${product.id}-${s}`] !== 'sold_out');
+      if (fallback) setSelectedSize(fallback);
+    }
+  }, [sizeStatuses]);
+
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
+    setQuantity(1);
   };
 
   useEffect(() => {
@@ -156,6 +185,12 @@ export default function ProductDetailPage({
   const onThumbClick = useCallback((index: number) => {
     emblaApi?.scrollTo(index);
   }, [emblaApi]);
+
+  useEffect(() => {
+    if (zoomPanelRef.current) {
+      zoomPanelRef.current.style.backgroundImage = `url(${product?.images[currentImage]})`;
+    }
+  }, [currentImage]);
 
   const handleBuyNow = () => {
     if (!selectedSize) {
@@ -186,18 +221,47 @@ export default function ProductDetailPage({
 
           <div className={styles.productDetail}>
             <div className={styles.imageSection}>
-              <div className={styles.mainImage} ref={emblaRef}>
+              <div
+                className={styles.mainImage}
+                ref={emblaRef}
+                onClick={() => { if (window.matchMedia('(pointer: coarse)').matches) setLightboxOpen(true); }}
+                onMouseMove={(e) => {
+                  const target = e.currentTarget;
+                  const clientX = e.clientX;
+                  const clientY = e.clientY;
+                  if (rafRef.current) cancelAnimationFrame(rafRef.current);
+                  rafRef.current = requestAnimationFrame(() => {
+                    const rect = target.getBoundingClientRect();
+                    const x = clientX - rect.left;
+                    const y = clientY - rect.top;
+                    const w = rect.width;
+                    const h = rect.height;
+                    if (lensRef.current) {
+                      lensRef.current.style.display = 'block';
+                      lensRef.current.style.left = `${Math.min(Math.max(x - 50, 0), w - 100)}px`;
+                      lensRef.current.style.top = `${Math.min(Math.max(y - 50, 0), h - 100)}px`;
+                    }
+                    if (zoomPanelRef.current) {
+                      zoomPanelRef.current.style.display = 'block';
+                      zoomPanelRef.current.style.backgroundSize = `${w * 3}px ${h * 3}px`;
+                      zoomPanelRef.current.style.backgroundPosition = `${-(x * 3 - w / 2)}px ${-(y * 3 - h / 2)}px`;
+                    }
+                  });
+                }}
+                onMouseLeave={() => {
+                  if (rafRef.current) cancelAnimationFrame(rafRef.current);
+                  if (lensRef.current) lensRef.current.style.display = 'none';
+                  if (zoomPanelRef.current) zoomPanelRef.current.style.display = 'none';
+                }}
+              >
                 <div className={styles.emblaContainer}>
                   {product.images.map((img, index) => (
                     <div className={styles.emblaSlide} key={index}>
-                      <img
-                        src={img}
-                        alt={`${product.name} ${index + 1}`}
-                        draggable={false}
-                      />
+                      <img src={img} alt={`${product.name} ${index + 1}`} draggable={false} />
                     </div>
                   ))}
                 </div>
+                <div ref={lensRef} className={styles.lens} style={{ display: 'none' }} />
               </div>
               <div className={styles.dotRow}>
                 {product.images.map((_, index) => (
@@ -226,6 +290,11 @@ export default function ProductDetailPage({
               <div className={styles.progressTrack}>
                 <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }} />
               </div>
+              <div
+                ref={zoomPanelRef}
+                className={styles.zoomPanel}
+                style={{ display: 'none', backgroundImage: `url(${product.images[currentImage]})` }}
+              />
             </div>
 
             <div className={styles.infoSection}>
@@ -251,7 +320,23 @@ export default function ProductDetailPage({
                 )}
               </div>
 
-              {product.sizeChart.length > 0 && <div className={styles.sizeChartInline}>
+              {product.category === 'taping' ? (
+                <div className={styles.sizeChartInline}>
+                  <table className={styles.sizeTable}>
+                    <thead>
+                      <tr><th>소재</th><th>규격</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{product.details.material.split('. ')[0]}</td>
+                        <td>{product.details.material.split('. ')[1]?.replace(/\.$/, '')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
+
+              {product.category !== 'taping' && product.sizeChart.length > 0 && <div className={styles.sizeChartInline}>
                 <p className={styles.sizeUnit}>단위: cm</p>
                 <table className={styles.sizeTable}>
                   {product.sizeChartType === 'shorts' ? (
@@ -338,7 +423,7 @@ export default function ProductDetailPage({
                 </div>
               ) : (
                 <>
-                  <div className={styles.sizeSection}>
+                  {product.sizes.length > 1 && <div className={styles.sizeSection}>
                     <h3>사이즈 선택</h3>
                     <div className={styles.sizeOptions}>
                       {product.sizes.map((size) => {
@@ -359,11 +444,11 @@ export default function ProductDetailPage({
                               if (isSoldOut) return;
                               if (isDelayed) {
                                 if (confirm(`해당 사이즈는 ${delayText} 상품입니다.\n주문하시겠습니까?`)) {
-                                  setSelectedSize(size);
+                                  handleSizeSelect(size);
                                 }
                                 return;
                               }
-                              setSelectedSize(size);
+                              handleSizeSelect(size);
                             }}
                             disabled={isSoldOut}
                           >
@@ -375,7 +460,7 @@ export default function ProductDetailPage({
                         );
                       })}
                     </div>
-                  </div>
+                  </div>}
 
                   <div className={styles.quantitySection}>
                     <h3>수량</h3>
@@ -463,7 +548,7 @@ export default function ProductDetailPage({
                   </div>
                 </Accordion>
 
-                <Accordion title="사이즈 가이드">
+                {product.category !== 'taping' && <Accordion title="사이즈 가이드">
                   <div className={styles.accordionContent}>
                     <p className={styles.sizeUnit}>단위: cm</p>
                     <table className={styles.sizeTable}>
@@ -542,7 +627,7 @@ export default function ProductDetailPage({
                     </table>
                     <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
                   </div>
-                </Accordion>
+                </Accordion>}
 
                 <Accordion title="배송">
                   <div className={styles.accordionContent}>
@@ -578,9 +663,11 @@ export default function ProductDetailPage({
             <div className={styles.stickyBuyBarInner}>
               <div className={styles.stickyBuyBarInfo}>
                 <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
-                <span className={styles.stickyBuyBarSize}>
-                  {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
-                </span>
+                {product.sizes.length > 1 && (
+                  <span className={styles.stickyBuyBarSize}>
+                    {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
+                  </span>
+                )}
               </div>
               <div className={styles.stickyBuyBarActions}>
                 <button
@@ -597,6 +684,17 @@ export default function ProductDetailPage({
             </div>
           </div>
         )}
+      {lightboxOpen && (
+        <div className={styles.lightboxOverlay} onClick={() => setLightboxOpen(false)}>
+          <button className={styles.lightboxClose} onClick={() => setLightboxOpen(false)}>✕</button>
+          <img
+            src={product.images[currentImage]}
+            alt={product.name}
+            className={styles.lightboxImage}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
       </main>
   );
 }

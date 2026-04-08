@@ -1679,6 +1679,42 @@
   cursor: default;
 }
 
+.pmComingSoonBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pmComingSoonBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.pmComingSoonOn {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.pmComingSoonOn:hover {
+  background: #c0251b;
+  border-color: #c0251b;
+  color: #fff;
+}
+
+.pmComingSoonBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 /* Sizes section */
 .pmSizesSection {
   border-top: 1px solid var(--color-border);

@@ -125,6 +125,8 @@ export interface AdminProduct {
   category: string;
   price: number;
   original_price: number | null;
+  coming_soon: boolean;
+  launched_at: string | null;
   updated_at: string;
 }
 

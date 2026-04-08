@@ -27,11 +27,12 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, name, price, original_price } = body as {
+    const { id, name, price, original_price, coming_soon } = body as {
       id: number;
       name?: string;
       price?: number;
       original_price?: number | null;
+      coming_soon?: boolean;
     };
 
     if (!id) return apiError('상품 ID가 필요합니다.', 400);
@@ -40,6 +41,18 @@ export async function PATCH(request: NextRequest) {
     if (name !== undefined) updates.name = name;
     if (price !== undefined) updates.price = price;
     if (original_price !== undefined) updates.original_price = original_price;
+    if (coming_soon !== undefined) {
+      updates.coming_soon = coming_soon;
+      if (coming_soon === false) {
+        // 처음 출시할 때만 launched_at 기록 (재토글 시 덮어쓰지 않음)
+        const { data: existing } = await supabaseAdmin
+          .from('products')
+          .select('launched_at')
+          .eq('id', id)
+          .single();
+        if (!existing?.launched_at) updates.launched_at = new Date().toISOString();
+      }
+    }
 
     const { data, error } = await supabaseAdmin
       .from('products')

@@ -11,11 +11,11 @@ import BrandStory from './components/sections/BrandStory';
 // import Contact from './components/sections/Contact';
 import { supabaseAdmin } from '@/lib/supabase';
 
-async function getPrices(): Promise<Record<number, { price: number; original_price: number | null }>> {
-  const { data } = await supabaseAdmin.from('products').select('id, price, original_price');
-  const map: Record<number, { price: number; original_price: number | null }> = {};
+async function getPrices(): Promise<Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null }>> {
+  const { data } = await supabaseAdmin.from('products').select('id, price, original_price, coming_soon, launched_at');
+  const map: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null }> = {};
   for (const item of data || []) {
-    map[item.id] = { price: item.price, original_price: item.original_price };
+    map[item.id] = { price: item.price, original_price: item.original_price, coming_soon: item.coming_soon ?? false, launched_at: item.launched_at ?? null };
   }
   return map;
 }

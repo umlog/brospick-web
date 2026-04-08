@@ -183,6 +183,9 @@ export const products: Record<ProductSlug, Product> = {
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb2.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/1-detail-1.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/2-detail-2.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/3-detail-3.png',
     ],
     tagline: '바디 라인을 정돈하며, 격한 움직임도 자유롭게 — 쿼터집 트레이닝 탑 (블랙)',
     description:
@@ -274,6 +277,9 @@ export const products: Record<ProductSlug, Product> = {
     images: [
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
       '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb2.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/1-detail-1.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/2-detail-2.png',
+      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/3-detail-3.png',
     ],
     tagline: '벌집 구조 원단으로 통기성과 쿨링을 동시에 — 쿼터집 트레이닝 탑 (그레이)',
     description:
@@ -330,7 +336,6 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/long-sleeve/running-top/10-detail-10.png',
       '/apparel/long-sleeve/running-top/11-detail-11.png',
       '/apparel/long-sleeve/running-top/12-detail-12.png',
-      '/apparel/long-sleeve/running-top/13-size-chart.JPG',
     ],
     tagline: '가볍게, 빠르게, 그리고 멀리.',
     description:
@@ -433,7 +438,6 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/hoodie/8-grid-zip-hoodie-8.png',
       '/apparel/hoodie/9-grid-zip-hoodie-9.png',
       '/apparel/hoodie/10-grid-zip-hoodie-10.png',
-      '/apparel/hoodie/11-후드집업 사이즈표.png',
     ],
     tagline: '부드러운 기능성 와플 텍스처 원단에 히든 지퍼 포켓과 전면 반사 로고 디테일을 더한 일상용 후드집업.',
     description:

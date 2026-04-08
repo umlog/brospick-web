@@ -155,7 +155,7 @@ function ProductCard({
   sizes: ProductSize[];
   staticSizes: string[];
   thumbnail?: string;
-  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null }) => Promise<void>;
+  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => Promise<void>;
   onStatusChange: (id: number, size: string, status: string) => Promise<void>;
   onStockUpdate: (id: number, size: string, stock: number) => Promise<void>;
   onDelayTextUpdate: (id: number, size: string, text: string | null) => Promise<void>;
@@ -258,6 +258,13 @@ function ProductCard({
           disabled={catalogSaving || !dirty}
         >
           {catalogSaving ? '저장 중…' : '저장'}
+        </button>
+        <button
+          className={`${styles.pmComingSoonBtn} ${product.coming_soon ? styles.pmComingSoonOn : ''}`}
+          onClick={() => onCatalogUpdate(product.id, { coming_soon: !product.coming_soon })}
+          disabled={catalogSaving}
+        >
+          {product.coming_soon ? 'COMING SOON' : '출시됨'}
         </button>
       </div>
 

@@ -20,6 +20,14 @@ export default function ApparelPage() {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const saved = sessionStorage.getItem('apparel-scroll');
+    if (saved) {
+      sessionStorage.removeItem('apparel-scroll');
+      requestAnimationFrame(() => window.scrollTo(0, parseInt(saved, 10)));
+    }
+  }, []);
+
+  useEffect(() => {
     fetch('/api/products/prices')
       .then((res) => res.json())
       .then((data) => {
@@ -142,7 +150,7 @@ export default function ApparelPage() {
                   </div>
                 </div>
               ) : (
-                <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.productCard}>
+                <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.productCard} onClick={() => sessionStorage.setItem('apparel-scroll', String(window.scrollY))}>
                   <div className={styles.productImage}>
                     <img
                       src={product.image}

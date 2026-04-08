@@ -9,7 +9,7 @@ const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
 
 interface Props {
-  initialPrices: Record<number, { price: number; original_price: number | null }>;
+  initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null }>;
 }
 
 export default function Sportswear({ initialPrices }: Props) {
@@ -34,9 +34,10 @@ export default function Sportswear({ initialPrices }: Props) {
     return () => el.removeEventListener('scroll', updateArrows);
   }, [updateArrows]);
 
-  // 카테고리 바뀔 때 화살표 상태 재계산
+  // 카테고리 바뀔 때 화살표 상태 재계산 (페인트 완료 후)
   useEffect(() => {
-    setTimeout(updateArrows, 50);
+    const id = requestAnimationFrame(updateArrows);
+    return () => cancelAnimationFrame(id);
   }, [active, updateArrows]);
 
   const scroll = (dir: 'left' | 'right') => {
@@ -46,7 +47,20 @@ export default function Sportswear({ initialPrices }: Props) {
   };
 
   const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
-  const filtered = active === ALL ? productList : productList.filter((p) => p.category === active);
+
+  const sorted = [...productList].sort((a, b) => {
+    const aDb = dbPrices[a.id];
+    const bDb = dbPrices[b.id];
+    const aComingSoon = aDb ? aDb.coming_soon : a.comingSoon;
+    const bComingSoon = bDb ? bDb.coming_soon : b.comingSoon;
+    if (aComingSoon !== bComingSoon) return aComingSoon ? 1 : -1;
+    const aDate = aDb?.launched_at ? new Date(aDb.launched_at).getTime() : -Infinity;
+    const bDate = bDb?.launched_at ? new Date(bDb.launched_at).getTime() : -Infinity;
+    if (bDate !== aDate) return bDate - aDate;
+    return a.id - b.id; // tie-breaker: id 순
+  });
+
+  const filtered = active === ALL ? sorted : sorted.filter((p) => p.category === active);
 
   const changeCategory = (cat: Filter) => {
     setActive(cat);
@@ -102,8 +116,9 @@ export default function Sportswear({ initialPrices }: Props) {
             const dbPrice = dbPrices[product.id];
             const price = dbPrice?.price;
             const originalPrice = dbPrice?.original_price ?? null;
+            const isComingSoon = dbPrice ? dbPrice.coming_soon : product.comingSoon;
 
-            if (product.comingSoon) {
+            if (isComingSoon) {
               return (
                 <div key={product.id} className={styles.card}>
                   <div className={styles.imageWrap}>
