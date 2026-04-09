@@ -762,8 +762,8 @@ export const products: Record<ProductSlug, Product> = {
     comingSoon: false,
     image: '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
     images: [
-      '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
-      '/apparel/cross-c-taping/black/2-Black Cross C Taping2.png',
+      '/apparel/cross-c-taping/black/3-Black Cross C Taping.png',
+      '/apparel/cross-c-taping/black/4-Black Cross C Taping.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
