@@ -1,5 +1,5 @@
 import { CartItem } from '../contexts/CartContext';
-import { SHIPPING } from '../../lib/constants';
+import { getShippingFee } from '../../lib/constants';
 import type { CheckoutFormData, DaumPostcodeData, ParsedAddress } from './types';
 
 export function formatPrice(amount: number): string {
@@ -40,8 +40,8 @@ export function buildOrderPayload(
     postalCode: formData.postalCode,
     address: formData.address,
     addressDetail: formData.addressDetail,
-    totalAmount: totalPrice + SHIPPING.fee,
-    shippingFee: SHIPPING.fee,
+    totalAmount: totalPrice + getShippingFee(totalPrice),
+    shippingFee: getShippingFee(totalPrice),
     depositorName: formData.depositorName,
     deliveryNote: formData.deliveryNote,
     privacyConsent: formData.privacyConsent,

@@ -1344,6 +1344,53 @@
   }
 }
 
+/* Product Sync Banner */
+.syncBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: #2a1f00;
+  border: 1px solid #7a5c00;
+  border-radius: var(--radius-sm);
+}
+
+.syncBannerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--size-sm);
+  color: #f5c842;
+}
+
+.syncBannerText span {
+  color: var(--color-text-secondary);
+  font-size: var(--size-xs);
+}
+
+.syncButton {
+  flex-shrink: 0;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--size-sm);
+  background: #7a5c00;
+  color: #f5c842;
+  border: 1px solid #7a5c00;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.syncButton:hover:not(:disabled) {
+  background: #9a7400;
+  border-color: #9a7400;
+}
+
+.syncButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* Product Catalog Manager */
 .catalogContainer {
   display: flex;
@@ -1998,4 +2045,156 @@
 
 .rejectTemplateBtn:hover {
   background: var(--color-bg-hover, #e5e7eb);
+}
+
+/* ── Blog Manager ─────────────────────────────────── */
+.bmLoading {
+  padding: 24px;
+}
+
+.bmFormWrapper {
+  padding: 0 0 40px;
+}
+
+.bmFormHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.bmFormTitle {
+  margin: 0;
+  font-size: 18px;
+}
+
+.bmForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bmFormGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.bmListHeader {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.bmPrimaryBtn {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.bmPrimaryBtn:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.bmEmpty {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+
+.bmList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bmCard {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bmCardInfo {
+  flex: 1;
+}
+
+.bmCardNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bmCardName {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bmCardMeta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.bmStatusBadge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.bmCardDate {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.bmCardActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.bmDeleteBtn {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.bmDeleteBtn:hover {
+  background: #fee2e2;
+}
+
+.bmFormActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.bmField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bmFieldLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.bmMonospace {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .bmFormGrid {
+    grid-template-columns: 1fr;
+  }
 }

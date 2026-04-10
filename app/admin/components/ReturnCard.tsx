@@ -4,6 +4,8 @@ import { RETURN_STATUS_TRANSITIONS } from '../constants';
 import { formatDate, getReturnStatusColor } from '../utils';
 import { ReturnStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
+import { NotifyToggle } from './NotifyToggle';
+import { DangerZone } from './DangerZone';
 import styles from '../admin.module.css';
 
 const REJECT_REASON_TEMPLATES = [
@@ -139,14 +141,7 @@ export function ReturnCard({
             <div className={styles.statusControl}>
               <div className={styles.statusHeader}>
                 <h3>상태 변경</h3>
-                <label className={styles.notifyToggle}>
-                  <input
-                    type="checkbox"
-                    checked={notifyOnChange}
-                    onChange={(e) => onNotifyChange(e.target.checked)}
-                  />
-                  <span>고객에게 알림 보내기</span>
-                </label>
+                <NotifyToggle checked={notifyOnChange} onChange={onNotifyChange} />
               </div>
               <div className={styles.statusButtons}>
                 {nextStatuses.map((status) => {
@@ -251,7 +246,7 @@ export function ReturnCard({
                   onChange={onTrackingInputChange}
                   onSubmit={() => {
                     if (!trackingInput.trim()) {
-                      alert('운송장번호를 입력해주세요.');
+                      showToast('운송장번호를 입력해주세요.', 'error');
                       return;
                     }
                     onStatusChange(req.id, ReturnStatus.COLLECTING, { returnTrackingNumber: trackingInput.trim() });
@@ -263,14 +258,10 @@ export function ReturnCard({
             </div>
           )}
 
-          <div className={styles.dangerZone}>
-            <button
-              className={styles.deleteButton}
-              onClick={() => onDelete(req.id, req.request_number)}
-            >
-              요청 삭제
-            </button>
-          </div>
+          <DangerZone
+            label="요청 삭제"
+            onClick={() => onDelete(req.id, req.request_number)}
+          />
         </div>
       )}
     </div>

@@ -70,6 +70,7 @@ function OrderCompletePage() {
         sessionStorage.removeItem('checkoutItems');
       }
 
+      localStorage.setItem('brospick-last-order', orderNumber);
       setOrderData({
         orderNumber,
         totalAmount: parseInt(amount, 10),
@@ -84,7 +85,9 @@ function OrderCompletePage() {
     const stored = sessionStorage.getItem('orderComplete');
     if (stored) {
       try {
-        setOrderData({ ...JSON.parse(stored), paymentMethod: 'bank' });
+        const parsed = JSON.parse(stored);
+        localStorage.setItem('brospick-last-order', parsed.orderNumber);
+        setOrderData({ ...parsed, paymentMethod: 'bank' });
         sessionStorage.removeItem('orderComplete');
       } catch {
         router.push('/');

@@ -7,6 +7,7 @@ import { useCart } from '../../contexts/CartContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import styles from './header.module.css';
 import symbolImg from '../../styles/symbol.svg';
+import { SOCIAL_MEDIA } from '../../../lib/constants';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -149,6 +150,22 @@ export default function Header() {
           <Link href="/cart" className={styles.menuCartLink} onClick={closeMenu}>
             장바구니 {getTotalItems() > 0 && `(${getTotalItems()})`}
           </Link>
+          <div className={styles.menuSocial}>
+            <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer" className={styles.menuSocialLink} aria-label="인스타그램">
+              {/* Instagram */}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href={SOCIAL_MEDIA.threads} target="_blank" rel="noopener noreferrer" className={styles.menuSocialLink} aria-label="스레드">
+              {/* Threads */}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.474 12.01v-.017c.02-3.579.87-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.594 12c.024 3.087.714 5.495 2.05 7.163 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.583-1.289-.879-2.309-.885h-.026c-.784 0-1.787.268-2.434 1.32l-1.752-1.067C8.17 5.886 9.686 5.02 11.726 5.008h.032c3.235.02 5.079 2.022 5.079 5.542v.031c0 .157-.004.315-.01.475a6.77 6.77 0 0 1 1.56 1.063c1.039.956 1.707 2.26 1.938 3.773.236 1.547-.028 3.166-1.039 4.686C17.714 22.747 15.465 23.98 12.186 24zm-.7-9.542c-.05 0-.099.002-.148.006-.951.053-1.716.35-2.216.858-.39.396-.58.913-.55 1.497.074 1.368 1.568 1.798 2.675 1.738 1.189-.064 2.058-.487 2.585-1.257.387-.563.588-1.302.596-2.192a12.048 12.048 0 0 0-2.942-.65z"/>
+              </svg>
+            </a>
+          </div>
         </nav>
       )}
     </header>

@@ -34,13 +34,12 @@ export default function Footer() {
     <>
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <div className={styles.column}>
-            <Image
-              src={symbolImg}
-              alt="Brospick"
-              className={styles.logo}
-            />
-          </div>
+            <FooterSection title="고객서비스">
+            <ul className={styles.columnList}>
+              <li><a href="/tracking">주문 조회</a></li>
+              <li><a href="/returns">교환 / 반품 신청</a></li>
+            </ul>
+          </FooterSection>
 
           <FooterSection title="지원">
             <ul className={styles.columnList}>
@@ -93,6 +92,7 @@ export default function Footer() {
 
         <div className={styles.bottom}>
           <div className={styles.bottomContainer}>
+            <Image src={symbolImg} alt="Brospick" className={styles.logo} />
             <p>© {year} {COMPANY.name}. All rights reserved.</p>
           </div>
         </div>

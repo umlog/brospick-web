@@ -149,6 +149,14 @@ export const apiClient = {
         method: 'PATCH',
         body: { id, ...body },
       }),
+
+    checkUnsynced: () =>
+      request<{ unsynced: { id: number; slug: string; name: string; category: string }[] }>(
+        '/api/admin/products/sync'
+      ),
+
+    sync: () =>
+      request<{ inserted: number }>('/api/admin/products/sync', { method: 'POST' }),
   },
 
   blog: {

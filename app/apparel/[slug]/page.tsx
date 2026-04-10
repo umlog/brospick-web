@@ -6,11 +6,11 @@ import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug } from '../../../lib/products';
-import { SHIPPING, CONTACT } from '../../../lib/constants';
+import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS } from '../../../lib/constants';
 import styles from './product-detail.module.css';
 
-function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
 
   return (
     <div className={styles.accordion}>
@@ -48,7 +48,7 @@ export default function ProductDetailPage({
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>({});
   const [sizeStocks, setSizeStocks] = useState<Record<string, number>>({});
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
-  const [dbPrice, setDbPrice] = useState<{ price: number; original_price: number | null } | undefined>(undefined);
+  const [dbPrice, setDbPrice] = useState<{ name?: string; price: number; original_price: number | null } | undefined>(undefined);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const lensRef = useRef<HTMLDivElement>(null);
   const zoomPanelRef = useRef<HTMLDivElement>(null);
@@ -62,7 +62,7 @@ export default function ProductDetailPage({
       .then((res) => res.json())
       .then((data) => {
         const found = (data.prices || []).find((p: { id: number }) => p.id === product.id);
-        if (found) setDbPrice({ price: found.price, original_price: found.original_price });
+        if (found) setDbPrice({ name: found.name, price: found.price, original_price: found.original_price });
       })
       .catch(() => {});
   }, [product?.id]);
@@ -89,6 +89,7 @@ export default function ProductDetailPage({
 
   const price = dbPrice?.price;
   const originalPrice = dbPrice?.original_price ?? null;
+  const productName = dbPrice?.name ?? product?.name;
 
   if (!product) {
     return (
@@ -129,7 +130,7 @@ export default function ProductDetailPage({
 
     addToCart({
       id: product.id,
-      name: product.name,
+      name: productName!,
       price,
       size: selectedSize,
       image: product.image,
@@ -202,7 +203,7 @@ export default function ProductDetailPage({
 
     addToCart({
       id: product.id,
-      name: product.name,
+      name: productName!,
       price,
       size: selectedSize,
       image: product.image,
@@ -298,7 +299,7 @@ export default function ProductDetailPage({
             </div>
 
             <div className={styles.infoSection}>
-              <h1 className={styles.productName}>{product.name}</h1>
+              <h1 className={styles.productName}>{productName}</h1>
 
               <div className={styles.priceSection}>
                 {price !== undefined ? (
@@ -509,7 +510,18 @@ export default function ProductDetailPage({
                       바로 구매하기
                     </button>
                   </div>
+                  <p className={styles.returnNotice}>
+                    반품 ₩{RETURN_POLICY.returnShippingFee.toLocaleString()} · 교환 ₩{RETURN_POLICY.exchangeShippingFee.toLocaleString()} · 수령 후 {RETURN_POLICY.windowDays}일 이내
+                  </p>
                 </>
+              )}
+
+              {product.category !== 'taping' && (
+                <div className={styles.careSection}>
+                  {CARE_INSTRUCTIONS.map((instruction, i) => (
+                    <span key={i} className={styles.careTag}>{instruction}</span>
+                  ))}
+                </div>
               )}
 
               <div className={styles.featureChips}>
@@ -519,7 +531,7 @@ export default function ProductDetailPage({
               </div>
 
               <div className={styles.accordionGroup}>
-                <Accordion title="제품 설명">
+                <Accordion title="제품 설명" defaultOpen={true}>
                   <div className={styles.accordionContent}>
                     {product.details.functions.length > 0 && (
                       <>
@@ -633,6 +645,7 @@ export default function ProductDetailPage({
                   <div className={styles.accordionContent}>
                     <ul>
                       <li>배송비: ₩{SHIPPING.fee.toLocaleString()} (주문당 1회 청구)</li>
+                      <li>₩{SHIPPING.freeThreshold.toLocaleString()} 이상 구매 시 무료배송</li>
                       <li>여러 상품을 함께 구매해도 배송비는 1회만 청구됩니다</li>
                       <li>입금 확인 후 1~3 영업일 이내 발송</li>
                       <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>

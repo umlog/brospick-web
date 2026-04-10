@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
-import { SHIPPING } from '../../lib/constants';
+import { SHIPPING, getShippingFee } from '../../lib/constants';
 import { PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory, productList } from '../../lib/products';
 import styles from './cart-page.module.css';
 
@@ -185,12 +185,21 @@ export default function CartPage() {
               </div>
               <div className={styles.summaryRow}>
                 <span>배송비 <small style={{ color: '#888', fontWeight: 400 }}>(주문당 1회)</small></span>
-                <span>₩{SHIPPING.fee.toLocaleString()}</span>
+                {getShippingFee(selectedTotalPrice) === 0 ? (
+                  <span style={{ color: '#2563eb', fontWeight: 600 }}>무료</span>
+                ) : (
+                  <span>₩{SHIPPING.fee.toLocaleString()}</span>
+                )}
               </div>
+              {selectedTotalPrice > 0 && getShippingFee(selectedTotalPrice) > 0 && (
+                <div style={{ fontSize: '12px', color: '#2563eb', textAlign: 'right', marginTop: '-4px' }}>
+                  ₩{(SHIPPING.freeThreshold - selectedTotalPrice).toLocaleString()} 더 담으면 무료배송!
+                </div>
+              )}
               <div className={styles.summaryDivider} />
               <div className={styles.summaryRowTotal}>
                 <span>총 결제 금액</span>
-                <span>₩{(selectedTotalPrice + SHIPPING.fee).toLocaleString()}</span>
+                <span>₩{(selectedTotalPrice + getShippingFee(selectedTotalPrice)).toLocaleString()}</span>
               </div>
               <button
                 className={styles.checkoutButton}

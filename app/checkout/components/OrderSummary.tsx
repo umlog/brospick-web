@@ -1,5 +1,5 @@
 import { CartItem } from '../../contexts/CartContext';
-import { SHIPPING } from '../../../lib/constants';
+import { SHIPPING, getShippingFee } from '../../../lib/constants';
 import { formatPrice } from '../utils';
 import styles from '../checkout-page.module.css';
 
@@ -33,12 +33,16 @@ export function OrderSummary({ checkoutItems, totalPrice }: OrderSummaryProps) {
         </div>
         <div className={styles.totalRow}>
           <span>배송비</span>
-          <span>{formatPrice(SHIPPING.fee)}</span>
+          {getShippingFee(totalPrice) === 0 ? (
+            <span style={{ color: '#2563eb', fontWeight: 600 }}>무료</span>
+          ) : (
+            <span>{formatPrice(SHIPPING.fee)}</span>
+          )}
         </div>
         <div className={styles.totalDivider} />
         <div className={styles.totalRowFinal}>
           <span>총 결제 금액</span>
-          <span>{formatPrice(totalPrice + SHIPPING.fee)}</span>
+          <span>{formatPrice(totalPrice + getShippingFee(totalPrice))}</span>
         </div>
       </div>
     </div>

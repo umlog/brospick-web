@@ -3,6 +3,8 @@ import { STATUS_OPTIONS } from '../constants';
 import { formatDate, getStatusColor } from '../utils';
 import { OrderStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
+import { NotifyToggle } from './NotifyToggle';
+import { DangerZone } from './DangerZone';
 import styles from '../admin.module.css';
 
 interface OrderCardProps {
@@ -22,7 +24,7 @@ interface OrderCardProps {
   onTrackingInputChange: (value: string) => void;
   onTrackingCancel: () => void;
   onNotifyChange: (value: boolean) => void;
-  onDelayClick: (orderId: string) => void;
+  onDelayClick: (orderId: string, currentStatus: string) => void;
   onDelayWeeksChange: (weeks: number) => void;
   onDelayUnitChange: (unit: '주' | '일') => void;
   onDelaySubmit: () => void;
@@ -120,17 +122,11 @@ export function OrderCard({
           <div className={styles.statusControl}>
             <div className={styles.statusHeader}>
               <h3>상태 변경</h3>
-              <label className={styles.notifyToggle}>
-                <input
-                  type="checkbox"
-                  checked={notifyOnChange}
-                  onChange={(e) => onNotifyChange(e.target.checked)}
-                />
-                <span>고객에게 알림 보내기</span>
-                {!order.customer_email && (
-                  <span className={styles.noEmail}>(이메일 없음)</span>
-                )}
-              </label>
+              <NotifyToggle
+                checked={notifyOnChange}
+                onChange={onNotifyChange}
+                noEmail={!order.customer_email}
+              />
             </div>
             <div className={styles.statusButtons}>
               {STATUS_OPTIONS.map((status) => {
@@ -139,7 +135,7 @@ export function OrderCard({
                     <button
                       key="발송지연"
                       className={`${styles.statusButton} ${isDelayStatus ? styles.statusButtonDelay : ''}`}
-                      onClick={() => onDelayClick(order.id)}
+                      onClick={() => onDelayClick(order.id, order.status)}
                       disabled={processing}
                     >
                       {isDelayStatus ? order.status : '발송 지연'}
@@ -254,15 +250,12 @@ export function OrderCard({
             </div>
           )}
 
-          <div className={styles.dangerZone}>
-            <button
-              className={styles.deleteButton}
-              onClick={() => onDelete(order.id, order.order_number)}
-              disabled={processing}
-            >
-              {processing ? '처리 중...' : '주문 삭제'}
-            </button>
-          </div>
+          <DangerZone
+            label="주문 삭제"
+            processingLabel="처리 중..."
+            disabled={processing}
+            onClick={() => onDelete(order.id, order.order_number)}
+          />
         </div>
       )}
     </div>

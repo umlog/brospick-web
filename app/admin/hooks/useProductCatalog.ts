@@ -15,24 +15,53 @@ function sortProducts(list: AdminProduct[]): AdminProduct[] {
   });
 }
 
+interface UnsyncedProduct {
+  id: number;
+  slug: string;
+  name: string;
+  category: string;
+}
+
 export function useProductCatalog() {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState<number | null>(null);
+  const [unsynced, setUnsynced] = useState<UnsyncedProduct[]>([]);
+  const [syncing, setSyncing] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await apiClient.products.list();
-      setProducts(sortProducts(data.products));
+      const [productsData, syncData] = await Promise.all([
+        apiClient.products.list(),
+        apiClient.products.checkUnsynced(),
+      ]);
+      setProducts(sortProducts(productsData.products));
+      setUnsynced(syncData.unsynced);
+      setHasLoaded(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : '상품 목록 조회 실패');
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const syncProducts = useCallback(async () => {
+    setSyncing(true);
+    try {
+      const data = await apiClient.products.sync();
+      showToast(`${data.inserted}개 상품이 DB에 등록되었습니다. 가격을 설정해주세요.`, 'success');
+      await fetchProducts();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : '동기화 실패';
+      showToast(msg, 'error');
+    } finally {
+      setSyncing(false);
+    }
+  }, [fetchProducts]);
 
   const updateProduct = useCallback(
     async (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => {
@@ -53,5 +82,5 @@ export function useProductCatalog() {
     []
   );
 
-  return { products, loading, error, saving, fetchProducts, updateProduct };
+  return { products, loading, error, saving, hasLoaded, fetchProducts, updateProduct, unsynced, syncing, syncProducts };
 }

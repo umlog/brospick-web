@@ -21,7 +21,8 @@
       "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
       "WebFetch(domain:lucier.kr)",
       "Bash(git checkout:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "mcp__plugin_playwright_playwright__browser_run_code"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

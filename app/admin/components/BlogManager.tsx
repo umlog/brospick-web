@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { BlogPost } from '@/lib/domain/types';
 import type { BlogFormData } from '../hooks/useBlogPosts';
 import styles from '../admin.module.css';
@@ -92,23 +92,23 @@ export function BlogManager({ state }: BlogManagerProps) {
   };
 
   if (loading) {
-    return <p style={{ padding: '24px' }}>로딩 중...</p>;
+    return <p className={styles.bmLoading}>로딩 중...</p>;
   }
 
   if (showForm) {
     return (
-      <div style={{ padding: '0 0 40px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+      <div className={styles.bmFormWrapper}>
+        <div className={styles.bmFormHeader}>
           <button onClick={closeForm} className={styles.refreshButton}>
             ← 목록으로
           </button>
-          <h2 style={{ margin: 0, fontSize: '18px' }}>
+          <h2 className={styles.bmFormTitle}>
             {editingPost ? `"${editingPost.player_name}" 수정` : '새 블로그 포스트'}
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <form onSubmit={handleSubmit} className={styles.bmForm}>
+          <div className={styles.bmFormGrid}>
             <FormField label="선수 이름 *">
               <input
                 className={styles.input}
@@ -204,25 +204,23 @@ export function BlogManager({ state }: BlogManagerProps) {
 
           <FormField label="본문 (마크다운) *">
             <textarea
-              className={styles.input}
+              className={`${styles.input} ${styles.bmMonospace}`}
               value={form.content}
               onChange={(e) => setField('content', e.target.value)}
               rows={30}
               placeholder={CONTENT_PLACEHOLDER}
-              style={{ fontFamily: 'monospace', fontSize: '13px' }}
               required
             />
           </FormField>
 
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
+          <div className={styles.bmFormActions}>
             <button type="button" onClick={closeForm} className={styles.refreshButton}>
               취소
             </button>
             <button
               type="submit"
-              className={styles.refreshButton}
+              className={`${styles.refreshButton} ${styles.bmPrimaryBtn}`}
               disabled={saving}
-              style={{ background: '#2563eb', color: '#fff', borderColor: '#2563eb' }}
             >
               {saving ? '저장 중...' : editingPost ? '수정 저장' : '포스트 생성'}
             </button>
@@ -234,62 +232,41 @@ export function BlogManager({ state }: BlogManagerProps) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-        <button onClick={openCreate} className={styles.refreshButton} style={{ background: '#2563eb', color: '#fff', borderColor: '#2563eb' }}>
+      <div className={styles.bmListHeader}>
+        <button
+          onClick={openCreate}
+          className={`${styles.refreshButton} ${styles.bmPrimaryBtn}`}
+        >
           + 새 포스트
         </button>
       </div>
 
       {posts.length === 0 ? (
-        <p style={{ textAlign: 'center', padding: '40px', color: '#9ca3af' }}>
-          블로그 포스트가 없습니다.
-        </p>
+        <p className={styles.bmEmpty}>블로그 포스트가 없습니다.</p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className={styles.bmList}>
           {posts.map((post) => (
-            <div
-              key={post.id}
-              style={{
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px',
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                  <strong style={{ fontSize: '16px' }}>{post.player_name}</strong>
-                  <span style={{ fontSize: '13px', color: '#6b7280' }}>
+            <div key={post.id} className={styles.bmCard}>
+              <div className={styles.bmCardInfo}>
+                <div className={styles.bmCardNameRow}>
+                  <strong className={styles.bmCardName}>{post.player_name}</strong>
+                  <span className={styles.bmCardMeta}>
                     {post.team} · {post.position}
                   </span>
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      padding: '2px 8px',
-                      borderRadius: '999px',
-                      background: '#dbeafe',
-                      color: '#1d4ed8',
-                    }}
-                  >
-                    {post.status}
-                  </span>
+                  <span className={styles.bmStatusBadge}>{post.status}</span>
                 </div>
-                <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#9ca3af' }}>
+                <p className={styles.bmCardDate}>
                   {post.date} · ID {post.id}
                 </p>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+              <div className={styles.bmCardActions}>
                 <button onClick={() => openEdit(post)} className={styles.refreshButton}>
                   수정
                 </button>
                 <button
                   onClick={() => deletePost(post.id)}
-                  className={styles.refreshButton}
-                  style={{ color: '#dc2626', borderColor: '#dc2626' }}
+                  className={`${styles.refreshButton} ${styles.bmDeleteBtn}`}
                 >
                   삭제
                 </button>
@@ -304,8 +281,8 @@ export function BlogManager({ state }: BlogManagerProps) {
 
 function FormField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <label style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>{label}</label>
+    <div className={styles.bmField}>
+      <label className={styles.bmFieldLabel}>{label}</label>
       {children}
     </div>
   );

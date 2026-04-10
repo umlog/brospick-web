@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { AdminTab } from './types';
 import { useOrders } from './hooks/useOrders';
+import { useOrderActions } from './hooks/useOrderActions';
 import { useReturns } from './hooks/useReturns';
 import { useProductSizes } from './hooks/useProductSizes';
 import { useProductCatalog } from './hooks/useProductCatalog';
@@ -28,12 +29,15 @@ const TAB_TITLES: Record<AdminTab, string> = {
 
 export default function AdminPage() {
   const router = useRouter();
-  const ordersState = useOrders();
-  const returnsState = useReturns(ordersState.notifyOnChange);
+  const [notifyOnChange, setNotifyOnChange] = useState(true);
+  const [activeTab, setActiveTab] = useState<AdminTab>('orders');
+
+  const ordersState = useOrders(notifyOnChange);
+  const actionsState = useOrderActions(ordersState.handleStatusChange);
+  const returnsState = useReturns(notifyOnChange);
   const productSizesState = useProductSizes();
   const productCatalogState = useProductCatalog();
   const blogState = useBlogPosts();
-  const [activeTab, setActiveTab] = useState<AdminTab>('orders');
 
   useEffect(() => {
     ordersState.fetchOrders();
@@ -44,7 +48,7 @@ export default function AdminPage() {
     if (tab === 'returns' && returnsState.returnRequests.length === 0) {
       returnsState.fetchReturns();
     }
-    if (tab === 'products') {
+    if (tab === 'products' && !productSizesState.hasLoaded) {
       productSizesState.fetchSizes();
       productCatalogState.fetchProducts();
     }
@@ -88,13 +92,18 @@ export default function AdminPage() {
         <AdminTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
         {activeTab === 'orders' && (
-          <OrderList ordersState={ordersState} />
+          <OrderList
+            ordersState={ordersState}
+            actionsState={actionsState}
+            notifyOnChange={notifyOnChange}
+            onNotifyChange={setNotifyOnChange}
+          />
         )}
         {activeTab === 'returns' && (
           <ReturnList
             returnsState={returnsState}
-            notifyOnChange={ordersState.notifyOnChange}
-            onNotifyChange={ordersState.setNotifyOnChange}
+            notifyOnChange={notifyOnChange}
+            onNotifyChange={setNotifyOnChange}
           />
         )}
         {activeTab === 'products' && (

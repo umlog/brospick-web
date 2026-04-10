@@ -17,7 +17,7 @@ export function getStatusColor(status: string): string {
     case OrderStatus.PENDING_PAYMENT: return styles.statusPending;
     case OrderStatus.KAKAO_PAY_PENDING: return styles.statusKakaoPending;
     case OrderStatus.PAYMENT_CONFIRMED: return styles.statusConfirmed;
-    case '배송준비': return styles.statusPreparing;
+    case OrderStatus.PREPARING: return styles.statusPreparing;
     case OrderStatus.SHIPPING: return styles.statusShipping;
     case OrderStatus.DELIVERED: return styles.statusDelivered;
     default:

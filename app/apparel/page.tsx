@@ -16,7 +16,7 @@ function getRepresentativeImage(category: ProductCategory): string {
 
 export default function ApparelPage() {
   const [activeCategory, setActiveCategory] = useState<Filter>(ALL);
-  const [dbPrices, setDbPrices] = useState<Record<number, { price: number; original_price: number | null }>>({});
+  const [dbPrices, setDbPrices] = useState<Record<number, { name?: string; price: number; original_price: number | null }>>({});
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,9 +31,9 @@ export default function ApparelPage() {
     fetch('/api/products/prices')
       .then((res) => res.json())
       .then((data) => {
-        const map: Record<number, { price: number; original_price: number | null }> = {};
+        const map: Record<number, { name?: string; price: number; original_price: number | null }> = {};
         for (const item of data.prices || []) {
-          map[item.id] = { price: item.price, original_price: item.original_price };
+          map[item.id] = { name: item.name, price: item.price, original_price: item.original_price };
         }
         setDbPrices(map);
       })
@@ -118,6 +118,7 @@ export default function ApparelPage() {
               const dbPrice = dbPrices[product.id];
               const price = dbPrice?.price;
               const originalPrice = dbPrice?.original_price ?? null;
+              const productName = dbPrice?.name ?? product.name;
 
               return product.comingSoon ? (
                 <div key={product.id} className={styles.comingSoonCard}>
@@ -132,7 +133,7 @@ export default function ApparelPage() {
                     </div>
                   </div>
                   <div className={styles.productInfo}>
-                    <h3 className={styles.productName}>{product.name}</h3>
+                    <h3 className={styles.productName}>{productName}</h3>
                     <div className={styles.priceContainer}>
                       {price !== undefined && (
                         <>
@@ -159,7 +160,7 @@ export default function ApparelPage() {
                     />
                   </div>
                   <div className={styles.productInfo}>
-                    <h3 className={styles.productName}>{product.name}</h3>
+                    <h3 className={styles.productName}>{productName}</h3>
                     <div className={styles.priceContainer}>
                       {price !== undefined && (
                         <>

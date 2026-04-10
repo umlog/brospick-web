@@ -6,12 +6,14 @@ import { showToast } from '../lib/toast';
 export function useProductSizes() {
   const [sizes, setSizes] = useState<ProductSize[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const fetchSizes = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiClient.productSizes.list();
       setSizes(data.sizes);
+      setHasLoaded(true);
     } catch {
       showToast('사이즈 정보 조회에 실패했습니다.', 'error');
     } finally {
@@ -54,7 +56,7 @@ export function useProductSizes() {
         )
       );
     } catch (err) {
-      alert(err instanceof Error ? err.message : '지연배송 텍스트 변경에 실패했습니다.');
+      showToast(err instanceof Error ? err.message : '지연배송 텍스트 변경에 실패했습니다.', 'error');
     }
   };
 
@@ -69,9 +71,9 @@ export function useProductSizes() {
         )
       );
     } catch (err) {
-      alert(err instanceof Error ? err.message : '재고 변경에 실패했습니다.');
+      showToast(err instanceof Error ? err.message : '재고 변경에 실패했습니다.', 'error');
     }
   };
 
-  return { sizes, loading, fetchSizes, updateSize, updateStock, updateDelayText };
+  return { sizes, loading, hasLoaded, fetchSizes, updateSize, updateStock, updateDelayText };
 }

@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const { data, error } = await supabaseAdmin
       .from('products')
-      .select('id, price, original_price, coming_soon, launched_at');
+      .select('id, name, price, original_price, coming_soon, launched_at');
 
     if (error) return apiError(`가격 조회 실패: ${error.message}`, 500);
 

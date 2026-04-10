@@ -1,17 +1,19 @@
 import { showToast } from '../lib/toast';
 import type { useOrders } from '../hooks/useOrders';
+import type { useOrderActions } from '../hooks/useOrderActions';
 import { STATUS_OPTIONS } from '../constants';
 import { StatusFilter } from './StatusFilter';
 import { OrderCard } from './OrderCard';
 import styles from '../admin.module.css';
 
-type OrdersState = ReturnType<typeof useOrders>;
-
 interface OrderListProps {
-  ordersState: OrdersState;
+  ordersState: ReturnType<typeof useOrders>;
+  actionsState: ReturnType<typeof useOrderActions>;
+  notifyOnChange: boolean;
+  onNotifyChange: (value: boolean) => void;
 }
 
-export function OrderList({ ordersState }: OrderListProps) {
+export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyChange }: OrderListProps) {
   const {
     orders,
     loading,
@@ -25,30 +27,37 @@ export function OrderList({ ordersState }: OrderListProps) {
     dateTo,
     setDateFrom,
     setDateTo,
-    expandedOrder,
-    trackingModal,
-    trackingInput,
-    notifyOnChange,
-    delayModal,
-    delayWeeks,
-    delayUnit,
-    setDelayWeeks,
-    setDelayUnit,
-    setDelayModal,
-    setTrackingInput,
-    setTrackingModal,
-    setNotifyOnChange,
     handleStatusChange,
-    handleShippingClick,
-    handleTrackingSubmit,
-    handleDelayClick,
-    handleDelaySubmit,
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,
     handleRevokeMarketing,
-    toggleExpanded,
   } = ordersState;
+
+  const {
+    expandedOrder,
+    trackingModal,
+    trackingInput,
+    delayModal,
+    delayWeeks,
+    delayUnit,
+    setTrackingInput,
+    setTrackingModal,
+    setDelayModal,
+    setDelayWeeks,
+    setDelayUnit,
+    toggleExpanded,
+    clearExpanded,
+    handleShippingClick,
+    handleDelayClick,
+    handleTrackingSubmit,
+    handleDelaySubmit,
+  } = actionsState;
+
+  const handleDelete = async (orderId: string, orderNumber: string) => {
+    await handleDeleteOrder(orderId, orderNumber);
+    clearExpanded();
+  };
 
   const handleExportCSV = () => {
     const marketingOrders = orders.filter((o) => o.marketing_consent);
@@ -166,14 +175,14 @@ export function OrderList({ ordersState }: OrderListProps) {
               onTrackingSubmit={handleTrackingSubmit}
               onTrackingInputChange={setTrackingInput}
               onTrackingCancel={() => setTrackingModal(null)}
-              onNotifyChange={setNotifyOnChange}
+              onNotifyChange={onNotifyChange}
               onDelayClick={handleDelayClick}
               onDelayWeeksChange={setDelayWeeks}
               onDelayUnitChange={setDelayUnit}
               onDelaySubmit={handleDelaySubmit}
               onDelayCancel={() => setDelayModal(null)}
               onPaymentReminder={handlePaymentReminder}
-              onDelete={handleDeleteOrder}
+              onDelete={handleDelete}
               onRevokeMarketing={handleRevokeMarketing}
             />
           ))}

@@ -1,0 +1,115 @@
+[     239ms] [LOG] %cVideo commerce powered by ReelUp. font-size: 18px; font-weight: 600; color: #000;background: #a3f234; padding: 10px 20px; border-radius: 5px; width: 100% @ https://lucier.kr/:1555
+[     239ms] [LOG] 🚀 Enhanced Product Discovery.
+📈 Increased Conversion Rates.
+🤩 Elevated Visitor Engagements.
+
+Learn more at: https://apps.shopify.com/reelup/ @ https://lucier.kr/:1556
+[     388ms] [LOG] %cSleek theme (v1.8.0) by Foxecom | Learn more https://foxecom.com/products/sleek-shopify-theme font-size: 14px; color: #FF5C00; @ https://lucier.kr/cdn/shop/t/15/assets/theme.js?v=3120951222923413131764509164:0
+[     535ms] [LOG] Running... @ https://lucier.kr/web-pixels/strict/app/web-pixel-110428227@c5d4d7bbb4a4a4292a8a7b5334af7e3d.js:0
+[     538ms] [LOG] reelup latest @ https://cdn-v2.reelup.io/global.js.gz?v=2.1.6:0
+[     585ms] TypeError: Cannot read properties of undefined (reading 'dataset')
+    at HTMLElement.onReady (https://lucier.kr/cdn/shop/t/15/assets/slideshow-component.js?v=169346175765144676121764509161:1:2775)
+    at HTMLElement.initSlider (https://lucier.kr/cdn/shop/t/15/assets/slideshow-component.js?v=169346175765144676121764509161:1:2129)
+    at new <anonymous> (https://lucier.kr/cdn/shop/t/15/assets/slideshow-component.js?v=169346175765144676121764509161:1:406)
+    at https://lucier.kr/cdn/shop/t/15/assets/slideshow-component.js?v=169346175765144676121764509161:1:59
+[     703ms] [LOG] MPG app successfully initialized @ https://lucier.kr/:9535
+[     834ms] [WARNING] In a sandboxed environment, addEventListener may not behave as expected. @ https://lucier.kr/web-pixels@0e8c7c7aw41bd75a1p837d7fd4m8b145375/custom/web-pixel-86147139@1/sandbox/modern/:6
+[    1412ms] [LOG] %c ► UpPromote Affiliate Marketing [Application] - Running... background-color: #092C4C; color: #fff; padding: 5px; @ https://d1639lhkj5l89m.cloudfront.net/js/storefront/uppromote.js?shop=lucid-eyes-korea.myshopify.com:0
+[    1504ms] [LOG] %c Avada SDK has initialized  background: #054597; color: white @ https://app.avada.io/avada-sdk.min.js?shop=lucid-eyes-korea.myshopify.com:0
+[    1884ms] [LOG] %c Avada Popup has initialized background: #054597; color: white @ https://cdn.shopify.com/extensions/278bfe32-f92d-4823-b497-2d4a7b22b914/0.0.0/assets/avada-popup-main.min.js?v=1775784446314:1
+[    1979ms] [LOG] %c AVADA Email Marketing has initialized  background: #054597; color: white @ https://cdn.shopify.com/extensions/278bfe32-f92d-4823-b497-2d4a7b22b914/0.0.0/assets/avada-email-marketing-main.min.js?v=1775784446393:1
+[    2066ms] Unexpected token '<', ..."
+
+
+
+
+
+
+
+
+
+<!doctype "... is not valid JSON
+[    2808ms] [LOG]  @ https://sdk.fastbundle.co/1.22.43/main.min.js:67
+[    2809ms] [LOG] %c
+🏆 Trusted by 20,000+ Shopify merchants
+📦 Flexible bundles for every type of store
+💡 Proven to lift sales and customer happiness
+
+Learn more at:
+https://apps.shopify.com/fast-bundle-product-bundles?utm_source=storefront-console&utm_medium=attribution&utm_campaign=bundle-banner&utm_content=learn-more&utm_term=lucier.kr font-size:14px; @ https://sdk.fastbundle.co/1.22.43/main.min.js:119
+[    3113ms] Uncaught (in promise) TypeError: Cannot destructure property 'name' of 'e' as it is undefined.
+    at <anonymous> (https://widget.privy.com/assets/widget.js:301:69767)
+    at <anonymous> (https://widget.privy.com/assets/widget.js:778:781440)
+    at dispatch (https://widget.privy.com/assets/widget.js:778:784866)
+    at <anonymous> (https://widget.privy.com/assets/widget.js:301:72472)
+[    3423ms] [INFO] Clear-Site-Data header on 'https://lucier.kr/cart/update.js': Cleared data types: "prefetchCache", "prerenderCache". @ https://lucier.kr/:0
+[    6507ms] [WARNING] Specifying 'overflow: visible' on img, video and canvas tags may cause them to produce visual content outside of the element bounds. See https://github.com/WICG/view-transitions/blob/main/debugging_overflow_on_images.md for details. @ https://lucier.kr/:0
+[  721772ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[  948389ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  948665ms] [LOG] [Fast Refresh] done in 276ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[  972503ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  972729ms] [LOG] [Fast Refresh] done in 225ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[  973282ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  973371ms] [LOG] [Fast Refresh] done in 88ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[  977614ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  977764ms] [LOG] [Fast Refresh] done in 150ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1037870ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 1038249ms] [LOG] [Fast Refresh] done in 378ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1157085ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 1157340ms] [LOG] [Fast Refresh] done in 255ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1322993ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 1323236ms] [LOG] [Fast Refresh] done in 243ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1323284ms] [LOG] [HMR] Detected local css modules. Reload all css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js:1
+[ 1364916ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 1365013ms] [LOG] [Fast Refresh] done in 98ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1365063ms] [LOG] [HMR] Detected local css modules. Reload all css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js:1
+[ 1636104ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 1636388ms] [LOG] [Fast Refresh] done in 283ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 1636437ms] [LOG] [HMR] Detected local css modules. Reload all css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js:1
+[ 2392874ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2393203ms] [LOG] [Fast Refresh] done in 329ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2418106ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2418263ms] [LOG] [Fast Refresh] done in 157ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2424021ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2424196ms] [LOG] [Fast Refresh] done in 175ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2424249ms] [LOG] [HMR] Detected local css modules. Reload all css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js:1
+[ 2549741ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2549907ms] [LOG] [Fast Refresh] done in 167ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2689585ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2689897ms] [LOG] [Fast Refresh] done in 312ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2695041ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2695211ms] [LOG] [Fast Refresh] done in 171ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2742804ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2742929ms] [LOG] [Fast Refresh] done in 125ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2747490ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2747642ms] [LOG] [Fast Refresh] done in 153ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2752437ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2752588ms] [LOG] [Fast Refresh] done in 152ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2757627ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2757782ms] [LOG] [Fast Refresh] done in 155ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2780414ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2780508ms] [LOG] [Fast Refresh] done in 95ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2784481ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2784639ms] [LOG] [Fast Refresh] done in 158ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2789462ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2789619ms] [LOG] [Fast Refresh] done in 156ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2798155ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2798304ms] [LOG] [Fast Refresh] done in 150ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2855927ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2856087ms] [LOG] [Fast Refresh] done in 161ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2865452ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2865615ms] [LOG] [Fast Refresh] done in 163ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2901664ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2901754ms] [LOG] [Fast Refresh] done in 91ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2905883ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2906069ms] [LOG] [Fast Refresh] done in 186ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 2917775ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 2917908ms] [LOG] [Fast Refresh] done in 133ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 3235969ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 3236201ms] [LOG] [Fast Refresh] done in 232ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 3245692ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 3245774ms] [LOG] [Fast Refresh] done in 81ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 3357998ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 3358137ms] [LOG] [Fast Refresh] done in 139ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[ 3362153ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[ 3362307ms] [LOG] [Fast Refresh] done in 154ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43

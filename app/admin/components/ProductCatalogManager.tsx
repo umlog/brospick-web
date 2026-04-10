@@ -119,7 +119,7 @@ function ProductRow({
 }
 
 export function ProductCatalogManager({ state }: ProductCatalogManagerProps) {
-  const { products, loading, error, saving, fetchProducts, updateProduct } = state;
+  const { products, loading, error, saving, fetchProducts, updateProduct, unsynced, syncing, syncProducts } = state;
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {
@@ -137,6 +137,21 @@ export function ProductCatalogManager({ state }: ProductCatalogManagerProps) {
 
   return (
     <div className={styles.catalogContainer}>
+      {unsynced.length > 0 && (
+        <div className={styles.syncBanner}>
+          <div className={styles.syncBannerText}>
+            <strong>⚠️ DB에 등록되지 않은 상품 {unsynced.length}개</strong>
+            <span>{unsynced.map((p) => p.name).join(', ')}</span>
+          </div>
+          <button
+            className={styles.syncButton}
+            onClick={syncProducts}
+            disabled={syncing}
+          >
+            {syncing ? '등록 중...' : '지금 동기화'}
+          </button>
+        </div>
+      )}
       <div className={styles.catalogHeader}>
         <h3 className={styles.catalogTitle}>상품 가격 / 이름 관리</h3>
         <p className={styles.catalogDesc}>

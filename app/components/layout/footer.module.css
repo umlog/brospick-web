@@ -38,16 +38,14 @@
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding-top: var(--space-md);
+  }
+
   .container {
     grid-template-columns: 1fr;
     gap: 0;
     padding-bottom: 0;
-  }
-
-  .column:first-child {
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid var(--color-border);
-    align-items: center;
   }
 
   /* Mobile: accordion active */

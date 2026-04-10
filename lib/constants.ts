@@ -2,9 +2,13 @@
 // 가격, 배송비, 은행 정보 등을 변경할 때 이 파일만 수정하면 됩니다.
 
 export const SHIPPING = {
-  fee: 3000,
-  freeShipping: false, // true면 배송비 할인 적용
+  fee: 3500,
+  freeThreshold: 100000, // 이 금액 이상 주문 시 무료배송
 } as const;
+
+export function getShippingFee(totalPrice: number): number {
+  return totalPrice >= SHIPPING.freeThreshold ? 0 : SHIPPING.fee;
+}
 
 export const BANK = {
   name: '기업은행',
@@ -20,10 +24,15 @@ export const CONTACT = {
 
 export const RETURN_POLICY = {
   windowDays: 7,
-  returnShippingFee: 4000,   // 반품 배송비
-  exchangeShippingFee: 8000, // 교환 배송비 (왕복)
+  returnShippingFee: 3500,   // 반품 배송비
+  exchangeShippingFee: 7000, // 교환 배송비 (왕복)
   banks: ['카카오뱅크', '국민은행', '신한은행', '우리은행', '하나은행', 'NH농협', '기업은행', 'SC제일은행', '토스뱅크', '케이뱅크'],
 } as const;
+
+export const CARE_INSTRUCTIONS = [
+  '건조기 사용 금지',
+  '온수세탁 금지',
+] as const;
 
 export const COMPANY = {
   name: 'BROSPICK',

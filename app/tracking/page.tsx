@@ -56,6 +56,9 @@ function TrackingContent() {
   useEffect(() => {
     if (orderNumberParam) {
       setOrderNumber(orderNumberParam);
+    } else {
+      const saved = localStorage.getItem('brospick-last-order');
+      if (saved) setOrderNumber(saved);
     }
   }, [orderNumberParam]);
 

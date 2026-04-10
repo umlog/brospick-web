@@ -1,10 +1,9 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
-import { OrderStatus } from '@/lib/domain/enums';
 import { showToast } from '../lib/toast';
 
-export function useOrders() {
+export function useOrders(notifyOnChange: boolean) {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [processingOrders, setProcessingOrders] = useState<Set<string>>(new Set());
@@ -13,13 +12,6 @@ export function useOrders() {
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
-  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
-  const [trackingModal, setTrackingModal] = useState<string | null>(null);
-  const [trackingInput, setTrackingInput] = useState('');
-  const [notifyOnChange, setNotifyOnChange] = useState(true);
-  const [delayModal, setDelayModal] = useState<string | null>(null);
-  const [delayWeeks, setDelayWeeks] = useState(3);
-  const [delayUnit, setDelayUnit] = useState<'주' | '일'>('주');
 
   const orders = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -104,43 +96,6 @@ export function useOrders() {
     }
   };
 
-  const handleShippingClick = (orderId: string) => {
-    setTrackingModal(orderId);
-    setTrackingInput('');
-  };
-
-  const handleDelayClick = (orderId: string) => {
-    const order = allOrders.find((o) => o.id === orderId);
-    if (order) {
-      const match = order.status.match(/^(\d+)(주|일) 뒤 발송$/);
-      if (match) {
-        setDelayWeeks(parseInt(match[1], 10));
-        setDelayUnit(match[2] as '주' | '일');
-      } else {
-        setDelayWeeks(3);
-        setDelayUnit('주');
-      }
-    }
-    setDelayModal(orderId);
-  };
-
-  const handleDelaySubmit = () => {
-    if (!delayModal) return;
-    handleStatusChange(delayModal, `${delayWeeks}${delayUnit} 뒤 발송`);
-    setDelayModal(null);
-  };
-
-  const handleTrackingSubmit = () => {
-    if (!trackingModal) return;
-    if (!trackingInput.trim()) {
-      showToast('운송장번호를 입력해주세요.', 'error');
-      return;
-    }
-    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim());
-    setTrackingModal(null);
-    setTrackingInput('');
-  };
-
   const handlePaymentReminder = async (orderId: string, orderNumber: string) => {
     if (!confirm(`주문 ${orderNumber} 고객에게 입금 안내 메일을 보낼까요?`)) return;
 
@@ -162,7 +117,6 @@ export function useOrders() {
     try {
       await apiClient.orders.delete(orderId);
       setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
-      setExpandedOrder(null);
       showToast('주문이 삭제되었습니다.', 'success');
     } catch {
       showToast('주문 삭제에 실패했습니다.', 'error');
@@ -192,10 +146,6 @@ export function useOrders() {
     }
   };
 
-  const toggleExpanded = (orderId: string) => {
-    setExpandedOrder(expandedOrder === orderId ? null : orderId);
-  };
-
   return {
     orders,
     allOrders,
@@ -210,29 +160,11 @@ export function useOrders() {
     dateTo,
     setDateFrom,
     setDateTo,
-    expandedOrder,
-    trackingModal,
-    trackingInput,
-    notifyOnChange,
-    setTrackingInput,
-    setTrackingModal,
-    setNotifyOnChange,
-    delayModal,
-    delayWeeks,
-    delayUnit,
-    setDelayWeeks,
-    setDelayUnit,
-    setDelayModal,
     fetchOrders,
     handleStatusChange,
-    handleShippingClick,
-    handleTrackingSubmit,
-    handleDelayClick,
-    handleDelaySubmit,
     handlePaymentReminder,
     handleDeleteOrder,
     handleFilterChange,
     handleRevokeMarketing,
-    toggleExpanded,
   };
 }

@@ -271,6 +271,31 @@
   }
 }
 
+.careSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space-xs);
+}
+
+.careTag {
+  font-size: var(--size-xs);
+  padding: 4px 10px;
+  border: 1px solid #5a3a3a;
+  border-radius: 4px;
+  color: #c97070;
+  background: #1e1010;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.returnNotice {
+  margin-top: var(--space-sm);
+  font-size: var(--size-xs);
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
 .featureChips {
   display: flex;
   flex-wrap: wrap;
