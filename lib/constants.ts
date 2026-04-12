@@ -2,7 +2,7 @@
 // 가격, 배송비, 은행 정보 등을 변경할 때 이 파일만 수정하면 됩니다.
 
 export const SHIPPING = {
-  fee: 3500,
+  fee: 3000,
   freeThreshold: 100000, // 이 금액 이상 주문 시 무료배송
 } as const;
 
