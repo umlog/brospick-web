@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { RETURN_POLICY } from '@/lib/constants';
+import { RETURN_POLICY, REMOTE_AREA_SURCHARGE, isRemoteArea } from '@/lib/constants';
 import { OrderStatus, ReturnStatus } from '@/lib/domain/enums';
 import { getProductByName } from '@/lib/products';
 import styles from './returns.module.css';
@@ -28,6 +28,7 @@ interface OrderResult {
   status: string;
   delivered_at: string | null;
   created_at: string;
+  postal_code: string | null;
   order_items: OrderItem[];
   return_requests: ReturnRequest[];
 }
@@ -498,10 +499,25 @@ function ReturnsContent() {
                 <span>사이즈</span>
                 <span>{selectedItem.size}{returnType === '교환' ? ` → ${exchangeSize}` : ''}</span>
               </div>
-              <div className={styles.summaryRow}>
-                <span>{returnType === '교환' ? '교환 배송비' : '반품 배송비'}</span>
-                <span>₩{(returnType === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee).toLocaleString()}</span>
-              </div>
+              {(() => {
+                const remote = order.postal_code ? isRemoteArea(order.postal_code) : false;
+                const baseFee = returnType === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee;
+                const surcharge = remote ? (returnType === '교환' ? REMOTE_AREA_SURCHARGE.exchange : REMOTE_AREA_SURCHARGE.return) : 0;
+                return (
+                  <>
+                    <div className={styles.summaryRow}>
+                      <span>{returnType === '교환' ? '교환 배송비' : '반품 배송비'}</span>
+                      <span>₩{(baseFee + surcharge).toLocaleString()}</span>
+                    </div>
+                    {remote && (
+                      <div className={styles.summaryRow} style={{ color: '#dc2626', fontSize: '0.8rem' }}>
+                        <span>도서산간 추가배송비 포함</span>
+                        <span>+₩{surcharge.toLocaleString()}</span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
               {returnType === '반품' && (
                 <>
                   <div className={styles.summaryRow}>
@@ -510,7 +526,7 @@ function ReturnsContent() {
                   </div>
                   <div className={`${styles.summaryRow} ${styles.summaryRowBold}`}>
                     <span>환불 예상 금액</span>
-                    <span>₩{(selectedItem.price * selectedItem.quantity - RETURN_POLICY.returnShippingFee).toLocaleString()}</span>
+                    <span>₩{(selectedItem.price * selectedItem.quantity - RETURN_POLICY.returnShippingFee - (order.postal_code && isRemoteArea(order.postal_code) ? REMOTE_AREA_SURCHARGE.return : 0)).toLocaleString()}</span>
                   </div>
                   <div className={styles.summaryRow}>
                     <span>환불 계좌</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { BANK } from '../../lib/constants';
@@ -46,8 +46,12 @@ function OrderCompletePage() {
   const searchParams = useSearchParams();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const { clearCart } = useCart();
+  const processed = useRef(false);
 
   useEffect(() => {
+    if (processed.current) return;
+    processed.current = true;
+
     const method = searchParams.get('method');
     const orderNumber = searchParams.get('order');
     const amount = searchParams.get('amount');
@@ -83,16 +87,18 @@ function OrderCompletePage() {
 
     // 무통장입금 (sessionStorage로 전달)
     const stored = sessionStorage.getItem('orderComplete');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        localStorage.setItem('brospick-last-order', parsed.orderNumber);
-        setOrderData({ ...parsed, paymentMethod: 'bank' });
-        sessionStorage.removeItem('orderComplete');
-      } catch {
-        router.push('/');
-      }
-    } else {
+    if (!stored) {
+      router.push('/');
+      return;
+    }
+
+    sessionStorage.removeItem('orderComplete');
+
+    try {
+      const parsed = JSON.parse(stored);
+      localStorage.setItem('brospick-last-order', parsed.orderNumber);
+      setOrderData({ ...parsed, paymentMethod: 'bank' });
+    } catch {
       router.push('/');
     }
   }, [router, searchParams]);

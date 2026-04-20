@@ -1,14 +1,16 @@
 import { CartItem } from '../../contexts/CartContext';
-import { SHIPPING, getShippingFee } from '../../../lib/constants';
+import { SHIPPING, REMOTE_AREA_SURCHARGE, getShippingFee, isRemoteArea } from '../../../lib/constants';
 import { formatPrice } from '../utils';
 import styles from '../checkout-page.module.css';
 
 interface OrderSummaryProps {
   checkoutItems: CartItem[];
   totalPrice: number;
+  postalCode?: string;
 }
 
-export function OrderSummary({ checkoutItems, totalPrice }: OrderSummaryProps) {
+export function OrderSummary({ checkoutItems, totalPrice, postalCode }: OrderSummaryProps) {
+  const remote = !!postalCode && isRemoteArea(postalCode);
   return (
     <div className={styles.orderSummary}>
       <h2>주문 요약</h2>
@@ -33,16 +35,22 @@ export function OrderSummary({ checkoutItems, totalPrice }: OrderSummaryProps) {
         </div>
         <div className={styles.totalRow}>
           <span>배송비</span>
-          {getShippingFee(totalPrice) === 0 ? (
+          {getShippingFee(totalPrice, postalCode) === 0 ? (
             <span style={{ color: '#2563eb', fontWeight: 600 }}>무료</span>
           ) : (
-            <span>{formatPrice(SHIPPING.fee)}</span>
+            <span>{formatPrice(SHIPPING.fee + (remote ? REMOTE_AREA_SURCHARGE.shipping : 0))}</span>
           )}
         </div>
+        {remote && (
+          <div className={styles.totalRow} style={{ color: '#dc2626', fontSize: '0.8rem' }}>
+            <span>도서산간 추가배송비 포함</span>
+            <span>+{formatPrice(REMOTE_AREA_SURCHARGE.shipping)}</span>
+          </div>
+        )}
         <div className={styles.totalDivider} />
         <div className={styles.totalRowFinal}>
           <span>총 결제 금액</span>
-          <span>{formatPrice(totalPrice + getShippingFee(totalPrice))}</span>
+          <span>{formatPrice(totalPrice + getShippingFee(totalPrice, postalCode))}</span>
         </div>
       </div>
     </div>

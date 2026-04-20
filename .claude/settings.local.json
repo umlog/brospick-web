@@ -22,7 +22,18 @@
       "WebFetch(domain:lucier.kr)",
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
-      "mcp__plugin_playwright_playwright__browser_run_code"
+      "mcp__plugin_playwright_playwright__browser_run_code",
+      "WebSearch",
+      "WebFetch(domain:tosstoss.co.kr)",
+      "WebFetch(domain:domeggook.com)",
+      "WebFetch(domain:ichibanhouse.com)",
+      "WebFetch(domain:www.webmini.net)",
+      "WebFetch(domain:www.sagein.net)",
+      "WebFetch(domain:webmini.tistory.com)",
+      "WebFetch(domain:imweb.me)",
+      "WebFetch(domain:help.campaignus.me)",
+      "WebFetch(domain:likeiam5.com)",
+      "WebFetch(domain:sycstore.co.kr)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

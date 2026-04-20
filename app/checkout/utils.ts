@@ -33,6 +33,7 @@ export function buildOrderPayload(
   checkoutItems: CartItem[],
   totalPrice: number
 ) {
+  const shippingFee = getShippingFee(totalPrice, formData.postalCode);
   return {
     customerName: formData.name,
     customerPhone: formData.phone,
@@ -40,8 +41,8 @@ export function buildOrderPayload(
     postalCode: formData.postalCode,
     address: formData.address,
     addressDetail: formData.addressDetail,
-    totalAmount: totalPrice + getShippingFee(totalPrice),
-    shippingFee: getShippingFee(totalPrice),
+    totalAmount: totalPrice + shippingFee,
+    shippingFee,
     depositorName: formData.depositorName,
     deliveryNote: formData.deliveryNote,
     privacyConsent: formData.privacyConsent,

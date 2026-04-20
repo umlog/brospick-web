@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
         tracking_number,
         delivered_at,
         created_at,
+        postal_code,
         order_items (
           id,
           product_name,

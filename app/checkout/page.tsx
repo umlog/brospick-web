@@ -51,12 +51,13 @@ export default function CheckoutPage() {
                 className={styles.submitButton}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? '주문 처리 중...' : `${formatPrice(selectedTotalPrice + getShippingFee(selectedTotalPrice))} 주문하기`}
+                {isSubmitting ? '주문 처리 중...' : `${formatPrice(selectedTotalPrice + getShippingFee(selectedTotalPrice, formData.postalCode))} 주문하기`}
               </button>
             </form>
             <OrderSummary
               checkoutItems={checkoutItems}
               totalPrice={selectedTotalPrice}
+              postalCode={formData.postalCode}
             />
           </div>
         </div>

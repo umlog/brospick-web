@@ -6,8 +6,62 @@ export const SHIPPING = {
   freeThreshold: 100000, // 이 금액 이상 주문 시 무료배송
 } as const;
 
-export function getShippingFee(totalPrice: number): number {
-  return totalPrice >= SHIPPING.freeThreshold ? 0 : SHIPPING.fee;
+// CJ대한통운 기준 도서산간 지역 추가 요금
+export const REMOTE_AREA_SURCHARGE = {
+  shipping: 5000,    // 배송비 추가
+  return: 5000,      // 반품 추가
+  exchange: 10000,   // 교환 추가
+} as const;
+
+// CJ대한통운 도서산간 지역 우편번호 범위 [시작, 끝]
+const REMOTE_AREA_RANGES: [number, number][] = [
+  [22386, 22388], // 인천 중구 섬지역
+  [23004, 23010], // 인천 강화군 섬지역
+  [23100, 23116], // 인천 옹진군 섬지역
+  [23124, 23136], // 인천 옹진군 섬지역
+  [31708, 31708], // 충남 당진시 섬지역
+  [32133, 32133], // 충남 태안군 섬지역
+  [33411, 33411], // 충남 보령시 섬지역
+  [40200, 40240], // 경북 울릉군 (울릉도·독도)
+  [46768, 46771], // 부산 강서구 섬지역
+  [52570, 52571], // 경남 사천시 섬지역
+  [53031, 53033], // 경남 통영시 섬지역
+  [53089, 53104], // 경남 통영시 섬지역
+  [54000, 54000], // 경남 통영시 섬지역
+  [56347, 56349], // 전북 부안군 섬지역
+  [57068, 57069], // 전남 영광군 섬지역
+  [58760, 58762], // 전남 목포시 섬지역
+  [58800, 58810], // 전남 신안군 섬지역
+  [58816, 58818], // 전남 신안군 섬지역
+  [58826, 58826], // 전남 신안군 섬지역
+  [58828, 58866], // 전남 신안군 섬지역
+  [58953, 58958], // 전남 진도군 섬지역
+  [59102, 59103], // 전남 완도군 섬지역
+  [59106, 59106], // 전남 완도군 섬지역
+  [59127, 59127], // 전남 완도군 섬지역
+  [59129, 59129], // 전남 완도군 섬지역
+  [59137, 59166], // 전남 완도군 섬지역
+  [59421, 59421], // 전남 보성군 섬지역
+  [59531, 59531], // 전남 고흥군 섬지역
+  [59551, 59551], // 전남 고흥군 섬지역
+  [59563, 59563], // 전남 고흥군 섬지역
+  [59568, 59568], // 전남 고흥군 섬지역
+  [59650, 59650], // 전남 여수시 섬지역
+  [59766, 59766], // 전남 여수시 섬지역
+  [59781, 59790], // 전남 여수시 섬지역
+  [63000, 63644], // 제주특별자치도 전지역
+];
+
+export function isRemoteArea(postalCode: string): boolean {
+  const code = parseInt(postalCode, 10);
+  if (isNaN(code)) return false;
+  return REMOTE_AREA_RANGES.some(([start, end]) => code >= start && code <= end);
+}
+
+export function getShippingFee(totalPrice: number, postalCode?: string): number {
+  if (totalPrice >= SHIPPING.freeThreshold) return 0;
+  const surcharge = postalCode && isRemoteArea(postalCode) ? REMOTE_AREA_SURCHARGE.shipping : 0;
+  return SHIPPING.fee + surcharge;
 }
 
 export const BANK = {
