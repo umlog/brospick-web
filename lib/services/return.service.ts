@@ -297,11 +297,39 @@ export class ReturnService {
 
   // 반품/교환 삭제
   async deleteReturnRequest(requestId: string) {
+    // 삭제 전 상태 조회 - 교환 승인 이후 삭제 시 차감된 재고 복구 필요
+    const { data: current } = await supabaseAdmin
+      .from('return_requests')
+      .select('status, type, exchange_size, quantity, order_items(product_id)')
+      .eq('id', requestId)
+      .single();
+
     const { error } = await supabaseAdmin.from('return_requests').delete().eq('id', requestId);
     if (error) {
       console.error('Return request delete error:', error);
       throw new Error(`삭제에 실패했습니다: ${error.message}`);
     }
+
+    // 교환 승인(APPROVED) 이후 상태에서 삭제 시 차감된 교환 사이즈 재고 복구
+    // APPROVED/COLLECTING/COLLECTED: 교환 사이즈 재고가 차감된 상태
+    const exchangeStockDecrementedStatuses = [
+      ReturnStatus.APPROVED,
+      ReturnStatus.COLLECTING,
+      ReturnStatus.COLLECTED,
+    ] as string[];
+    if (
+      current &&
+      current.type === ReturnType.EXCHANGE &&
+      current.exchange_size &&
+      exchangeStockDecrementedStatuses.includes(current.status)
+    ) {
+      const orderItem = Array.isArray(current.order_items) ? current.order_items[0] : current.order_items;
+      const productId = orderItem?.product_id ?? null;
+      if (productId) {
+        await inventoryService.adjustStock(productId, current.exchange_size, current.quantity);
+      }
+    }
+
     return { success: true };
   }
 }

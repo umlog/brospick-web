@@ -214,7 +214,7 @@ export class OrderService {
     // 현재 주문 상태 조회 (재고 차감 판단용)
     const { data: currentOrder } = await supabaseAdmin
       .from('orders')
-      .select('status, order_items(product_id, size, quantity)')
+      .select('status, payment_method, order_items(product_id, size, quantity)')
       .eq('id', orderId)
       .single();
 
@@ -238,8 +238,11 @@ export class OrderService {
       throw new Error(`주문 상태 변경에 실패했습니다: ${error.message}`);
     }
 
-    // 입금확인 또는 발송지연으로 전환 시 재고 차감 (아직 차감되지 않은 경우만)
-    if (isConfirmedStatus(status) && currentOrder && !isConfirmedStatus(currentOrder.status)) {
+    // 입금확인 또는 발송지연으로 전환 시 재고 차감
+    // 카카오페이만: 주문 생성 시 skipStockDecrement=true로 생성되므로 여기서 차감
+    // 무통장입금: 주문 생성 시 이미 차감했으므로 여기서 다시 차감하면 이중 차감됨
+    const isKakaoPay = currentOrder?.payment_method === '카카오페이';
+    if (isConfirmedStatus(status) && isKakaoPay && currentOrder && !isConfirmedStatus(currentOrder.status)) {
       const items = Array.isArray(currentOrder.order_items) ? currentOrder.order_items : [];
       for (const item of items) {
         if (item.product_id) {
@@ -277,7 +280,7 @@ export class OrderService {
     // 삭제 전 상태와 아이템 조회 (재고 복구 여부 판단)
     const { data: order } = await supabaseAdmin
       .from('orders')
-      .select('status, order_items(product_id, size, quantity)')
+      .select('status, payment_method, order_items(product_id, size, quantity)')
       .eq('id', orderId)
       .single();
 
@@ -287,9 +290,14 @@ export class OrderService {
       throw new Error(`주문 삭제에 실패했습니다: ${error.message}`);
     }
 
-    // 입금확인 이후 상태였다면 재고 복구
+    // 재고 복구 대상:
+    // 1. 입금확인 이후 상태 (카카오/무통장 모두)
+    // 2. 입금대기 + 무통장입금 (주문 생성 시점에 재고가 차감됐으므로)
     const restoreStatuses = STOCK_RESTORE_STATUSES as readonly string[];
-    if (order && (restoreStatuses.includes(order.status) || isDelayStatus(order.status))) {
+    const isBankTransferPending =
+      order?.status === OrderStatus.PENDING_PAYMENT &&
+      order?.payment_method === '무통장입금';
+    if (order && (restoreStatuses.includes(order.status) || isDelayStatus(order.status) || isBankTransferPending)) {
       const items = Array.isArray(order.order_items) ? order.order_items : [];
       await inventoryService.restoreStock(
         items.filter((i: { product_id: number | null }) => i.product_id).map((i: { product_id: number; size: string; quantity: number }) => ({

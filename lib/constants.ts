@@ -8,9 +8,9 @@ export const SHIPPING = {
 
 // CJ대한통운 기준 도서산간 지역 추가 요금
 export const REMOTE_AREA_SURCHARGE = {
-  shipping: 5000,    // 배송비 추가
-  return: 5000,      // 반품 추가
-  exchange: 10000,   // 교환 추가
+  shipping: 3000,    // 배송비 추가
+  return: 3000,      // 반품 추가
+  exchange: 5000,   // 교환 추가
 } as const;
 
 // CJ대한통운 도서산간 지역 우편번호 범위 [시작, 끝]

@@ -226,6 +226,10 @@ function ReturnsContent() {
               <span className={styles.policyItem}>교환 배송비 ₩{RETURN_POLICY.exchangeShippingFee.toLocaleString()}</span>
               <span className={styles.policyItem}>수령 후 {RETURN_POLICY.windowDays}일 이내</span>
             </div>
+            <div className={styles.policyRow} style={{ marginTop: '6px', color: '#dc2626', fontSize: '0.78rem' }}>
+              <span className={styles.policyItem}>도서산간 반품 +₩{REMOTE_AREA_SURCHARGE.return.toLocaleString()}</span>
+              <span className={styles.policyItem}>도서산간 교환 +₩{REMOTE_AREA_SURCHARGE.exchange.toLocaleString()}</span>
+            </div>
           </div>
           <form className={styles.form} onSubmit={handleLookup}>
             {lookupError && <div className={styles.error}>{lookupError}</div>}
