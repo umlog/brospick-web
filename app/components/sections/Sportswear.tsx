@@ -131,6 +131,9 @@ export default function Sportswear({ initialPrices }: Props) {
                     <div className={styles.comingSoonOverlay}>
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
                     </div>
+                    {product.popularBadge && (
+                      <span className={styles.popularBadge}>{product.popularBadge}</span>
+                    )}
                   </div>
                   <div className={styles.cardInfo}>
                     <p className={styles.cardName}>{product.name}</p>
@@ -159,6 +162,9 @@ export default function Sportswear({ initialPrices }: Props) {
                     className={styles.cardImg}
                     onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
                   />
+                  {product.popularBadge && (
+                    <span className={styles.popularBadge}>{product.popularBadge}</span>
+                  )}
                 </div>
                 <div className={styles.cardInfo}>
                   <p className={styles.cardName}>{product.name}</p>

@@ -73,7 +73,7 @@ export const BANK = {
 
 export const CONTACT = {
   email: 'team.brospick@gmail.com',
-  phone: '010-6604-6269',
+  phone: '010-2687-6269',
 } as const;
 
 export const RETURN_POLICY = {

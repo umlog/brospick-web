@@ -115,6 +115,7 @@ export interface Product {
   chestLabel?: string;       // 사이즈 표 가슴 열 헤더 (기본값: '가슴단면')
   sizeChartType?: 'top' | 'shorts' | 'pants'; // 사이즈 표 컬럼 구성 (기본값: 'top')
   comingSoon?: boolean; // true면 목록에서 Coming Soon 카드로 표시, 구매 불가
+  popularBadge?: string; // 예: '500장 이상 구매한 상품' — 상품 카드 이미지 위에 배너로 표시
   variants?: ProductVariant[]; // 묶어서 보여줄 컬러 variants (Coming Soon 그룹)
   hideFromList?: boolean; // true면 productList에서 제외 (다른 상품의 variant로 표시됨)
   details: ProductDetails;
@@ -124,7 +125,8 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.HALF_ZIP_TRAINING_TOP]: {
     id: PRODUCT_IDS.HALF_ZIP_TRAINING_TOP,
     slug: PRODUCT_SLUGS.HALF_ZIP_TRAINING_TOP,
-    name: 'Half-Zip Training Top',
+    name: 'Quarter-Zip Training Top',
+    popularBadge: '500장 이상 구매한 상품',
     category: 'training-top',
     image: '/apparel/training-top/half-zip/half-zip-training-top/detail-1.jpg',
     images: [
@@ -132,9 +134,6 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/training-top/half-zip/half-zip-training-top/thumb2.png',
       '/apparel/training-top/half-zip/half-zip-training-top/half-zip-detail-all.png',
       '/apparel/training-top/half-zip/half-zip-training-top/detail-1.jpg',
-      '/apparel/training-top/half-zip/half-zip-training-top/detail-point.jpg',
-      '/apparel/training-top/half-zip/half-zip-training-top/light-second.png',
-      '/apparel/training-top/half-zip/half-zip-training-top/light-main.png',
     ],
     tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
     description:
@@ -176,7 +175,7 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_BLACK]: {
     id: PRODUCT_IDS.QUARTER_ZIP_TRAINING_TOP_BLACK,
     slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_BLACK,
-    name: 'Quarter-Zip Training Top (Black)',
+    name: 'Flex Quarter-Zip Top (Black)',
     category: 'training-top',
     comingSoon: true,
     image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
@@ -270,7 +269,8 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_GRAY]: {
     id: PRODUCT_IDS.QUARTER_ZIP_TRAINING_TOP_GRAY,
     slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_GRAY,
-    name: 'Quarter-Zip Training Top (Gray)',
+    name: 'Flex Quarter-Zip Top (Gray)',
+    popularBadge: '100장 이상 구매한 상품',
     category: 'training-top',
     comingSoon: false,
     image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
@@ -320,6 +320,7 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.RUNNING_LONG_SLEEVE_TOP_GRAY,
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_GRAY,
     name: 'Running Long Sleeve Top (Gray)',
+    popularBadge: '300장 이상 구매한 상품',
     category: 'long-sleeve',
     comingSoon: false,
     image: '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
@@ -372,6 +373,7 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.RUNNING_LONG_SLEEVE_TOP_BLACK,
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_BLACK,
     name: 'Running Long Sleeve Top (Black)',
+    popularBadge: '300장 이상 구매한 상품',
     category: 'long-sleeve',
     comingSoon: false,
     image: '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
@@ -981,6 +983,7 @@ export const productList = Object.values(products)
     description: p.tagline,
     category: p.category,
     comingSoon: p.comingSoon ?? false,
+    popularBadge: p.popularBadge,
     variants: p.variants,
   }));
 

@@ -26,20 +26,20 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://brospick.com'),
-  title: 'BROSPICK',
+  title: '브로스픽 BROSPICK',
   description:
     '스포츠인들의 스토리를 기록하는 브로스픽입니다. 새롭게 출시된 의류와 다양한 컨텐츠를 만나보세요. 현재 하이라이트 커뮤니티 플랫폼 픽커 (picker)를 준비 중입니다.',
   openGraph: {
-    title: 'Brospick',
+    title: '브로스픽 BROSPICK',
     description:
-      '선수의 실력을 기록하고, 그들에게 기회를 만듭니다.',
+      'Sportswear × Teams × Community',
     type: 'website',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Brospick',
+        alt: 'BROSPICK',
       },
     ],
   },

@@ -131,6 +131,9 @@ export default function ApparelPage() {
                     <div className={styles.comingSoonOverlay}>
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
                     </div>
+                    {product.popularBadge && (
+                      <span className={styles.popularBadge}>{product.popularBadge}</span>
+                    )}
                   </div>
                   <div className={styles.productInfo}>
                     <h3 className={styles.productName}>{productName}</h3>
@@ -158,6 +161,9 @@ export default function ApparelPage() {
                       alt={product.name}
                       onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
                     />
+                    {product.popularBadge && (
+                      <span className={styles.popularBadge}>{product.popularBadge}</span>
+                    )}
                   </div>
                   <div className={styles.productInfo}>
                     <h3 className={styles.productName}>{productName}</h3>
