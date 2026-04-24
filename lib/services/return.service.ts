@@ -9,6 +9,7 @@ import { notificationService } from './notification.service';
 import { OrderStatus, ReturnStatus, ReturnType } from '@/lib/domain/enums';
 import { RETURN_STATUS_TRANSITIONS } from '@/lib/domain/constants';
 import { RETURN_POLICY } from '@/lib/constants';
+import { getKakaoPayConfig } from '@/lib/kakao-pay';
 
 function generateRequestNumber(): string {
   const now = new Date();
@@ -77,14 +78,15 @@ export class ReturnService {
       throw Object.assign(new Error('교환 희망 사이즈를 선택해주세요.'), { status: 400 });
     }
 
-    if (type === ReturnType.RETURN && (!refundBank || !refundAccount || !refundHolder)) {
+    const isKakaoPay = (order as { payment_method?: string }).payment_method === '카카오페이';
+    if (type === ReturnType.RETURN && !isKakaoPay && (!refundBank || !refundAccount || !refundHolder)) {
       throw Object.assign(new Error('환불 계좌 정보를 입력해주세요.'), { status: 400 });
     }
 
     // 주문 조회 + 인증 (주문번호 + 전화번호)
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
-      .select('id, order_number, status, delivered_at, customer_name, customer_phone, customer_email')
+      .select('id, order_number, status, delivered_at, customer_name, customer_phone, customer_email, payment_method')
       .eq('order_number', orderNumber)
       .eq('customer_phone', phone)
       .single();
@@ -203,7 +205,7 @@ export class ReturnService {
       .from('return_requests')
       .select(`
         *,
-        orders (order_number, customer_name, customer_phone, customer_email),
+        orders (order_number, customer_name, customer_phone, customer_email, payment_method, kakao_tid),
         order_items (product_id, product_name, size, quantity, price)
       `)
       .eq('id', requestId)
@@ -273,6 +275,46 @@ export class ReturnService {
     // 처리완료: 원래 사이즈 재고 복구
     if (status === ReturnStatus.COMPLETED && orderItem?.size && productId) {
       await inventoryService.adjustStock(productId, orderItem.size, current.quantity);
+    }
+
+    // 처리완료 + 반품 + 카카오페이: 자동 환불 API 호출
+    const order = Array.isArray(current.orders) ? current.orders[0] : current.orders;
+    if (
+      status === ReturnStatus.COMPLETED &&
+      current.type === ReturnType.RETURN &&
+      order?.payment_method === '카카오페이' &&
+      order?.kakao_tid &&
+      current.refund_amount
+    ) {
+      try {
+        const kakaoConfig = getKakaoPayConfig();
+        const kakaoRes = await fetch('https://open-api.kakaopay.com/online/v1/payment/cancel', {
+          method: 'POST',
+          headers: {
+            'Authorization': `SECRET_KEY ${kakaoConfig.secretKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cid: kakaoConfig.cid,
+            tid: order.kakao_tid,
+            cancel_amount: current.refund_amount,
+            cancel_tax_free_amount: current.refund_amount,
+          }),
+        });
+        if (!kakaoRes.ok) {
+          const err = await kakaoRes.json().catch(() => ({}));
+          console.error('KakaoPay refund error:', err);
+          throw new Error('카카오페이 환불에 실패했습니다. 카카오페이 관리자 콘솔에서 직접 처리해주세요.');
+        }
+        // 환불 완료 표시
+        await supabaseAdmin
+          .from('return_requests')
+          .update({ refund_completed: true })
+          .eq('id', requestId);
+      } catch (err) {
+        if (err instanceof Error && err.message.includes('카카오페이')) throw err;
+        console.error('KakaoPay refund unexpected error:', err);
+      }
     }
 
     // 알림 발송

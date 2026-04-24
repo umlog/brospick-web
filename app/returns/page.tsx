@@ -29,6 +29,7 @@ interface OrderResult {
   delivered_at: string | null;
   created_at: string;
   postal_code: string | null;
+  payment_method: string;
   order_items: OrderItem[];
   return_requests: ReturnRequest[];
 }
@@ -110,12 +111,15 @@ function ReturnsContent() {
     };
   };
 
+  const isKakaoPay = order?.payment_method === '카카오페이';
+
   const canNext = () => {
     switch (step) {
       case 0: return !!selectedItem;
       case 1: return !!returnType;
       case 2:
         if (returnType === '교환') return !!exchangeSize;
+        if (isKakaoPay) return true;
         return !!refundBank && !!refundAccount && !!refundHolder;
       case 3: return !!reason.trim();
       default: return false;
@@ -318,7 +322,7 @@ function ReturnsContent() {
   // ─── Form ──────────────────────────────────────────────────────────────────
   if (!order) return null;
 
-  const stepLabels = ['상품', '유형', returnType === '교환' ? '사이즈' : '계좌', '사유', '확인'];
+  const stepLabels = ['상품', '유형', returnType === '교환' ? '사이즈' : isKakaoPay ? '환불' : '계좌', '사유', '확인'];
 
   return (
     <div className={styles.container}>
@@ -438,7 +442,16 @@ function ReturnsContent() {
           </div>
         )}
 
-        {step === 2 && returnType === '반품' && (
+        {step === 2 && returnType === '반품' && isKakaoPay && (
+          <div className={styles.stepContent}>
+            <p className={styles.stepTitle}>환불 안내</p>
+            <div className={styles.bankInfo} style={{ background: '#fff9e6', border: '1px solid #f0c040', borderRadius: 8, padding: '16px 20px', marginTop: 8 }}>
+              <p style={{ margin: 0, fontWeight: 600, color: '#7a5c00' }}>카카오페이로 자동 환불됩니다</p>
+              <p style={{ margin: '8px 0 0', fontSize: '0.875rem', color: '#7a5c00' }}>반품 처리 완료 시 결제하신 카카오페이 계정으로 자동 환불됩니다. 별도 계좌 입력이 필요하지 않습니다.</p>
+            </div>
+          </div>
+        )}
+        {step === 2 && returnType === '반품' && !isKakaoPay && (
           <div className={styles.stepContent}>
             <p className={styles.stepTitle}>환불 받으실 계좌 정보를 입력해주세요</p>
             <div className={styles.inputGroup}>
@@ -532,10 +545,17 @@ function ReturnsContent() {
                     <span>환불 예상 금액</span>
                     <span>₩{(selectedItem.price * selectedItem.quantity - RETURN_POLICY.returnShippingFee - (order.postal_code && isRemoteArea(order.postal_code) ? REMOTE_AREA_SURCHARGE.return : 0)).toLocaleString()}</span>
                   </div>
-                  <div className={styles.summaryRow}>
-                    <span>환불 계좌</span>
-                    <span>{refundBank} {refundAccount}</span>
-                  </div>
+                  {isKakaoPay ? (
+                    <div className={styles.summaryRow}>
+                      <span>환불 방법</span>
+                      <span>카카오페이 자동 환불</span>
+                    </div>
+                  ) : (
+                    <div className={styles.summaryRow}>
+                      <span>환불 계좌</span>
+                      <span>{refundBank} {refundAccount}</span>
+                    </div>
+                  )}
                 </>
               )}
               <div className={styles.summaryRow}>
