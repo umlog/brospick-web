@@ -100,6 +100,7 @@ export async function GET(request: NextRequest) {
       address: order.address,
       addressDetail: order.address_detail,
       siteUrl,
+      paymentMethod: 'kakaopay',
     });
 
     return NextResponse.redirect(

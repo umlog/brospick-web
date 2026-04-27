@@ -37,7 +37,7 @@ export default function Footer() {
             <FooterSection title="고객서비스">
             <ul className={styles.columnList}>
               <li><a href="/tracking">주문 조회</a></li>
-              <li><a href="/returns">교환 / 반품 신청</a></li>
+              <li><a href="/returns">취소 / 교환 / 반품</a></li>
             </ul>
           </FooterSection>
 

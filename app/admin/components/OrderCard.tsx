@@ -1,5 +1,5 @@
 import type { Order } from '../types';
-import { STATUS_OPTIONS } from '../constants';
+import { STATUS_BUTTON_OPTIONS } from '../constants';
 import { formatDate, getStatusColor } from '../utils';
 import { OrderStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
@@ -32,6 +32,7 @@ interface OrderCardProps {
   onPaymentReminder: (orderId: string, orderNumber: string) => void;
   onDelete: (orderId: string, orderNumber: string) => void;
   onRevokeMarketing: (orderId: string, orderNumber: string) => void;
+  onCancelRefundComplete: (orderId: string, orderNumber: string) => void;
 }
 
 export function OrderCard({
@@ -59,6 +60,7 @@ export function OrderCard({
   onPaymentReminder,
   onDelete,
   onRevokeMarketing,
+  onCancelRefundComplete,
 }: OrderCardProps) {
   const isDelayStatus = /^(\d+)(주|일) 뒤 발송$/.test(order.status);
 
@@ -129,7 +131,7 @@ export function OrderCard({
               />
             </div>
             <div className={styles.statusButtons}>
-              {STATUS_OPTIONS.map((status) => {
+              {STATUS_BUTTON_OPTIONS.map((status) => {
                 if (status === '발송지연') {
                   return (
                     <button
@@ -227,6 +229,34 @@ export function OrderCard({
               </div>
             )}
           </div>
+
+          {(order.status === OrderStatus.CANCEL_REQUESTED || order.status === OrderStatus.CANCELLED) && (
+            <div className={styles.detailSection}>
+              <h3>취소 정보</h3>
+              <p>취소 사유: {order.cancellation_reason || '-'}</p>
+              <p>환불 금액: ₩{(order.cancel_refund_amount ?? 0).toLocaleString()}</p>
+              {order.cancel_refund_bank && (
+                <>
+                  <p>환불 은행: {order.cancel_refund_bank}</p>
+                  <p>계좌번호: {order.cancel_refund_account}</p>
+                  <p>예금주: {order.cancel_refund_holder}</p>
+                </>
+              )}
+              <p>환불 완료: {order.cancel_refund_completed ? '✓ 완료' : '대기중'}</p>
+            </div>
+          )}
+
+          {order.status === OrderStatus.CANCEL_REQUESTED && !order.cancel_refund_completed && (
+            <div className={styles.paymentReminder}>
+              <button
+                className={styles.paymentReminderButton}
+                onClick={() => onCancelRefundComplete(order.id, order.order_number)}
+                disabled={processing}
+              >
+                환불 완료 처리
+              </button>
+            </div>
+          )}
 
           {order.marketing_consent && (
             <div className={styles.paymentReminder}>

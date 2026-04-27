@@ -4,5 +4,5 @@
 
 export { escapeHtml, sendMail } from './transporter';
 export { sendOrderConfirmationEmail, sendNewOrderNotificationEmail } from './order-emails';
-export { sendStatusChangeEmail, sendPaymentReminderEmail } from './status-emails';
+export { sendStatusChangeEmail, sendPaymentReminderEmail, sendOrderCancelEmail, sendAdminCancelNotificationEmail } from './status-emails';
 export { sendReturnRequestEmail, sendReturnStatusEmail } from './return-emails';

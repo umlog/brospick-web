@@ -5,7 +5,7 @@
 
 import { escapeHtml, sendMail } from './transporter';
 import { BANK, TRACKING } from '@/lib/constants';
-import type { StatusChangeEmailData, PaymentReminderEmailData } from '@/lib/domain/types';
+import type { StatusChangeEmailData, PaymentReminderEmailData, OrderCancelEmailData, AdminCancelNotificationEmailData } from '@/lib/domain/types';
 import { OrderStatus } from '@/lib/domain/enums';
 
 const STATUS_INFO: Partial<Record<OrderStatus, { title: string; message: string; color: string; bgColor: string }>> = {
@@ -165,4 +165,112 @@ export async function sendPaymentReminderEmail(data: PaymentReminderEmailData) {
   </div>`;
 
   await sendMail(data.customerEmail, `[BROSPICK] 입금 안내드립니다 (${data.orderNumber})`, html);
+}
+
+export async function sendOrderCancelEmail(data: OrderCancelEmailData) {
+  const isKakao = data.paymentMethod === '카카오페이';
+
+  const refundSection = isKakao
+    ? `<div style="background:#fff9e6;border:1px solid #f0c040;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="font-size:14px;color:#7a5c00;font-weight:600;margin:0 0 6px;">카카오페이 자동 환불</p>
+        <p style="font-size:13px;color:#7a5c00;margin:0;">결제하신 카카오페이 계정으로 자동 환불 처리되었습니다.</p>
+      </div>`
+    : `<div style="background:#f0f6ff;border:1px solid #d0e3ff;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="font-size:14px;color:#1a3f7a;font-weight:600;margin:0 0 12px;">환불 계좌 정보</p>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:#888;">은행</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.cancelRefundBank || '')}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:#888;">계좌번호</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.cancelRefundAccount || '')}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#888;">예금주</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.cancelRefundHolder || '')}</span>
+        </div>
+        <p style="font-size:12px;color:#555;margin:12px 0 0;">확인 후 영업일 기준 1~3일 내 환불 처리됩니다.</p>
+      </div>`;
+
+  const html = `
+  <div style="max-width:560px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;">
+    <div style="background:#121212;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+      <h1 style="color:#fff;font-size:20px;margin:0 0 8px;">BROSPICK</h1>
+      <p style="color:#b3b3b3;font-size:14px;margin:0;">주문이 취소되었습니다</p>
+    </div>
+    <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
+      <p style="font-size:15px;color:#333;margin:0 0 20px;">${escapeHtml(data.customerName)}님, 안녕하세요.</p>
+      <div style="background:#fff0f0;border-radius:8px;padding:20px;margin-bottom:24px;text-align:center;">
+        <div style="display:inline-block;padding:6px 16px;border-radius:20px;background:#ff3b30;color:#fff;font-size:14px;font-weight:600;margin-bottom:12px;">취소완료</div>
+        <p style="font-size:14px;color:#333;margin:12px 0 0;">주문이 정상적으로 취소되었습니다.</p>
+      </div>
+      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:#888;">주문번호</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#888;">환불 금액</span>
+          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+        </div>
+      </div>
+      ${refundSection}
+    </div>
+    <div style="padding:20px 24px;text-align:center;border-radius:0 0 12px 12px;background:#f8f8f8;border:1px solid #eee;border-top:none;">
+      <p style="font-size:12px;color:#999;margin:0;">본 메일은 BROSPICK에서 발송된 주문 취소 안내 메일입니다.</p>
+    </div>
+  </div>`;
+
+  await sendMail(data.customerEmail, `[BROSPICK] 주문이 취소되었습니다 (${data.orderNumber})`, html);
+}
+
+export async function sendAdminCancelNotificationEmail(data: AdminCancelNotificationEmailData) {
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.GMAIL_USER || '';
+  if (!adminEmail) return;
+
+  const html = `
+  <div style="max-width:560px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;">
+    <div style="background:#121212;padding:24px;text-align:center;border-radius:12px 12px 0 0;">
+      <h1 style="color:#fff;font-size:18px;margin:0;">BROSPICK 주문 취소 신청</h1>
+    </div>
+    <div style="padding:24px;background:#fff;border:1px solid #eee;border-top:none;">
+      <p style="font-size:14px;color:#333;margin:0 0 16px;font-weight:600;">무통장 환불 처리가 필요합니다.</p>
+      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">주문번호</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.orderNumber)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">고객명</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.customerName)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">연락처</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.customerPhone)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">환불 금액</span>
+          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">환불 은행</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.cancelRefundBank)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">계좌번호</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(data.cancelRefundAccount)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:#888;">예금주</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.cancelRefundHolder)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#888;">취소 사유</span>
+          <span style="font-size:14px;color:#333;">${escapeHtml(data.reason)}</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  await sendMail(adminEmail, `[취소신청] ${data.customerName} - ${data.orderNumber}`, html);
 }

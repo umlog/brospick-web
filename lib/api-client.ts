@@ -89,6 +89,19 @@ export const apiClient = {
       request<{ success: true }>(`/api/orders/${id}/marketing-consent`, {
         method: 'DELETE',
       }),
+
+    cancel: (payload: {
+      orderNumber: string;
+      phone: string;
+      reason: string;
+      refundBank?: string;
+      refundAccount?: string;
+      refundHolder?: string;
+    }) =>
+      request<{ refundAmount: number; paymentMethod: string }>('/api/orders/cancel', {
+        method: 'POST',
+        body: payload,
+      }),
   },
 
   returns: {

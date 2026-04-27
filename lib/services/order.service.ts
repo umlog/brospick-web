@@ -7,7 +7,8 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { inventoryService, type StockableItem } from './inventory.service';
 import { notificationService } from './notification.service';
 import { OrderStatus, isDelayStatus, isConfirmedStatus, STOCK_RESTORE_STATUSES } from '@/lib/domain/enums';
-import { VALID_ORDER_STATUSES } from '@/lib/domain/constants';
+import { VALID_ORDER_STATUSES, CANCELLABLE_STATUSES } from '@/lib/domain/constants';
+import { getKakaoPayConfig } from '@/lib/kakao-pay';
 
 interface CreateOrderItem {
   productId?: number;
@@ -190,6 +191,7 @@ export class OrderService {
       address,
       addressDetail: addressDetail ?? null,
       siteUrl,
+      paymentMethod: paymentMethod ?? '무통장입금',
     });
     }
 
@@ -224,6 +226,9 @@ export class OrderService {
     }
     if (status === OrderStatus.DELIVERED) {
       updateData.delivered_at = new Date().toISOString();
+    }
+    if (status === OrderStatus.CANCELLED) {
+      updateData.cancel_refund_completed = true;
     }
 
     const { data, error } = await supabaseAdmin
@@ -309,6 +314,138 @@ export class OrderService {
     }
 
     return { success: true };
+  }
+
+  // 주문 취소
+  async cancelOrder(payload: {
+    orderNumber: string;
+    phone: string;
+    reason: string;
+    refundBank?: string;
+    refundAccount?: string;
+    refundHolder?: string;
+  }, siteUrl: string) {
+    const { orderNumber, phone, reason, refundBank, refundAccount, refundHolder } = payload;
+
+    if (!orderNumber || !phone || !reason) {
+      throw Object.assign(new Error('필수 정보가 누락되었습니다.'), { status: 400 });
+    }
+
+    const { data: order, error: orderError } = await supabaseAdmin
+      .from('orders')
+      .select('*, order_items(product_id, size, quantity)')
+      .eq('order_number', orderNumber)
+      .eq('customer_phone', phone)
+      .single();
+
+    if (orderError || !order) {
+      throw Object.assign(new Error('주문을 찾을 수 없습니다. 주문번호와 전화번호를 확인해주세요.'), { status: 404 });
+    }
+
+    if (!(CANCELLABLE_STATUSES as readonly string[]).includes(order.status)) {
+      throw Object.assign(new Error('취소할 수 없는 주문 상태입니다.'), { status: 400 });
+    }
+
+    const isKakao = order.payment_method === '카카오페이';
+    // 입금대기(무통장)는 아직 미결제 → 환불 불필요, 바로 취소완료
+    const isPendingUnpaid = order.status === OrderStatus.PENDING_PAYMENT && !isKakao;
+
+    if (!isKakao && !isPendingUnpaid && (!refundBank || !refundAccount || !refundHolder)) {
+      throw Object.assign(new Error('환불 받으실 계좌 정보를 입력해주세요.'), { status: 400 });
+    }
+
+    // 배송중이면 배송비 제외, 입금대기 미결제면 0, 그 외 전액 환불
+    const refundAmount = isPendingUnpaid
+      ? 0
+      : order.status === OrderStatus.SHIPPING
+        ? order.total_amount - order.shipping_fee
+        : order.total_amount;
+
+    const updateData: Record<string, unknown> = {
+      cancellation_reason: reason,
+      cancelled_at: new Date().toISOString(),
+      cancel_refund_amount: refundAmount,
+    };
+
+    if (isPendingUnpaid) {
+      // 미결제 취소: 즉시 취소완료 (환불 불필요)
+      updateData.status = OrderStatus.CANCELLED;
+      updateData.cancel_refund_completed = true;
+    } else if (!isKakao) {
+      updateData.cancel_refund_bank = refundBank;
+      updateData.cancel_refund_account = refundAccount;
+      updateData.cancel_refund_holder = refundHolder;
+      updateData.status = OrderStatus.CANCEL_REQUESTED;
+    }
+
+    // 카카오페이: cancel API 호출 후 즉시 취소완료
+    if (isKakao) {
+      if (!order.kakao_tid) {
+        throw Object.assign(new Error('결제 정보를 찾을 수 없습니다.'), { status: 400 });
+      }
+      const kakaoConfig = getKakaoPayConfig();
+      const kakaoRes = await fetch('https://open-api.kakaopay.com/online/v1/payment/cancel', {
+        method: 'POST',
+        headers: {
+          'Authorization': `SECRET_KEY ${kakaoConfig.secretKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cid: kakaoConfig.cid,
+          tid: order.kakao_tid,
+          cancel_amount: refundAmount,
+          cancel_tax_free_amount: refundAmount,
+        }),
+      });
+
+      if (!kakaoRes.ok) {
+        const err = await kakaoRes.json().catch(() => ({}));
+        console.error('KakaoPay cancel error:', err);
+        throw new Error('카카오페이 환불에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+
+      updateData.status = OrderStatus.CANCELLED;
+      updateData.cancel_refund_completed = true;
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from('orders')
+      .update(updateData)
+      .eq('id', order.id);
+
+    if (updateError) {
+      throw new Error(`취소 처리에 실패했습니다: ${updateError.message}`);
+    }
+
+    // 재고 복구
+    const items = Array.isArray(order.order_items) ? order.order_items : [];
+    const stockItems = items.filter((i: { product_id: number | null }) => i.product_id);
+    if (stockItems.length > 0) {
+      await inventoryService.restoreStock(
+        stockItems.map((i: { product_id: number; size: string; quantity: number }) => ({
+          product_id: i.product_id,
+          size: i.size,
+          quantity: i.quantity,
+        }))
+      );
+    }
+
+    // 알림 발송
+    notificationService.notifyOrderCancelled({
+      orderNumber: order.order_number,
+      customerName: order.customer_name,
+      customerEmail: order.customer_email,
+      customerPhone: order.customer_phone,
+      refundAmount,
+      paymentMethod: order.payment_method,
+      cancelRefundBank: refundBank,
+      cancelRefundAccount: refundAccount,
+      cancelRefundHolder: refundHolder,
+      reason,
+      siteUrl,
+    });
+
+    return { refundAmount, paymentMethod: order.payment_method };
   }
 
   // 입금 안내 메일 발송

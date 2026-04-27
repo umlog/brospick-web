@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { RETURN_POLICY, REMOTE_AREA_SURCHARGE, isRemoteArea } from '@/lib/constants';
 import { OrderStatus, ReturnStatus } from '@/lib/domain/enums';
+import { CANCELLABLE_STATUSES } from '@/lib/domain/constants';
 import { getProductByName } from '@/lib/products';
 import styles from './returns.module.css';
 
@@ -30,6 +31,8 @@ interface OrderResult {
   created_at: string;
   postal_code: string | null;
   payment_method: string;
+  shipping_fee: number;
+  total_amount: number;
   order_items: OrderItem[];
   return_requests: ReturnRequest[];
 }
@@ -53,8 +56,17 @@ function ReturnsContent() {
   const [lookupError, setLookupError] = useState('');
   const [order, setOrder] = useState<OrderResult | null>(null);
 
-  // view: 'lookup' | 'ineligible' | 'form' | 'success'
-  const [view, setView] = useState<'lookup' | 'ineligible' | 'form' | 'success'>('lookup');
+  // view: 'lookup' | 'cancel' | 'cancel-success' | 'ineligible' | 'form' | 'success'
+  const [view, setView] = useState<'lookup' | 'cancel' | 'cancel-success' | 'ineligible' | 'form' | 'success'>('lookup');
+
+  // Cancel form state
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelRefundBank, setCancelRefundBank] = useState('');
+  const [cancelRefundAccount, setCancelRefundAccount] = useState('');
+  const [cancelRefundHolder, setCancelRefundHolder] = useState('');
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState('');
+  const [cancelResult, setCancelResult] = useState<{ refundAmount: number; paymentMethod: string } | null>(null);
 
   // Form state
   const [step, setStep] = useState(0);
@@ -88,7 +100,10 @@ function ReturnsContent() {
     return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
   };
 
-  const isEligible = (o: OrderResult) => {
+  const isCancellable = (o: OrderResult) =>
+    (CANCELLABLE_STATUSES as readonly string[]).includes(o.status);
+
+  const isEligibleForReturn = (o: OrderResult) => {
     if (o.status !== OrderStatus.DELIVERED) return false;
     if (!o.delivered_at) return false;
     const diff = (Date.now() - new Date(o.delivered_at).getTime()) / (1000 * 60 * 60 * 24);
@@ -146,8 +161,15 @@ function ReturnsContent() {
         return;
       }
 
-      setOrder(data.order);
-      setView(isEligible(data.order) ? 'form' : 'ineligible');
+      const o = data.order;
+      setOrder(o);
+      if (isCancellable(o)) {
+        setView('cancel');
+      } else if (isEligibleForReturn(o)) {
+        setView('form');
+      } else {
+        setView('ineligible');
+      }
     } catch {
       setLookupError('조회에 실패했습니다. 다시 시도해주세요.');
     } finally {
@@ -200,6 +222,49 @@ function ReturnsContent() {
     }
   };
 
+  const handleCancel = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!order || !cancelReason.trim()) return;
+
+    const isKakao = order.payment_method === '카카오페이';
+    if (!isKakao && (!cancelRefundBank || !cancelRefundAccount || !cancelRefundHolder)) return;
+
+    setCancelLoading(true);
+    setCancelError('');
+
+    try {
+      const body: Record<string, unknown> = {
+        orderNumber: order.order_number,
+        phone,
+        reason: cancelReason,
+      };
+      if (!isKakao) {
+        body.refundBank = cancelRefundBank;
+        body.refundAccount = cancelRefundAccount;
+        body.refundHolder = cancelRefundHolder;
+      }
+
+      const res = await fetch('/api/orders/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setCancelError(data.error);
+        return;
+      }
+
+      setCancelResult(data);
+      setView('cancel-success');
+    } catch {
+      setCancelError('취소 처리에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setCancelLoading(false);
+    }
+  };
+
   const handleReset = () => {
     setOrder(null);
     setView('lookup');
@@ -215,6 +280,12 @@ function ReturnsContent() {
     setReason('');
     setSubmitError('');
     setRequestNumber('');
+    setCancelReason('');
+    setCancelRefundBank('');
+    setCancelRefundAccount('');
+    setCancelRefundHolder('');
+    setCancelError('');
+    setCancelResult(null);
   };
 
   // ─── Lookup ────────────────────────────────────────────────────────────────
@@ -223,7 +294,7 @@ function ReturnsContent() {
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <h1>교환 / 반품 신청</h1>
+            <h1>취소 / 교환 / 반품</h1>
             <p>주문번호와 전화번호를 입력해 주문을 조회하세요.</p>
             <div className={styles.policyRow}>
               <span className={styles.policyItem}>반품 배송비 ₩{RETURN_POLICY.returnShippingFee.toLocaleString()}</span>
@@ -268,21 +339,27 @@ function ReturnsContent() {
 
   // ─── Ineligible ────────────────────────────────────────────────────────────
   if (view === 'ineligible' && order) {
-    const reason =
-      order.status !== OrderStatus.DELIVERED
-        ? '배송완료된 주문만 교환/반품 신청이 가능합니다.'
-        : `수령 후 ${RETURN_POLICY.windowDays}일이 지나 신청이 불가합니다.`;
+    let ineligibleReason: string;
+    if (order.status === OrderStatus.CANCEL_REQUESTED) {
+      ineligibleReason = '취소 요청이 접수된 주문입니다. 환불 처리 후 취소완료로 변경됩니다.';
+    } else if (order.status === OrderStatus.CANCELLED) {
+      ineligibleReason = '이미 취소 처리된 주문입니다.';
+    } else if (order.status !== OrderStatus.DELIVERED) {
+      ineligibleReason = '배송완료된 주문만 교환/반품 신청이 가능합니다.';
+    } else {
+      ineligibleReason = `수령 후 ${RETURN_POLICY.windowDays}일이 지나 신청이 불가합니다.`;
+    }
 
     return (
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <h1>교환 / 반품 신청</h1>
+            <h1>취소 / 교환 / 반품</h1>
           </div>
           <div className={styles.ineligible}>
             <div className={styles.ineligibleIcon}>✕</div>
             <h3>신청 불가</h3>
-            <p>{reason}</p>
+            <p>{ineligibleReason}</p>
             <button className={styles.resetButton} onClick={handleReset}>다시 조회하기</button>
           </div>
         </div>
@@ -290,13 +367,58 @@ function ReturnsContent() {
     );
   }
 
-  // ─── Success ───────────────────────────────────────────────────────────────
+  // ─── Cancel Success ─────────────────────────────────────────────────────────
+  if (view === 'cancel-success' && cancelResult) {
+    const isKakao = cancelResult.paymentMethod === '카카오페이';
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>취소 / 교환 / 반품</h1>
+          </div>
+          <div className={styles.success}>
+            <div className={styles.successIcon}>✓</div>
+            <h3 className={styles.successTitle}>주문이 취소되었습니다</h3>
+            <div className={styles.successInfo}>
+              {cancelResult.refundAmount > 0 && (
+                <>
+                  <div className={styles.summaryRow}>
+                    <span>환불 금액</span>
+                    <span>₩{cancelResult.refundAmount.toLocaleString()}</span>
+                  </div>
+                  <div className={styles.summaryRow}>
+                    <span>환불 방법</span>
+                    <span>{isKakao ? '카카오페이 자동 환불' : '무통장 환불 (관리자 처리)'}</span>
+                  </div>
+                  {!isKakao && (
+                    <div className={styles.summaryRow}>
+                      <span>처리 기간</span>
+                      <span>1~3 영업일</span>
+                    </div>
+                  )}
+                </>
+              )}
+              {cancelResult.refundAmount === 0 && (
+                <div className={styles.summaryRow}>
+                  <span>환불</span>
+                  <span>해당 없음 (미결제 취소)</span>
+                </div>
+              )}
+            </div>
+            <button className={styles.resetButton} onClick={handleReset}>확인</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Return/Exchange Success ────────────────────────────────────────────────
   if (view === 'success') {
     return (
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <h1>교환 / 반품 신청</h1>
+            <h1>취소 / 교환 / 반품</h1>
           </div>
           <div className={styles.success}>
             <div className={styles.successIcon}>✓</div>
@@ -319,6 +441,125 @@ function ReturnsContent() {
     );
   }
 
+  // ─── Cancel ────────────────────────────────────────────────────────────────
+  if (view === 'cancel' && order) {
+    const isKakao = order.payment_method === '카카오페이';
+    const isShipping = order.status === OrderStatus.SHIPPING;
+    const isPendingUnpaid = order.status === OrderStatus.PENDING_PAYMENT && !isKakao;
+    const refundAmount = isPendingUnpaid
+      ? 0
+      : isShipping
+        ? order.total_amount - order.shipping_fee
+        : order.total_amount;
+    const needsAccount = !isKakao && !isPendingUnpaid;
+    const canSubmit = !!cancelReason.trim() && (!needsAccount || (!!cancelRefundBank && !!cancelRefundAccount && !!cancelRefundHolder));
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>취소 / 교환 / 반품</h1>
+          </div>
+
+          <div className={styles.orderPreview}>
+            <div className={styles.orderMeta}>
+              <span className={styles.orderNumber}>{order.order_number}</span>
+              <span className={styles.orderDate}>{formatDate(order.created_at)}</span>
+            </div>
+            <span className={styles.eligibleBadge}>{order.status}</span>
+          </div>
+
+          {isShipping && (
+            <div className={styles.error} style={{ margin: '0 28px', background: '#fff9e6', borderColor: '#f0c040', color: '#7a5c00' }}>
+              배송 중인 주문은 상품 금액만 환불됩니다. (배송비 ₩{order.shipping_fee.toLocaleString()} 제외)
+            </div>
+          )}
+
+          {isPendingUnpaid && (
+            <div className={styles.error} style={{ margin: '0 28px', background: '#f0fdf4', borderColor: '#86efac', color: '#166534' }}>
+              아직 입금 전 주문으로, 취소 즉시 처리됩니다.
+            </div>
+          )}
+
+          <form onSubmit={handleCancel}>
+            <div className={styles.stepContent}>
+              <p className={styles.stepTitle}>취소 사유를 입력해주세요</p>
+              {cancelError && <div className={styles.error}>{cancelError}</div>}
+              <div className={styles.inputGroup}>
+                <textarea
+                  placeholder="취소 사유를 입력해주세요"
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className={styles.summary} style={{ marginTop: 16 }}>
+                {!isPendingUnpaid && (
+                  <div className={styles.summaryRow}>
+                    <span>환불 금액</span>
+                    <span>₩{refundAmount.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className={styles.summaryRow}>
+                  <span>환불 방법</span>
+                  <span>
+                    {isPendingUnpaid ? '환불 없음 (미결제 취소)' : isKakao ? '카카오페이 자동 환불' : '무통장 환불'}
+                  </span>
+                </div>
+              </div>
+
+              {needsAccount && (
+                <>
+                  <p className={styles.stepTitle} style={{ marginTop: 20 }}>환불 받으실 계좌 정보를 입력해주세요</p>
+                  <div className={styles.inputGroup}>
+                    <label>은행</label>
+                    <select value={cancelRefundBank} onChange={(e) => setCancelRefundBank(e.target.value)} required>
+                      <option value="">은행 선택</option>
+                      {RETURN_POLICY.banks.map((bank) => (
+                        <option key={bank} value={bank}>{bank}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>계좌번호</label>
+                    <input
+                      type="text"
+                      placeholder="- 없이 입력"
+                      value={cancelRefundAccount}
+                      onChange={(e) => setCancelRefundAccount(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>예금주</label>
+                    <input
+                      type="text"
+                      placeholder="예금주명"
+                      value={cancelRefundHolder}
+                      onChange={(e) => setCancelRefundHolder(e.target.value)}
+                      required
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className={styles.actions}>
+              <button type="button" className={styles.prevButton} onClick={handleReset}>
+                돌아가기
+              </button>
+              <button type="submit" className={styles.nextButton} disabled={!canSubmit || cancelLoading}>
+                {cancelLoading ? '처리 중...' : '취소 신청'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   // ─── Form ──────────────────────────────────────────────────────────────────
   if (!order) return null;
 
@@ -328,7 +569,7 @@ function ReturnsContent() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <h1>교환 / 반품 신청</h1>
+          <h1>취소 / 교환 / 반품</h1>
         </div>
 
         <div className={styles.orderPreview}>
@@ -602,7 +843,7 @@ export default function ReturnsPage() {
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <h1>교환 / 반품 신청</h1>
+            <h1>취소 / 교환 / 반품</h1>
             <p>로딩 중...</p>
           </div>
         </div>

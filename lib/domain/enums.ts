@@ -11,6 +11,8 @@ export enum OrderStatus {
   PREPARING = '배송준비',
   SHIPPING = '배송중',
   DELIVERED = '배송완료',
+  CANCEL_REQUESTED = '취소요청',
+  CANCELLED = '취소완료',
 }
 
 // 발송 지연 상태는 동적 문자열 패턴 (예: "2주 뒤 발송", "5일 뒤 발송")

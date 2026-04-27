@@ -58,8 +58,8 @@ export default function FloatingTracker() {
                 </svg>
               </div>
               <div className={styles.menuText}>
-                <span className={styles.menuTitle}>교환 / 반품 신청</span>
-                <span className={styles.menuSub}>수령 후 7일 이내</span>
+                <span className={styles.menuTitle}>취소 / 교환 / 반품</span>
+                <span className={styles.menuSub}>배송 전 취소 · 수령 후 7일 이내 교환/반품</span>
               </div>
               <svg className={styles.menuArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />

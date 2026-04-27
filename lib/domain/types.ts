@@ -39,6 +39,14 @@ export interface Order {
   delivered_at?: string | null;
   created_at: string;
   order_items: OrderItem[];
+  // 취소 관련
+  cancellation_reason?: string | null;
+  cancelled_at?: string | null;
+  cancel_refund_bank?: string | null;
+  cancel_refund_account?: string | null;
+  cancel_refund_holder?: string | null;
+  cancel_refund_amount?: number | null;
+  cancel_refund_completed?: boolean;
 }
 
 // -----------------------------------------------------------------------------
@@ -196,6 +204,7 @@ export interface OrderEmailData {
   address: string;
   addressDetail?: string;
   trackingUrl: string;
+  paymentMethod?: string;
 }
 
 export interface StatusChangeEmailData {
@@ -213,6 +222,29 @@ export interface PaymentReminderEmailData {
   customerEmail: string;
   totalAmount: number;
   trackingUrl: string;
+}
+
+export interface OrderCancelEmailData {
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  refundAmount: number;
+  paymentMethod: string;
+  cancelRefundBank?: string;
+  cancelRefundAccount?: string;
+  cancelRefundHolder?: string;
+  siteUrl: string;
+}
+
+export interface AdminCancelNotificationEmailData {
+  orderNumber: string;
+  customerName: string;
+  customerPhone: string;
+  refundAmount: number;
+  cancelRefundBank: string;
+  cancelRefundAccount: string;
+  cancelRefundHolder: string;
+  reason: string;
 }
 
 export interface ReturnRequestEmailData {

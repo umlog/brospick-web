@@ -2,6 +2,7 @@
 // 기존 import 경로 (import { STATUS_OPTIONS } from '../constants') 그대로 동작
 export {
   ORDER_STATUS_OPTIONS as STATUS_OPTIONS,
+  ORDER_STATUS_BUTTON_OPTIONS as STATUS_BUTTON_OPTIONS,
   RETURN_STATUS_OPTIONS,
   RETURN_STATUS_TRANSITIONS,
 } from '@/lib/domain/constants';

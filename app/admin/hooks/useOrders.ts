@@ -125,6 +125,26 @@ export function useOrders(notifyOnChange: boolean) {
     }
   };
 
+  const handleCancelRefundComplete = async (orderId: string, orderNumber: string) => {
+    if (!confirm(`주문 ${orderNumber} 환불을 완료 처리할까요?`)) return;
+
+    setProcessing(orderId, true);
+    try {
+      await apiClient.orders.updateStatus(orderId, {
+        status: '취소완료',
+        sendNotification: false,
+      });
+      setAllOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, status: '취소완료', cancel_refund_completed: true } : o))
+      );
+      showToast('환불 완료 처리되었습니다.', 'success');
+    } catch (err) {
+      showToast(`처리 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
+    } finally {
+      setProcessing(orderId, false);
+    }
+  };
+
   const handleFilterChange = (status: string) => {
     setFilterStatus(status);
   };
@@ -166,5 +186,6 @@ export function useOrders(notifyOnChange: boolean) {
     handleDeleteOrder,
     handleFilterChange,
     handleRevokeMarketing,
+    handleCancelRefundComplete,
   };
 }

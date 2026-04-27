@@ -32,6 +32,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
     handleDeleteOrder,
     handleFilterChange,
     handleRevokeMarketing,
+    handleCancelRefundComplete,
   } = ordersState;
 
   const {
@@ -184,6 +185,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
               onPaymentReminder={handlePaymentReminder}
               onDelete={handleDelete}
               onRevokeMarketing={handleRevokeMarketing}
+              onCancelRefundComplete={handleCancelRefundComplete}
             />
           ))}
         </div>
