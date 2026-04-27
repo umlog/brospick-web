@@ -74,18 +74,16 @@ export function useOrderSubmission(
     const data = await apiClient.orders.create(payload);
 
     clearCheckoutCart(checkoutItems);
-
-    sessionStorage.setItem(
-      'orderComplete',
-      JSON.stringify({
-        orderNumber: data.orderNumber,
-        totalAmount: data.totalAmount,
-        shippingFee: data.shippingFee,
-        depositorName: formData.depositorName,
-      })
-    );
     setIsSubmitting(false);
-    router.push('/order-complete');
+
+    const params = new URLSearchParams({
+      method: 'bank',
+      order: data.orderNumber,
+      amount: String(data.totalAmount),
+      shippingFee: String(data.shippingFee),
+      depositor: formData.depositorName,
+    });
+    router.push(`/order-complete?${params.toString()}`);
   };
 
   return { isSubmitting, handleSubmit };

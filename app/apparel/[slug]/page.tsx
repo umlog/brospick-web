@@ -305,7 +305,7 @@ export default function ProductDetailPage({
                 {price !== undefined ? (
                   <>
                     <span className={styles.price}>₩{price.toLocaleString()}</span>
-                    {originalPrice && (
+                    {originalPrice && originalPrice > price && (
                       <>
                         <span className={styles.originalPrice}>
                           ₩{originalPrice.toLocaleString()}

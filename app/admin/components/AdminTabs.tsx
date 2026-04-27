@@ -39,6 +39,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         블로그 관리
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'marketing' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('marketing')}
+      >
+        마케팅 이메일
+      </button>
     </div>
   );
 }

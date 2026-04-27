@@ -11,7 +11,7 @@ export default function BrandStory() {
           <ScrollReveal direction="up">
             <div className={styles.imageWrap}>
               <Image
-                src="/apparel/training-top/half-zip/half-zip-training-top/thumb.png"
+                src="/apparel/training-top/quarter-zip-training-top/thumb.png"
                 alt="브로스픽 스포츠웨어"
                 fill
                 style={{ objectFit: 'cover' }}

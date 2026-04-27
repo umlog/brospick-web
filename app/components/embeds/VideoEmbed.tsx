@@ -10,7 +10,7 @@ interface VideoEmbedProps {
 
 export default function VideoEmbed({ url, autoPlay = true }: VideoEmbedProps) {
   const [embedUrl, setEmbedUrl] = useState<string>('');
-  const [videoType, setVideoType] = useState<'youtube' | 'instagram' | null>(null);
+  const [videoType, setVideoType] = useState<'youtube' | 'instagram' | 'local' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,6 +31,11 @@ export default function VideoEmbed({ url, autoPlay = true }: VideoEmbedProps) {
         setEmbedUrl(`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1${autoplayParam}`);
         setVideoType('youtube');
       }
+    }
+    // 로컬 동영상 파일 처리
+    else if (url.startsWith('/')) {
+      setEmbedUrl(url);
+      setVideoType('local');
     }
     // Instagram URL 처리
     else if (url.includes('instagram.com')) {
@@ -79,6 +84,15 @@ export default function VideoEmbed({ url, autoPlay = true }: VideoEmbedProps) {
           allow="autoplay; encrypted-media"
           allowFullScreen
           title="Instagram post"
+        />
+      )}
+      {videoType === 'local' && (
+        <video
+          src={embedUrl}
+          className={styles.videoEmbed}
+          controls
+          playsInline
+          preload="metadata"
         />
       )}
     </div>

@@ -15,6 +15,7 @@ import { ReturnList } from './components/ReturnList';
 import { ProductManager } from './components/ProductManager';
 import { Dashboard } from './components/Dashboard';
 import { BlogManager } from './components/BlogManager';
+import { MarketingEmailManager } from './components/MarketingEmailManager';
 import { VisitCounter } from './components/VisitCounter';
 import { Toasts } from './components/Toasts';
 import styles from './admin.module.css';
@@ -25,6 +26,7 @@ const TAB_TITLES: Record<AdminTab, string> = {
   products: '상품 관리',
   dashboard: '대시보드',
   blog: '블로그 관리',
+  marketing: '마케팅 이메일',
 };
 
 export default function AdminPage() {
@@ -114,6 +116,9 @@ export default function AdminPage() {
         )}
         {activeTab === 'blog' && (
           <BlogManager state={blogState} />
+        )}
+        {activeTab === 'marketing' && (
+          <MarketingEmailManager />
         )}
       </div>
       <VisitCounter />

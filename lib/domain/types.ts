@@ -116,7 +116,7 @@ export interface BlogPost {
 // 어드민 UI
 // -----------------------------------------------------------------------------
 
-export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing';
 
 export interface AdminProduct {
   id: number;

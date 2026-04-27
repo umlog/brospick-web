@@ -1,5 +1,20 @@
+'use client';
+
+import { useState } from 'react';
 import type { CheckoutFormData } from '../types';
 import styles from '../checkout-page.module.css';
+
+const EMAIL_DOMAINS = [
+  'naver.com',
+  'gmail.com',
+  'daum.net',
+  'kakao.com',
+  'hanmail.net',
+  'nate.com',
+  'hotmail.com',
+  'outlook.com',
+  'icloud.com',
+];
 
 interface ShippingFormProps {
   formData: CheckoutFormData;
@@ -8,6 +23,42 @@ interface ShippingFormProps {
 }
 
 export function ShippingForm({ formData, onInputChange, onAddressSearch }: ShippingFormProps) {
+  const [emailUser, setEmailUser] = useState('');
+  const [emailDomain, setEmailDomain] = useState('');
+  const [isCustomDomain, setIsCustomDomain] = useState(false);
+
+  const fireEmailChange = (user: string, domain: string) => {
+    const combined = user && domain ? `${user}@${domain}` : '';
+    onInputChange({
+      target: { name: 'email', value: combined },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const handleEmailUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const user = e.target.value;
+    setEmailUser(user);
+    fireEmailChange(user, emailDomain);
+  };
+
+  const handleDomainSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === '__custom__') {
+      setIsCustomDomain(true);
+      setEmailDomain('');
+      fireEmailChange(emailUser, '');
+    } else {
+      setIsCustomDomain(false);
+      setEmailDomain(value);
+      fireEmailChange(emailUser, value);
+    }
+  };
+
+  const handleCustomDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const domain = e.target.value;
+    setEmailDomain(domain);
+    fireEmailChange(emailUser, domain);
+  };
+
   return (
     <section className={styles.formSection}>
       <h2>배송 정보</h2>
@@ -35,16 +86,40 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch }: Shipp
         />
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="email">이메일 *</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={onInputChange}
-          placeholder="주문 확인서를 받으실 이메일"
-          required
-        />
+        <label htmlFor="emailUser">이메일 *</label>
+        <div className={styles.emailRow}>
+          <input
+            type="text"
+            id="emailUser"
+            value={emailUser}
+            onChange={handleEmailUserChange}
+            placeholder="이메일 아이디"
+            required
+            autoComplete="email"
+          />
+          <span className={styles.emailAt}>@</span>
+          {isCustomDomain ? (
+            <input
+              type="text"
+              value={emailDomain}
+              onChange={handleCustomDomainChange}
+              placeholder="직접 입력"
+              required
+            />
+          ) : (
+            <select
+              value={emailDomain}
+              onChange={handleDomainSelectChange}
+              required
+            >
+              <option value="" disabled>선택</option>
+              {EMAIL_DOMAINS.map(domain => (
+                <option key={domain} value={domain}>{domain}</option>
+              ))}
+              <option value="__custom__">직접 입력</option>
+            </select>
+          )}
+        </div>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="postalCode">우편번호 *</label>

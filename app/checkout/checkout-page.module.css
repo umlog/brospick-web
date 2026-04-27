@@ -98,6 +98,24 @@
   background-color: var(--color-bg-secondary);
 }
 
+.emailRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.emailRow input,
+.emailRow select {
+  flex: 1;
+  min-width: 0;
+}
+
+.emailAt {
+  font-size: var(--size-base);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
 .addressSearch {
   display: flex;
   gap: var(--space-sm);

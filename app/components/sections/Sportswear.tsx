@@ -140,7 +140,7 @@ export default function Sportswear({ initialPrices }: Props) {
                     {price !== undefined && (
                       <div className={styles.priceRow}>
                         <span className={styles.price}>₩{price.toLocaleString()}</span>
-                        {originalPrice && (
+                        {originalPrice && originalPrice > price && (
                           <>
                             <span className={styles.originalPrice}>₩{originalPrice.toLocaleString()}</span>
                             <span className={styles.discountBadge}>{getDiscountPercent(price, originalPrice)}%</span>
@@ -171,7 +171,7 @@ export default function Sportswear({ initialPrices }: Props) {
                   {price !== undefined && (
                     <div className={styles.priceRow}>
                       <span className={styles.price}>₩{price.toLocaleString()}</span>
-                      {originalPrice && (
+                      {originalPrice && originalPrice > price && (
                         <>
                           <span className={styles.originalPrice}>₩{originalPrice.toLocaleString()}</span>
                           <span className={styles.discountBadge}>{getDiscountPercent(price, originalPrice)}%</span>

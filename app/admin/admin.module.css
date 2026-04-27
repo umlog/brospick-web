@@ -646,6 +646,144 @@
   border-color: rgba(239, 68, 68, 0.5);
 }
 
+/* ─── Marketing Email Manager ─────────────────────────────── */
+.marketingManager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  max-width: 720px;
+}
+
+.marketingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.marketingHeader h3 {
+  font-size: var(--size-lg);
+  font-weight: 700;
+  margin: 0;
+}
+
+.recipientToggle {
+  font-size: var(--size-sm);
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.recipientToggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.recipientList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--color-bg-secondary);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.recipientChip {
+  font-size: 12px;
+  padding: 3px 10px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+}
+
+.emailForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.emailFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.emailFormGroup label {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.emailFormGroup input,
+.emailFormGroup textarea {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: var(--size-base);
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.emailFormGroup input:focus,
+.emailFormGroup textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.sendButton {
+  align-self: flex-end;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: var(--size-base);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.sendButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.resultSuccess,
+.resultWarning {
+  padding: var(--space-md);
+  border-radius: 8px;
+  font-size: var(--size-sm);
+}
+
+.resultSuccess {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.resultWarning {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #facc15;
+}
+
+.resultWarning p,
+.resultSuccess p {
+  margin: 6px 0 0;
+}
+
 /* Admin Tabs */
 .adminTabs {
   display: flex;

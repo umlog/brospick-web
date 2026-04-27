@@ -85,22 +85,21 @@ function OrderCompletePage() {
       return;
     }
 
-    // 무통장입금 (sessionStorage로 전달)
-    const stored = sessionStorage.getItem('orderComplete');
-    if (!stored) {
-      router.push('/');
+    // 무통장입금 (URL 파라미터로 전달)
+    if (method === 'bank' && orderNumber && amount) {
+      const depositorName = searchParams.get('depositor') || '';
+      localStorage.setItem('brospick-last-order', orderNumber);
+      setOrderData({
+        orderNumber,
+        totalAmount: parseInt(amount, 10),
+        shippingFee: parseInt(shippingFee || '0', 10),
+        depositorName,
+        paymentMethod: 'bank',
+      });
       return;
     }
 
-    sessionStorage.removeItem('orderComplete');
-
-    try {
-      const parsed = JSON.parse(stored);
-      localStorage.setItem('brospick-last-order', parsed.orderNumber);
-      setOrderData({ ...parsed, paymentMethod: 'bank' });
-    } catch {
-      router.push('/');
-    }
+    router.push('/');
   }, [router, searchParams]);
 
   if (!orderData) {

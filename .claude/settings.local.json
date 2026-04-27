@@ -33,7 +33,15 @@
       "WebFetch(domain:imweb.me)",
       "WebFetch(domain:help.campaignus.me)",
       "WebFetch(domain:likeiam5.com)",
-      "WebFetch(domain:sycstore.co.kr)"
+      "WebFetch(domain:sycstore.co.kr)",
+      "Bash(for dir:*)",
+      "Bash(do)",
+      "Bash(echo \"=== $dir ===\")",
+      "Read(//c/brospick-web/brospick-web/**)",
+      "Bash(done)",
+      "Bash(curl:*)",
+      "Bash(vercel --version)",
+      "mcp__claude_ai_Supabase__get_logs"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

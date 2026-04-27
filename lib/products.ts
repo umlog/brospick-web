@@ -4,17 +4,17 @@
 //   1. PRODUCT_SLUGS 에 항목 추가
 //   2. PRODUCT_IDS 에 항목 추가
 //   3. products 객체에 데이터 추가
-//   4. public/apparel/[slug]/ 폴더 만들고 이미지 넣기
+//   4. public/apparel/[category]/[slug]/ 폴더 만들고 이미지 넣기
 //   5. Supabase product_sizes 테이블에 새 product_id 행 추가
 
-export const PRODUCT_FALLBACK_IMAGE = '/apparel/training-top/half-zip/half-zip-training-top/brospick-half-zip-trainging-top-1.png';
+export const PRODUCT_FALLBACK_IMAGE = '/apparel/training-top/quarter-zip-training-top/thumb.png';
 
 // URL + 코드 식별자 (오타 방지용 타입 안전 상수)
 export const PRODUCT_SLUGS = {
-  HALF_ZIP_TRAINING_TOP: 'half-zip-training-top',
-  QUARTER_ZIP_TRAINING_TOP_BLACK: 'quarter-zip-training-top-black',
-  QUARTER_ZIP_TRAINING_TOP_GRAY: 'quarter-zip-training-top-gray',
-  CAMEL_GRAY_SHORT_SLEEVE: 'camel-gray-short-sleeve',
+  QUARTER_ZIP_TRAINING_TOP: 'quarter-zip-training-top',
+  FLEX_QUARTER_ZIP_TOP_BLACK: 'flex-quarter-zip-top-black',
+  FLEX_QUARTER_ZIP_TOP_GRAY: 'flex-quarter-zip-top-gray',
+  REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 'reflective-run-tshirt-camel-gray',
   RUNNING_LONG_SLEEVE_TOP_GRAY: 'running-long-sleeve-top-gray',
   RUNNING_LONG_SLEEVE_TOP_BLACK: 'running-long-sleeve-top-black',
   GRID_ZIP_HOODIE: 'grid-zip-hoodie',
@@ -29,16 +29,32 @@ export const PRODUCT_SLUGS = {
   CROSS_C_TAPING_BLACK: 'cross-c-taping-black',
   CROSS_C_TAPING_GOLD: 'cross-c-taping-gold',
   PHILIPPIANS_413_C_TAPING: 'philippians-413-c-taping',
+  // ── 2차 추가 상품 ──
+  KINESIOLOGY_TAPE_BLACK: 'kinesiology-tape-black',
+  KINESIOLOGY_TAPE_CAMO: 'kinesiology-tape-camo',
+  KINESIOLOGY_TAPE: 'kinesiology-tape',
+  ATHLETIC_CALF_SLEEVES_BLACK: 'athletic-calf-sleeves-black',
+  ATHLETIC_CALF_SLEEVES_WHITE: 'athletic-calf-sleeves-white',
+  ATHLETIC_LONG_SOCKS_BLACK: 'athletic-long-socks-black',
+  ATHLETIC_LONG_SOCKS_WHITE: 'athletic-long-socks-white',
+  CROSS_C_TAPE_5CM_BLACK: 'cross-c-tape-5cm-black',
+  C_TAPE_WHITE: 'c-tape-white',
+  C_TAPE_BLACK: 'c-tape-black',
+  PHILIPPIANS_413_CREW_SOCKS_BLACK: 'philippians-413-crew-socks-black',
+  PHILIPPIANS_413_CREW_SOCKS_WHITE: 'philippians-413-crew-socks-white',
+  // ── 3차 추가 상품 ──
+  COOL_TECH_TSHIRT_BLACK: 'cool-tech-tshirt-black',
+  COOL_TECH_TSHIRT_WHITE: 'cool-tech-tshirt-white',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
 
 // DB FK (Supabase product_sizes.product_id) 숫자 ID 중앙화
 export const PRODUCT_IDS = {
-  HALF_ZIP_TRAINING_TOP: 1,
-  QUARTER_ZIP_TRAINING_TOP_BLACK: 2,
-  QUARTER_ZIP_TRAINING_TOP_GRAY: 3,
-  CAMEL_GRAY_SHORT_SLEEVE: 4,
+  QUARTER_ZIP_TRAINING_TOP: 1,
+  FLEX_QUARTER_ZIP_TOP_BLACK: 2,
+  FLEX_QUARTER_ZIP_TOP_GRAY: 3,
+  REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 4,
   RUNNING_LONG_SLEEVE_TOP_GRAY: 5,
   RUNNING_LONG_SLEEVE_TOP_BLACK: 6,
   GRID_ZIP_HOODIE: 7,
@@ -53,6 +69,22 @@ export const PRODUCT_IDS = {
   CROSS_C_TAPING_BLACK: 16,
   CROSS_C_TAPING_GOLD: 17,
   PHILIPPIANS_413_C_TAPING: 18,
+  // ── 2차 추가 상품 ──
+  KINESIOLOGY_TAPE_BLACK: 19,
+  KINESIOLOGY_TAPE_CAMO: 20,
+  KINESIOLOGY_TAPE: 21,
+  ATHLETIC_CALF_SLEEVES_BLACK: 22,
+  ATHLETIC_CALF_SLEEVES_WHITE: 23,
+  ATHLETIC_LONG_SOCKS_BLACK: 24,
+  ATHLETIC_LONG_SOCKS_WHITE: 25,
+  CROSS_C_TAPE_5CM_BLACK: 26,
+  C_TAPE_WHITE: 27,
+  C_TAPE_BLACK: 28,
+  PHILIPPIANS_413_CREW_SOCKS_BLACK: 29,
+  PHILIPPIANS_413_CREW_SOCKS_WHITE: 30,
+  // ── 3차 추가 상품 ──
+  COOL_TECH_TSHIRT_BLACK: 31,
+  COOL_TECH_TSHIRT_WHITE: 32,
 } as const;
 
 export interface SizeChartRow {
@@ -88,16 +120,15 @@ export interface ProductVariant {
   color?: string; // CSS color for swatch dot
 }
 
-export type ProductCategory = 'training-top' | 'short-sleeve' | 'long-sleeve' | 'hoodie' | 'shorts' | 'pants' | 'taping';
+export type ProductCategory = 'training-top' | 'top' | 'bottom' | 'outer' | 'taping' | 'socks';
 
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'training-top': '트레이닝 탑',
-  'short-sleeve': '반팔',
-  'long-sleeve': '긴팔',
-  'hoodie': '후드',
-  'shorts': '반바지',
-  'pants': '팬츠',
+  'top': '상의',
+  'bottom': '하의',
+  'outer': '아우터',
   'taping': '테이핑',
+  'socks': '양말',
 };
 
 export interface Product {
@@ -115,25 +146,25 @@ export interface Product {
   chestLabel?: string;       // 사이즈 표 가슴 열 헤더 (기본값: '가슴단면')
   sizeChartType?: 'top' | 'shorts' | 'pants'; // 사이즈 표 컬럼 구성 (기본값: 'top')
   comingSoon?: boolean; // true면 목록에서 Coming Soon 카드로 표시, 구매 불가
-  popularBadge?: string; // 예: '500장 이상 구매한 상품' — 상품 카드 이미지 위에 배너로 표시
+  popularBadge?: string; // 예: 'BEST' — 상품 카드 이미지 위에 배너로 표시
   variants?: ProductVariant[]; // 묶어서 보여줄 컬러 variants (Coming Soon 그룹)
   hideFromList?: boolean; // true면 productList에서 제외 (다른 상품의 variant로 표시됨)
   details: ProductDetails;
 }
 
 export const products: Record<ProductSlug, Product> = {
-  [PRODUCT_SLUGS.HALF_ZIP_TRAINING_TOP]: {
-    id: PRODUCT_IDS.HALF_ZIP_TRAINING_TOP,
-    slug: PRODUCT_SLUGS.HALF_ZIP_TRAINING_TOP,
+  [PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP]: {
+    id: PRODUCT_IDS.QUARTER_ZIP_TRAINING_TOP,
+    slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP,
     name: 'Quarter-Zip Training Top',
-    popularBadge: '500장 이상 구매한 상품',
+    popularBadge: 'BEST',
     category: 'training-top',
-    image: '/apparel/training-top/half-zip/half-zip-training-top/detail-1.jpg',
+    image: '/apparel/training-top/quarter-zip-training-top/detail-1.jpg',
     images: [
-      '/apparel/training-top/half-zip/half-zip-training-top/thumb.png',
-      '/apparel/training-top/half-zip/half-zip-training-top/thumb2.png',
-      '/apparel/training-top/half-zip/half-zip-training-top/half-zip-detail-all.png',
-      '/apparel/training-top/half-zip/half-zip-training-top/detail-1.jpg',
+      '/apparel/training-top/quarter-zip-training-top/thumb.png',
+      '/apparel/training-top/quarter-zip-training-top/thumb2.png',
+      '/apparel/training-top/quarter-zip-training-top/detail-all.png',
+      '/apparel/training-top/quarter-zip-training-top/detail-1.jpg',
     ],
     tagline: '가볍게 입고, 강하게 뛰는 브로스픽 반집업 트레이닝 탑',
     description:
@@ -172,19 +203,19 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
-  [PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_BLACK]: {
-    id: PRODUCT_IDS.QUARTER_ZIP_TRAINING_TOP_BLACK,
-    slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_BLACK,
+  [PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_BLACK]: {
+    id: PRODUCT_IDS.FLEX_QUARTER_ZIP_TOP_BLACK,
+    slug: PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_BLACK,
     name: 'Flex Quarter-Zip Top (Black)',
     category: 'training-top',
     comingSoon: true,
-    image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
+    image: '/apparel/training-top/flex-quarter-zip-top-black/thumb.png',
     images: [
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-black/thumb2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/1-detail-1.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/2-detail-2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/3-detail-3.png',
+      '/apparel/training-top/flex-quarter-zip-top-black/thumb.png',
+      '/apparel/training-top/flex-quarter-zip-top-black/thumb2.png',
+      '/apparel/training-top/flex-quarter-zip-top-black/detail-1.png',
+      '/apparel/training-top/flex-quarter-zip-top-black/detail-2.png',
+      '/apparel/training-top/flex-quarter-zip-top-black/detail-3.png',
     ],
     tagline: '바디 라인을 정돈하며, 격한 움직임도 자유롭게 — 쿼터집 트레이닝 탑 (블랙)',
     description:
@@ -218,18 +249,18 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
-  [PRODUCT_SLUGS.CAMEL_GRAY_SHORT_SLEEVE]: {
-    id: PRODUCT_IDS.CAMEL_GRAY_SHORT_SLEEVE,
-    slug: PRODUCT_SLUGS.CAMEL_GRAY_SHORT_SLEEVE,
-    name: 'Camel Gray Short Sleeve',
-    category: 'short-sleeve',
+  [PRODUCT_SLUGS.REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY]: {
+    id: PRODUCT_IDS.REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY,
+    slug: PRODUCT_SLUGS.REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY,
+    name: 'Reflective Run T-Shirt (Camel Gray)',
+    category: 'top',
     comingSoon: true,
-    image: '/apparel/short-sleeve/camel-gray/1-camel-gray-short-sleeve-1.png',
+    image: '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
     images: [
-      '/apparel/short-sleeve/camel-gray/1-camel-gray-short-sleeve-1.png',
-      '/apparel/short-sleeve/camel-gray/2-camel-gray-short-sleeve-2.png',
-      '/apparel/short-sleeve/camel-gray/3-camel-gray-3.png',
-      '/apparel/short-sleeve/camel-gray/4-camel-gray-4.png',
+      '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
+      '/apparel/top/reflective-run-tshirt-camel-gray/2.png',
+      '/apparel/top/reflective-run-tshirt-camel-gray/3.png',
+      '/apparel/top/reflective-run-tshirt-camel-gray/4.png',
     ],
     tagline: '가볍고, 빠르게 마르고, 형태는 그대로',
     description:
@@ -266,20 +297,20 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
-  [PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_GRAY]: {
-    id: PRODUCT_IDS.QUARTER_ZIP_TRAINING_TOP_GRAY,
-    slug: PRODUCT_SLUGS.QUARTER_ZIP_TRAINING_TOP_GRAY,
+  [PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_GRAY]: {
+    id: PRODUCT_IDS.FLEX_QUARTER_ZIP_TOP_GRAY,
+    slug: PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_GRAY,
     name: 'Flex Quarter-Zip Top (Gray)',
-    popularBadge: '100장 이상 구매한 상품',
+    popularBadge: 'BEST',
     category: 'training-top',
     comingSoon: false,
-    image: '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
+    image: '/apparel/training-top/flex-quarter-zip-top-gray/thumb.png',
     images: [
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/thumb2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/1-detail-1.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/2-detail-2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-training-top-gray/3-detail-3.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/thumb.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/thumb2.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/detail-1.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/detail-2.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/detail-3.png',
     ],
     tagline: '벌집 구조 원단으로 통기성과 쿨링을 동시에 — 쿼터집 트레이닝 탑 (그레이)',
     description:
@@ -320,23 +351,23 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.RUNNING_LONG_SLEEVE_TOP_GRAY,
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_GRAY,
     name: 'Running Long Sleeve Top (Gray)',
-    popularBadge: '300장 이상 구매한 상품',
-    category: 'long-sleeve',
+    popularBadge: 'BEST',
+    category: 'top',
     comingSoon: false,
-    image: '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
+    image: '/apparel/top/running-long-sleeve-top-gray/1.png',
     images: [
-      '/apparel/long-sleeve/running-top/gray/1-thumb-1.png',
-      '/apparel/long-sleeve/running-top/gray/2-thumb-2.png',
-      '/apparel/long-sleeve/running-top/gray/3-thumb-3.png',
-      '/apparel/long-sleeve/running-top/4-detail-4.png',
-      '/apparel/long-sleeve/running-top/5-detail-5.png',
-      '/apparel/long-sleeve/running-top/6-detail-6.png',
-      '/apparel/long-sleeve/running-top/7-detail-7.png',
-      '/apparel/long-sleeve/running-top/8-detail-8.png',
-      '/apparel/long-sleeve/running-top/9-detail-9.png',
-      '/apparel/long-sleeve/running-top/10-detail-10.png',
-      '/apparel/long-sleeve/running-top/11-detail-11.png',
-      '/apparel/long-sleeve/running-top/12-detail-12.png',
+      '/apparel/top/running-long-sleeve-top-gray/1.png',
+      '/apparel/top/running-long-sleeve-top-gray/2.png',
+      '/apparel/top/running-long-sleeve-top-gray/3.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-1.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-2.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-3.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-4.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-5.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-6.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-7.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-8.png',
+      '/apparel/top/running-long-sleeve-top-gray/detail-9.png',
     ],
     tagline: '가볍게, 빠르게, 그리고 멀리.',
     description:
@@ -373,23 +404,23 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.RUNNING_LONG_SLEEVE_TOP_BLACK,
     slug: PRODUCT_SLUGS.RUNNING_LONG_SLEEVE_TOP_BLACK,
     name: 'Running Long Sleeve Top (Black)',
-    popularBadge: '300장 이상 구매한 상품',
-    category: 'long-sleeve',
+    popularBadge: 'BEST',
+    category: 'top',
     comingSoon: false,
-    image: '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
+    image: '/apparel/top/running-long-sleeve-top-black/1.png',
     images: [
-      '/apparel/long-sleeve/running-top/black/1-thumb-1.png',
-      '/apparel/long-sleeve/running-top/black/2-thumb-2.png',
-      '/apparel/long-sleeve/running-top/black/3-thumb-3.png',
-      '/apparel/long-sleeve/running-top/4-detail-4.png',
-      '/apparel/long-sleeve/running-top/5-detail-5.png',
-      '/apparel/long-sleeve/running-top/6-detail-6.png',
-      '/apparel/long-sleeve/running-top/7-detail-7.png',
-      '/apparel/long-sleeve/running-top/8-detail-8.png',
-      '/apparel/long-sleeve/running-top/9-detail-9.png',
-      '/apparel/long-sleeve/running-top/10-detail-10.png',
-      '/apparel/long-sleeve/running-top/11-detail-11.png',
-      '/apparel/long-sleeve/running-top/12-detail-12.png',
+      '/apparel/top/running-long-sleeve-top-black/1.png',
+      '/apparel/top/running-long-sleeve-top-black/2.png',
+      '/apparel/top/running-long-sleeve-top-black/3.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-1.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-2.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-3.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-4.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-5.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-6.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-7.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-8.png',
+      '/apparel/top/running-long-sleeve-top-black/detail-9.png',
     ],
     tagline: '가볍게, 빠르게, 그리고 멀리.',
     description:
@@ -425,21 +456,21 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.GRID_ZIP_HOODIE]: {
     id: PRODUCT_IDS.GRID_ZIP_HOODIE,
     slug: PRODUCT_SLUGS.GRID_ZIP_HOODIE,
-    category: 'hoodie',
+    category: 'outer',
     name: 'GRID ZIP HOODIE',
     comingSoon: true,
-    image: '/apparel/hoodie/1-grid-zip-hoodie-1.png',
+    image: '/apparel/outer/grid-zip-hoodie/1.png',
     images: [
-      '/apparel/hoodie/1-grid-zip-hoodie-1.png',
-      '/apparel/hoodie/2-grid-zip-hoodie-2.png',
-      '/apparel/hoodie/3-grid-zip-hoodie-3.png',
-      '/apparel/hoodie/4-grid-zip-hoodie-4.png',
-      '/apparel/hoodie/5-grid-zip-hoodie-5.png',
-      '/apparel/hoodie/6-grid-zip-hoodie-6.png',
-      '/apparel/hoodie/7-grid-zip-hoodie-7.png',
-      '/apparel/hoodie/8-grid-zip-hoodie-8.png',
-      '/apparel/hoodie/9-grid-zip-hoodie-9.png',
-      '/apparel/hoodie/10-grid-zip-hoodie-10.png',
+      '/apparel/outer/grid-zip-hoodie/1.png',
+      '/apparel/outer/grid-zip-hoodie/2.png',
+      '/apparel/outer/grid-zip-hoodie/3.png',
+      '/apparel/outer/grid-zip-hoodie/4.png',
+      '/apparel/outer/grid-zip-hoodie/5.png',
+      '/apparel/outer/grid-zip-hoodie/6.png',
+      '/apparel/outer/grid-zip-hoodie/7.png',
+      '/apparel/outer/grid-zip-hoodie/8.png',
+      '/apparel/outer/grid-zip-hoodie/9.png',
+      '/apparel/outer/grid-zip-hoodie/10.png',
     ],
     tagline: '부드러운 기능성 와플 텍스처 원단에 히든 지퍼 포켓과 전면 반사 로고 디테일을 더한 일상용 후드집업.',
     description:
@@ -480,12 +511,12 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.TECH_TRAINING_SHORTS_BLACK,
     slug: PRODUCT_SLUGS.TECH_TRAINING_SHORTS_BLACK,
     name: 'Tech Training Shorts (Black)',
-    category: 'shorts',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/shorts/training-shorts/tech-training-shorts/black/1-tech-training-shorts-black-1.png',
+    image: '/apparel/bottom/tech-training-shorts-black/1.png',
     images: [
-      '/apparel/shorts/training-shorts/tech-training-shorts/black/1-tech-training-shorts-black-1.png',
-      '/apparel/shorts/training-shorts/3-size-chart-3.png',
+      '/apparel/bottom/tech-training-shorts-black/1.png',
+      '/apparel/bottom/tech-training-shorts-black/size-chart.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -526,12 +557,12 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.TECH_TRAINING_SHORTS_GRAY,
     slug: PRODUCT_SLUGS.TECH_TRAINING_SHORTS_GRAY,
     name: 'Tech Training Shorts (Gray)',
-    category: 'shorts',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/shorts/training-shorts/tech-training-shorts/gray/1-tech-training-shorts-gray-1.png',
+    image: '/apparel/bottom/tech-training-shorts-gray/1.png',
     images: [
-      '/apparel/shorts/training-shorts/tech-training-shorts/gray/1-tech-training-shorts-gray-1.png',
-      '/apparel/shorts/training-shorts/3-size-chart-3.png',
+      '/apparel/bottom/tech-training-shorts-gray/1.png',
+      '/apparel/bottom/tech-training-shorts-gray/size-chart.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -572,12 +603,12 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.MOTION_TECH_SHORTS_BLACK,
     slug: PRODUCT_SLUGS.MOTION_TECH_SHORTS_BLACK,
     name: 'Motion Tech Shorts (Black)',
-    category: 'shorts',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/shorts/training-shorts/motion-training-shorts/black/1-motion-training-shorts-black-1.png',
+    image: '/apparel/bottom/motion-tech-shorts-black/1.png',
     images: [
-      '/apparel/shorts/training-shorts/motion-training-shorts/black/1-motion-training-shorts-black-1.png',
-      '/apparel/shorts/training-shorts/motion-training-shorts/3-size-chart-3.png',
+      '/apparel/bottom/motion-tech-shorts-black/1.png',
+      '/apparel/bottom/motion-tech-shorts-black/size-chart.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -623,11 +654,11 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Flex (Blue)',
     category: 'training-top',
     comingSoon: true,
-    image: '/apparel/training-top/quarter-zip/quarter-zip-flex/blue/1-blue-1.png',
+    image: '/apparel/training-top/quarter-zip-flex-blue/1.png',
     images: [
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/blue/1-blue-1.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/blue/2-blue-2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/5-size-chart-5.png',
+      '/apparel/training-top/quarter-zip-flex-blue/1.png',
+      '/apparel/training-top/quarter-zip-flex-blue/2.png',
+      '/apparel/training-top/quarter-zip-flex-blue/size-chart.png',
     ],
     tagline: '편안한 넥라인과 컬러 배색, 슬림한 퍼포먼스 핏으로 활동성과 스타일을 모두 갖춘 쿼터 집업.',
     description:
@@ -666,12 +697,12 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.MOTION_TECH_SHORTS_GRAY,
     slug: PRODUCT_SLUGS.MOTION_TECH_SHORTS_GRAY,
     name: 'Motion Tech Shorts (Gray)',
-    category: 'shorts',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/shorts/training-shorts/motion-training-shorts/gray/1-motion-training-shorts-gray-1.png',
+    image: '/apparel/bottom/motion-tech-shorts-gray/1.png',
     images: [
-      '/apparel/shorts/training-shorts/motion-training-shorts/gray/1-motion-training-shorts-gray-1.png',
-      '/apparel/shorts/training-shorts/motion-training-shorts/3-size-chart-3.png',
+      '/apparel/bottom/motion-tech-shorts-gray/1.png',
+      '/apparel/bottom/motion-tech-shorts-gray/size-chart.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -717,11 +748,11 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Flex (Light Green)',
     category: 'training-top',
     comingSoon: true,
-    image: '/apparel/training-top/quarter-zip/quarter-zip-flex/light-green/1-light-green-1.png',
+    image: '/apparel/training-top/quarter-zip-flex-light-green/1.png',
     images: [
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/light-green/1-light-green-1.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/light-green/2-light-green-2.png',
-      '/apparel/training-top/quarter-zip/quarter-zip-flex/5-size-chart-5.png',
+      '/apparel/training-top/quarter-zip-flex-light-green/1.png',
+      '/apparel/training-top/quarter-zip-flex-light-green/2.png',
+      '/apparel/training-top/quarter-zip-flex-light-green/size-chart.png',
     ],
     tagline: '편안한 넥라인과 컬러 배색, 슬림한 퍼포먼스 핏으로 활동성과 스타일을 모두 갖춘 쿼터 집업.',
     description:
@@ -759,13 +790,13 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.CROSS_C_TAPING_BLACK]: {
     id: PRODUCT_IDS.CROSS_C_TAPING_BLACK,
     slug: PRODUCT_SLUGS.CROSS_C_TAPING_BLACK,
-    name: 'Cross C Taping (Black)',
+    name: 'Cross C-Tape (Black) (3.8cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/cross-c-taping/black/1-Black Cross C Taping.png',
+    image: '/apparel/taping/cross-c-taping-black/1.png',
     images: [
-      '/apparel/cross-c-taping/black/3-Black Cross C Taping.png',
-      '/apparel/cross-c-taping/black/4-Black Cross C Taping.png',
+      '/apparel/taping/cross-c-taping-black/3.png',
+      '/apparel/taping/cross-c-taping-black/4.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -796,13 +827,13 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.CROSS_C_TAPING_GOLD]: {
     id: PRODUCT_IDS.CROSS_C_TAPING_GOLD,
     slug: PRODUCT_SLUGS.CROSS_C_TAPING_GOLD,
-    name: 'Cross C Taping (Gold)',
+    name: 'Cross C-Tape (Gold) (3.8cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
+    image: '/apparel/taping/cross-c-taping-gold/1.png',
     images: [
-      '/apparel/cross-c-taping/gold/3-Gold Cross C Taping.png',
-      '/apparel/cross-c-taping/gold/4-Gold Cross C Taping2.png',
+      '/apparel/taping/cross-c-taping-gold/1.png',
+      '/apparel/taping/cross-c-taping-gold/2.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -833,13 +864,13 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.PHILIPPIANS_413_C_TAPING]: {
     id: PRODUCT_IDS.PHILIPPIANS_413_C_TAPING,
     slug: PRODUCT_SLUGS.PHILIPPIANS_413_C_TAPING,
-    name: 'Philippians 4:13 C Taping',
+    name: 'Philippians 4:13 C-Tape (5cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
+    image: '/apparel/taping/philippians-413-c-taping/1.png',
     images: [
-      '/apparel/cross-c-taping/Philippians-4-13/1-Philippians 4_13 C Taping 2.png',
-      '/apparel/cross-c-taping/Philippians-4-13/2-Philippians 4_13 C Taping 2.png',
+      '/apparel/taping/philippians-413-c-taping/1.png',
+      '/apparel/taping/philippians-413-c-taping/2.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -867,20 +898,490 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
+  // ════════════════════════════════════════════════════════════════
+  // 2차 추가 상품 (ID 19~30) — 가격은 docs/product-prices.md 에서 관리
+  // ════════════════════════════════════════════════════════════════
+
+  [PRODUCT_SLUGS.KINESIOLOGY_TAPE_BLACK]: {
+    id: PRODUCT_IDS.KINESIOLOGY_TAPE_BLACK,
+    slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE_BLACK,
+    name: 'Kinesiology Tape (Black) (5cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/kinesiology-tape-black/1.png',
+    images: [
+      '/apparel/taping/kinesiology-tape-black/1.png',
+      '/apparel/taping/kinesiology-tape-black/2.png',
+    ],
+    tagline: '고급 면·스판덱스 원단과 강한 접착력으로 활동 중에도 안정적으로 밀착되는 키네시올로지 테이핑.',
+    description:
+      '프리미엄 코튼 원단을 사용해 피부에 부드럽게 밀착되어 편안한 착용감을 제공하는 키네시올로지 테이프입니다. 강한 접착력으로 활동 중에도 쉽게 떨어지지 않으며, 신축성 있는 구조가 움직임에 맞춰 자연스럽게 늘어나 활동성을 유지해 줍니다. 손목, 발목, 종아리 등 다양한 부위에 사용 가능하며, 오래 착용해도 피부 트러블을 최소화합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '프리미엄 코튼 원단', detail: ' — 피부에 부드럽게 밀착' },
+      { label: '강한 접착력', detail: ' — 활동 중에도 쉽게 떨어지지 않음' },
+      { label: '신축성 있는 구조', detail: ' — 움직임에 맞춰 자연스럽게 늘어남' },
+      { label: '다양한 부위 활용', detail: ' — 손목, 발목, 종아리 등' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '프리미엄 코튼 원단', description: '피부에 부드럽게 밀착되어 편안한 착용감 제공.' },
+        { title: '강한 접착력', description: '활동 중에도 쉽게 떨어지지 않아 안정적인 고정 가능.' },
+        { title: '신축성 구조', description: '움직임에 맞춰 자연스럽게 늘어나 활동성 유지.' },
+        { title: '다용도 활용', description: '손목, 발목, 종아리 등 다양한 부위에 사용 가능.' },
+      ],
+      design: [
+        { title: '블랙 컬러', description: '자연스러운 컬러로 눈에 띄지 않는 깔끔한 연출.' },
+        { title: '텍스처 패턴 마감', description: '미끄러짐을 줄여주는 실용적인 표면 구조.' },
+        { title: '심플 롤 타입', description: '휴대 및 보관이 간편한 실용적인 형태.' },
+      ],
+      material: '면 + 스판덱스 혼방 원단 / 아크릴 접착제. 폭 5cm × 길이 약 5m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.KINESIOLOGY_TAPE_CAMO]: {
+    id: PRODUCT_IDS.KINESIOLOGY_TAPE_CAMO,
+    slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE_CAMO,
+    name: 'Kinesiology Tape (Camo) (5cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/kinesiology-tape-camo/1.png',
+    images: [
+      '/apparel/taping/kinesiology-tape-camo/1.png',
+      '/apparel/taping/kinesiology-tape-camo/2.png',
+    ],
+    tagline: '카모플라주 패턴과 안정적인 접착력으로 트렌디한 스포츠 감성을 더한 키네시올로지 테이핑.',
+    description:
+      '탄성 코튼 혼방 원단이 부드럽게 밀착되면서도 움직임에 유연하게 대응하는 키네시올로지 테이프입니다. 운동 중에도 쉽게 떨어지지 않는 안정적인 접착력을 제공하며, 신축성 구조 설계로 활동 시 근육 움직임을 자연스럽게 서포트합니다. 손목, 발목, 종아리 등 다양한 부위에 활용 가능합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '탄성 코튼 혼방 원단', detail: ' — 부드럽게 밀착, 유연한 대응' },
+      { label: '안정적인 접착력', detail: ' — 운동 중에도 고정력 유지' },
+      { label: '신축성 구조', detail: ' — 근육 움직임을 자연스럽게 서포트' },
+      { label: '다용도 테이핑', detail: ' — 손목, 발목, 종아리 등' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '탄성 코튼 혼방 원단', description: '부드럽게 밀착되면서도 움직임에 유연하게 대응.' },
+        { title: '안정적인 접착력', description: '운동 중에도 쉽게 떨어지지 않는 고정력 제공.' },
+        { title: '신축성 구조 설계', description: '활동 시 근육 움직임을 자연스럽게 서포트.' },
+        { title: '다용도 테이핑', description: '손목, 발목, 종아리 등 다양한 부위 사용 가능.' },
+      ],
+      design: [
+        { title: '카모플라주 패턴', description: '강렬하고 트렌디한 스포츠 감성 연출.' },
+        { title: '블랙 & 화이트 믹스', description: '유니크한 컬러 조합으로 시각적 포인트 강화.' },
+        { title: '롤 타입 구성', description: '휴대와 보관이 편리한 실용적인 형태.' },
+      ],
+      material: '면 + 스판덱스 혼방 원단 / 아크릴 접착제. 폭 5cm × 길이 약 5m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.KINESIOLOGY_TAPE]: {
+    id: PRODUCT_IDS.KINESIOLOGY_TAPE,
+    slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE,
+    name: 'Kinesiology Tape (5cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/kinesiology-tape/1.png',
+    images: [
+      '/apparel/taping/kinesiology-tape/1.png',
+      '/apparel/taping/kinesiology-tape/2.png',
+    ],
+    tagline: '고급 면·스판덱스 원단과 강한 접착력으로 활동 중에도 안정적으로 밀착되는 키네시올로지 테이핑.',
+    description:
+      '프리미엄 코튼 원단을 사용해 피부에 부드럽게 밀착되어 편안한 착용감을 제공하는 키네시올로지 테이프입니다. 강한 접착력으로 활동 중에도 쉽게 떨어지지 않으며, 신축성 있는 구조가 움직임에 맞춰 자연스럽게 늘어나 활동성을 유지해 줍니다. 스킨톤 컬러로 자연스러운 연출이 가능하며, 손목, 발목, 종아리 등 다양한 부위에 사용 가능합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '프리미엄 코튼 원단', detail: ' — 피부에 부드럽게 밀착' },
+      { label: '강한 접착력', detail: ' — 활동 중에도 쉽게 떨어지지 않음' },
+      { label: '신축성 있는 구조', detail: ' — 움직임에 맞춰 자연스럽게 늘어남' },
+      { label: '다양한 부위 활용', detail: ' — 손목, 발목, 종아리 등' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '프리미엄 코튼 원단', description: '피부에 부드럽게 밀착되어 편안한 착용감 제공.' },
+        { title: '강한 접착력', description: '활동 중에도 쉽게 떨어지지 않아 안정적인 고정 가능.' },
+        { title: '신축성 구조', description: '움직임에 맞춰 자연스럽게 늘어나 활동성 유지.' },
+        { title: '다용도 활용', description: '손목, 발목, 종아리 등 다양한 부위에 사용 가능.' },
+      ],
+      design: [
+        { title: '스킨톤 컬러', description: '자연스러운 컬러로 눈에 띄지 않는 깔끔한 연출.' },
+        { title: '텍스처 패턴 마감', description: '미끄러짐을 줄여주는 실용적인 표면 구조.' },
+        { title: '심플 롤 타입', description: '휴대 및 보관이 간편한 실용적인 형태.' },
+      ],
+      material: '면 + 스판덱스 혼방 원단 / 아크릴 접착제. 폭 5cm × 길이 약 5m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK]: {
+    id: PRODUCT_IDS.CROSS_C_TAPE_5CM_BLACK,
+    slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK,
+    name: 'Cross C-Tape (Black) (5cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/cross-c-tape-5cm-black/1.png',
+    images: [
+      '/apparel/taping/cross-c-tape-5cm-black/1.png',
+      '/apparel/taping/cross-c-tape-5cm-black/2.png',
+      '/apparel/taping/cross-c-tape-5cm-black/3.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 크로스 포인트 패턴으로 관절을 단단하게 고정하는 스포츠 테이핑.',
+    description:
+      '비탄성 고정 테이프로 늘어나지 않는 구조가 관절을 단단하게 고정해 줍니다. 강력한 접착력으로 운동 중에도 쉽게 풀리지 않으며, 손목, 발목 등 움직임이 많은 부위 고정에 적합합니다. 프리미엄 코튼 원단을 사용해 오래 착용해도 자극이 적으며, 톱니형 절개 구조로 손쉽게 뜯어 빠른 테이핑이 가능합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '비탄성 고정 테이프', detail: ' — 관절을 단단하게 고정' },
+      { label: '강력한 접착력', detail: ' — 운동 중에도 쉽게 풀리지 않음' },
+      { label: '관절 보호 서포트', detail: ' — 손목, 발목 등 다양한 부위 고정' },
+      { label: '빠른 테이핑', detail: ' — 간편하게 감아 고정하는 실전용 구성' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '비탄성 고정 구조', description: '늘어나지 않는 구조로 관절을 단단하게 고정.' },
+        { title: '강력한 접착력', description: '운동 중에도 쉽게 풀리지 않는 안정적인 유지력.' },
+        { title: '관절 보호 서포트', description: '손목, 발목 등 움직임이 많은 부위 고정에 적합.' },
+        { title: '빠른 테이핑', description: '간편하게 감아 고정하는 실전용 스포츠 테이프.' },
+      ],
+      design: [
+        { title: '크로스 포인트 패턴', description: '시각적인 포인트와 브랜딩 요소를 강조하는 디자인.' },
+        { title: '블랙 컬러 베이스', description: '강한 존재감과 스포츠 감성 연출.' },
+        { title: '콤팩트 롤 타입', description: '휴대 및 보관이 간편한 실용적인 구조.' },
+      ],
+      material: '코튼. 폭 5cm × 길이 7m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.C_TAPE_WHITE]: {
+    id: PRODUCT_IDS.C_TAPE_WHITE,
+    slug: PRODUCT_SLUGS.C_TAPE_WHITE,
+    name: 'C-Tape (3.8cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/c-tape-white/1.png',
+    images: [
+      '/apparel/taping/c-tape-white/1.png',
+      '/apparel/taping/c-tape-white/2.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
+    description:
+      '비탄성 고정 테이프로 늘어나지 않는 구조가 관절을 단단하게 지지해 줍니다. 강력한 접착력으로 활동 중에도 쉽게 풀리지 않으며, 손목, 발목 등 부위 고정에 적합한 스포츠 테이프입니다. 무지 화이트 컬러로 다양한 환경에서 부담 없이 사용 가능하며, 콤팩트한 롤 구조로 휴대와 보관이 간편합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '비탄성 고정 테이프', detail: ' — 관절을 단단하게 지지' },
+      { label: '강력한 접착력', detail: ' — 활동 중에도 쉽게 풀리지 않음' },
+      { label: '관절 보호 서포트', detail: ' — 손목, 발목 등 부위 고정에 적합' },
+      { label: '빠른 테이핑', detail: ' — 간편하게 감아 고정하는 실전용 구성' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '비탄성 고정 구조', description: '늘어나지 않는 구조로 관절을 단단하게 지지.' },
+        { title: '강력한 접착력', description: '활동 중에도 쉽게 풀리지 않는 안정적인 고정력.' },
+        { title: '관절 보호 서포트', description: '손목, 발목 등 부위 고정에 적합한 스포츠 테이프.' },
+        { title: '빠른 테이핑', description: '간편하게 감아 고정하는 실전용 구성.' },
+      ],
+      design: [
+        { title: '무지 화이트 컬러', description: '깔끔하고 기본에 충실한 디자인.' },
+        { title: '로고 없는 심플 타입', description: '다양한 환경에서 부담 없이 사용 가능.' },
+        { title: '콤팩트 롤 구조', description: '휴대 및 보관이 간편한 실용적인 형태.' },
+      ],
+      material: '코튼. 폭 3.8cm × 길이 9.1m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.C_TAPE_BLACK]: {
+    id: PRODUCT_IDS.C_TAPE_BLACK,
+    slug: PRODUCT_SLUGS.C_TAPE_BLACK,
+    name: 'C-Tape Black (3.8cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/c-tape-black/1.png',
+    images: [
+      '/apparel/taping/c-tape-black/1.png',
+      '/apparel/taping/c-tape-black/2.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
+    description:
+      '비탄성 고정 테이프로 늘어나지 않는 구조가 관절을 단단하게 지지해 줍니다. 강력한 접착력으로 활동 중에도 쉽게 풀리지 않으며, 손목, 발목 등 다양한 부위 고정에 적합한 스포츠 테이프입니다. 블랙 컬러 베이스로 강한 존재감을 연출하며, 로고 없는 심플한 디자인으로 다양한 환경에서 실용적으로 활용할 수 있습니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '비탄성 고정 테이프', detail: ' — 관절을 단단하게 지지' },
+      { label: '강력한 접착력', detail: ' — 활동 중에도 쉽게 풀리지 않음' },
+      { label: '관절 보호 서포트', detail: ' — 손목, 발목 등 다양한 부위 고정' },
+      { label: '빠른 테이핑', detail: ' — 간편하게 감아 고정하는 실전용 구성' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '비탄성 고정 구조', description: '늘어나지 않는 구조로 관절을 단단하게 지지.' },
+        { title: '강력한 접착력', description: '활동 중에도 쉽게 풀리지 않는 안정적인 고정력.' },
+        { title: '관절 보호 서포트', description: '손목, 발목 등 다양한 부위 고정에 적합.' },
+        { title: '빠른 테이핑', description: '간편하게 감아 고정하는 실전용 스포츠 테이프.' },
+      ],
+      design: [
+        { title: '블랙 컬러 베이스', description: '강한 존재감과 스포츠 감성 연출.' },
+        { title: '무지 심플 타입', description: '로고 없이 깔끔한 기본 디자인.' },
+        { title: '콤팩트 롤 구조', description: '휴대 및 보관이 간편한 실용적인 형태.' },
+      ],
+      material: '코튼. 폭 3.8cm × 길이 9.14m.',
+    },
+  },
+
+  [PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_BLACK]: {
+    id: PRODUCT_IDS.ATHLETIC_CALF_SLEEVES_BLACK,
+    slug: PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_BLACK,
+    name: 'Athletic Calf Sleeves (Black)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/athletic-calf-sleeves-black/1.png',
+    images: [
+      '/apparel/socks/athletic-calf-sleeves-black/1.png',
+      '/apparel/socks/athletic-calf-sleeves-black/2.png',
+      '/apparel/socks/athletic-calf-sleeves-black/3.png',
+    ],
+    tagline: '루즈핏 튜브형 구조로 조이지 않고 자연스러운 움직임을 지원하는 축구·럭비용 종아리 슬리브.',
+    description:
+      '조이지 않는 루즈핏 튜브형 구조로 장시간 착용에도 편안함을 유지하는 종아리 슬리브입니다. 압박을 최소화한 설계로 근육을 과하게 조이지 않아 자연스러운 움직임이 가능하며, 구멍을 뚫거나 가위로 자를 필요 없이 바로 착용할 수 있습니다. 반스타킹 위에 덮어 착용하는 축구·럭비용 레이어드 전용 슬리브입니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '루즈핏 튜브형 구조', detail: ' — 조이지 않아 장시간 착용도 편안' },
+      { label: '압박 최소화 디자인', detail: ' — 자연스러운 움직임 가능' },
+      { label: '컷팅 없이 착용 가능', detail: ' — 바로 착용하는 실용적 구조' },
+      { label: '레이어드 전용 슬리브', detail: ' — 반스타킹 위에 덮어 착용' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '루즈핏 튜브형 구조', description: '조이지 않는 설계로 장시간 착용에도 편안함 유지.' },
+        { title: '압박 최소화 디자인', description: '근육을 과하게 조이지 않아 자연스러운 움직임 가능.' },
+        { title: '컷팅 없이 착용', description: '구멍을 뚫거나 가위로 자를 필요 없는 실용적 구조.' },
+        { title: '레이어드 전용 슬리브', description: '반스타킹 위에 덮어 착용하는 축구·럭비용 구성.' },
+      ],
+      design: [
+        { title: '롱 기장 주름형 실루엣', description: '자연스럽게 잡히는 주름으로 스타일과 기능 동시 구현.' },
+        { title: '블랙 컬러 베이스', description: '강한 스포츠 무드와 다양한 유니폼 매칭.' },
+        { title: '튜브 슬리브 형태', description: '발 부분 없이 종아리만 감싸는 간결한 디자인.' },
+      ],
+      material: '면 / 폴리 혼방. 성인 프리사이즈.',
+    },
+  },
+
+  [PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_WHITE]: {
+    id: PRODUCT_IDS.ATHLETIC_CALF_SLEEVES_WHITE,
+    slug: PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_WHITE,
+    name: 'Athletic Calf Sleeves (White)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/athletic-calf-sleeves-white/1.png',
+    images: [
+      '/apparel/socks/athletic-calf-sleeves-white/1.png',
+      '/apparel/socks/athletic-calf-sleeves-white/2.png',
+      '/apparel/socks/athletic-calf-sleeves-white/3.png',
+    ],
+    tagline: '루즈핏 튜브형 구조로 조이지 않고 자연스러운 움직임을 지원하는 축구·럭비용 종아리 슬리브.',
+    description:
+      '조이지 않는 루즈핏 튜브형 구조로 장시간 착용에도 편안함을 유지하는 종아리 슬리브입니다. 압박을 최소화한 설계로 근육을 과하게 조이지 않아 자연스러운 움직임이 가능하며, 구멍을 뚫거나 가위로 자를 필요 없이 바로 착용할 수 있습니다. 반스타킹 위에 덮어 착용하는 축구·럭비용 레이어드 전용 슬리브입니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '루즈핏 튜브형 구조', detail: ' — 조이지 않아 장시간 착용도 편안' },
+      { label: '압박 최소화 디자인', detail: ' — 자연스러운 움직임 가능' },
+      { label: '컷팅 없이 착용 가능', detail: ' — 바로 착용하는 실용적 구조' },
+      { label: '레이어드 전용 슬리브', detail: ' — 반스타킹 위에 덮어 착용' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '루즈핏 튜브형 구조', description: '조이지 않는 설계로 장시간 착용에도 편안함 유지.' },
+        { title: '압박 최소화 디자인', description: '근육을 과하게 조이지 않아 자연스러운 움직임 가능.' },
+        { title: '컷팅 없이 착용', description: '구멍을 뚫거나 가위로 자를 필요 없는 실용적 구조.' },
+        { title: '레이어드 전용 슬리브', description: '반스타킹 위에 덮어 착용하는 축구·럭비용 구성.' },
+      ],
+      design: [
+        { title: '롱 기장 주름형 실루엣', description: '자연스럽게 잡히는 주름으로 스타일과 기능 동시 구현.' },
+        { title: '화이트 컬러 베이스', description: '깔끔하고 어떤 유니폼에도 매칭 쉬운 컬러.' },
+        { title: '튜브 슬리브 형태', description: '발 부분 없이 종아리만 감싸는 간결한 디자인.' },
+      ],
+      material: '면 / 폴리 혼방. 성인 프리사이즈.',
+    },
+  },
+
+  [PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_BLACK]: {
+    id: PRODUCT_IDS.ATHLETIC_LONG_SOCKS_BLACK,
+    slug: PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_BLACK,
+    name: 'Athletic Long Socks (Black)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/athletic-long-socks-black/1.png',
+    images: [
+      '/apparel/socks/athletic-long-socks-black/1.png',
+      '/apparel/socks/athletic-long-socks-black/2.png',
+    ],
+    tagline: '흡습속건 원단과 논슬립 구조로 격한 스포츠 활동에서도 발을 쾌적하고 안정적으로 보호하는 롱 스타킹 양말.',
+    description:
+      '흡습속건 원단이 땀을 빠르게 흡수·건조해 발을 쾌적하게 유지해 주는 롱 스타킹 양말입니다. 발바닥 논슬립 구조로 미끄러짐을 방지해 안정적인 플레이가 가능하며, 발목 보호 패딩이 마찰로 인한 물집과 자극을 줄여줍니다. 발뒤꿈치와 발끝 보강 처리로 내구성을 높였으며, 무릎까지 올라오는 롱 기장으로 안정적인 착용감을 제공합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '흡습속건 원단', detail: ' — 땀을 빠르게 흡수·건조' },
+      { label: '발바닥 논슬립 구조', detail: ' — 안정적인 플레이 가능' },
+      { label: '발목 보호 패딩', detail: ' — 물집과 자극 최소화' },
+      { label: '발뒤꿈치·발끝 보강', detail: ' — 내구성 향상' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '흡습속건 원단', description: '땀을 빠르게 흡수·건조해 발을 쾌적하게 유지.' },
+        { title: '발바닥 논슬립 구조', description: '미끄럼 방지 설계로 안정적인 플레이 가능.' },
+        { title: '발목 보호 패딩', description: '마찰로 인한 물집과 자극을 줄여주는 쿠션 구조.' },
+        { title: '발뒤꿈치·발끝 보강', description: '마모가 많은 부위를 강화해 내구성 향상.' },
+      ],
+      design: [
+        { title: '롱 기장 스타킹', description: '무릎까지 올라오는 안정적인 착용감.' },
+        { title: '입체 패턴 설계', description: '발 형태에 맞춘 구조로 밀착감 향상.' },
+        { title: '블랙 컬러 베이스', description: '오염 부담 적고 강한 스포츠 무드 연출.' },
+        { title: '기능성 조직 디테일', description: '덧댐 구조로 두툼하고 보호력 강화.' },
+      ],
+      material: '면 / 폴리 혼방. 성인 프리사이즈.',
+    },
+  },
+
+  [PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_WHITE]: {
+    id: PRODUCT_IDS.ATHLETIC_LONG_SOCKS_WHITE,
+    slug: PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_WHITE,
+    name: 'Athletic Long Socks (White)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/athletic-long-socks-white/1.png',
+    images: [
+      '/apparel/socks/athletic-long-socks-white/1.png',
+      '/apparel/socks/athletic-long-socks-white/2.png',
+    ],
+    tagline: '흡습속건 원단과 논슬립 구조로 격한 스포츠 활동에서도 발을 쾌적하고 안정적으로 보호하는 롱 스타킹 양말.',
+    description:
+      '흡습속건 원단이 땀을 빠르게 흡수·건조해 발을 쾌적하게 유지해 주는 롱 스타킹 양말입니다. 발바닥 논슬립 구조로 미끄러짐을 방지해 안정적인 움직임이 가능하며, 발목 보호 패딩이 마찰로 인한 물집과 자극을 줄여줍니다. 발뒤꿈치와 발끝 보강 처리로 내구성을 높였으며, 화이트 컬러로 어떤 유니폼에도 잘 어울립니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '흡습속건 원단', detail: ' — 땀을 빠르게 흡수·건조' },
+      { label: '발바닥 논슬립 구조', detail: ' — 안정적인 움직임 가능' },
+      { label: '발목 보호 패딩', detail: ' — 물집과 자극 최소화' },
+      { label: '발뒤꿈치·발끝 보강', detail: ' — 내구성 향상' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '흡습속건 원단', description: '땀을 빠르게 흡수·건조해 발을 쾌적하게 유지.' },
+        { title: '발바닥 논슬립 구조', description: '미끄럼 방지 설계로 안정적인 움직임 가능.' },
+        { title: '발목 보호 패딩', description: '마찰로 인한 물집과 자극을 줄여주는 쿠션 설계.' },
+        { title: '발뒤꿈치·발끝 보강', description: '마모가 많은 부위를 강화해 내구성 향상.' },
+      ],
+      design: [
+        { title: '롱 기장 스타킹', description: '무릎까지 올라오는 안정적인 착용감.' },
+        { title: '입체 패턴 구조', description: '발 형태에 맞춘 설계로 밀착감 향상.' },
+        { title: '화이트 컬러 베이스', description: '깔끔하고 어떤 유니폼에도 잘 어울리는 컬러.' },
+        { title: '기능성 조직 디테일', description: '두툼한 구조로 보호력과 안정감 강화.' },
+      ],
+      material: '면 / 폴리 혼방. 성인 프리사이즈.',
+    },
+  },
+
+  [PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_BLACK]: {
+    id: PRODUCT_IDS.PHILIPPIANS_413_CREW_SOCKS_BLACK,
+    slug: PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_BLACK,
+    name: 'Philippians 4:13 Non-Slip Crew Socks (Black)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/philippians-413-crew-socks-black/1.png',
+    images: [
+      '/apparel/socks/philippians-413-crew-socks-black/1.png',
+    ],
+    tagline: '논슬립 그립 도트와 빌립보서 4:13 레터링으로 믿음과 퍼포먼스를 하나로 담은 크루 양말.',
+    description:
+      '발바닥 논슬립 그립 도트가 접지력을 높여 미끄러짐을 줄이고 안정적인 움직임을 지원하는 크루 양말입니다. 통기성 원단 설계로 땀과 열 배출이 용이해 발을 쾌적하게 유지하며, 쿠셔닝 힐 구조가 뒤꿈치 충격을 완화합니다. 탄탄한 상단 밴드가 흘러내리지 않게 잡아주고, 두툼한 바닥 조직감이 보호력과 내구성을 높여줍니다. 빌립보서 4:13 레터링과 크로스 심볼 디테일이 더해진 의미 있는 스포츠 양말입니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '논슬립 그립 도트', detail: ' — 접지력을 높여 미끄러짐 방지' },
+      { label: '통기성 원단', detail: ' — 땀과 열 배출로 쾌적함 유지' },
+      { label: '쿠셔닝 힐 구조', detail: ' — 뒤꿈치 충격 완화' },
+      { label: '두툼한 바닥 보강', detail: ' — 보호력과 내구성 향상' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '논슬립 그립 도트', description: '발바닥 접지력을 높여 미끄러짐을 줄이고 안정적인 움직임 지원.' },
+        { title: '통기성 원단 설계', description: '땀과 열 배출이 용이해 발을 쾌적하게 유지.' },
+        { title: '쿠셔닝 힐 구조', description: '뒤꿈치 충격을 완화하고 편안한 착용감 제공.' },
+        { title: '탄탄한 상단 밴드', description: '쉽게 흘러내리지 않으면서도 과한 조임 없이 안정적으로 고정.' },
+        { title: '두툼한 바닥 조직감', description: '마찰이 많은 부위를 보강해 보호력과 내구성 향상.' },
+        { title: '스포츠 활동 대응형', description: '축구, 러닝, 트레이닝 등 움직임이 많은 환경에서 실용적 활용.' },
+      ],
+      design: [
+        { title: 'Philippians 4:13 레터링', description: '의미 있는 성경 구절을 시각적으로 담아낸 디자인.' },
+        { title: '크로스 심볼 디테일', description: '상징성을 더해 아이덴티티를 강조하는 포인트 구성.' },
+        { title: '크루 기장 실루엣', description: '발목 위까지 자연스럽게 올라오는 데일리 겸 스포츠 타입.' },
+        { title: '블랙 컬러 베이스', description: '강한 스포츠 무드와 다양한 룩에 매치 용이.' },
+      ],
+      material: '면 / 폴리에스터 혼방. 성인 프리사이즈.',
+    },
+  },
+
+  [PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_WHITE]: {
+    id: PRODUCT_IDS.PHILIPPIANS_413_CREW_SOCKS_WHITE,
+    slug: PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_WHITE,
+    name: 'Philippians 4:13 Non-Slip Crew Socks (White)',
+    category: 'socks',
+    comingSoon: true,
+    image: '/apparel/socks/philippians-413-crew-socks-white/1.png',
+    images: [
+      '/apparel/socks/philippians-413-crew-socks-white/1.png',
+    ],
+    tagline: '논슬립 그립 도트와 빌립보서 4:13 레터링으로 믿음과 퍼포먼스를 하나로 담은 크루 양말.',
+    description:
+      '발바닥 논슬립 그립 도트가 접지력을 높여 미끄러짐을 줄이고 안정적인 움직임을 지원하는 크루 양말입니다. 통기성 원단 설계로 땀과 열 배출이 용이해 발을 쾌적하게 유지하며, 쿠셔닝 힐 구조가 뒤꿈치 충격을 완화합니다. 탄탄한 상단 밴드가 흘러내리지 않게 잡아주고, 두툼한 바닥 조직감이 보호력과 내구성을 높여줍니다. 빌립보서 4:13 레터링과 크로스 심볼 디테일이 더해진 의미 있는 스포츠 양말입니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '논슬립 그립 도트', detail: ' — 접지력을 높여 미끄러짐 방지' },
+      { label: '통기성 원단', detail: ' — 땀과 열 배출로 쾌적함 유지' },
+      { label: '쿠셔닝 힐 구조', detail: ' — 뒤꿈치 충격 완화' },
+      { label: '두툼한 바닥 보강', detail: ' — 보호력과 내구성 향상' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '논슬립 그립 도트', description: '발바닥 접지력을 높여 미끄러짐을 줄이고 안정적인 움직임 지원.' },
+        { title: '통기성 원단 설계', description: '땀과 열 배출이 용이해 발을 쾌적하게 유지.' },
+        { title: '쿠셔닝 힐 구조', description: '뒤꿈치 충격을 완화하고 편안한 착용감 제공.' },
+        { title: '탄탄한 상단 밴드', description: '쉽게 흘러내리지 않으면서도 과한 조임 없이 안정적으로 고정.' },
+        { title: '두툼한 바닥 조직감', description: '마찰이 많은 부위를 보강해 보호력과 내구성 향상.' },
+        { title: '스포츠 활동 대응형', description: '축구, 러닝, 트레이닝 등 움직임이 많은 환경에서 실용적 활용.' },
+      ],
+      design: [
+        { title: 'Philippians 4:13 레터링', description: '의미 있는 성경 구절을 시각적으로 담아낸 디자인.' },
+        { title: '크로스 심볼 디테일', description: '상징성을 더해 아이덴티티를 강조하는 포인트 구성.' },
+        { title: '크루 기장 실루엣', description: '발목 위까지 자연스럽게 올라오는 데일리 겸 스포츠 타입.' },
+        { title: '화이트 베이스 컬러', description: '깔끔하고 선명한 느낌으로 다양한 룩과 매치 용이.' },
+        { title: '블랙 그립 도트 대비감', description: '화이트 바탕 위에 선명한 포인트를 더해 디자인 완성도 강화.' },
+      ],
+      material: '면 / 폴리에스터 혼방. 성인 프리사이즈.',
+    },
+  },
+
   [PRODUCT_SLUGS.MOTION_TECH_PANTS_BLACK]: {
     id: PRODUCT_IDS.MOTION_TECH_PANTS_BLACK,
     slug: PRODUCT_SLUGS.MOTION_TECH_PANTS_BLACK,
     name: 'Motion Tech Pants (Black)',
-    category: 'pants',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/pants/traning-pants/motion-training-pants/black/1-motion-tech-training-pants-black-1.png',
+    image: '/apparel/bottom/motion-tech-pants-black/1.png',
     images: [
-      '/apparel/pants/traning-pants/motion-training-pants/black/1-motion-tech-training-pants-black-1.png',
-      '/apparel/pants/traning-pants/motion-training-pants/3-motion-tech-trianing-pants-3.png',
-      '/apparel/pants/traning-pants/motion-training-pants/4-motion-tech-trianing-pants-4.png',
-      '/apparel/pants/traning-pants/motion-training-pants/5-motion-tech-trianing-pants-5.png',
-      '/apparel/pants/traning-pants/motion-training-pants/6-motion-tech-trianing-pants-6.png',
-      '/apparel/pants/traning-pants/motion-training-pants/7-motion-tech-trianing-pants-7.png',
+      '/apparel/bottom/motion-tech-pants-black/1.png',
+      '/apparel/bottom/motion-tech-pants-black/detail-1.png',
+      '/apparel/bottom/motion-tech-pants-black/detail-2.png',
+      '/apparel/bottom/motion-tech-pants-black/detail-3.png',
+      '/apparel/bottom/motion-tech-pants-black/detail-4.png',
+      '/apparel/bottom/motion-tech-pants-black/detail-5.png',
     ],
     tagline: '프리미엄 기능성 원단과 뛰어난 신축성, 빠른 건조력으로 어떤 운동에서도 완성도 높은 핏을 구현한 테크 팬츠.',
     description:
@@ -920,16 +1421,16 @@ export const products: Record<ProductSlug, Product> = {
     id: PRODUCT_IDS.MOTION_TECH_PANTS_GRAY,
     slug: PRODUCT_SLUGS.MOTION_TECH_PANTS_GRAY,
     name: 'Motion Tech Pants (Gray)',
-    category: 'pants',
+    category: 'bottom',
     comingSoon: true,
-    image: '/apparel/pants/traning-pants/motion-training-pants/gray/1-motion-tech-traning-pants-gray-1.png',
+    image: '/apparel/bottom/motion-tech-pants-gray/1.png',
     images: [
-      '/apparel/pants/traning-pants/motion-training-pants/gray/1-motion-tech-traning-pants-gray-1.png',
-      '/apparel/pants/traning-pants/motion-training-pants/3-motion-tech-trianing-pants-3.png',
-      '/apparel/pants/traning-pants/motion-training-pants/4-motion-tech-trianing-pants-4.png',
-      '/apparel/pants/traning-pants/motion-training-pants/5-motion-tech-trianing-pants-5.png',
-      '/apparel/pants/traning-pants/motion-training-pants/6-motion-tech-trianing-pants-6.png',
-      '/apparel/pants/traning-pants/motion-training-pants/7-motion-tech-trianing-pants-7.png',
+      '/apparel/bottom/motion-tech-pants-gray/1.png',
+      '/apparel/bottom/motion-tech-pants-gray/detail-1.png',
+      '/apparel/bottom/motion-tech-pants-gray/detail-2.png',
+      '/apparel/bottom/motion-tech-pants-gray/detail-3.png',
+      '/apparel/bottom/motion-tech-pants-gray/detail-4.png',
+      '/apparel/bottom/motion-tech-pants-gray/detail-5.png',
     ],
     tagline: '프리미엄 기능성 원단과 뛰어난 신축성, 빠른 건조력으로 어떤 운동에서도 완성도 높은 핏을 구현한 테크 팬츠.',
     description:
@@ -962,6 +1463,120 @@ export const products: Record<ProductSlug, Product> = {
         { title: '반사 디테일', description: '포인트 디자인으로 완성한 야간 가시성.' },
       ],
       material: '폴리에스터 92%, 스판덱스 8%.',
+    },
+  },
+
+  [PRODUCT_SLUGS.COOL_TECH_TSHIRT_BLACK]: {
+    id: PRODUCT_IDS.COOL_TECH_TSHIRT_BLACK,
+    slug: PRODUCT_SLUGS.COOL_TECH_TSHIRT_BLACK,
+    name: 'Cool Tech T-Shirt (Black)',
+    category: 'top',
+    comingSoon: true,
+    image: '/apparel/top/cool-tech-tshirt-black/1.png',
+    images: [
+      '/apparel/top/cool-tech-tshirt-black/1.png',
+      '/apparel/top/cool-tech-tshirt-black/2.png',
+      '/apparel/top/cool-tech-tshirt-black/3.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-1.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-2.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-3.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-4.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-5.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-6.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-7.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-8.png',
+      '/apparel/top/cool-tech-tshirt-black/detail-9.png',
+    ],
+    tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
+    description:
+      '폴리에스터 80% + 스판덱스 20%의 신축성 있는 피케 조직 원단으로 제작된 160g 초경량 기능성 반팔. 전·후면 빛반사 로고와 어깨/등 라인 절개로 퍼포먼스 핏을 완성하고, 옆단 트임 설계로 움직임의 자유도를 높였습니다. 빠른 땀 흡수와 건조력으로 운동 내내 쾌적한 착용감을 유지합니다.',
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    features: [
+      { label: '전·후면 빛반사 로고', detail: ' — 야간 시인성 + 브로스픽 아이덴티티' },
+      { label: '피케 조직 원단', detail: ' — 차별화된 텍스처와 기능성' },
+      { label: '초경량 160G', detail: ' — 원단의 무게감을 거의 느끼지 못하는 착용감' },
+      { label: '빠른 흡수·건조', detail: ' — 운동 내내 쾌적함 유지' },
+      { label: '어깨/등 라인 절개', detail: ' — 활동성 + 핏 개선' },
+      { label: '옆단 트임 설계', detail: ' — 하체 움직임 자유도 확보' },
+    ],
+    sizeChart: [
+      { size: 'S',   length: 62,   chest: 45, sleeve: 16 },
+      { size: 'M',   length: 65.5, chest: 48, sleeve: 17 },
+      { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
+      { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
+      { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
+      { size: '3XL', length: 76.5, chest: 57, sleeve: 21 },
+    ],
+    details: {
+      functions: [
+        { title: '빠른 흡수·건조', description: '땀을 빠르게 흡수·건조해 운동 내내 쾌적함 유지.' },
+        { title: '4방향 스트레치', description: '신축성 있는 피케 조직으로 어떤 움직임도 제한 없이 커버.' },
+        { title: '초경량 160G', description: '착용 중 원단의 무게감을 거의 느끼지 못하는 가벼운 착용감.' },
+        { title: '옆단 트임 설계', description: '하체 움직임의 자유도를 높인 슬릿 헴 디자인.' },
+      ],
+      design: [
+        { title: '전·후면 빛반사 로고', description: '야간 훈련 시인성을 높이고 브로스픽 아이덴티티를 강조.' },
+        { title: '어깨/등 라인 절개', description: '기능적 절개로 활동성을 높이고 실루엣을 정돈.' },
+        { title: '테크웨어 봉제 디자인', description: '퍼포먼스 무드를 살린 기능적 봉제 디테일.' },
+      ],
+      material: '폴리에스터 80% + 스판덱스 20%. 신축성 있는 피케 조직으로 독특한 텍스처와 기능성을 동시에. 중량 160g.',
+    },
+  },
+
+  [PRODUCT_SLUGS.COOL_TECH_TSHIRT_WHITE]: {
+    id: PRODUCT_IDS.COOL_TECH_TSHIRT_WHITE,
+    slug: PRODUCT_SLUGS.COOL_TECH_TSHIRT_WHITE,
+    name: 'Cool Tech T-Shirt (White)',
+    category: 'top',
+    comingSoon: true,
+    image: '/apparel/top/cool-tech-tshirt-white/1.png',
+    images: [
+      '/apparel/top/cool-tech-tshirt-white/1.png',
+      '/apparel/top/cool-tech-tshirt-white/2.png',
+      '/apparel/top/cool-tech-tshirt-white/3.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-1.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-2.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-3.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-4.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-5.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-6.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-7.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-8.png',
+      '/apparel/top/cool-tech-tshirt-white/detail-9.png',
+    ],
+    tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
+    description:
+      '폴리에스터 80% + 스판덱스 20%의 신축성 있는 피케 조직 원단으로 제작된 160g 초경량 기능성 반팔. 전·후면 빛반사 로고와 어깨/등 라인 절개로 퍼포먼스 핏을 완성하고, 옆단 트임 설계로 움직임의 자유도를 높였습니다. 빠른 땀 흡수와 건조력으로 운동 내내 쾌적한 착용감을 유지합니다.',
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    features: [
+      { label: '전·후면 빛반사 로고', detail: ' — 야간 시인성 + 브로스픽 아이덴티티' },
+      { label: '피케 조직 원단', detail: ' — 차별화된 텍스처와 기능성' },
+      { label: '초경량 160G', detail: ' — 원단의 무게감을 거의 느끼지 못하는 착용감' },
+      { label: '빠른 흡수·건조', detail: ' — 운동 내내 쾌적함 유지' },
+      { label: '어깨/등 라인 절개', detail: ' — 활동성 + 핏 개선' },
+      { label: '옆단 트임 설계', detail: ' — 하체 움직임 자유도 확보' },
+    ],
+    sizeChart: [
+      { size: 'S',   length: 62,   chest: 45, sleeve: 16 },
+      { size: 'M',   length: 65.5, chest: 48, sleeve: 17 },
+      { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
+      { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
+      { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
+      { size: '3XL', length: 76.5, chest: 57, sleeve: 21 },
+    ],
+    details: {
+      functions: [
+        { title: '빠른 흡수·건조', description: '땀을 빠르게 흡수·건조해 운동 내내 쾌적함 유지.' },
+        { title: '4방향 스트레치', description: '신축성 있는 피케 조직으로 어떤 움직임도 제한 없이 커버.' },
+        { title: '초경량 160G', description: '착용 중 원단의 무게감을 거의 느끼지 못하는 가벼운 착용감.' },
+        { title: '옆단 트임 설계', description: '하체 움직임의 자유도를 높인 슬릿 헴 디자인.' },
+      ],
+      design: [
+        { title: '전·후면 빛반사 로고', description: '야간 훈련 시인성을 높이고 브로스픽 아이덴티티를 강조.' },
+        { title: '어깨/등 라인 절개', description: '기능적 절개로 활동성을 높이고 실루엣을 정돈.' },
+        { title: '테크웨어 봉제 디자인', description: '퍼포먼스 무드를 살린 기능적 봉제 디테일.' },
+      ],
+      material: '폴리에스터 80% + 스판덱스 20%. 신축성 있는 피케 조직으로 독특한 텍스처와 기능성을 동시에. 중량 160g.',
     },
   },
 };
