@@ -78,11 +78,6 @@ export class ReturnService {
       throw Object.assign(new Error('교환 희망 사이즈를 선택해주세요.'), { status: 400 });
     }
 
-    const isKakaoPay = (order as { payment_method?: string }).payment_method === '카카오페이';
-    if (type === ReturnType.RETURN && !isKakaoPay && (!refundBank || !refundAccount || !refundHolder)) {
-      throw Object.assign(new Error('환불 계좌 정보를 입력해주세요.'), { status: 400 });
-    }
-
     // 주문 조회 + 인증 (주문번호 + 전화번호)
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
@@ -93,6 +88,11 @@ export class ReturnService {
 
     if (orderError || !order) {
       throw Object.assign(new Error('주문을 찾을 수 없습니다. 주문번호와 전화번호를 확인해주세요.'), { status: 404 });
+    }
+
+    const isKakaoPay = order.payment_method === '카카오페이';
+    if (type === ReturnType.RETURN && !isKakaoPay && (!refundBank || !refundAccount || !refundHolder)) {
+      throw Object.assign(new Error('환불 계좌 정보를 입력해주세요.'), { status: 400 });
     }
 
     // 배송완료 상태 확인
