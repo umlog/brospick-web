@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
+import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { escapeHtml, sendMail } from '@/lib/email/transporter';
 
 // 마케팅 동의 수신자 목록 조회
 export async function GET(request: NextRequest) {
   return withErrorHandler(async () => {
-    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
+    if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);
     }
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 // 마케팅 이메일 발송
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
-    if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
+    if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);
     }
 

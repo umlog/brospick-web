@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
+import { showConfirm } from '../lib/confirm';
 
 export function useOrders(notifyOnChange: boolean) {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
@@ -70,7 +71,8 @@ export function useOrders(notifyOnChange: boolean) {
       ? `상태를 "${newStatus}"(으)로 변경하고 고객에게 알림을 보낼까요?`
       : `상태를 "${newStatus}"(으)로 변경할까요?`;
 
-    if (!confirm(confirmMsg)) return;
+    const ok = await showConfirm(confirmMsg);
+    if (!ok) return;
 
     setProcessing(orderId, true);
     try {
@@ -97,7 +99,8 @@ export function useOrders(notifyOnChange: boolean) {
   };
 
   const handlePaymentReminder = async (orderId: string, orderNumber: string) => {
-    if (!confirm(`주문 ${orderNumber} 고객에게 입금 안내 메일을 보낼까요?`)) return;
+    const ok = await showConfirm(`주문 ${orderNumber} 고객에게 입금 안내 메일을 보낼까요?`);
+    if (!ok) return;
 
     setProcessing(orderId, true);
     try {
@@ -111,7 +114,8 @@ export function useOrders(notifyOnChange: boolean) {
   };
 
   const handleDeleteOrder = async (orderId: string, orderNumber: string) => {
-    if (!confirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`)) return;
+    const ok = await showConfirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`);
+    if (!ok) return;
 
     setProcessing(orderId, true);
     try {
@@ -126,7 +130,8 @@ export function useOrders(notifyOnChange: boolean) {
   };
 
   const handleCancelRefundComplete = async (orderId: string, orderNumber: string) => {
-    if (!confirm(`주문 ${orderNumber} 환불을 완료 처리할까요?`)) return;
+    const ok = await showConfirm(`주문 ${orderNumber} 환불을 완료 처리할까요?`);
+    if (!ok) return;
 
     setProcessing(orderId, true);
     try {
@@ -150,7 +155,8 @@ export function useOrders(notifyOnChange: boolean) {
   };
 
   const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
-    if (!confirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`)) return;
+    const ok = await showConfirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`);
+    if (!ok) return;
 
     setProcessing(orderId, true);
     try {

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { CONTACT } from '../../lib/constants';
 import styles from './FloatingTracker.module.css';
 
-const HIDDEN_PATHS = ['/checkout', '/cart'];
+const HIDDEN_PATHS = ['/checkout', '/cart', '/ebook'];
 const HIDDEN_PATTERN = /^\/apparel\/.+/;
 
 export default function FloatingTracker() {

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import type { useProductCatalog } from '../hooks/useProductCatalog';
 import type { AdminProduct } from '@/lib/domain/types';
 import { CATEGORY_LABELS } from '@/lib/products';
+import { showToast } from '../lib/toast';
 import styles from '../admin.module.css';
 
 type ProductCatalogState = ReturnType<typeof useProductCatalog>;
@@ -40,12 +41,12 @@ function ProductRow({
   const handleSave = async () => {
     const parsedPrice = parseInt(price, 10);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      alert('올바른 가격을 입력해주세요.');
+      showToast('올바른 가격을 입력해주세요.', 'error');
       return;
     }
     const parsedOriginal = originalPrice === '' ? null : parseInt(originalPrice, 10);
     if (originalPrice !== '' && (isNaN(parsedOriginal!) || parsedOriginal! <= 0)) {
-      alert('올바른 정가를 입력해주세요.');
+      showToast('올바른 정가를 입력해주세요.', 'error');
       return;
     }
     await onUpdate(product.id, {

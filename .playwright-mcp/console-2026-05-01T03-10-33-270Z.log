@@ -1,0 +1,72 @@
+[     253ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[   19053ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   19196ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:112
+[   19660ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[   24692ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   24782ms] [ERROR] ./app/ebook/ebook-page.module.css:1511:1
+Syntax error: C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css Unclosed block
+
+  1509 | }
+  1510 | 
+> 1511 | .faqAnswer {
+       | ^
+  1512 |   max-height: 0;
+  1513 |   overflow: hidden; @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   24783ms] [ERROR] ./app/ebook/ebook-page.module.css:1511:1
+Syntax error: C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css Unclosed block
+
+  1509 | }
+  1510 | 
+> 1511 | .faqAnswer {
+       | ^
+  1512 |   max-height: 0;
+  1513 |   overflow: hidden; @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  261649ms] [ERROR] ./app/ebook/ebook-page.module.css:1511:1
+Syntax error: C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css Unclosed block
+
+  1509 | }
+  1510 | 
+> 1511 | .faqAnswer {
+       | ^
+  1512 |   max-height: 0;
+  1513 |   overflow: hidden; @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  261649ms] [ERROR] ./app/ebook/ebook-page.module.css
+Syntax error: C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css Unclosed block (1511:1)
+
+  1509 | }
+  1510 | 
+> 1511 | .faqAnswer {
+       | ^
+  1512 |   max-height: 0;
+  1513 |   overflow: hidden;
+-- inner error --
+Syntax error: C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css Unclosed block (1511:1)
+
+  1509 | }
+  1510 | 
+> 1511 | .faqAnswer {
+       | ^
+  1512 |   max-height: 0;
+  1513 |   overflow: hidden;
+Generated code for C:\brospick-web\brospick-web\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[14].oneOf[7].use[2]!C:\brospick-web\brospick-web\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[14].oneOf[7].use[3]!C:\brospick-web\brospick-web\app\ebook\ebook-page.module.css
+
+Import trace for requested module:
+./app/ebook/ebook-page.module.css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  261861ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:112
+[  262386ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[  277389ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  277719ms] [LOG] [Fast Refresh] done in 330ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43

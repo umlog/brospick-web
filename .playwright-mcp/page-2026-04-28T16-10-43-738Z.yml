@@ -1,0 +1,172 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e19]:
+    - main [ref=e20]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - paragraph [ref=e24]: BROSPICK E-BOOK · 2026
+          - heading "The Overseas Football Playbook" [level=1] [ref=e25]
+          - paragraph [ref=e26]: 해외 축구 진출을 꿈꾸는 선수들을 위한 단 하나의 실전 가이드. 자기 평가부터 계약까지, 브로스픽이 직접 경험한 모든 것을 담았습니다.
+          - generic [ref=e27]:
+            - button "지금 구매하기" [ref=e28] [cursor=pointer]:
+              - text: 지금 구매하기
+              - img [ref=e29]
+            - link "목차 보기" [ref=e31] [cursor=pointer]:
+              - /url: "#contents"
+        - generic [ref=e36]:
+          - paragraph [ref=e38]: BROSPICK
+          - paragraph [ref=e40]: The Overseas Football Playbook
+          - paragraph [ref=e41]: E-BOOK · 2026
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: WHY THIS BOOK
+          - heading "이 책이 필요한 이유" [level=2] [ref=e52]
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - heading "완전한 실전 로드맵" [level=3] [ref=e58]
+            - paragraph [ref=e59]: 자기 평가부터 오퍼·계약까지, 해외 진출의 전 과정을 단계별로 정리했습니다. 막막함 없이 바로 시작할 수 있습니다.
+          - generic [ref=e60]:
+            - img [ref=e62]
+            - heading "실제 경험자의 케이스" [level=3] [ref=e65]
+            - paragraph [ref=e66]: Australia NPL, Philippines 등에서 뛴 선수들의 리얼 필드 노트와 성공·실패 사례를 그대로 담았습니다.
+          - generic [ref=e67]:
+            - img [ref=e69]
+            - heading "14일 즉시 실행 플랜" [level=3] [ref=e73]
+            - paragraph [ref=e74]: 읽고 끝나는 책이 아닙니다. 오늘부터 14일 안에 실행할 수 있는 단계별 액션 플랜과 체크리스트를 제공합니다.
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - paragraph [ref=e78]: CONTENTS
+          - heading "목차" [level=2] [ref=e79]
+        - list [ref=e80]:
+          - listitem [ref=e81]:
+            - generic [ref=e82]: PART 00
+            - generic [ref=e83]:
+              - strong [ref=e84]: START HERE — 시작하기
+              - generic [ref=e85]: 이 책의 활용법, 해외 진출의 현실, 그리고 당신이 지금 어디에 있는지 확인합니다.
+          - listitem [ref=e86]:
+            - generic [ref=e87]: PART 01
+            - generic [ref=e88]:
+              - strong [ref=e89]: THE MAP — 해외 진출 로드맵
+              - generic [ref=e90]: 7단계 전체 프로세스 개요. 세미프로 루트, 리그 선택, 현실적인 타임라인을 제시합니다.
+          - listitem [ref=e91]:
+            - generic [ref=e92]: PART 02
+            - generic [ref=e93]:
+              - strong [ref=e94]: SELF-ASSESSMENT & EVIDENCE
+              - generic [ref=e95]: 나는 어느 레벨인가? 하이라이트 영상 제작, Transfermarkt 프로필 세팅까지.
+          - listitem [ref=e96]:
+            - generic [ref=e97]: PART 03
+            - generic [ref=e98]:
+              - strong [ref=e99]: PLAYER PACKAGE — 선수 패키지
+              - generic [ref=e100]: 5~10초 안에 눈길을 끄는 1-page 프로필, 하이라이트 영상, SNS 채널 구성법.
+          - listitem [ref=e101]:
+            - generic [ref=e102]: PART 04
+            - generic [ref=e103]:
+              - strong [ref=e104]: FINDING OPPORTUNITIES & CONTACT
+              - generic [ref=e105]: 구단 리서치 방법, DM 전략, 이메일 템플릿, 그리고 팔로업 타임라인.
+          - listitem [ref=e106]:
+            - generic [ref=e107]: PART 05
+            - generic [ref=e108]:
+              - strong [ref=e109]: TRIAL & EXECUTION — 트라이얼 실전
+              - generic [ref=e110]: 트라이얼 준비, 현지 도착 후 24시간 행동 가이드, 멘탈 관리까지.
+          - listitem [ref=e111]:
+            - generic [ref=e112]: PART 06
+            - generic [ref=e113]:
+              - strong [ref=e114]: OFFERS, CONTRACTS & RISK
+              - generic [ref=e115]: 오퍼를 받으면 꼭 확인해야 할 7가지 체크리스트. 계약서 독소조항과 리스크 관리.
+          - listitem [ref=e116]:
+            - generic [ref=e117]: PART 07
+            - generic [ref=e118]:
+              - strong [ref=e119]: CASES & 14-DAY PLAN
+              - generic [ref=e120]: 실제 선수들의 성공·실패 사례 분석. 지금 당장 시작하는 14일 실행 플랜.
+          - listitem [ref=e121]:
+            - generic [ref=e122]: PART 08
+            - generic [ref=e123]:
+              - strong [ref=e124]: REAL FIELD NOTES & NEXT MOVE
+              - generic [ref=e125]: Australia NPL, Philippines, 유럽 루트 — 포지션별·리그별 실전 노트 모음.
+          - listitem [ref=e126]:
+            - generic [ref=e127]: APPENDIX
+            - generic [ref=e128]:
+              - strong [ref=e129]: CHECKLISTS & Q&A
+              - generic [ref=e130]: 독자들이 가장 많이 묻는 질문 7가지 + 단계별 체크리스트 전체 수록.
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - paragraph [ref=e135]: WRITTEN BY
+          - paragraph [ref=e136]: Hong Juyeong
+          - paragraph [ref=e137]: Kim Geon-oh
+        - generic [ref=e139]:
+          - paragraph [ref=e140]: EDITED BY
+          - paragraph [ref=e141]: Jung Jiyeong
+        - generic [ref=e143]:
+          - paragraph [ref=e144]: FIELD CONTRIBUTORS
+          - paragraph [ref=e145]: Choi Eun-woo
+          - paragraph [ref=e146]: Kim Jun-yong
+          - paragraph [ref=e147]: Lee Eun-pyo
+  - contentinfo [ref=e148]:
+    - generic [ref=e149]:
+      - generic [ref=e150]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e152]:
+          - listitem [ref=e153]:
+            - link "주문 조회" [ref=e154] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e155]:
+            - link "취소 / 교환 / 반품" [ref=e156] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e157]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e159]:
+          - listitem [ref=e160]:
+            - link "인스타그램" [ref=e161] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e162]:
+            - link "스레드" [ref=e163] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e164]:
+            - link "이메일 문의" [ref=e165] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e166]:
+            - link "전화 문의" [ref=e167] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e168]:
+            - button "개인정보 처리방침" [ref=e169] [cursor=pointer]
+          - listitem [ref=e170]:
+            - button "쿠키 정책" [ref=e171] [cursor=pointer]
+          - listitem [ref=e172]:
+            - button "면책 조항" [ref=e173] [cursor=pointer]
+      - generic [ref=e174]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e176]:
+          - listitem [ref=e177]: "회사: BROSPICK"
+          - listitem [ref=e178]: "대표자: 홍주영"
+          - listitem [ref=e179]: "사업자번호: 847-07-03351"
+          - listitem [ref=e180]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e181]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e182]: "전화번호: 010-2687-6269"
+          - listitem [ref=e183]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e185]:
+      - img "Brospick" [ref=e186]
+      - paragraph [ref=e187]: © 2026 BROSPICK. All rights reserved.
+  - button "고객센터" [ref=e188] [cursor=pointer]:
+    - img [ref=e189]

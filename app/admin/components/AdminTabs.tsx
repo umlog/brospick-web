@@ -45,6 +45,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         마케팅 이메일
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'ebook' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('ebook')}
+      >
+        전자책 주문
+      </button>
     </div>
   );
 }

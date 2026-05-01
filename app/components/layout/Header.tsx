@@ -33,6 +33,7 @@ export default function Header() {
     { label: 'BROSPICK', href: '/#manifesto' },
     { label: 'BLOG', href: '/interviews' },
     { label: 'SPORTWEAR', href: '/apparel-showcase' },
+    { label: 'EBOOK', href: '/ebook' },
   ];
 
   return (

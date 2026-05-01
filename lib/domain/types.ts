@@ -124,7 +124,23 @@ export interface BlogPost {
 // 어드민 UI
 // -----------------------------------------------------------------------------
 
-export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing' | 'ebook';
+
+// -----------------------------------------------------------------------------
+// 전자책 주문
+// -----------------------------------------------------------------------------
+
+export interface EbookOrder {
+  id: number;
+  order_number: string;
+  name: string;
+  phone: string;
+  email: string;
+  amount: number;
+  status: 'pending_payment' | 'payment_confirmed' | 'download_sent';
+  download_sent_at: string | null;
+  created_at: string;
+}
 
 export interface AdminProduct {
   id: number;

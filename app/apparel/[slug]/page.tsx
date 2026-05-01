@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug } from '../../../lib/products';
-import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS } from '../../../lib/constants';
+import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './product-detail.module.css';
 
 function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
@@ -50,6 +50,7 @@ export default function ProductDetailPage({
   const [sizeDelayTexts, setSizeDelayTexts] = useState<Record<string, string>>({});
   const [dbPrice, setDbPrice] = useState<{ name?: string; price: number; original_price: number | null } | undefined>(undefined);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [logoInquiryOpen, setLogoInquiryOpen] = useState(false);
   const lensRef = useRef<HTMLDivElement>(null);
   const zoomPanelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -64,7 +65,7 @@ export default function ProductDetailPage({
         const found = (data.prices || []).find((p: { id: number }) => p.id === product.id);
         if (found) setDbPrice({ name: found.name, price: found.price, original_price: found.original_price });
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [product?.id]);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export default function ProductDetailPage({
         setSizeStocks(stockMap);
         setSizeDelayTexts(delayTextMap);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const price = dbPrice?.price;
@@ -215,488 +216,547 @@ export default function ProductDetailPage({
 
   return (
     <main className={styles.main}>
-        <div className={styles.container}>
-          <Link href="/apparel" className={styles.backLink}>
-            ← 의류 목록으로 돌아가기
-          </Link>
+      <div className={styles.container}>
+        <Link href="/apparel" className={styles.backLink}>
+          ← 의류 목록으로 돌아가기
+        </Link>
 
-          <div className={styles.productDetail}>
-            <div className={styles.imageSection}>
-              <div
-                className={styles.mainImage}
-                ref={emblaRef}
-                onClick={() => { if (window.matchMedia('(pointer: coarse)').matches) setLightboxOpen(true); }}
-                onMouseMove={(e) => {
-                  const target = e.currentTarget;
-                  const clientX = e.clientX;
-                  const clientY = e.clientY;
-                  if (rafRef.current) cancelAnimationFrame(rafRef.current);
-                  rafRef.current = requestAnimationFrame(() => {
-                    const rect = target.getBoundingClientRect();
-                    const x = clientX - rect.left;
-                    const y = clientY - rect.top;
-                    const w = rect.width;
-                    const h = rect.height;
-                    if (lensRef.current) {
-                      lensRef.current.style.display = 'block';
-                      lensRef.current.style.left = `${Math.min(Math.max(x - 50, 0), w - 100)}px`;
-                      lensRef.current.style.top = `${Math.min(Math.max(y - 50, 0), h - 100)}px`;
-                    }
-                    if (zoomPanelRef.current) {
-                      zoomPanelRef.current.style.display = 'block';
-                      zoomPanelRef.current.style.backgroundSize = `${w * 3}px ${h * 3}px`;
-                      zoomPanelRef.current.style.backgroundPosition = `${-(x * 3 - w / 2)}px ${-(y * 3 - h / 2)}px`;
-                    }
-                  });
-                }}
-                onMouseLeave={() => {
-                  if (rafRef.current) cancelAnimationFrame(rafRef.current);
-                  if (lensRef.current) lensRef.current.style.display = 'none';
-                  if (zoomPanelRef.current) zoomPanelRef.current.style.display = 'none';
-                }}
-              >
-                <div className={styles.emblaContainer}>
-                  {product.images.map((img, index) => (
-                    <div className={styles.emblaSlide} key={index}>
-                      <img src={img} alt={`${product.name} ${index + 1}`} draggable={false} />
-                    </div>
-                  ))}
-                </div>
-                <div ref={lensRef} className={styles.lens} style={{ display: 'none' }} />
+        <div className={styles.productDetail}>
+          <div className={styles.imageSection}>
+            <div
+              className={styles.mainImage}
+              ref={emblaRef}
+              onClick={() => { if (window.matchMedia('(pointer: coarse)').matches) setLightboxOpen(true); }}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const clientX = e.clientX;
+                const clientY = e.clientY;
+                if (rafRef.current) cancelAnimationFrame(rafRef.current);
+                rafRef.current = requestAnimationFrame(() => {
+                  const rect = target.getBoundingClientRect();
+                  const x = clientX - rect.left;
+                  const y = clientY - rect.top;
+                  const w = rect.width;
+                  const h = rect.height;
+                  if (lensRef.current) {
+                    lensRef.current.style.display = 'block';
+                    lensRef.current.style.left = `${Math.min(Math.max(x - 50, 0), w - 100)}px`;
+                    lensRef.current.style.top = `${Math.min(Math.max(y - 50, 0), h - 100)}px`;
+                  }
+                  if (zoomPanelRef.current) {
+                    zoomPanelRef.current.style.display = 'block';
+                    zoomPanelRef.current.style.backgroundSize = `${w * 3}px ${h * 3}px`;
+                    zoomPanelRef.current.style.backgroundPosition = `${-(x * 3 - w / 2)}px ${-(y * 3 - h / 2)}px`;
+                  }
+                });
+              }}
+              onMouseLeave={() => {
+                if (rafRef.current) cancelAnimationFrame(rafRef.current);
+                if (lensRef.current) lensRef.current.style.display = 'none';
+                if (zoomPanelRef.current) zoomPanelRef.current.style.display = 'none';
+              }}
+            >
+              <div className={styles.emblaContainer}>
+                {product.images.map((img, index) => (
+                  <div className={styles.emblaSlide} key={index}>
+                    <img src={img} alt={`${product.name} ${index + 1}`} draggable={false} />
+                  </div>
+                ))}
               </div>
-              <div className={styles.dotRow}>
-                {product.images.map((_, index) => (
+              <div ref={lensRef} className={styles.lens} style={{ display: 'none' }} />
+            </div>
+            <div className={styles.dotRow}>
+              {product.images.map((_, index) => (
+                <button
+                  key={index}
+                  className={`${styles.dot} ${index === currentImage ? styles.dotActive : ''}`}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                  aria-label={`이미지 ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            <div className={styles.thumbEmbla} ref={thumbRef}>
+              <div className={styles.thumbContainer}>
+                {product.images.map((img, index) => (
                   <button
                     key={index}
-                    className={`${styles.dot} ${index === currentImage ? styles.dotActive : ''}`}
-                    onClick={() => emblaApi?.scrollTo(index)}
-                    aria-label={`이미지 ${index + 1}`}
-                  />
+                    className={`${styles.thumbnail} ${index === currentImage ? styles.thumbnailActive : ''}`}
+                    onClick={() => onThumbClick(index)}
+                  >
+                    <img src={img} alt={`${product.name} ${index + 1}`} />
+                  </button>
                 ))}
               </div>
-
-              <div className={styles.thumbEmbla} ref={thumbRef}>
-                <div className={styles.thumbContainer}>
-                  {product.images.map((img, index) => (
-                    <button
-                      key={index}
-                      className={`${styles.thumbnail} ${index === currentImage ? styles.thumbnailActive : ''}`}
-                      onClick={() => onThumbClick(index)}
-                    >
-                      <img src={img} alt={`${product.name} ${index + 1}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className={styles.progressTrack}>
-                <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }} />
-              </div>
-              <div
-                ref={zoomPanelRef}
-                className={styles.zoomPanel}
-                style={{ display: 'none', backgroundImage: `url(${product.images[currentImage]})` }}
-              />
             </div>
+            <div className={styles.progressTrack}>
+              <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }} />
+            </div>
+            <div
+              ref={zoomPanelRef}
+              className={styles.zoomPanel}
+              style={{ display: 'none', backgroundImage: `url(${product.images[currentImage]})` }}
+            />
+          </div>
 
-            <div className={styles.infoSection}>
-              <h1 className={styles.productName}>{productName}</h1>
+          <div className={styles.infoSection}>
+            <h1 className={styles.productName}>{productName}</h1>
 
-              <div className={styles.priceSection}>
-                {price !== undefined ? (
-                  <>
-                    <span className={styles.price}>₩{price.toLocaleString()}</span>
-                    {originalPrice && originalPrice > price && (
-                      <>
-                        <span className={styles.originalPrice}>
-                          ₩{originalPrice.toLocaleString()}
-                        </span>
-                        <span className={styles.discountBadge}>
-                          {getDiscountPercent(price, originalPrice)}%
-                        </span>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <span className={styles.price}>—</span>
-                )}
-              </div>
-
-              {product.category === 'taping' ? (
-                <div className={styles.sizeChartInline}>
-                  <table className={styles.sizeTable}>
-                    <thead>
-                      <tr><th>소재</th><th>규격</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{product.details.material.split('. ')[0]}</td>
-                        <td>{product.details.material.split('. ')[1]?.replace(/\.$/, '')}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ) : null}
-
-              {product.category !== 'taping' && product.sizeChart.length > 0 && <div className={styles.sizeChartInline}>
-                <p className={styles.sizeUnit}>단위: cm</p>
-                <table className={styles.sizeTable}>
-                  {product.sizeChartType === 'shorts' ? (
+            <div className={styles.priceSection}>
+              {price !== undefined ? (
+                <>
+                  <span className={styles.price}>₩{price.toLocaleString()}</span>
+                  {originalPrice && originalPrice > price && (
                     <>
-                      <thead>
-                        <tr>
-                          <th>사이즈</th>
-                          <th>총장</th>
-                          <th>허리(반둘레)</th>
-                          {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
-                          {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {product.sizeChart.map((row) => (
-                          <tr key={row.size}>
-                            <td>{row.size}</td>
-                            <td>{row.length}</td>
-                            <td>{row.waist ?? '—'}</td>
-                            {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
-                            {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </>
-                  ) : product.sizeChartType === 'pants' ? (
-                    <>
-                      <thead>
-                        <tr>
-                          <th>사이즈</th>
-                          <th>총장</th>
-                          <th>엉덩이</th>
-                          <th>허리</th>
-                          <th>앞밑위</th>
-                          <th>밑단</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {product.sizeChart.map((row) => (
-                          <tr key={row.size}>
-                            <td>{row.size}</td>
-                            <td>{row.length}</td>
-                            <td>{row.hip ?? '—'}</td>
-                            <td>{row.waist ?? '—'}</td>
-                            <td>{row.rise ?? '—'}</td>
-                            <td>{row.hem ?? '—'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </>
-                  ) : (
-                    <>
-                      <thead>
-                        <tr>
-                          <th>사이즈</th>
-                          <th>총장</th>
-                          <th>{product.chestLabel ?? '가슴단면'}</th>
-                          <th>소매길이</th>
-                          {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {product.sizeChart.map((row) => (
-                          <tr key={row.size}>
-                            <td>{row.size}</td>
-                            <td>{row.length}</td>
-                            <td>{row.chest}</td>
-                            <td>{row.sleeve}</td>
-                            {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                          </tr>
-                        ))}
-                      </tbody>
+                      <span className={styles.originalPrice}>
+                        ₩{originalPrice.toLocaleString()}
+                      </span>
+                      <span className={styles.discountBadge}>
+                        {getDiscountPercent(price, originalPrice)}%
+                      </span>
                     </>
                   )}
-                </table>
-                <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
-              </div>}
-
-              {product.comingSoon ? (
-                <div className={styles.comingSoonNotice}>
-                  <span className={styles.comingSoonNoticeBadge}>COMING SOON</span>
-                  <p>해당 상품은 현재 출시 준비 중입니다.</p>
-                  <p>출시 소식은 인스타그램을 통해 먼저 확인하세요.</p>
-                </div>
-              ) : (
-                <>
-                  {product.sizes.length > 1 && <div className={styles.sizeSection}>
-                    <h3>사이즈 선택</h3>
-                    <div className={styles.sizeOptions}>
-                      {product.sizes.map((size) => {
-                        const key = `${product.id}-${size}`;
-                        const sizeStatus = sizeStatuses[key] || 'available';
-                        const stock = sizeStocks[key] ?? null;
-                        const isSoldOut = sizeStatus === 'sold_out';
-                        const isDelayed = sizeStatus === 'delayed';
-                        const delayText = sizeDelayTexts[key] || '지연배송';
-                        const showLowStock = !isSoldOut && stock !== null && stock > 0 && stock <= 5;
-                        return (
-                          <button
-                            key={size}
-                            className={`${styles.sizeButton} ${
-                              selectedSize === size ? styles.selected : ''
-                            } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
-                            onClick={() => {
-                              if (isSoldOut) return;
-                              if (isDelayed) {
-                                if (confirm(`해당 사이즈는 ${delayText} 상품입니다.\n주문하시겠습니까?`)) {
-                                  handleSizeSelect(size);
-                                }
-                                return;
-                              }
-                              handleSizeSelect(size);
-                            }}
-                            disabled={isSoldOut}
-                          >
-                            {size}
-                            {isSoldOut && <span className={styles.soldOutLine} />}
-                            {isDelayed && <span className={styles.delayedLabel}>{delayText}</span>}
-                            {showLowStock && <span className={styles.lowStockLabel}>잔여 {stock}개</span>}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>}
-
-                  <div className={styles.quantitySection}>
-                    <h3>수량</h3>
-                    <div className={styles.quantityRow}>
-                      <div className={styles.quantityControls}>
-                        <button
-                          className={styles.quantityButton}
-                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        >
-                          −
-                        </button>
-                        <span className={styles.quantity}>{quantity}</span>
-                        <button
-                          className={styles.quantityButton}
-                          onClick={() => {
-                            const key = `${product.id}-${selectedSize}`;
-                            const stock = selectedSize ? (sizeStocks[key] || Infinity) : Infinity;
-                            setQuantity(Math.min(quantity + 1, stock));
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                      {(() => {
-                        if (!selectedSize) return null;
-                        const key = `${product.id}-${selectedSize}`;
-                        const status = sizeStatuses[key];
-                        const stock = sizeStocks[key] ?? 0;
-                        if (status && status !== 'sold_out' && stock > 0 && stock <= 5) {
-                          return <span className={styles.quantityLowStock}>{stock}개 남음</span>;
-                        }
-                        return null;
-                      })()}
-                    </div>
-                  </div>
-
-                  <div className={styles.actionButtons}>
-                    <button
-                      className={styles.addToCartButton}
-                      onClick={handleAddToCart}
-                      disabled={showSuccess || price === undefined}
-                    >
-                      {showSuccess ? '장바구니에 추가됨 ✓' : '장바구니에 추가'}
-                    </button>
-                    <button className={styles.buyNowButton} onClick={handleBuyNow} disabled={price === undefined}>
-                      바로 구매하기
-                    </button>
-                  </div>
-                  <p className={styles.returnNotice}>
-                    반품 ₩{RETURN_POLICY.returnShippingFee.toLocaleString()} · 교환 ₩{RETURN_POLICY.exchangeShippingFee.toLocaleString()} · 수령 후 {RETURN_POLICY.windowDays}일 이내
-                  </p>
                 </>
+              ) : (
+                <span className={styles.price}>—</span>
               )}
+            </div>
 
-              {product.category !== 'taping' && (
-                <div className={styles.careSection}>
-                  {CARE_INSTRUCTIONS.map((instruction, i) => (
-                    <span key={i} className={styles.careTag}>{instruction}</span>
-                  ))}
+            {product.category === 'taping' ? (
+              <div className={styles.sizeChartInline}>
+                <table className={styles.sizeTable}>
+                  <thead>
+                    <tr><th>소재</th><th>규격</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{product.details.material.split('. ')[0]}</td>
+                      <td>{product.details.material.split('. ')[1]?.replace(/\.$/, '')}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
+
+            {product.category !== 'taping' && product.sizeChart.length > 0 && <div className={styles.sizeChartInline}>
+              <p className={styles.sizeUnit}>단위: cm</p>
+              <table className={styles.sizeTable}>
+                {product.sizeChartType === 'shorts' ? (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>사이즈</th>
+                        <th>총장</th>
+                        <th>허리(반둘레)</th>
+                        {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
+                        {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.sizeChart.map((row) => (
+                        <tr key={row.size}>
+                          <td>{row.size}</td>
+                          <td>{row.length}</td>
+                          <td>{row.waist ?? '—'}</td>
+                          {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
+                          {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : product.sizeChartType === 'pants' ? (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>사이즈</th>
+                        <th>총장</th>
+                        <th>엉덩이</th>
+                        <th>허리</th>
+                        <th>앞밑위</th>
+                        <th>밑단</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.sizeChart.map((row) => (
+                        <tr key={row.size}>
+                          <td>{row.size}</td>
+                          <td>{row.length}</td>
+                          <td>{row.hip ?? '—'}</td>
+                          <td>{row.waist ?? '—'}</td>
+                          <td>{row.rise ?? '—'}</td>
+                          <td>{row.hem ?? '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>사이즈</th>
+                        <th>총장</th>
+                        <th>{product.chestLabel ?? '가슴단면'}</th>
+                        <th>소매길이</th>
+                        {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.sizeChart.map((row) => (
+                        <tr key={row.size}>
+                          <td>{row.size}</td>
+                          <td>{row.length}</td>
+                          <td>{row.chest}</td>
+                          <td>{row.sleeve}</td>
+                          {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                )}
+              </table>
+              <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
+            </div>}
+
+            {product.comingSoon ? (
+              <div className={styles.comingSoonNotice}>
+                <span className={styles.comingSoonNoticeBadge}>COMING SOON</span>
+                <p>해당 상품은 현재 출시 준비 중입니다.</p>
+                <p>출시 소식은 인스타그램을 통해 먼저 확인하세요.</p>
+              </div>
+            ) : (
+              <>
+                {product.sizes.length > 1 && <div className={styles.sizeSection}>
+                  <h3>사이즈 선택</h3>
+                  <div className={styles.sizeOptions}>
+                    {product.sizes.map((size) => {
+                      const key = `${product.id}-${size}`;
+                      const sizeStatus = sizeStatuses[key] || 'available';
+                      const stock = sizeStocks[key] ?? null;
+                      const isSoldOut = sizeStatus === 'sold_out';
+                      const isDelayed = sizeStatus === 'delayed';
+                      const delayText = sizeDelayTexts[key] || '지연배송';
+                      const showLowStock = !isSoldOut && stock !== null && stock > 0 && stock <= 5;
+                      return (
+                        <button
+                          key={size}
+                          className={`${styles.sizeButton} ${selectedSize === size ? styles.selected : ''
+                            } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
+                          onClick={() => {
+                            if (isSoldOut) return;
+                            if (isDelayed) {
+                              if (confirm(`해당 사이즈는 ${delayText} 상품입니다.\n주문하시겠습니까?`)) {
+                                handleSizeSelect(size);
+                              }
+                              return;
+                            }
+                            handleSizeSelect(size);
+                          }}
+                          disabled={isSoldOut}
+                        >
+                          {size}
+                          {isSoldOut && <span className={styles.soldOutLine} />}
+                          {isDelayed && <span className={styles.delayedLabel}>{delayText}</span>}
+                          {showLowStock && <span className={styles.lowStockLabel}>잔여 {stock}개</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>}
+
+                <div className={styles.quantitySection}>
+                  <h3>수량</h3>
+                  <div className={styles.quantityRow}>
+                    <div className={styles.quantityControls}>
+                      <button
+                        className={styles.quantityButton}
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      >
+                        −
+                      </button>
+                      <span className={styles.quantity}>{quantity}</span>
+                      <button
+                        className={styles.quantityButton}
+                        onClick={() => {
+                          const key = `${product.id}-${selectedSize}`;
+                          const stock = selectedSize ? (sizeStocks[key] || Infinity) : Infinity;
+                          setQuantity(Math.min(quantity + 1, stock));
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                    {(() => {
+                      if (!selectedSize) return null;
+                      const key = `${product.id}-${selectedSize}`;
+                      const status = sizeStatuses[key];
+                      const stock = sizeStocks[key] ?? 0;
+                      if (status && status !== 'sold_out' && stock > 0 && stock <= 5) {
+                        return <span className={styles.quantityLowStock}>{stock}개 남음</span>;
+                      }
+                      return null;
+                    })()}
+                  </div>
                 </div>
-              )}
 
-              <div className={styles.featureChips}>
-                {product.features.map((f, i) => (
-                  <span key={i} className={styles.featureChip}>{f.label}</span>
+                <div className={styles.actionButtons}>
+                  <button
+                    className={styles.addToCartButton}
+                    onClick={handleAddToCart}
+                    disabled={showSuccess || price === undefined}
+                  >
+                    {showSuccess ? '장바구니에 추가됨 ✓' : '장바구니에 추가'}
+                  </button>
+                  <button className={styles.buyNowButton} onClick={handleBuyNow} disabled={price === undefined}>
+                    바로 구매하기
+                  </button>
+                </div>
+                <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
+                  맞춤 로고각인 가능
+                </button>
+                <p className={styles.returnNotice}>오후 3시 이전 결제 확인 시 당일 발송</p>
+              </>
+            )}
+
+            {product.category !== 'taping' && (
+              <div className={styles.careSection}>
+                {CARE_INSTRUCTIONS.map((instruction, i) => (
+                  <span key={i} className={styles.careTag}>{instruction}</span>
                 ))}
               </div>
+            )}
 
-              <div className={styles.accordionGroup}>
-                <Accordion title="제품 설명" defaultOpen={true}>
-                  <div className={styles.accordionContent}>
-                    {product.details.functions.length > 0 && (
-                      <>
-                        <h4>기능</h4>
-                        <ul>
-                          {product.details.functions.map((item, i) => (
-                            <li key={i}><strong>{item.title}</strong> — {item.description}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-
-                    {product.details.design.length > 0 && (
-                      <>
-                        <h4>디자인</h4>
-                        <ul>
-                          {product.details.design.map((item, i) => (
-                            <li key={i}><strong>{item.title}</strong> — {item.description}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-
-                    <h4>소재</h4>
-                    <p>{product.details.material}</p>
-                  </div>
-                </Accordion>
-
-                {product.category !== 'taping' && <Accordion title="사이즈 가이드">
-                  <div className={styles.accordionContent}>
-                    <p className={styles.sizeUnit}>단위: cm</p>
-                    <table className={styles.sizeTable}>
-                      {product.sizeChartType === 'shorts' ? (
-                        <>
-                          <thead>
-                            <tr>
-                              <th>사이즈</th>
-                              <th>총장</th>
-                              <th>허리(반둘레)</th>
-                              {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
-                              {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {product.sizeChart.map((row) => (
-                              <tr key={row.size}>
-                                <td>{row.size}</td>
-                                <td>{row.length}</td>
-                                <td>{row.waist ?? '—'}</td>
-                                {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
-                                {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </>
-                      ) : product.sizeChartType === 'pants' ? (
-                        <>
-                          <thead>
-                            <tr>
-                              <th>사이즈</th>
-                              <th>총장</th>
-                              <th>엉덩이</th>
-                              <th>허리</th>
-                              <th>앞밑위</th>
-                              <th>밑단</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {product.sizeChart.map((row) => (
-                              <tr key={row.size}>
-                                <td>{row.size}</td>
-                                <td>{row.length}</td>
-                                <td>{row.hip ?? '—'}</td>
-                                <td>{row.waist ?? '—'}</td>
-                                <td>{row.rise ?? '—'}</td>
-                                <td>{row.hem ?? '—'}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </>
-                      ) : (
-                        <>
-                          <thead>
-                            <tr>
-                              <th>사이즈</th>
-                              <th>총장</th>
-                              <th>{product.chestLabel ?? '가슴단면'}</th>
-                              <th>소매길이</th>
-                              {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {product.sizeChart.map((row) => (
-                              <tr key={row.size}>
-                                <td>{row.size}</td>
-                                <td>{row.length}</td>
-                                <td>{row.chest}</td>
-                                <td>{row.sleeve}</td>
-                                {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </>
-                      )}
-                    </table>
-                    <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
-                  </div>
-                </Accordion>}
-
-                <Accordion title="배송">
-                  <div className={styles.accordionContent}>
-                    <ul>
-                      <li>배송비: ₩{SHIPPING.fee.toLocaleString()} (주문당 1회 청구)</li>
-                      <li>₩{SHIPPING.freeThreshold.toLocaleString()} 이상 구매 시 무료배송</li>
-                      <li>여러 상품을 함께 구매해도 배송비는 1회만 청구됩니다</li>
-                      <li>입금 확인 후 1~3 영업일 이내 발송</li>
-                      <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>
-                      <li>제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다</li>
-                    </ul>
-                  </div>
-                </Accordion>
-
-                <Accordion title="반품 & 교환">
-                  <div className={styles.accordionContent}>
-                    <ul>
-                      <li>수령 후 7일 이내 교환/반품 가능</li>
-                      <li>단순 변심에 의한 반품 시 왕복 배송비 고객 부담</li>
-                      <li>제품 하자의 경우 배송비 무료 교환/반품</li>
-                      <li>착용 흔적이 있거나 태그 제거 시 교환/반품 불가</li>
-                      <li>문의: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
-                    </ul>
-                  </div>
-                </Accordion>
-              </div>
-
+            <div className={styles.featureChips}>
+              {product.features.map((f, i) => (
+                <span key={i} className={styles.featureChip}>{f.label}</span>
+              ))}
             </div>
+
+            <div className={styles.accordionGroup}>
+              <Accordion title="제품 설명" defaultOpen={true}>
+                <div className={styles.accordionContent}>
+                  {product.details.functions.length > 0 && (
+                    <>
+                      <h4>기능</h4>
+                      <ul>
+                        {product.details.functions.map((item, i) => (
+                          <li key={i}><strong>{item.title}</strong> — {item.description}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
+                  {product.details.design.length > 0 && (
+                    <>
+                      <h4>디자인</h4>
+                      <ul>
+                        {product.details.design.map((item, i) => (
+                          <li key={i}><strong>{item.title}</strong> — {item.description}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
+                  <h4>소재</h4>
+                  <p>{product.details.material}</p>
+                </div>
+              </Accordion>
+
+              {product.category !== 'taping' && <Accordion title="사이즈 가이드">
+                <div className={styles.accordionContent}>
+                  <p className={styles.sizeUnit}>단위: cm</p>
+                  <table className={styles.sizeTable}>
+                    {product.sizeChartType === 'shorts' ? (
+                      <>
+                        <thead>
+                          <tr>
+                            <th>사이즈</th>
+                            <th>총장</th>
+                            <th>허리(반둘레)</th>
+                            {product.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이</th>}
+                            {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {product.sizeChart.map((row) => (
+                            <tr key={row.size}>
+                              <td>{row.size}</td>
+                              <td>{row.length}</td>
+                              <td>{row.waist ?? '—'}</td>
+                              {product.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
+                              {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </>
+                    ) : product.sizeChartType === 'pants' ? (
+                      <>
+                        <thead>
+                          <tr>
+                            <th>사이즈</th>
+                            <th>총장</th>
+                            <th>엉덩이</th>
+                            <th>허리</th>
+                            <th>앞밑위</th>
+                            <th>밑단</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {product.sizeChart.map((row) => (
+                            <tr key={row.size}>
+                              <td>{row.size}</td>
+                              <td>{row.length}</td>
+                              <td>{row.hip ?? '—'}</td>
+                              <td>{row.waist ?? '—'}</td>
+                              <td>{row.rise ?? '—'}</td>
+                              <td>{row.hem ?? '—'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </>
+                    ) : (
+                      <>
+                        <thead>
+                          <tr>
+                            <th>사이즈</th>
+                            <th>총장</th>
+                            <th>{product.chestLabel ?? '가슴단면'}</th>
+                            <th>소매길이</th>
+                            {product.sizeChart.some((r) => r.hem !== undefined) && <th>밑단</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {product.sizeChart.map((row) => (
+                            <tr key={row.size}>
+                              <td>{row.size}</td>
+                              <td>{row.length}</td>
+                              <td>{row.chest}</td>
+                              <td>{row.sleeve}</td>
+                              {product.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </>
+                    )}
+                  </table>
+                  <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
+                </div>
+              </Accordion>}
+
+              <Accordion title="배송">
+                <div className={styles.accordionContent}>
+                  <ul>
+                    <li>배송비: ₩{SHIPPING.fee.toLocaleString()} (주문당 1회 청구)</li>
+                    <li>₩{SHIPPING.freeThreshold.toLocaleString()} 이상 구매 시 무료배송</li>
+                    <li>여러 상품을 함께 구매해도 배송비는 1회만 청구됩니다</li>
+                    <li>입금 확인 후 1~3 영업일 이내 발송</li>
+                    <li>발송 후 1~2일 이내 수령 (지역에 따라 상이)</li>
+                    <li>제주/도서산간 지역은 추가 배송비가 발생할 수 있습니다</li>
+                  </ul>
+                </div>
+              </Accordion>
+
+              <Accordion title="반품 & 교환">
+                <div className={styles.accordionContent}>
+                  <ul>
+                    <li>수령 후 7일 이내 교환/반품 가능</li>
+                    <li>단순 변심에 의한 반품 시 왕복 배송비 고객 부담</li>
+                    <li>제품 하자의 경우 배송비 무료 교환/반품</li>
+                    <li>착용 흔적이 있거나 태그 제거 시 교환/반품 불가</li>
+                    <li>문의: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
+                  </ul>
+                </div>
+              </Accordion>
+            </div>
+
           </div>
         </div>
 
-        {!product.comingSoon && (
-          <div className={styles.stickyBuyBar}>
-            <div className={styles.stickyBuyBarInner}>
-              <div className={styles.stickyBuyBarInfo}>
-                <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
-                {product.sizes.length > 1 && (
-                  <span className={styles.stickyBuyBarSize}>
-                    {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
-                  </span>
-                )}
-              </div>
-              <div className={styles.stickyBuyBarActions}>
-                <button
-                  className={styles.stickyCartButton}
-                  onClick={handleAddToCart}
-                  disabled={showSuccess || price === undefined}
-                >
-                  {showSuccess ? '✓' : '장바구니'}
-                </button>
-                <button className={styles.stickyBuyButton} onClick={handleBuyNow} disabled={price === undefined}>
-                  바로 구매
-                </button>
+        {(() => {
+          const related = Object.values(products)
+            .filter((p) => !p.hideFromList && p.slug !== product.slug)
+            .sort((a, b) => {
+              const aScore =
+                (a.comingSoon ? 2 : 0) + (a.category === product.category ? 0 : 1);
+              const bScore =
+                (b.comingSoon ? 2 : 0) + (b.category === product.category ? 0 : 1);
+              return aScore - bScore;
+            })
+            .slice(0, 4);
+          if (related.length === 0) return null;
+          return (
+            <div className={styles.relatedSection}>
+              <h2 className={styles.relatedTitle}>관련 상품</h2>
+              <div className={styles.relatedGrid}>
+                {related.map((p) => (
+                  <a key={p.slug} href={`/apparel/${p.slug}`} className={styles.relatedCard}>
+                    <div className={styles.relatedImageWrap}>
+                      <img src={p.images[0]} alt={p.name} className={styles.relatedImage} />
+                      {p.comingSoon && (
+                        <span className={styles.relatedComingSoonBadge}>COMING SOON</span>
+                      )}
+                    </div>
+                    <p className={styles.relatedName}>{p.name}</p>
+                  </a>
+                ))}
               </div>
             </div>
+          );
+        })()}
+      </div>
+
+      {!product.comingSoon && (
+        <div className={styles.stickyBuyBar}>
+          <div className={styles.stickyBuyBarInner}>
+            <div className={styles.stickyBuyBarInfo}>
+              <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
+              {product.sizes.length > 1 && (
+                <span className={styles.stickyBuyBarSize}>
+                  {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
+                </span>
+              )}
+            </div>
+            <div className={styles.stickyBuyBarActions}>
+              <button
+                className={styles.stickyCartButton}
+                onClick={handleAddToCart}
+                disabled={showSuccess || price === undefined}
+              >
+                {showSuccess ? '✓' : '장바구니'}
+              </button>
+              <button className={styles.stickyBuyButton} onClick={handleBuyNow} disabled={price === undefined}>
+                바로 구매
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
+      {logoInquiryOpen && (
+        <div className={styles.lightboxOverlay} onClick={() => setLogoInquiryOpen(false)}>
+          <div className={styles.logoInquiryModal} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.lightboxClose} onClick={() => setLogoInquiryOpen(false)}>✕</button>
+            <h3 className={styles.logoInquiryTitle}>맞춤 로고각인 단체 주문</h3>
+            <p className={styles.logoInquiryDesc}>
+              팀, 단체, 기업 유니폼에 로고각인을 원하신다면 편하게 연락 주세요.<br />
+              수량, 디자인, 납기까지 처음부터 끝까지 함께 도와드립니다.
+            </p>
+            <div className={styles.logoInquiryContacts}>
+              <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer" className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>Instagram DM</span>
+                <span className={styles.logoInquiryContactValue}>@team.brospick</span>
+              </a>
+              <a href={`mailto:${CONTACT.email}`} className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>이메일</span>
+                <span className={styles.logoInquiryContactValue}>{CONTACT.email}</span>
+              </a>
+              <a href={`tel:${CONTACT.phone}`} className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>전화 / 문자</span>
+                <span className={styles.logoInquiryContactValue}>{CONTACT.phone}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {lightboxOpen && (
         <div className={styles.lightboxOverlay} onClick={() => setLightboxOpen(false)}>
           <button className={styles.lightboxClose} onClick={() => setLightboxOpen(false)}>✕</button>
@@ -708,6 +768,6 @@ export default function ProductDetailPage({
           />
         </div>
       )}
-      </main>
+    </main>
   );
 }

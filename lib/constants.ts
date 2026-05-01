@@ -3,7 +3,7 @@
 
 export const SHIPPING = {
   fee: 3000,
-  freeThreshold: 100000, // 이 금액 이상 주문 시 무료배송
+  freeThreshold: 50000, // 이 금액 이상 주문 시 무료배송
 } as const;
 
 // CJ대한통운 기준 도서산간 지역 추가 요금

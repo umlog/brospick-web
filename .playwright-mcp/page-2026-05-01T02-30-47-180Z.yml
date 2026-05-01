@@ -1,0 +1,332 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e19]:
+    - main [ref=e20]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - paragraph [ref=e24]: COLLECTION
+          - heading "브로스픽 의류" [level=1] [ref=e25]
+        - generic [ref=e26]:
+          - button "트레이닝 탑 트레이닝 탑" [ref=e27] [cursor=pointer]:
+            - img "트레이닝 탑" [ref=e29]
+            - generic [ref=e30]: 트레이닝 탑
+          - button "상의 상의" [ref=e31] [cursor=pointer]:
+            - img "상의" [ref=e33]
+            - generic [ref=e34]: 상의
+          - button "아우터 아우터" [ref=e35] [cursor=pointer]:
+            - img "아우터" [ref=e37]
+            - generic [ref=e38]: 아우터
+          - button "하의 하의" [ref=e39] [cursor=pointer]:
+            - img "하의" [ref=e41]
+            - generic [ref=e42]: 하의
+          - button "테이핑 테이핑" [ref=e43] [cursor=pointer]:
+            - img "테이핑" [ref=e45]
+            - generic [ref=e46]: 테이핑
+          - button "양말 양말" [ref=e47] [cursor=pointer]:
+            - img "양말" [ref=e49]
+            - generic [ref=e50]: 양말
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - button "전체" [ref=e56] [cursor=pointer]
+            - button "트레이닝 탑" [ref=e57] [cursor=pointer]
+            - button "상의" [ref=e58] [cursor=pointer]
+            - button "아우터" [ref=e59] [cursor=pointer]
+            - button "하의" [ref=e60] [cursor=pointer]
+            - button "테이핑" [ref=e61] [cursor=pointer]
+            - button "양말" [ref=e62] [cursor=pointer]
+          - generic [ref=e63]: 32개 상품
+        - generic [ref=e64]:
+          - link "Quarter-Zip Training Top BEST Quarter-Zip Training Top 자세히 보기 →" [ref=e65] [cursor=pointer]:
+            - /url: /apparel/quarter-zip-training-top
+            - generic [ref=e66]:
+              - img "Quarter-Zip Training Top" [ref=e67]
+              - generic: BEST
+            - generic [ref=e68]:
+              - heading "Quarter-Zip Training Top" [level=3] [ref=e69]
+              - generic [ref=e70]: 자세히 보기 →
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - img "Flex Quarter-Zip Top (Black)" [ref=e73]
+              - generic [ref=e75]: COMING SOON
+            - generic [ref=e76]:
+              - heading "Flex Quarter-Zip Top (Black)" [level=3] [ref=e77]
+              - generic [ref=e78]: 출시 예정
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - img "Reflective Run T-Shirt (Camel Gray)" [ref=e81]
+              - generic [ref=e83]: COMING SOON
+            - generic [ref=e84]:
+              - heading "Reflective Run T-Shirt (Camel Gray)" [level=3] [ref=e85]
+              - generic [ref=e86]: 출시 예정
+          - link "Flex Quarter-Zip Top (Gray) BEST Flex Quarter-Zip Top (Gray) 자세히 보기 →" [ref=e87] [cursor=pointer]:
+            - /url: /apparel/flex-quarter-zip-top-gray
+            - generic [ref=e88]:
+              - img "Flex Quarter-Zip Top (Gray)" [ref=e89]
+              - generic: BEST
+            - generic [ref=e90]:
+              - heading "Flex Quarter-Zip Top (Gray)" [level=3] [ref=e91]
+              - generic [ref=e92]: 자세히 보기 →
+          - link "Running Long Sleeve Top (Gray) BEST Running Long Sleeve Top (Gray) 자세히 보기 →" [ref=e93] [cursor=pointer]:
+            - /url: /apparel/running-long-sleeve-top-gray
+            - generic [ref=e94]:
+              - img "Running Long Sleeve Top (Gray)" [ref=e95]
+              - generic: BEST
+            - generic [ref=e96]:
+              - heading "Running Long Sleeve Top (Gray)" [level=3] [ref=e97]
+              - generic [ref=e98]: 자세히 보기 →
+          - link "Running Long Sleeve Top (Black) BEST Running Long Sleeve Top (Black) 자세히 보기 →" [ref=e99] [cursor=pointer]:
+            - /url: /apparel/running-long-sleeve-top-black
+            - generic [ref=e100]:
+              - img "Running Long Sleeve Top (Black)" [ref=e101]
+              - generic: BEST
+            - generic [ref=e102]:
+              - heading "Running Long Sleeve Top (Black)" [level=3] [ref=e103]
+              - generic [ref=e104]: 자세히 보기 →
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - img "GRID ZIP HOODIE" [ref=e107]
+              - generic [ref=e109]: COMING SOON
+            - generic [ref=e110]:
+              - heading "GRID ZIP HOODIE" [level=3] [ref=e111]
+              - generic [ref=e112]: 출시 예정
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - img "Tech Training Shorts (Black)" [ref=e115]
+              - generic [ref=e117]: COMING SOON
+            - generic [ref=e118]:
+              - heading "Tech Training Shorts (Black)" [level=3] [ref=e119]
+              - generic [ref=e120]: 출시 예정
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img "Tech Training Shorts (Gray)" [ref=e123]
+              - generic [ref=e125]: COMING SOON
+            - generic [ref=e126]:
+              - heading "Tech Training Shorts (Gray)" [level=3] [ref=e127]
+              - generic [ref=e128]: 출시 예정
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - img "Motion Tech Shorts (Black)" [ref=e131]
+              - generic [ref=e133]: COMING SOON
+            - generic [ref=e134]:
+              - heading "Motion Tech Shorts (Black)" [level=3] [ref=e135]
+              - generic [ref=e136]: 출시 예정
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - img "Quarter-Zip Flex (Blue)" [ref=e139]
+              - generic [ref=e141]: COMING SOON
+            - generic [ref=e142]:
+              - heading "Quarter-Zip Flex (Blue)" [level=3] [ref=e143]
+              - generic [ref=e144]: 출시 예정
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - img "Motion Tech Shorts (Gray)" [ref=e147]
+              - generic [ref=e149]: COMING SOON
+            - generic [ref=e150]:
+              - heading "Motion Tech Shorts (Gray)" [level=3] [ref=e151]
+              - generic [ref=e152]: 출시 예정
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - img "Quarter-Zip Flex (Light Green)" [ref=e155]
+              - generic [ref=e157]: COMING SOON
+            - generic [ref=e158]:
+              - heading "Quarter-Zip Flex (Light Green)" [level=3] [ref=e159]
+              - generic [ref=e160]: 출시 예정
+          - link "Cross C-Tape (Black) (3.8cm) Cross C-Tape (Black) (3.8cm) 자세히 보기 →" [ref=e161] [cursor=pointer]:
+            - /url: /apparel/cross-c-taping-black
+            - img "Cross C-Tape (Black) (3.8cm)" [ref=e163]
+            - generic [ref=e164]:
+              - heading "Cross C-Tape (Black) (3.8cm)" [level=3] [ref=e165]
+              - generic [ref=e166]: 자세히 보기 →
+          - link "Cross C-Tape (Gold) (3.8cm) Cross C-Tape (Gold) (3.8cm) 자세히 보기 →" [ref=e167] [cursor=pointer]:
+            - /url: /apparel/cross-c-taping-gold
+            - img "Cross C-Tape (Gold) (3.8cm)" [ref=e169]
+            - generic [ref=e170]:
+              - heading "Cross C-Tape (Gold) (3.8cm)" [level=3] [ref=e171]
+              - generic [ref=e172]: 자세히 보기 →
+          - link "Philippians 4:13 C-Tape (5cm) Philippians 4:13 C-Tape (5cm) 자세히 보기 →" [ref=e173] [cursor=pointer]:
+            - /url: /apparel/philippians-413-c-taping
+            - img "Philippians 4:13 C-Tape (5cm)" [ref=e175]
+            - generic [ref=e176]:
+              - heading "Philippians 4:13 C-Tape (5cm)" [level=3] [ref=e177]
+              - generic [ref=e178]: 자세히 보기 →
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - img "Kinesiology Tape (Black) (5cm)" [ref=e181]
+              - generic [ref=e183]: COMING SOON
+            - generic [ref=e184]:
+              - heading "Kinesiology Tape (Black) (5cm)" [level=3] [ref=e185]
+              - generic [ref=e186]: 출시 예정
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - img "Kinesiology Tape (Camo) (5cm)" [ref=e189]
+              - generic [ref=e191]: COMING SOON
+            - generic [ref=e192]:
+              - heading "Kinesiology Tape (Camo) (5cm)" [level=3] [ref=e193]
+              - generic [ref=e194]: 출시 예정
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - img "Kinesiology Tape (5cm)" [ref=e197]
+              - generic [ref=e199]: COMING SOON
+            - generic [ref=e200]:
+              - heading "Kinesiology Tape (5cm)" [level=3] [ref=e201]
+              - generic [ref=e202]: 출시 예정
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - img "Cross C-Tape (Black) (5cm)" [ref=e205]
+              - generic [ref=e207]: COMING SOON
+            - generic [ref=e208]:
+              - heading "Cross C-Tape (Black) (5cm)" [level=3] [ref=e209]
+              - generic [ref=e210]: 출시 예정
+          - generic [ref=e211]:
+            - generic [ref=e212]:
+              - img "C-Tape (3.8cm)" [ref=e213]
+              - generic [ref=e215]: COMING SOON
+            - generic [ref=e216]:
+              - heading "C-Tape (3.8cm)" [level=3] [ref=e217]
+              - generic [ref=e218]: 출시 예정
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - img "C-Tape Black (3.8cm)" [ref=e221]
+              - generic [ref=e223]: COMING SOON
+            - generic [ref=e224]:
+              - heading "C-Tape Black (3.8cm)" [level=3] [ref=e225]
+              - generic [ref=e226]: 출시 예정
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - img "Athletic Calf Sleeves (Black)" [ref=e229]
+              - generic [ref=e231]: COMING SOON
+            - generic [ref=e232]:
+              - heading "Athletic Calf Sleeves (Black)" [level=3] [ref=e233]
+              - generic [ref=e234]: 출시 예정
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - img "Athletic Calf Sleeves (White)" [ref=e237]
+              - generic [ref=e239]: COMING SOON
+            - generic [ref=e240]:
+              - heading "Athletic Calf Sleeves (White)" [level=3] [ref=e241]
+              - generic [ref=e242]: 출시 예정
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - img "Athletic Long Socks (Black)" [ref=e245]
+              - generic [ref=e247]: COMING SOON
+            - generic [ref=e248]:
+              - heading "Athletic Long Socks (Black)" [level=3] [ref=e249]
+              - generic [ref=e250]: 출시 예정
+          - generic [ref=e251]:
+            - generic [ref=e252]:
+              - img "Athletic Long Socks (White)" [ref=e253]
+              - generic [ref=e255]: COMING SOON
+            - generic [ref=e256]:
+              - heading "Athletic Long Socks (White)" [level=3] [ref=e257]
+              - generic [ref=e258]: 출시 예정
+          - generic [ref=e259]:
+            - generic [ref=e260]:
+              - img "Philippians 4:13 Non-Slip Crew Socks (Black)" [ref=e261]
+              - generic [ref=e263]: COMING SOON
+            - generic [ref=e264]:
+              - heading "Philippians 4:13 Non-Slip Crew Socks (Black)" [level=3] [ref=e265]
+              - generic [ref=e266]: 출시 예정
+          - generic [ref=e267]:
+            - generic [ref=e268]:
+              - img "Philippians 4:13 Non-Slip Crew Socks (White)" [ref=e269]
+              - generic [ref=e271]: COMING SOON
+            - generic [ref=e272]:
+              - heading "Philippians 4:13 Non-Slip Crew Socks (White)" [level=3] [ref=e273]
+              - generic [ref=e274]: 출시 예정
+          - generic [ref=e275]:
+            - generic [ref=e276]:
+              - img "Motion Tech Pants (Black)" [ref=e277]
+              - generic [ref=e279]: COMING SOON
+            - generic [ref=e280]:
+              - heading "Motion Tech Pants (Black)" [level=3] [ref=e281]
+              - generic [ref=e282]: 출시 예정
+          - generic [ref=e283]:
+            - generic [ref=e284]:
+              - img "Motion Tech Pants (Gray)" [ref=e285]
+              - generic [ref=e287]: COMING SOON
+            - generic [ref=e288]:
+              - heading "Motion Tech Pants (Gray)" [level=3] [ref=e289]
+              - generic [ref=e290]: 출시 예정
+          - generic [ref=e291]:
+            - generic [ref=e292]:
+              - img "Cool Tech T-Shirt (Black)" [ref=e293]
+              - generic [ref=e295]: COMING SOON
+            - generic [ref=e296]:
+              - heading "Cool Tech T-Shirt (Black)" [level=3] [ref=e297]
+              - generic [ref=e298]: 출시 예정
+          - generic [ref=e299]:
+            - generic [ref=e300]:
+              - img "Cool Tech T-Shirt (White)" [ref=e301]
+              - generic [ref=e303]: COMING SOON
+            - generic [ref=e304]:
+              - heading "Cool Tech T-Shirt (White)" [level=3] [ref=e305]
+              - generic [ref=e306]: 출시 예정
+  - contentinfo [ref=e307]:
+    - generic [ref=e308]:
+      - generic [ref=e309]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e311]:
+          - listitem [ref=e312]:
+            - link "주문 조회" [ref=e313] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e314]:
+            - link "취소 / 교환 / 반품" [ref=e315] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e316]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e318]:
+          - listitem [ref=e319]:
+            - link "인스타그램" [ref=e320] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e321]:
+            - link "스레드" [ref=e322] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e323]:
+            - link "이메일 문의" [ref=e324] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e325]:
+            - link "전화 문의" [ref=e326] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e327]:
+            - button "개인정보 처리방침" [ref=e328] [cursor=pointer]
+          - listitem [ref=e329]:
+            - button "쿠키 정책" [ref=e330] [cursor=pointer]
+          - listitem [ref=e331]:
+            - button "면책 조항" [ref=e332] [cursor=pointer]
+      - generic [ref=e333]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e335]:
+          - listitem [ref=e336]: "회사: BROSPICK"
+          - listitem [ref=e337]: "대표자: 홍주영"
+          - listitem [ref=e338]: "사업자번호: 847-07-03351"
+          - listitem [ref=e339]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e340]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e341]: "전화번호: 010-2687-6269"
+          - listitem [ref=e342]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e344]:
+      - img "Brospick" [ref=e345]
+      - paragraph [ref=e346]: © 2026 BROSPICK. All rights reserved.
+  - button "고객센터" [ref=e347] [cursor=pointer]:
+    - img [ref=e348]

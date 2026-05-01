@@ -1,18 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
+import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { BlogPost } from '@/lib/domain/types';
-
-function isAuthorized(request: NextRequest): boolean {
-  return checkAdminSession(request.cookies.get('admin_session')?.value);
-}
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   return withErrorHandler(async () => {
-    if (!isAuthorized(request)) {
+    if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);
     }
 
@@ -58,7 +54,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   return withErrorHandler(async () => {
-    if (!isAuthorized(request)) {
+    if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);
     }
 

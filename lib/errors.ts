@@ -42,6 +42,11 @@ export function apiSuccess(data?: Record<string, unknown>, status = 200): NextRe
   return NextResponse.json(data ?? { success: true }, { status });
 }
 
+// 어드민 인증 헬퍼 - API 라우트에서 직접 사용
+export function isAdminAuthorized(request: { cookies: { get: (name: string) => { value?: string } | undefined } }): boolean {
+  return checkAdminSession(request.cookies.get('admin_session')?.value);
+}
+
 // 어드민 세션 쿠키 검증 헬퍼 (HMAC 서명 토큰 방식)
 export function checkAdminSession(cookieValue: string | null | undefined): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;

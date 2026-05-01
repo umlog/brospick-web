@@ -1,0 +1,226 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e19]:
+    - main [ref=e20]:
+      - generic [ref=e21]:
+        - link "← 의류 목록으로 돌아가기" [ref=e22] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e26]:
+              - generic [ref=e27]:
+                - img "Quarter-Zip Training Top 1"
+              - generic [ref=e28]:
+                - img "Quarter-Zip Training Top 2"
+              - generic [ref=e29]:
+                - img "Quarter-Zip Training Top 3"
+              - generic [ref=e30]:
+                - img "Quarter-Zip Training Top 4"
+            - generic [ref=e32]:
+              - button "Quarter-Zip Training Top 1" [ref=e33] [cursor=pointer]:
+                - img "Quarter-Zip Training Top 1" [ref=e34]
+              - button "Quarter-Zip Training Top 2" [ref=e35] [cursor=pointer]:
+                - img "Quarter-Zip Training Top 2" [ref=e36]
+              - button "Quarter-Zip Training Top 3" [ref=e37] [cursor=pointer]:
+                - img "Quarter-Zip Training Top 3" [ref=e38]
+              - button "Quarter-Zip Training Top 4" [ref=e39] [cursor=pointer]:
+                - img "Quarter-Zip Training Top 4" [ref=e40]
+          - generic [ref=e42]:
+            - heading "Quarter-Zip Training Top" [level=1] [ref=e43]
+            - generic [ref=e45]: —
+            - generic [ref=e46]:
+              - paragraph [ref=e47]: "단위: cm"
+              - table [ref=e48]:
+                - rowgroup [ref=e49]:
+                  - row "사이즈 총장 가슴단면 소매길이 밑단" [ref=e50]:
+                    - columnheader "사이즈" [ref=e51]
+                    - columnheader "총장" [ref=e52]
+                    - columnheader "가슴단면" [ref=e53]
+                    - columnheader "소매길이" [ref=e54]
+                    - columnheader "밑단" [ref=e55]
+                - rowgroup [ref=e56]:
+                  - row "S 61 45 67 45" [ref=e57]:
+                    - cell "S" [ref=e58]
+                    - cell "61" [ref=e59]
+                    - cell "45" [ref=e60]
+                    - cell "67" [ref=e61]
+                    - cell "45" [ref=e62]
+                  - row "M 64 46 68 48" [ref=e63]:
+                    - cell "M" [ref=e64]
+                    - cell "64" [ref=e65]
+                    - cell "46" [ref=e66]
+                    - cell "68" [ref=e67]
+                    - cell "48" [ref=e68]
+                  - row "L 67 51 74 50" [ref=e69]:
+                    - cell "L" [ref=e70]
+                    - cell "67" [ref=e71]
+                    - cell "51" [ref=e72]
+                    - cell "74" [ref=e73]
+                    - cell "50" [ref=e74]
+                  - row "XL 70 53 76 53" [ref=e75]:
+                    - cell "XL" [ref=e76]
+                    - cell "70" [ref=e77]
+                    - cell "53" [ref=e78]
+                    - cell "76" [ref=e79]
+                    - cell "53" [ref=e80]
+                  - row "2XL 73 55 78 55" [ref=e81]:
+                    - cell "2XL" [ref=e82]
+                    - cell "73" [ref=e83]
+                    - cell "55" [ref=e84]
+                    - cell "78" [ref=e85]
+                    - cell "55" [ref=e86]
+              - paragraph [ref=e87]: 개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.
+            - generic [ref=e88]:
+              - heading "사이즈 선택" [level=3] [ref=e89]
+              - generic [ref=e90]:
+                - button "S" [ref=e91] [cursor=pointer]
+                - button "M" [ref=e92] [cursor=pointer]
+                - button "L" [ref=e93] [cursor=pointer]
+                - button "XL" [ref=e94] [cursor=pointer]
+                - button "2XL" [ref=e95] [cursor=pointer]
+            - generic [ref=e96]:
+              - heading "수량" [level=3] [ref=e97]
+              - generic [ref=e99]:
+                - button "−" [ref=e100] [cursor=pointer]
+                - generic [ref=e101]: "1"
+                - button "+" [ref=e102] [cursor=pointer]
+            - generic [ref=e103]:
+              - button "장바구니에 추가" [disabled] [ref=e104]
+              - button "바로 구매하기" [disabled] [ref=e105] [cursor=pointer]
+            - button "맞춤 로고각인 가능" [ref=e106] [cursor=pointer]
+            - paragraph [ref=e107]: 오후 3시 이전 결제 확인 시 당일 발송
+            - generic [ref=e108]:
+              - generic [ref=e109]: 건조기 사용 금지
+              - generic [ref=e110]: 온수세탁 금지
+            - generic [ref=e111]:
+              - generic [ref=e112]: 편안한 착용감
+              - generic [ref=e113]: 고탄성 원단
+              - generic [ref=e114]: 자유로운 움직임
+              - generic [ref=e115]: 빠른 건조
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - button "제품 설명 +" [expanded] [ref=e118] [cursor=pointer]:
+                  - generic [ref=e119]: 제품 설명
+                  - generic [ref=e120]: +
+                - generic [ref=e122]:
+                  - heading "기능" [level=4] [ref=e123]
+                  - list [ref=e124]:
+                    - listitem [ref=e125]:
+                      - text: •
+                      - strong [ref=e126]: 핑거홀 디자인
+                      - text: — 핑거홀 디자인으로 안정적인 착용감
+                    - listitem [ref=e127]:
+                      - text: •
+                      - strong [ref=e128]: 퀵드라이
+                      - text: — 땀 흡수 후 빠른 건조
+                    - listitem [ref=e129]:
+                      - text: •
+                      - strong [ref=e130]: 4방향 스트레치
+                      - text: — 러닝, 웨이트, 축구 모두 커버
+                    - listitem [ref=e131]:
+                      - text: •
+                      - strong [ref=e132]: 라이트웨이트
+                      - text: — 가벼운 착용감, 레이어드에도 부담 없음
+                    - listitem [ref=e133]:
+                      - text: •
+                      - strong [ref=e134]: 통기성
+                      - text: — 장시간 착용에도 쾌적
+                  - heading "디자인" [level=4] [ref=e135]
+                  - list [ref=e136]:
+                    - listitem [ref=e137]:
+                      - text: •
+                      - strong [ref=e138]: 어깨 체크 패턴
+                      - text: — 단색 상의에서도 포인트 연출
+                    - listitem [ref=e139]:
+                      - text: •
+                      - strong [ref=e140]: 하프 집업 넥
+                      - text: — 체온 조절이 쉬운 반집업, 보온성 강화
+                    - listitem [ref=e141]:
+                      - text: •
+                      - strong [ref=e142]: 슬림 실루엣
+                      - text: — 옆 라인을 따라 몸매를 정리해 주는 핏
+                    - listitem [ref=e143]:
+                      - text: •
+                      - strong [ref=e144]: 미니멀 로고
+                      - text: — 전면 BR 로고, 후면 BROSPICK 레터링
+                    - listitem [ref=e145]:
+                      - text: •
+                      - strong [ref=e146]: 리플렉티브 디테일
+                      - text: — 야간 러닝 시 안전성 향상, 조명 아래 하이라이트 연출
+                  - heading "소재" [level=4] [ref=e147]
+                  - paragraph [ref=e148]: 프리미엄 기능성 폴리에스터 + 스판 혼방. 부드러운 터치감과 높은 신축성, 세탁 시 수축과 뒤틀림을 최소화한 내구성.
+              - button "사이즈 가이드 +" [ref=e150] [cursor=pointer]:
+                - generic [ref=e151]: 사이즈 가이드
+                - generic [ref=e152]: +
+              - button "배송 +" [ref=e154] [cursor=pointer]:
+                - generic [ref=e155]: 배송
+                - generic [ref=e156]: +
+              - button "반품 & 교환 +" [ref=e158] [cursor=pointer]:
+                - generic [ref=e159]: 반품 & 교환
+                - generic [ref=e160]: +
+  - contentinfo [ref=e161]:
+    - generic [ref=e162]:
+      - generic [ref=e163]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e165]:
+          - listitem [ref=e166]:
+            - link "주문 조회" [ref=e167] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e168]:
+            - link "취소 / 교환 / 반품" [ref=e169] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e170]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e172]:
+          - listitem [ref=e173]:
+            - link "인스타그램" [ref=e174] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e175]:
+            - link "스레드" [ref=e176] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e177]:
+            - link "이메일 문의" [ref=e178] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e179]:
+            - link "전화 문의" [ref=e180] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e181]:
+            - button "개인정보 처리방침" [ref=e182] [cursor=pointer]
+          - listitem [ref=e183]:
+            - button "쿠키 정책" [ref=e184] [cursor=pointer]
+          - listitem [ref=e185]:
+            - button "면책 조항" [ref=e186] [cursor=pointer]
+      - generic [ref=e187]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e189]:
+          - listitem [ref=e190]: "회사: BROSPICK"
+          - listitem [ref=e191]: "대표자: 홍주영"
+          - listitem [ref=e192]: "사업자번호: 847-07-03351"
+          - listitem [ref=e193]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e194]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e195]: "전화번호: 010-2687-6269"
+          - listitem [ref=e196]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e198]:
+      - img "Brospick" [ref=e199]
+      - paragraph [ref=e200]: © 2026 BROSPICK. All rights reserved.

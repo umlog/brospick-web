@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { showToast } from '../lib/toast';
+import { showConfirm } from '../lib/confirm';
 import styles from '../admin.module.css';
 
 interface Recipient {
@@ -26,10 +28,10 @@ export function MarketingEmailManager() {
 
   const handleSend = async () => {
     if (!subject.trim() || !body.trim()) return;
-    const confirmed = window.confirm(
+    const ok = await showConfirm(
       `마케팅 동의 고객 ${recipients.length}명에게 이메일을 발송합니다.\n계속하시겠습니까?`
     );
-    if (!confirmed) return;
+    if (!ok) return;
 
     setSending(true);
     setResult(null);
@@ -43,7 +45,7 @@ export function MarketingEmailManager() {
       if (!res.ok) throw new Error(data.message ?? '발송 실패');
       setResult(data);
     } catch (e) {
-      alert(e instanceof Error ? e.message : '발송 중 오류가 발생했습니다.');
+      showToast(e instanceof Error ? e.message : '발송 중 오류가 발생했습니다.', 'error');
     } finally {
       setSending(false);
     }

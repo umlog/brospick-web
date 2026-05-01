@@ -1,9 +1,19 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import type { Order } from '../types';
+import type { Order, EbookOrder } from '../types';
 import { OrderStatus } from '@/lib/domain/enums';
+import { showToast } from '../lib/toast';
+import { showConfirm } from '../lib/confirm';
 import styles from '../admin.module.css';
+
+const REVENUE_STATUSES = new Set<string>([
+  OrderStatus.PAYMENT_CONFIRMED,
+  OrderStatus.PREPARING,
+  OrderStatus.SHIPPING,
+  OrderStatus.DELIVERED,
+]);
+const DELAY_REGEX = /^(\d+)(주|일) 뒤 발송$/;
 
 interface VisitData {
   today: number;
@@ -12,6 +22,7 @@ interface VisitData {
 
 interface Props {
   allOrders: Order[];
+  ebookOrders: EbookOrder[];
 }
 
 const STATUS_LABELS: Partial<Record<OrderStatus, string>> = {
@@ -34,7 +45,7 @@ interface RetentionResult {
   ran_at: string;
 }
 
-export function Dashboard({ allOrders }: Props) {
+export function Dashboard({ allOrders, ebookOrders }: Props) {
   const [visitData, setVisitData] = useState<VisitData | null>(null);
   const [retentionLoading, setRetentionLoading] = useState(false);
   const [retentionResult, setRetentionResult] = useState<RetentionResult | null>(null);
@@ -47,6 +58,7 @@ export function Dashboard({ allOrders }: Props) {
   }, []);
 
   const today = new Date().toISOString().split('T')[0];
+  const thisMonth = today.slice(0, 7);
 
   const orderCountByStatus = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -71,6 +83,41 @@ export function Dashboard({ allOrders }: Props) {
     [visitData]
   );
 
+  const revenueOrders = useMemo(
+    () => allOrders.filter((o) => REVENUE_STATUSES.has(o.status) || DELAY_REGEX.test(o.status)),
+    [allOrders]
+  );
+
+  const totalRevenue = useMemo(
+    () => revenueOrders.reduce((sum, o) => sum + o.total_amount, 0),
+    [revenueOrders]
+  );
+
+  const thisMonthRevenue = useMemo(
+    () => revenueOrders
+      .filter((o) => o.created_at.startsWith(thisMonth))
+      .reduce((sum, o) => sum + o.total_amount, 0),
+    [revenueOrders, thisMonth]
+  );
+
+  const cancelledCount = useMemo(
+    () => allOrders.filter(
+      (o) => o.status === OrderStatus.CANCEL_REQUESTED || o.status === OrderStatus.CANCELLED
+    ).length,
+    [allOrders]
+  );
+
+  const ebookStats = useMemo(() => {
+    const total = ebookOrders.length;
+    const pending = ebookOrders.filter((o) => o.status === 'pending_payment').length;
+    const confirmed = ebookOrders.filter((o) => o.status === 'payment_confirmed').length;
+    const sent = ebookOrders.filter((o) => o.status === 'download_sent').length;
+    const revenue = ebookOrders
+      .filter((o) => o.status !== 'pending_payment')
+      .reduce((s, o) => s + o.amount, 0);
+    return { total, pending, confirmed, sent, revenue };
+  }, [ebookOrders]);
+
   const marketingStats = useMemo(() => {
     const total = allOrders.length;
     const consented = allOrders.filter((o) => o.marketing_consent).length;
@@ -79,7 +126,10 @@ export function Dashboard({ allOrders }: Props) {
   }, [allOrders]);
 
   const handleRunRetention = async () => {
-    if (!confirm('개인정보 보존 정책을 지금 실행할까요?\n3년 이상 된 마케팅 동의 및 5년 이상 된 주문 PII가 처리됩니다.')) return;
+    const ok = await showConfirm(
+      '개인정보 보존 정책을 지금 실행할까요?\n3년 이상 된 마케팅 동의 및 5년 이상 된 주문 PII가 처리됩니다.'
+    );
+    if (!ok) return;
     setRetentionLoading(true);
     setRetentionResult(null);
     try {
@@ -88,7 +138,7 @@ export function Dashboard({ allOrders }: Props) {
       const data = await res.json();
       setRetentionResult(data);
     } catch (err) {
-      alert(`실행 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      showToast(`실행 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
     } finally {
       setRetentionLoading(false);
     }
@@ -105,6 +155,24 @@ export function Dashboard({ allOrders }: Props) {
               <div className={styles.statLabel}>{STATUS_LABELS[status]}</div>
             </div>
           ))}
+          <div className={styles.dashboardCard}>
+            <div className={styles.statNumber}>{cancelledCount}</div>
+            <div className={styles.statLabel}>취소 건수</div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.dashboardSection}>
+        <h2 className={styles.dashboardSectionTitle}>주문 매출 현황</h2>
+        <div className={styles.dashboardGrid}>
+          <div className={`${styles.dashboardCard} ${styles.dashboardCardHighlight}`}>
+            <div className={styles.statNumber}>₩{(totalRevenue / 10000).toFixed(0)}만</div>
+            <div className={styles.statLabel}>누적 매출 ({revenueOrders.length}건)</div>
+          </div>
+          <div className={styles.dashboardCard}>
+            <div className={styles.statNumber}>₩{(thisMonthRevenue / 10000).toFixed(0)}만</div>
+            <div className={styles.statLabel}>이번 달 매출</div>
+          </div>
         </div>
       </section>
 
@@ -122,6 +190,28 @@ export function Dashboard({ allOrders }: Props) {
           <div className={`${styles.dashboardCard} ${styles.dashboardCardHighlight}`}>
             <div className={styles.statNumber}>{conversionRate}%</div>
             <div className={styles.statLabel}>구매 전환율</div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.dashboardSection}>
+        <h2 className={styles.dashboardSectionTitle}>전자책 현황</h2>
+        <div className={styles.dashboardGrid}>
+          <div className={styles.dashboardCard}>
+            <div className={styles.statNumber}>{ebookStats.pending}</div>
+            <div className={styles.statLabel}>입금 대기</div>
+          </div>
+          <div className={styles.dashboardCard}>
+            <div className={styles.statNumber}>{ebookStats.confirmed}</div>
+            <div className={styles.statLabel}>입금 확인</div>
+          </div>
+          <div className={styles.dashboardCard}>
+            <div className={styles.statNumber}>{ebookStats.sent}</div>
+            <div className={styles.statLabel}>발송 완료</div>
+          </div>
+          <div className={`${styles.dashboardCard} ${styles.dashboardCardHighlight}`}>
+            <div className={styles.statNumber}>₩{ebookStats.revenue.toLocaleString()}</div>
+            <div className={styles.statLabel}>총 매출 ({ebookStats.total}건)</div>
           </div>
         </div>
       </section>

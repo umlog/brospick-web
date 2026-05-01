@@ -3,10 +3,12 @@ import type { ReturnRequest } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 import { ReturnStatus } from '@/lib/domain/enums';
 import { showToast } from '../lib/toast';
+import { showConfirm } from '../lib/confirm';
 
 export function useReturns(notifyOnChange: boolean) {
   const [returnRequests, setReturnRequests] = useState<ReturnRequest[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [processingReturns, setProcessingReturns] = useState<Set<string>>(new Set());
   const [filterStatus, setFilterStatus] = useState('');
   const [expandedReturn, setExpandedReturn] = useState<string | null>(null);
@@ -29,6 +31,7 @@ export function useReturns(notifyOnChange: boolean) {
     try {
       const data = await apiClient.returns.list(status ? { status } : undefined);
       setReturnRequests(data.requests);
+      setHasLoaded(true);
     } catch (err) {
       if (err instanceof ApiClientError && err.status === 401) {
         window.location.href = '/admin/login';
@@ -41,8 +44,8 @@ export function useReturns(notifyOnChange: boolean) {
   }, []);
 
   const handleStatusChange = async (requestId: string, newStatus: string, extra?: Record<string, unknown>) => {
-    const confirmMsg = `상태를 "${newStatus}"(으)로 변경할까요?`;
-    if (!confirm(confirmMsg)) return;
+    const ok = await showConfirm(`상태를 "${newStatus}"(으)로 변경할까요?`);
+    if (!ok) return;
 
     setProcessing(requestId, true);
     try {
@@ -66,7 +69,8 @@ export function useReturns(notifyOnChange: boolean) {
   };
 
   const handleDelete = async (requestId: string, requestNumber: string) => {
-    if (!confirm(`요청 ${requestNumber}을(를) 정말 삭제할까요?`)) return;
+    const ok = await showConfirm(`요청 ${requestNumber}을(를) 정말 삭제할까요?`);
+    if (!ok) return;
 
     setProcessing(requestId, true);
     try {
@@ -87,7 +91,8 @@ export function useReturns(notifyOnChange: boolean) {
   };
 
   const handleRefundComplete = async (requestId: string) => {
-    if (!confirm('환불 완료로 처리할까요?')) return;
+    const ok = await showConfirm('환불 완료로 처리할까요?');
+    if (!ok) return;
 
     setProcessing(requestId, true);
     try {
@@ -113,6 +118,7 @@ export function useReturns(notifyOnChange: boolean) {
   return {
     returnRequests,
     loading,
+    hasLoaded,
     processingReturns,
     filterStatus,
     expandedReturn,

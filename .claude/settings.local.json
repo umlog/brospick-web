@@ -41,7 +41,18 @@
       "Bash(done)",
       "Bash(curl:*)",
       "Bash(vercel --version)",
-      "mcp__claude_ai_Supabase__get_logs"
+      "mcp__claude_ai_Supabase__get_logs",
+      "Bash(choco --version)",
+      "Bash(winget --version)",
+      "Bash(choco install:*)",
+      "Bash(winget install:*)",
+      "Bash(pdftotext --version)",
+      "Read(//c/Users/**)",
+      "Bash(pdftotext \"C:/brospick-web/brospick-web/BROSPICK — The Overseas Football Playbook.pdf\" \"C:/brospick-web/brospick-web/ebook-content.txt\")",
+      "Bash(pdftotext \"C:\\\\brospick-web\\\\brospick-web\\\\BROSPICK — The Overseas Football Playbook.pdf\" \"C:\\\\brospick-web\\\\brospick-web\\\\ebook-content.txt\")",
+      "Bash(pdftotext \"C:/brospick-web/brospick-web/ebook.pdf\" \"C:/brospick-web/brospick-web/ebook-content.txt\")",
+      "Bash(ls:*)",
+      "Bash(printf 'EBOOK_PDF_BUCKET=ebooks\\\\nEBOOK_PDF_PATH=BROSPICK - The Overseas Football Playbook.pdf\\\\n')"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

@@ -9,6 +9,8 @@ interface BlogManagerProps {
   state: ReturnType<typeof import('../hooks/useBlogPosts').useBlogPosts>;
 }
 
+const STATUS_OPTIONS = ['해외 진출', '프로 입단', '대학 활동'] as const;
+
 const EMPTY_FORM: BlogFormData = {
   player_name: '',
   team: '',
@@ -31,6 +33,8 @@ export function BlogManager({ state }: BlogManagerProps) {
   const [form, setForm] = useState<BlogFormData>(EMPTY_FORM);
   const [highlightsText, setHighlightsText] = useState('');
   const [saving, setSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   const openCreate = () => {
     setEditingPost(null);
@@ -90,6 +94,15 @@ export function BlogManager({ state }: BlogManagerProps) {
   const setField = <K extends keyof BlogFormData>(key: K, value: BlogFormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
+
+  const filteredPosts = posts.filter((post) => {
+    const q = searchQuery.trim().toLowerCase();
+    const matchSearch = !q ||
+      post.player_name.toLowerCase().includes(q) ||
+      post.team.toLowerCase().includes(q);
+    const matchStatus = !filterStatus || post.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
 
   if (loading) {
     return <p className={styles.bmLoading}>로딩 중...</p>;
@@ -161,13 +174,22 @@ export function BlogManager({ state }: BlogManagerProps) {
               />
             </FormField>
 
-            <FormField label="프로필 이미지 경로 *">
+            <FormField label="카드 이미지 경로 *">
               <input
                 className={styles.input}
                 value={form.image}
                 onChange={(e) => setField('image', e.target.value)}
                 placeholder="/players/guno/guno-profile.jpg"
                 required
+              />
+            </FormField>
+
+            <FormField label="프로필 배경 이미지 URL (선택)">
+              <input
+                className={styles.input}
+                value={form.profile_image ?? ''}
+                onChange={(e) => setField('profile_image', e.target.value || null)}
+                placeholder="/players/guno/guno-profile-bg.jpg"
               />
             </FormField>
           </div>
@@ -241,11 +263,43 @@ export function BlogManager({ state }: BlogManagerProps) {
         </button>
       </div>
 
-      {posts.length === 0 ? (
-        <p className={styles.bmEmpty}>블로그 포스트가 없습니다.</p>
+      <div className={styles.searchBar}>
+        <input
+          className={styles.searchInput}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="선수 이름, 팀으로 검색..."
+        />
+        {searchQuery && (
+          <button className={styles.searchClearBtn} onClick={() => setSearchQuery('')}>✕</button>
+        )}
+      </div>
+
+      <div className={styles.filters}>
+        <button
+          className={`${styles.filterButton} ${!filterStatus ? styles.filterActive : ''}`}
+          onClick={() => setFilterStatus('')}
+        >
+          전체 ({posts.length})
+        </button>
+        {STATUS_OPTIONS.map((s) => (
+          <button
+            key={s}
+            className={`${styles.filterButton} ${filterStatus === s ? styles.filterActive : ''}`}
+            onClick={() => setFilterStatus(filterStatus === s ? '' : s)}
+          >
+            {s} ({posts.filter((p) => p.status === s).length})
+          </button>
+        ))}
+      </div>
+
+      {filteredPosts.length === 0 ? (
+        <p className={styles.bmEmpty}>
+          {posts.length === 0 ? '블로그 포스트가 없습니다.' : '검색 결과가 없습니다.'}
+        </p>
       ) : (
         <div className={styles.bmList}>
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <div key={post.id} className={styles.bmCard}>
               <div className={styles.bmCardInfo}>
                 <div className={styles.bmCardNameRow}>
