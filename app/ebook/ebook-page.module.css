@@ -1446,6 +1446,12 @@
   border-top: 1px solid var(--color-border);
 }
 
+.packageBannerList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .packageBanner {
   border: 1px solid rgba(255, 59, 48, 0.3);
   border-radius: var(--radius-md);
@@ -1495,6 +1501,11 @@
   color: var(--color-text-secondary);
   line-height: 1.75;
   margin: 0;
+}
+
+.packageBannerNote {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255,255,255,0.4));
 }
 
 /* ============================================================

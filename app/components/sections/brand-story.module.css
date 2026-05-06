@@ -1,5 +1,5 @@
 .section {
-  padding: 80px 0 100px;
+  padding: 120px 0 80px;
   overflow: hidden;
 }
 
@@ -13,13 +13,97 @@
   align-items: center;
 }
 
-/* ===== 이미지 ===== */
+.innerLink {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===== fade 애니메이션 ===== */
+.fadeIn {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.fadeOut {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ===== 이미지 (스포츠웨어) ===== */
 .imageWrap {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-md);
   overflow: hidden;
+}
+
+/* ===== 이북 커버 ===== */
+.ebookCover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ebookCover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 20%, rgba(37, 99, 235, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.ebookCoverEyebrow {
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.ebookCoverDivider {
+  display: block;
+  width: 32px;
+  height: 2px;
+  background: var(--color-accent);
+  margin-bottom: 20px;
+}
+
+.ebookCoverTitle {
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+}
+
+.ebookCoverYear {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 /* ===== 텍스트 ===== */
@@ -53,6 +137,35 @@
   margin: 0 0 16px;
 }
 
+/* ===== 이북 혜택 리스트 ===== */
+.ebookBenefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ebookBenefit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.ebookBenefitDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ===== CTA ===== */
 .cta {
   display: inline-flex;
   align-items: center;
@@ -75,23 +188,60 @@
   color: var(--color-text-primary);
 }
 
+/* ===== 도트 ===== */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: background var(--anim-fast), transform var(--anim-fast);
+  padding: 0;
+}
+
+.dotActive {
+  background: var(--color-text-primary);
+  transform: scale(1.3);
+}
+
 /* ===== 모바일 ===== */
 @media (max-width: 768px) {
   .section {
-    padding: 60px 0 72px;
+    padding: 40px 0 48px;
   }
 
   .inner {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 28px;
     padding: 0 var(--space-md);
   }
 
   .imageWrap {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
   }
 
   .imageWrap img {
-    object-fit: contain !important;
+    object-position: top !important;
+  }
+
+  .ebookCover {
+    aspect-ratio: 4 / 3;
+    padding: 28px 24px;
+  }
+
+  .ebookCoverTitle {
+    font-size: 1.4rem;
+  }
+
+  .dots {
+    margin-top: 28px;
   }
 }

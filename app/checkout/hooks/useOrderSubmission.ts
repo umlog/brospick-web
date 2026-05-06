@@ -1,9 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, CartItem } from '../../contexts/CartContext';
 import { buildOrderPayload, removePurchasedItems } from '../utils';
 import type { CheckoutFormData } from '../types';
 import { apiClient } from '@/lib/api-client';
+import { validateCartStock } from '@/lib/validateStock';
 
 export function useOrderSubmission(
   formData: CheckoutFormData,
@@ -20,6 +23,13 @@ export function useOrderSubmission(
 
     if (!formData.privacyConsent || !formData.thirdPartyConsent) {
       alert('필수 약관에 동의해 주세요.');
+      return;
+    }
+
+    const stockErrors = await validateCartStock(checkoutItems);
+    if (stockErrors.length > 0) {
+      alert(stockErrors.join('\n'));
+      setIsSubmitting(false);
       return;
     }
 

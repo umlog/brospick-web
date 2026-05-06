@@ -315,7 +315,7 @@ export const products: Record<ProductSlug, Product> = {
     tagline: '벌집 구조 원단으로 통기성과 쿨링을 동시에 — 쿼터집 트레이닝 탑 (그레이)',
     description:
       '폴리에스터 90% + 스판덱스 10%의 얇고 가벼운 원단으로 제작된 기능성 쿨링 티셔츠. 벌집 구조 설계로 자연스러운 통기 구멍을 형성해 공기 순환을 유도하고, 땀을 빠르게 흡수·건조합니다. 건강하고 안전한 소재로 피부에 부드럽고, 반복 세탁에도 색 빠짐 없이 형태를 유지합니다.',
-    sizes: ['S', 'M', 'L', 'XL', '2XL'],
+    sizes: ['M', 'L', 'XL', '2XL', '3XL'],
     features: [
       { label: '빠른 건조', detail: ' — 땀 흡수 후 빠르게 건조, 운동 내내 쾌적' },
       { label: '통기성', detail: ' — 벌집 구조로 공기 순환 유도, 답답함 없음' },
@@ -324,11 +324,11 @@ export const products: Record<ProductSlug, Product> = {
     ],
     chestLabel: '가슴둘레',
     sizeChart: [
-      { size: 'S', length: 63, chest: 92, sleeve: 68 },
       { size: 'M', length: 66, chest: 98, sleeve: 71 },
       { size: 'L', length: 69, chest: 104, sleeve: 74 },
       { size: 'XL', length: 72, chest: 110, sleeve: 77 },
       { size: '2XL', length: 75, chest: 116, sleeve: 80 },
+      { size: '3XL', length: 78, chest: 122, sleeve: 83 },
     ],
     details: {
       functions: [
@@ -1490,7 +1490,7 @@ export const products: Record<ProductSlug, Product> = {
     tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
     description:
       '폴리에스터 80% + 스판덱스 20%의 신축성 있는 피케 조직 원단으로 제작된 160g 초경량 기능성 반팔. 전·후면 빛반사 로고와 어깨/등 라인 절개로 퍼포먼스 핏을 완성하고, 옆단 트임 설계로 움직임의 자유도를 높였습니다. 빠른 땀 흡수와 건조력으로 운동 내내 쾌적한 착용감을 유지합니다.',
-    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
     features: [
       { label: '전·후면 빛반사 로고', detail: ' — 야간 시인성 + 브로스픽 아이덴티티' },
       { label: '피케 조직 원단', detail: ' — 차별화된 텍스처와 기능성' },
@@ -1505,7 +1505,6 @@ export const products: Record<ProductSlug, Product> = {
       { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
       { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
       { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
-      { size: '3XL', length: 76.5, chest: 57, sleeve: 21 },
     ],
     details: {
       functions: [
@@ -1547,7 +1546,7 @@ export const products: Record<ProductSlug, Product> = {
     tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
     description:
       '폴리에스터 80% + 스판덱스 20%의 신축성 있는 피케 조직 원단으로 제작된 160g 초경량 기능성 반팔. 전·후면 빛반사 로고와 어깨/등 라인 절개로 퍼포먼스 핏을 완성하고, 옆단 트임 설계로 움직임의 자유도를 높였습니다. 빠른 땀 흡수와 건조력으로 운동 내내 쾌적한 착용감을 유지합니다.',
-    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
     features: [
       { label: '전·후면 빛반사 로고', detail: ' — 야간 시인성 + 브로스픽 아이덴티티' },
       { label: '피케 조직 원단', detail: ' — 차별화된 텍스처와 기능성' },
@@ -1562,7 +1561,6 @@ export const products: Record<ProductSlug, Product> = {
       { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
       { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
       { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
-      { size: '3XL', length: 76.5, chest: 57, sleeve: 21 },
     ],
     details: {
       functions: [

@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import Hero from './components/sections/Hero';
 import Manifesto from './components/sections/Manifesto';
 import Project from './components/sections/Project';
 import Blog from './components/sections/Blog';
@@ -25,9 +24,8 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
-      <Sportswear initialPrices={prices} />
       <BrandStory />
+      <Sportswear initialPrices={prices} />
       <Blog />
       <Manifesto />
       <Project />

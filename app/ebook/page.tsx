@@ -76,7 +76,7 @@ export default async function EbookPage() {
               <p className={styles.priceNextNotice}>
                 2차 ₩{EBOOK.phase2Price.toLocaleString()} · 3차(정가) ₩{EBOOK.originalPrice.toLocaleString()}으로 순차 인상 예정
               </p>
-              <span className={styles.priceFormat}>PDF · 즉시 다운로드</span>
+              <span className={styles.priceFormat}>PDF · 3시간 이내 전자 메일 발송</span>
             </div>
           </div>
 
@@ -169,22 +169,63 @@ export default async function EbookPage() {
       {/* ===== PACKAGE BENEFITS ===== */}
       <section className={styles.packageBenefits}>
         <div className={styles.sectionInner}>
-          <div className={styles.packageBanner}>
-            <div className={styles.packageBannerLabel}>구매시 혜택</div>
-            <div className={styles.packageBannerBody}>
-              <div className={styles.packageBannerIcon}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                </svg>
+          <div className={styles.packageBannerList}>
+            <div className={styles.packageBanner}>
+              <div className={styles.packageBannerLabel}>구매시 혜택 1</div>
+              <div className={styles.packageBannerBody}>
+                <div className={styles.packageBannerIcon}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.packageBannerTitle}>1:1 선수 면담 포함</p>
+                  <p className={styles.packageBannerDesc}>
+                    E북을 구매한 인원들에게는 실제 무명선수에서 해외로 진출한 선수들과 1:1 면담을 제공합니다.
+                    전반적인 컨설팅을 통한 가이드를 세우는데 도움을 줄 수 있습니다.
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className={styles.packageBannerTitle}>1:1 선수 면담 포함</p>
-                <p className={styles.packageBannerDesc}>
-                  E북을 구매한 인원들에게는 실제 무명선수에서 해외로 진출한 선수들과 1:1 면담을 제공합니다.
-                  전반적인 컨설팅을 통한 가이드를 세우는데 도움을 줄 수 있습니다.
-                </p>
+            </div>
+
+            <div className={styles.packageBanner}>
+              <div className={styles.packageBannerLabel}>구매시 혜택 2</div>
+              <div className={styles.packageBannerBody}>
+                <div className={styles.packageBannerIcon}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.packageBannerTitle}>에이전트 컨택 도움</p>
+                  <p className={styles.packageBannerDesc}>
+                    선수의 경력과 기량이 뛰어나다면 실제 국내 및 해외 에이전트 컨택 및 면담 연결을 통해 팀 계약의 가능성을 제공합니다.
+                    <br />
+                    <span className={styles.packageBannerNote}>(컨택을 위한 객관적인 데이터와 자료가 반드시 필요합니다.)</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.packageBanner}>
+              <div className={styles.packageBannerLabel}>구매시 혜택 3</div>
+              <div className={styles.packageBannerBody}>
+                <div className={styles.packageBannerIcon}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.packageBannerTitle}>전문적 상담</p>
+                  <p className={styles.packageBannerDesc}>
+                    구매 인원에게는 해외 진출에 전반적인 궁금증을 해결할 수 있는 맞춤 질문상담 진행합니다.
+                    <br />
+                    <span className={styles.packageBannerNote}>(메일 소통 및 인스타그램 DM)</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>

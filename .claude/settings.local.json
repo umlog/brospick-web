@@ -52,7 +52,8 @@
       "Bash(pdftotext \"C:\\\\brospick-web\\\\brospick-web\\\\BROSPICK — The Overseas Football Playbook.pdf\" \"C:\\\\brospick-web\\\\brospick-web\\\\ebook-content.txt\")",
       "Bash(pdftotext \"C:/brospick-web/brospick-web/ebook.pdf\" \"C:/brospick-web/brospick-web/ebook-content.txt\")",
       "Bash(ls:*)",
-      "Bash(printf 'EBOOK_PDF_BUCKET=ebooks\\\\nEBOOK_PDF_PATH=BROSPICK - The Overseas Football Playbook.pdf\\\\n')"
+      "Bash(printf 'EBOOK_PDF_BUCKET=ebooks\\\\nEBOOK_PDF_PATH=BROSPICK - The Overseas Football Playbook.pdf\\\\n')",
+      "mcp__claude_ai_Supabase__get_project"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

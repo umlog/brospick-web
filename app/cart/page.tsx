@@ -7,10 +7,17 @@ import { useCart, CartItem } from '../contexts/CartContext';
 import { SHIPPING, getShippingFee } from '../../lib/constants';
 import { PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory, productList } from '../../lib/products';
 import styles from './cart-page.module.css';
+import { validateCartStock } from '../../lib/validateStock';
 
 const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
 
+const CATEGORY_REPRESENTATIVE_IMAGE: Partial<Record<ProductCategory, string>> = {
+  'bottom': '/apparel/bottom/tech-training-shorts-gray/1.png',
+  'socks': '/apparel/socks/athletic-long-socks-white/1.png',
+};
+
 function getCategoryImage(category: ProductCategory): string {
+  if (CATEGORY_REPRESENTATIVE_IMAGE[category]) return CATEGORY_REPRESENTATIVE_IMAGE[category]!;
   return productList.find((p) => p.category === category)?.image ?? PRODUCT_FALLBACK_IMAGE;
 }
 
@@ -56,9 +63,15 @@ export default function CartPage() {
   }, [selectedCartItems]);
 
   // 결제 페이지로 이동
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (selectedCartItems.length === 0) {
       alert('결제할 항목을 선택해주세요.');
+      return;
+    }
+
+    const stockErrors = await validateCartStock(selectedCartItems);
+    if (stockErrors.length > 0) {
+      alert(stockErrors.join('\n'));
       return;
     }
 
