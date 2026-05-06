@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './brand-story.module.css';
-import ScrollReveal from '../animations/ScrollReveal';
 import { EBOOK } from '@/app/ebook/ebook.config';
 
 const SLIDES = ['sportswear', 'ebook'] as const;
