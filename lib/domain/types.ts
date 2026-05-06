@@ -152,6 +152,7 @@ export interface AdminProduct {
   coming_soon: boolean;
   launched_at: string | null;
   updated_at: string;
+  sort_order: number | null;
 }
 
 // -----------------------------------------------------------------------------

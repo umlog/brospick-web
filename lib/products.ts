@@ -254,7 +254,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY,
     name: 'Reflective Run T-Shirt (Camel Gray)',
     category: 'top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
     images: [
       '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
@@ -458,7 +458,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.GRID_ZIP_HOODIE,
     category: 'outer',
     name: 'GRID ZIP HOODIE',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/outer/grid-zip-hoodie/1.png',
     images: [
       '/apparel/outer/grid-zip-hoodie/1.png',
@@ -512,7 +512,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.TECH_TRAINING_SHORTS_BLACK,
     name: 'Tech Training Shorts (Black)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/tech-training-shorts-black/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-black/1.png',
@@ -558,7 +558,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.TECH_TRAINING_SHORTS_GRAY,
     name: 'Tech Training Shorts (Gray)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/tech-training-shorts-gray/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-gray/1.png',
@@ -604,7 +604,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.MOTION_TECH_SHORTS_BLACK,
     name: 'Motion Tech Shorts (Black)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/motion-tech-shorts-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-black/1.png',
@@ -653,7 +653,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.QUARTER_ZIP_FLEX_BLUE,
     name: 'Quarter-Zip Flex (Blue)',
     category: 'training-top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/training-top/quarter-zip-flex-blue/1.png',
     images: [
       '/apparel/training-top/quarter-zip-flex-blue/1.png',
@@ -698,7 +698,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.MOTION_TECH_SHORTS_GRAY,
     name: 'Motion Tech Shorts (Gray)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/motion-tech-shorts-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-gray/1.png',
@@ -747,7 +747,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.QUARTER_ZIP_FLEX_LIGHT_GREEN,
     name: 'Quarter-Zip Flex (Light Green)',
     category: 'training-top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/training-top/quarter-zip-flex-light-green/1.png',
     images: [
       '/apparel/training-top/quarter-zip-flex-light-green/1.png',
@@ -907,7 +907,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE_BLACK,
     name: 'Kinesiology Tape (Black) (5cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/kinesiology-tape-black/1.png',
     images: [
       '/apparel/taping/kinesiology-tape-black/1.png',
@@ -945,7 +945,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE_CAMO,
     name: 'Kinesiology Tape (Camo) (5cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/kinesiology-tape-camo/1.png',
     images: [
       '/apparel/taping/kinesiology-tape-camo/1.png',
@@ -983,7 +983,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.KINESIOLOGY_TAPE,
     name: 'Kinesiology Tape (5cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/kinesiology-tape/1.png',
     images: [
       '/apparel/taping/kinesiology-tape/1.png',
@@ -1021,7 +1021,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK,
     name: 'Cross C-Tape (Black) (5cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/cross-c-tape-5cm-black/1.png',
     images: [
       '/apparel/taping/cross-c-tape-5cm-black/1.png',
@@ -1060,7 +1060,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.C_TAPE_WHITE,
     name: 'C-Tape (3.8cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/c-tape-white/1.png',
     images: [
       '/apparel/taping/c-tape-white/1.png',
@@ -1098,7 +1098,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.C_TAPE_BLACK,
     name: 'C-Tape Black (3.8cm)',
     category: 'taping',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/taping/c-tape-black/1.png',
     images: [
       '/apparel/taping/c-tape-black/1.png',
@@ -1136,7 +1136,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_BLACK,
     name: 'Athletic Calf Sleeves (Black)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/athletic-calf-sleeves-black/1.png',
     images: [
       '/apparel/socks/athletic-calf-sleeves-black/1.png',
@@ -1175,7 +1175,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.ATHLETIC_CALF_SLEEVES_WHITE,
     name: 'Athletic Calf Sleeves (White)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/athletic-calf-sleeves-white/1.png',
     images: [
       '/apparel/socks/athletic-calf-sleeves-white/1.png',
@@ -1214,7 +1214,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_BLACK,
     name: 'Athletic Long Socks (Black)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/athletic-long-socks-black/1.png',
     images: [
       '/apparel/socks/athletic-long-socks-black/1.png',
@@ -1253,7 +1253,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.ATHLETIC_LONG_SOCKS_WHITE,
     name: 'Athletic Long Socks (White)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/athletic-long-socks-white/1.png',
     images: [
       '/apparel/socks/athletic-long-socks-white/1.png',
@@ -1292,7 +1292,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_BLACK,
     name: 'Philippians 4:13 Non-Slip Crew Socks (Black)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/philippians-413-crew-socks-black/1.png',
     images: [
       '/apparel/socks/philippians-413-crew-socks-black/1.png',
@@ -1332,7 +1332,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.PHILIPPIANS_413_CREW_SOCKS_WHITE,
     name: 'Philippians 4:13 Non-Slip Crew Socks (White)',
     category: 'socks',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/socks/philippians-413-crew-socks-white/1.png',
     images: [
       '/apparel/socks/philippians-413-crew-socks-white/1.png',
@@ -1373,7 +1373,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.MOTION_TECH_PANTS_BLACK,
     name: 'Motion Tech Pants (Black)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/motion-tech-pants-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-pants-black/1.png',
@@ -1422,7 +1422,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.MOTION_TECH_PANTS_GRAY,
     name: 'Motion Tech Pants (Gray)',
     category: 'bottom',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/bottom/motion-tech-pants-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-pants-gray/1.png',
@@ -1471,7 +1471,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.COOL_TECH_TSHIRT_BLACK,
     name: 'Cool Tech T-Shirt (Black)',
     category: 'top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/top/cool-tech-tshirt-black/1.png',
     images: [
       '/apparel/top/cool-tech-tshirt-black/1.png',
@@ -1527,7 +1527,7 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.COOL_TECH_TSHIRT_WHITE,
     name: 'Cool Tech T-Shirt (White)',
     category: 'top',
-    comingSoon: true,
+    comingSoon: false,
     image: '/apparel/top/cool-tech-tshirt-white/1.png',
     images: [
       '/apparel/top/cool-tech-tshirt-white/1.png',

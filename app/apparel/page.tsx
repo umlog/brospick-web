@@ -4,11 +4,11 @@ import ApparelClient from './ApparelClient';
 async function getPrices() {
   const { data } = await supabase
     .from('products')
-    .select('id, name, price, original_price, coming_soon');
+    .select('id, name, price, original_price, coming_soon, sort_order');
 
-  const map: Record<number, { name?: string; price: number; original_price: number | null; coming_soon: boolean }> = {};
+  const map: Record<number, { name?: string; price: number; original_price: number | null; coming_soon: boolean; sort_order: number | null }> = {};
   for (const item of data || []) {
-    map[item.id] = { name: item.name, price: item.price, original_price: item.original_price, coming_soon: item.coming_soon ?? false };
+    map[item.id] = { name: item.name, price: item.price, original_price: item.original_price, coming_soon: item.coming_soon ?? false, sort_order: item.sort_order ?? null };
   }
   return map;
 }

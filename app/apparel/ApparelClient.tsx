@@ -19,19 +19,29 @@ function getRepresentativeImage(category: ProductCategory): string {
   return product?.image ?? PRODUCT_FALLBACK_IMAGE;
 }
 
+type SortMode = 'recommended' | 'price_desc' | 'price_asc';
+
 interface DbPrice {
   name?: string;
   price: number;
   original_price: number | null;
   coming_soon: boolean;
+  sort_order: number | null;
 }
 
 interface Props {
   initialPrices: Record<number, DbPrice>;
 }
 
+const SORT_LABELS: Record<SortMode, string> = {
+  recommended: '추천순',
+  price_desc: '가격 높은순',
+  price_asc: '가격 낮은순',
+};
+
 export default function ApparelClient({ initialPrices }: Props) {
   const [activeCategory, setActiveCategory] = useState<Filter>(ALL);
+  const [sortMode, setSortMode] = useState<SortMode>('recommended');
   const [dbPrices] = useState<Record<number, DbPrice>>(initialPrices);
   const gridRef = useRef<HTMLDivElement>(null);
 

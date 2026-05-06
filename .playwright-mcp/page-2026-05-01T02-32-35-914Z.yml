@@ -106,7 +106,7 @@
               - button "장바구니에 추가" [disabled] [ref=e104]
               - button "바로 구매하기" [disabled] [ref=e105] [cursor=pointer]
             - button "맞춤 로고각인 가능" [ref=e106] [cursor=pointer]
-            - paragraph [ref=e107]: 오후 3시 이전 결제 확인 시 당일 발송
+            - paragraph [ref=e107]: 15시 이전 결제 시 당일 발송
             - generic [ref=e108]:
               - generic [ref=e109]: 건조기 사용 금지
               - generic [ref=e110]: 온수세탁 금지

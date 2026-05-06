@@ -67,7 +67,7 @@ export default function BrandStory() {
                 브로스픽 스포츠웨어는 단순한 운동복이 아닙니다. 선수가 자신을 표현하는 방식입니다.
               </p>
               <span className={styles.cta}>
-                컬렉션 보기 <span>→</span>
+                more <span>→</span>
               </span>
             </div>
           </>
@@ -98,7 +98,7 @@ export default function BrandStory() {
                 ))}
               </ul>
               <span className={styles.cta}>
-                이북 보러가기 <span>→</span>
+                more <span>→</span>
               </span>
             </div>
           </>

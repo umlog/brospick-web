@@ -26,11 +26,11 @@
 | 19 | Kinesiology Tape (Black) (5cm) | 3000 | 4000 |
 | 20 | Kinesiology Tape (Camo) (5cm) | 3000 | 4000 |
 | 21 | Kinesiology Tape (5cm) | 3000 | 4000 |
-| 22 | Athletic Calf Sleeves (Black) | 10900 | 15900 |
+| 22 | Athletic Calf Sleeves (Black) | 8900 | 13900 |
 | 23 | Athletic Calf Sleeves (White) | 8900 | 13900 |
 | 24 | Athletic Long Socks (Black) | 10900 | 15900 |
 | 25 | Athletic Long Socks (White) | 10900 | 15900 |
-| 26 | Cross C-Tape (Black) (5cm) | 3000 | 40000 |
+| 26 | Cross C-Tape (Black) (5cm) | 3000 | 4000 |
 | 27 | C-Tape (3.8cm) | 1800 | 1800 |
 | 28 | C-Tape Black (3.8cm) | 2000 | 2000 |
 | 29 | Philippians 4:13 Non-Slip Crew Socks (Black) | 8900 | 13900 |

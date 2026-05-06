@@ -6,7 +6,7 @@ async function getProductData(productId: number) {
   const [priceRes, sizesRes] = await Promise.all([
     supabase
       .from('products')
-      .select('id, name, price, original_price')
+      .select('id, name, price, original_price, coming_soon')
       .eq('id', productId)
       .single(),
     supabase
@@ -18,6 +18,7 @@ async function getProductData(productId: number) {
   return {
     price: priceRes.data ?? null,
     sizes: sizesRes.data ?? [],
+    comingSoon: priceRes.data?.coming_soon ?? null,
   };
 }
 
@@ -32,6 +33,6 @@ export default async function ProductDetailPage({
     return <ProductDetailClient params={params} initialPrice={null} initialSizes={[]} />;
   }
 
-  const { price, sizes } = await getProductData(product.id);
-  return <ProductDetailClient params={params} initialPrice={price} initialSizes={sizes} />;
+  const { price, sizes, comingSoon } = await getProductData(product.id);
+  return <ProductDetailClient params={params} initialPrice={price} initialSizes={sizes} dbComingSoon={comingSoon} />;
 }

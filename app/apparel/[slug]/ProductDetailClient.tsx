@@ -49,9 +49,10 @@ interface Props {
   params: { slug: string };
   initialPrice: DbPrice | null;
   initialSizes: SizeRow[];
+  dbComingSoon?: boolean | null;
 }
 
-export default function ProductDetailClient({ params, initialPrice, initialSizes }: Props) {
+export default function ProductDetailClient({ params, initialPrice, initialSizes, dbComingSoon }: Props) {
   const router = useRouter();
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -93,6 +94,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const price = dbPrice?.price;
   const originalPrice = dbPrice?.original_price ?? null;
   const productName = dbPrice?.name ?? product?.name;
+  const isComingSoon = dbComingSoon !== null && dbComingSoon !== undefined ? dbComingSoon : product?.comingSoon;
 
   if (!product) {
     return (
@@ -418,7 +420,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
             </div>}
 
-            {product.comingSoon ? (
+            {isComingSoon ? (
               <div className={styles.comingSoonNotice}>
                 <span className={styles.comingSoonNoticeBadge}>COMING SOON</span>
                 <p>해당 상품은 현재 출시 준비 중입니다.</p>
@@ -426,7 +428,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               </div>
             ) : (
               <>
-                {product.sizes.length > 1 && <div className={styles.sizeSection}>
+                {product.sizes.length >= 1 && <div className={styles.sizeSection}>
                   <h3>사이즈 선택</h3>
                   <div className={styles.sizeOptions}>
                     {product.sizes.map((size) => {
@@ -445,7 +447,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                           onClick={() => {
                             if (isSoldOut) return;
                             if (isDelayed) {
-                              if (confirm(`해당 사이즈는 ${delayText} 상품입니다.\n주문하시겠습니까?`)) {
+                              if (confirm(`${delayText}\n주문하시겠습니까?`)) {
                                 handleSizeSelect(size);
                               }
                               return;
@@ -511,10 +513,13 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     바로 구매하기
                   </button>
                 </div>
-                <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
-                  맞춤 로고각인 가능
-                </button>
-                <p className={styles.returnNotice}>오후 3시 이전 결제 확인 시 당일 발송</p>
+                {product.category !== 'taping' && product.category !== 'socks' &&
+                  product.slug !== 'quarter-zip-flex-blue' && product.slug !== 'quarter-zip-flex-light-green' && (
+                    <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
+                      맞춤 로고각인 가능
+                    </button>
+                  )}
+                <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
               </>
             )}
 
@@ -705,7 +710,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         })()}
       </div>
 
-      {!product.comingSoon && (
+      {!isComingSoon && (
         <div className={styles.stickyBuyBar}>
           <div className={styles.stickyBuyBarInner}>
             <div className={styles.stickyBuyBarInfo}>
