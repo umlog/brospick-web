@@ -55,9 +55,44 @@ export default function ApparelClient({ initialPrices }: Props) {
 
   const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
 
-  const filtered = activeCategory === ALL
+  const baseList = activeCategory === ALL
     ? productList
     : productList.filter((p) => p.category === activeCategory);
+
+  const filtered = [...baseList].sort((a, b) => {
+    const aDb = dbPrices[a.id];
+    const bDb = dbPrices[b.id];
+    const aSortOrder = aDb?.sort_order ?? null;
+    const bSortOrder = bDb?.sort_order ?? null;
+    const aComingSoon = aDb ? aDb.coming_soon : a.comingSoon;
+    const bComingSoon = bDb ? bDb.coming_soon : b.comingSoon;
+    const aPrice = aDb?.price ?? 0;
+    const bPrice = bDb?.price ?? 0;
+
+    // 핀 고정 항상 최우선
+    if (aSortOrder !== null && bSortOrder !== null) return aSortOrder - bSortOrder;
+    if (aSortOrder !== null) return -1;
+    if (bSortOrder !== null) return 1;
+
+    // 커밍순 항상 마지막
+    if (!aComingSoon && bComingSoon) return -1;
+    if (aComingSoon && !bComingSoon) return 1;
+
+    // 커밍순끼리는 순서 유지
+    if (aComingSoon && bComingSoon) return 0;
+
+    // 판매중끼리 정렬
+    if (sortMode === 'recommended') {
+      // BEST 배지 우선, 그 다음 가격 높은순
+      const aBest = a.popularBadge ? 1 : 0;
+      const bBest = b.popularBadge ? 1 : 0;
+      if (bBest !== aBest) return bBest - aBest;
+      return bPrice - aPrice;
+    }
+    if (sortMode === 'price_desc') return bPrice - aPrice;
+    if (sortMode === 'price_asc') return aPrice - bPrice;
+    return 0;
+  });
 
   const selectCategory = (cat: Filter) => {
     setActiveCategory(cat);
@@ -121,7 +156,17 @@ export default function ApparelClient({ initialPrices }: Props) {
                 </button>
               ))}
             </div>
-            <span className={styles.productCount}>{filtered.length}개 상품</span>
+            <div className={styles.sortControls}>
+              {(['recommended', 'price_desc', 'price_asc'] as SortMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  className={`${styles.sortButton} ${sortMode === mode ? styles.sortButtonActive : ''}`}
+                  onClick={() => setSortMode(mode)}
+                >
+                  {SORT_LABELS[mode]}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 상품 그리드 */}

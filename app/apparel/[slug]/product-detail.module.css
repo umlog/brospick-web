@@ -80,6 +80,52 @@
   z-index: 10;
 }
 
+.carouselArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.mainImage:hover .carouselArrow {
+  opacity: 1;
+}
+
+.carouselArrow:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.carouselArrowLeft { left: 12px; }
+.carouselArrowRight { right: 12px; }
+
+.carouselArrowHidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .carouselArrow {
+    opacity: 1;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .carouselArrowLeft { left: 8px; }
+  .carouselArrowRight { right: 8px; }
+}
+
 .zoomPanel {
   position: absolute;
   left: calc(100% + var(--space-2xl));
@@ -123,6 +169,7 @@
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  will-change: transform;
 }
 
 .thumbEmbla {
@@ -289,6 +336,29 @@
   letter-spacing: 0.02em;
 }
 
+@keyframes noticePulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.shippingNotices {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--size-xs);
+  color: var(--color-text-secondary);
+}
+
+.shippingNotices span:nth-child(1) {
+  animation: noticePulse 2.8s ease-in-out infinite;
+}
+
+.shippingNotices span:nth-child(2) {
+  animation: noticePulse 2.8s ease-in-out infinite;
+  animation-delay: 1.4s;
+}
+
 .returnNotice {
   margin-top: var(--space-sm);
   font-size: var(--size-xs);
@@ -332,6 +402,10 @@
 }
 
 .logoInquiryButton + .returnNotice {
+  margin-top: 4px;
+}
+
+.logoInquiryButton + .shippingNotices {
   margin-top: 4px;
 }
 

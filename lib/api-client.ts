@@ -156,7 +156,7 @@ export const apiClient = {
 
     update: (
       id: number,
-      body: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }
+      body: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean; sort_order?: number | null }
     ) =>
       request<{ product: AdminProduct }>('/api/admin/products', {
         method: 'PATCH',

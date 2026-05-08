@@ -64,6 +64,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const [thumbRef, thumbApi] = useEmblaCarousel({ dragFree: true, containScroll: 'keepSnaps', align: 'start' });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [logoInquiryOpen, setLogoInquiryOpen] = useState(false);
+  const [imgScale, setImgScale] = useState(1);
+  const [isPinching, setIsPinching] = useState(false);
+  const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
   const lensRef = useRef<HTMLDivElement>(null);
   const zoomPanelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -192,6 +195,40 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [emblaApi]);
 
   useEffect(() => {
+    setImgScale(1);
+    setIsPinching(false);
+    pinchRef.current = null;
+  }, [currentImage]);
+
+  const getPinchDist = (touches: React.TouchList) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const handlePinchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.nativeEvent.stopPropagation();
+      setIsPinching(true);
+      pinchRef.current = { dist: getPinchDist(e.touches), scale: imgScale };
+    }
+  };
+
+  const handlePinchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchRef.current) {
+      e.nativeEvent.stopPropagation();
+      const ratio = getPinchDist(e.touches) / pinchRef.current.dist;
+      setImgScale(Math.min(4, Math.max(1, pinchRef.current.scale * ratio)));
+    }
+  };
+
+  const handlePinchEnd = () => {
+    pinchRef.current = null;
+    setIsPinching(false);
+    setImgScale(1);
+  };
+
+  useEffect(() => {
     if (zoomPanelRef.current) {
       zoomPanelRef.current.style.backgroundImage = `url(${product?.images[currentImage]})`;
     }
@@ -216,6 +253,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
     router.push('/checkout');
   };
+
+  const carouselImages = product.images.filter((img) => !img.includes('size-chart'));
 
   return (
     <main className={styles.main}>
@@ -259,17 +298,55 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 if (zoomPanelRef.current) zoomPanelRef.current.style.display = 'none';
               }}
             >
-              <div className={styles.emblaContainer}>
-                {product.images.map((img, index) => (
+              <div
+                className={styles.emblaContainer}
+                onTouchStart={handlePinchStart}
+                onTouchMove={handlePinchMove}
+                onTouchEnd={handlePinchEnd}
+              >
+                {carouselImages.map((img, index) => (
                   <div className={styles.emblaSlide} key={index}>
-                    <img src={img} alt={`${product.name} ${index + 1}`} draggable={false} />
+                    <img
+                      src={img}
+                      alt={`${product.name} ${index + 1}`}
+                      draggable={false}
+                      style={index === currentImage ? {
+                        transform: `scale(${imgScale})`,
+                        transformOrigin: 'center center',
+                        transition: isPinching ? 'none' : 'transform 0.3s ease',
+                      } : undefined}
+                    />
                   </div>
                 ))}
               </div>
               <div ref={lensRef} className={styles.lens} style={{ display: 'none' }} />
+              {carouselImages.length > 1 && (
+                <>
+                  <button
+                    className={`${styles.carouselArrow} ${styles.carouselArrowLeft} ${currentImage === 0 ? styles.carouselArrowHidden : ''}`}
+                    onClick={(e) => { e.stopPropagation(); emblaApi?.scrollPrev(); }}
+                    onMouseMove={(e) => e.stopPropagation()}
+                    aria-label="이전 이미지"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <button
+                    className={`${styles.carouselArrow} ${styles.carouselArrowRight} ${currentImage === carouselImages.length - 1 ? styles.carouselArrowHidden : ''}`}
+                    onClick={(e) => { e.stopPropagation(); emblaApi?.scrollNext(); }}
+                    onMouseMove={(e) => e.stopPropagation()}
+                    aria-label="다음 이미지"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </>
+              )}
             </div>
             <div className={styles.dotRow}>
-              {product.images.map((_, index) => (
+              {carouselImages.map((_, index) => (
                 <button
                   key={index}
                   className={`${styles.dot} ${index === currentImage ? styles.dotActive : ''}`}
@@ -281,7 +358,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
             <div className={styles.thumbEmbla} ref={thumbRef}>
               <div className={styles.thumbContainer}>
-                {product.images.map((img, index) => (
+                {carouselImages.map((img, index) => (
                   <button
                     key={index}
                     className={`${styles.thumbnail} ${index === currentImage ? styles.thumbnailActive : ''}`}
@@ -519,7 +596,10 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       맞춤 로고각인 가능
                     </button>
                   )}
-                <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
+                <div className={styles.shippingNotices}>
+                  <span>15시 이전 결제 시 당일 발송</span>
+                  <span>50,000원 이상 결제 시 무료 배송</span>
+                </div>
               </>
             )}
 

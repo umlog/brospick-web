@@ -155,7 +155,7 @@ function ProductCard({
   sizes: ProductSize[];
   staticSizes: string[];
   thumbnail?: string;
-  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => Promise<void>;
+  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean; sort_order?: number | null }) => Promise<void>;
   onStatusChange: (id: number, size: string, status: string) => Promise<void>;
   onStockUpdate: (id: number, size: string, stock: number) => Promise<void>;
   onDelayTextUpdate: (id: number, size: string, text: string | null) => Promise<void>;
@@ -165,6 +165,7 @@ function ProductCard({
   const [originalPrice, setOriginalPrice] = useState(
     product.original_price != null ? String(product.original_price) : ''
   );
+  const [sortOrder, setSortOrder] = useState(product.sort_order != null ? String(product.sort_order) : '');
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -172,6 +173,7 @@ function ProductCard({
       setName(product.name);
       setPrice(String(product.price));
       setOriginalPrice(product.original_price != null ? String(product.original_price) : '');
+      setSortOrder(product.sort_order != null ? String(product.sort_order) : '');
       setDirty(false);
     }
   }, [product, catalogSaving]);
@@ -189,10 +191,12 @@ function ProductCard({
       showToast('올바른 정가를 입력해주세요.', 'error');
       return;
     }
+    const parsedSortOrder = sortOrder === '' ? null : parseInt(sortOrder, 10);
     await onCatalogUpdate(product.id, {
       name: name.trim(),
       price: parsedPrice,
       original_price: parsedOriginal,
+      sort_order: parsedSortOrder,
     });
     setDirty(false);
   };
@@ -266,6 +270,19 @@ function ProductCard({
         >
           {product.coming_soon ? 'COMING SOON' : '출시됨'}
         </button>
+        <div className={styles.pmSortOrderField}>
+          <span className={styles.pmSortOrderLabel}>핀</span>
+          <input
+            className={styles.pmSortOrderInput}
+            type="number"
+            value={sortOrder}
+            onChange={(e) => { setSortOrder(e.target.value); mark(); }}
+            onKeyDown={onEnter}
+            disabled={catalogSaving}
+            placeholder="–"
+            min={1}
+          />
+        </div>
       </div>
 
       {staticSizes.length > 0 && (

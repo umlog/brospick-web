@@ -27,12 +27,13 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, name, price, original_price, coming_soon } = body as {
+    const { id, name, price, original_price, coming_soon, sort_order } = body as {
       id: number;
       name?: string;
       price?: number;
       original_price?: number | null;
       coming_soon?: boolean;
+      sort_order?: number | null;
     };
 
     if (!id) return apiError('상품 ID가 필요합니다.', 400);
@@ -41,6 +42,7 @@ export async function PATCH(request: NextRequest) {
     if (name !== undefined) updates.name = name;
     if (price !== undefined) updates.price = price;
     if (original_price !== undefined) updates.original_price = original_price;
+    if ('sort_order' in body) updates.sort_order = sort_order ?? null;
     if (coming_soon !== undefined) {
       updates.coming_soon = coming_soon;
       if (coming_soon === false) {

@@ -265,7 +265,7 @@ export const products: Record<ProductSlug, Product> = {
     tagline: '가볍고, 빠르게 마르고, 형태는 그대로',
     description:
       '카멜 그레이 쇼트 슬리브는 소로나 50% + 폴리에스터(스판덱스 혼합) 50%의 경량 혼방 원단으로 제작되어, 입었을 때의 부담감을 최소화한 기능성 트레이닝 상의입니다. 일상 훈련부터 원정 경기까지, 주름 없이 가방에서 꺼내 바로 착용할 수 있고, 땀을 빠르게 배출해 쾌적한 착용감을 오래 유지합니다. 후면 봉제선과 브로스픽 심볼에 적용된 빛반사 스티치는 야간 훈련 시 시인성을 높이는 동시에 제품에 디테일을 더합니다. UPF 50+ 자외선 차단 기능으로 야외 활동에서도 피부를 보호합니다.',
-    sizes: ['M', 'L', 'XL', '2XL', '3XL'],
+    sizes: ['M', 'L', 'XL', '2XL'],
     features: [
       { label: '노 아이언 관리', detail: ' — 주름에 강한 원단으로 가방에서 꺼내 바로 착용 가능' },
       { label: '초경량 155G', detail: ' — 착용 중 원단의 무게감을 거의 느끼지 못합니다' },
@@ -278,7 +278,6 @@ export const products: Record<ProductSlug, Product> = {
       { size: 'L', length: 72, chest: 55.5, sleeve: 22.5 },
       { size: 'XL', length: 74, chest: 57.5, sleeve: 23.5 },
       { size: '2XL', length: 76, chest: 59.5, sleeve: 24.5 },
-      { size: '3XL', length: 78, chest: 61.5, sleeve: 25.5 },
     ],
     details: {
       functions: [
@@ -871,6 +870,7 @@ export const products: Record<ProductSlug, Product> = {
     images: [
       '/apparel/taping/philippians-413-c-taping/1.png',
       '/apparel/taping/philippians-413-c-taping/2.png',
+      '/apparel/taping/philippians-413-c-taping/3.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -1500,11 +1500,11 @@ export const products: Record<ProductSlug, Product> = {
       { label: '옆단 트임 설계', detail: ' — 하체 움직임 자유도 확보' },
     ],
     sizeChart: [
-      { size: 'S',   length: 62,   chest: 45, sleeve: 16 },
-      { size: 'M',   length: 65.5, chest: 48, sleeve: 17 },
-      { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
-      { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
-      { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
+      { size: 'S', length: 62, chest: 45, sleeve: 16 },
+      { size: 'M', length: 65.5, chest: 48, sleeve: 17 },
+      { size: 'L', length: 69, chest: 51, sleeve: 18 },
+      { size: 'XL', length: 71.5, chest: 53, sleeve: 19 },
+      { size: '2XL', length: 74, chest: 55, sleeve: 20 },
     ],
     details: {
       functions: [
@@ -1556,11 +1556,11 @@ export const products: Record<ProductSlug, Product> = {
       { label: '옆단 트임 설계', detail: ' — 하체 움직임 자유도 확보' },
     ],
     sizeChart: [
-      { size: 'S',   length: 62,   chest: 45, sleeve: 16 },
-      { size: 'M',   length: 65.5, chest: 48, sleeve: 17 },
-      { size: 'L',   length: 69,   chest: 51, sleeve: 18 },
-      { size: 'XL',  length: 71.5, chest: 53, sleeve: 19 },
-      { size: '2XL', length: 74,   chest: 55, sleeve: 20 },
+      { size: 'S', length: 62, chest: 45, sleeve: 16 },
+      { size: 'M', length: 65.5, chest: 48, sleeve: 17 },
+      { size: 'L', length: 69, chest: 51, sleeve: 18 },
+      { size: 'XL', length: 71.5, chest: 53, sleeve: 19 },
+      { size: '2XL', length: 74, chest: 55, sleeve: 20 },
     ],
     details: {
       functions: [

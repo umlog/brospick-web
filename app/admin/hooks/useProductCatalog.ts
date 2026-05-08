@@ -64,7 +64,7 @@ export function useProductCatalog() {
   }, [fetchProducts]);
 
   const updateProduct = useCallback(
-    async (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => {
+    async (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean; sort_order?: number | null }) => {
       setSaving(id);
       setError(null);
       try {
