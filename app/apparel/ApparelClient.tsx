@@ -46,10 +46,15 @@ export default function ApparelClient({ initialPrices }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('apparel-scroll');
-    if (saved) {
+    const savedCategory = sessionStorage.getItem('apparel-category') as Filter | null;
+    const savedSort = sessionStorage.getItem('apparel-sort') as SortMode | null;
+    if (savedCategory) setActiveCategory(savedCategory);
+    if (savedSort) setSortMode(savedSort);
+
+    const savedScroll = sessionStorage.getItem('apparel-scroll');
+    if (savedScroll) {
       sessionStorage.removeItem('apparel-scroll');
-      requestAnimationFrame(() => window.scrollTo(0, parseInt(saved, 10)));
+      requestAnimationFrame(() => window.scrollTo(0, parseInt(savedScroll, 10)));
     }
   }, []);
 
@@ -96,6 +101,7 @@ export default function ApparelClient({ initialPrices }: Props) {
 
   const selectCategory = (cat: Filter) => {
     setActiveCategory(cat);
+    sessionStorage.setItem('apparel-category', cat);
     setTimeout(() => {
       gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);
@@ -142,7 +148,7 @@ export default function ApparelClient({ initialPrices }: Props) {
             <div className={styles.categories}>
               <button
                 className={`${styles.categoryButton} ${activeCategory === ALL ? styles.active : ''}`}
-                onClick={() => setActiveCategory(ALL)}
+                onClick={() => { setActiveCategory(ALL); sessionStorage.setItem('apparel-category', ALL); }}
               >
                 전체
               </button>
@@ -161,7 +167,7 @@ export default function ApparelClient({ initialPrices }: Props) {
                 <button
                   key={mode}
                   className={`${styles.sortButton} ${sortMode === mode ? styles.sortButtonActive : ''}`}
-                  onClick={() => setSortMode(mode)}
+                  onClick={() => { setSortMode(mode); sessionStorage.setItem('apparel-sort', mode); }}
                 >
                   {SORT_LABELS[mode]}
                 </button>

@@ -242,7 +242,7 @@
 
 .sortButtonActive {
   background: var(--color-text-primary);
-  color: var(--color-bg);
+  color: var(--color-bg-primary);
   border-color: var(--color-text-primary);
 }
 

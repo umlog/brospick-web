@@ -8,6 +8,7 @@ import Future from './components/sections/Future';
 import Sportswear from './components/sections/Sportswear';
 import BrandStory from './components/sections/BrandStory';
 // import Contact from './components/sections/Contact';
+import ScrollHint from './components/ScrollHint';
 import { supabaseAdmin } from '@/lib/supabase';
 
 async function getPrices(): Promise<Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null }>> {
@@ -24,8 +25,9 @@ export default async function Home() {
 
   return (
     <>
-      <BrandStory />
+      <ScrollHint />
       <Sportswear initialPrices={prices} />
+      <BrandStory />
       <Blog />
       <Manifesto />
       <Project />

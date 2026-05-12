@@ -192,6 +192,33 @@ export default function CartPage() {
           <div className={styles.cartSummary}>
             <div className={styles.summaryContent}>
               <h2>주문 요약</h2>
+
+              {/* 배송비 프로그레스 바 */}
+              {(() => {
+                const pct = Math.min(100, Math.round((selectedTotalPrice / SHIPPING.freeThreshold) * 100));
+                const isFree = selectedTotalPrice >= SHIPPING.freeThreshold;
+                return (
+                  <div className={styles.shippingProgress}>
+                    <div className={styles.shippingProgressText}>
+                      {isFree ? (
+                        <span className={styles.shippingProgressFreeText}>무료배송 달성!</span>
+                      ) : selectedTotalPrice > 0 ? (
+                        <span>₩{(SHIPPING.freeThreshold - selectedTotalPrice).toLocaleString()} 더 담으면 무료배송</span>
+                      ) : (
+                        <span>₩{SHIPPING.freeThreshold.toLocaleString()} 이상 무료배송</span>
+                      )}
+                      <span className={styles.shippingProgressPct}>{pct}%</span>
+                    </div>
+                    <div className={styles.shippingProgressTrack}>
+                      <div
+                        className={`${styles.shippingProgressFill} ${isFree ? styles.shippingProgressFillFree : ''}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className={styles.summaryRow}>
                 <span>선택된 상품 ({selectedCartItems.length}개)</span>
                 <span>₩{selectedTotalPrice.toLocaleString()}</span>
@@ -199,16 +226,11 @@ export default function CartPage() {
               <div className={styles.summaryRow}>
                 <span>배송비 <small style={{ color: '#888', fontWeight: 400 }}>(주문당 1회)</small></span>
                 {getShippingFee(selectedTotalPrice) === 0 ? (
-                  <span style={{ color: '#2563eb', fontWeight: 600 }}>무료</span>
+                  <span style={{ color: '#22c55e', fontWeight: 600 }}>무료</span>
                 ) : (
                   <span>₩{SHIPPING.fee.toLocaleString()}</span>
                 )}
               </div>
-              {selectedTotalPrice > 0 && getShippingFee(selectedTotalPrice) > 0 && (
-                <div style={{ fontSize: '12px', color: '#2563eb', textAlign: 'right', marginTop: '-4px' }}>
-                  ₩{(SHIPPING.freeThreshold - selectedTotalPrice).toLocaleString()} 더 담으면 무료배송!
-                </div>
-              )}
               <div className={styles.summaryDivider} />
               <div className={styles.summaryRowTotal}>
                 <span>총 결제 금액</span>
@@ -226,6 +248,27 @@ export default function CartPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 모바일 하단 고정 결제 바 */}
+      <div className={styles.mobileStickyBar}>
+        <div className={styles.mobileStickyBarInner}>
+          <div className={styles.mobileStickyBarInfo}>
+            <span className={styles.mobileStickyBarTotal}>
+              ₩{(selectedTotalPrice + getShippingFee(selectedTotalPrice)).toLocaleString()}
+            </span>
+            <span className={styles.mobileStickyBarLabel}>
+              {selectedCartItems.length > 0 ? `${selectedCartItems.length}개 선택` : '항목을 선택해주세요'}
+            </span>
+          </div>
+          <button
+            className={styles.mobileStickyCheckout}
+            onClick={handleCheckout}
+            disabled={selectedCartItems.length === 0}
+          >
+            결제하기
+          </button>
         </div>
       </div>
     </main>

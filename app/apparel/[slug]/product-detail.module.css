@@ -177,6 +177,12 @@
   margin-top: var(--space-sm);
 }
 
+@media (max-width: 768px) {
+  .thumbEmbla {
+    display: none;
+  }
+}
+
 .thumbContainer {
   display: flex;
   gap: var(--space-sm);
@@ -188,6 +194,12 @@
   border-radius: 2px;
   margin-top: var(--space-sm);
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .progressTrack {
+    display: none;
+  }
 }
 
 .progressFill {
@@ -341,13 +353,35 @@
   50% { opacity: 1; }
 }
 
+.unitNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: var(--size-xs);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
 .shippingNotices {
   margin-top: var(--space-sm);
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   font-size: var(--size-xs);
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .shippingNotices {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xs);
+    padding: 8px 12px;
+    gap: 5px;
+    font-size: 11px;
+  }
 }
 
 .shippingNotices span:nth-child(1) {
@@ -357,6 +391,39 @@
 .shippingNotices span:nth-child(2) {
   animation: noticePulse 2.8s ease-in-out infinite;
   animation-delay: 1.4s;
+}
+
+.shippingFree {
+  color: #4caf50;
+  font-weight: 600;
+  animation: none !important;
+}
+
+.shippingProgress {
+  color: var(--color-accent);
+  font-weight: 500;
+  animation: none !important;
+}
+
+/* 멀티셀렉트 총 금액 */
+.multiSelectTotal {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  padding: 6px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.multiSelectTotalLabel {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.multiSelectTotalPrice {
+  font-size: var(--size-xl);
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
 .returnNotice {
@@ -523,6 +590,45 @@
   .sizeOptions::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* boot-skin: 모바일에서 가로 스크롤 대신 wrap 격자 */
+.sizeOptionsBootSkin {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .sizeOptionsBootSkin {
+    flex-wrap: wrap;
+    overflow-x: unset;
+    padding-bottom: 0;
+    gap: 6px;
+  }
+}
+
+.sizeButtonBootSkin {
+  min-width: 44px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+  .sizeButtonBootSkin {
+    padding: 10px 8px;
+    min-width: 44px;
+    font-size: var(--size-sm);
+  }
+}
+
+.selectedCount {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+  border-radius: 20px;
+  vertical-align: middle;
 }
 
 .sizeButton {
@@ -987,13 +1093,52 @@
     z-index: 100;
     background-color: var(--color-bg-primary);
     border-top: 1px solid var(--color-border);
-    padding: var(--space-sm) var(--space-md);
+    padding: 0 var(--space-md) var(--space-sm);
     padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
   }
 
   .main {
-    padding-bottom: 80px;
+    padding-bottom: 90px;
   }
+}
+
+/* 배송 프로그레스 배너 (sticky bar 상단) */
+.shippingBanner {
+  padding: var(--space-xs) 0 var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-xs);
+}
+
+.shippingBannerText {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.shippingBannerFreeText {
+  color: #4caf50;
+  font-weight: 700;
+}
+
+.shippingBannerTrack {
+  height: 3px;
+  background: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-left: calc(-1 * var(--space-md));
+  margin-right: calc(-1 * var(--space-md));
+}
+
+.shippingBannerFill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+}
+
+.shippingBannerFillFree {
+  background: #4caf50;
 }
 
 .stickyBuyBarInner {

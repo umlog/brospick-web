@@ -292,7 +292,7 @@ function ProductCard({
               key={size}
               productId={product.id}
               size={size}
-              sizeData={sizes.find((s) => s.size === size)}
+              sizeData={sizes.find((s) => s.product_id === product.id && s.size === size)}
               onStatusChange={onStatusChange}
               onStockUpdate={onStockUpdate}
               onDelayTextUpdate={onDelayTextUpdate}
@@ -316,9 +316,13 @@ export function ProductManager({
   const { products, loading: catalogLoading, saving: catalogSaving, updateProduct } = catalogState;
   const { sizes, loading: sizesLoading, updateSize, updateStock, updateDelayText } = sizesState;
 
+  const idToCategory = Object.fromEntries(
+    Object.values(staticProducts).map((p) => [p.id, p.category])
+  );
+
   const filteredProducts = selectedCategory === 'all'
     ? products
-    : products.filter((p) => p.category === selectedCategory);
+    : products.filter((p) => idToCategory[p.id] === selectedCategory);
 
   const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
 
@@ -343,7 +347,7 @@ export function ProductManager({
           전체 ({products.length})
         </button>
         {categories.map(([key, label]) => {
-          const count = products.filter((p) => p.category === key).length;
+          const count = products.filter((p) => idToCategory[p.id] === key).length;
           if (count === 0) return null;
           return (
             <button

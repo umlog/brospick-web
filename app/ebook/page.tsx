@@ -5,6 +5,7 @@ import EbookPurchaseDialog from './components/EbookPurchaseDialog';
 import EbookBlogSection from './components/EbookBlogSection';
 import EbookToc from './components/EbookToc';
 import EbookFaq from './components/EbookFaq';
+import EbookBook3D from '@/app/components/EbookBook3D';
 import styles from './ebook-page.module.css';
 import type { BlogPost } from '@/lib/domain/types';
 
@@ -82,30 +83,7 @@ export default async function EbookPage() {
 
           {/* 3D 북 목업 */}
           <div className={styles.heroBookWrapper}>
-            <div className={styles.bookScene}>
-              <div className={styles.book}>
-                {/* 앞표지 */}
-                <div className={styles.bookFront}>
-                  <div className={styles.bookFrontContent}>
-                    <div>
-                      <p className={styles.bookBrand}>BROSPICK</p>
-                      <div className={styles.bookDivider} />
-                    </div>
-                    <p className={styles.bookTitleText}>{EBOOK.title}</p>
-                    <p className={styles.bookLabel}>E-BOOK · {EBOOK.year}</p>
-                  </div>
-                  <div className={styles.bookShine} />
-                  <div className={styles.bookAccentBar} />
-                </div>
-                {/* 척추(등) */}
-                <div className={styles.bookSpineFace} />
-                {/* 페이지 옆면 */}
-                <div className={styles.bookPageBlock} />
-                {/* 상단 */}
-                <div className={styles.bookTopFace} />
-              </div>
-              <div className={styles.bookGroundShadow} />
-            </div>
+            <EbookBook3D />
           </div>
         </div>
 

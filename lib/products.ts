@@ -45,6 +45,13 @@ export const PRODUCT_SLUGS = {
   // ── 3차 추가 상품 ──
   COOL_TECH_TSHIRT_BLACK: 'cool-tech-tshirt-black',
   COOL_TECH_TSHIRT_WHITE: 'cool-tech-tshirt-white',
+  // ── 4차 추가 상품 (부츠스킨) ──
+  BOOTSKIN_NUMBER: 'bootskin-number',
+  BOOTSKIN_ALPHABET: 'bootskin-alphabet',
+  BOOTSKIN_SYMBOL: 'bootskin-symbol',
+  BOOTSKIN_KOREA: 'bootskin-korea',
+  // ── 5차 추가 상품 ──
+  UNDERWRAP_TAPING: 'underwrap-taping',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
@@ -85,6 +92,13 @@ export const PRODUCT_IDS = {
   // ── 3차 추가 상품 ──
   COOL_TECH_TSHIRT_BLACK: 31,
   COOL_TECH_TSHIRT_WHITE: 32,
+  // ── 4차 추가 상품 (부츠스킨) ──
+  BOOTSKIN_NUMBER: 33,
+  BOOTSKIN_ALPHABET: 34,
+  BOOTSKIN_SYMBOL: 35,
+  BOOTSKIN_KOREA: 36,
+  // ── 5차 추가 상품 ──
+  UNDERWRAP_TAPING: 37,
 } as const;
 
 export interface SizeChartRow {
@@ -120,7 +134,7 @@ export interface ProductVariant {
   color?: string; // CSS color for swatch dot
 }
 
-export type ProductCategory = 'training-top' | 'top' | 'bottom' | 'outer' | 'taping' | 'socks';
+export type ProductCategory = 'training-top' | 'top' | 'bottom' | 'outer' | 'taping' | 'socks' | 'boot-skin';
 
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'training-top': '트레이닝 탑',
@@ -129,6 +143,7 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'outer': '아우터',
   'taping': '테이핑',
   'socks': '양말',
+  'boot-skin': '부츠스킨',
 };
 
 export interface Product {
@@ -149,6 +164,9 @@ export interface Product {
   popularBadge?: string; // 예: 'BEST' — 상품 카드 이미지 위에 배너로 표시
   variants?: ProductVariant[]; // 묶어서 보여줄 컬러 variants (Coming Soon 그룹)
   hideFromList?: boolean; // true면 productList에서 제외 (다른 상품의 variant로 표시됨)
+  sizeImages?: Record<string, string>; // size value -> 해당 사이즈 선택 시 보여줄 이미지 경로
+  sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
+  multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
   details: ProductDetails;
 }
 
@@ -515,7 +533,6 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/tech-training-shorts-black/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-black/1.png',
-      '/apparel/bottom/tech-training-shorts-black/size-chart.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -561,7 +578,6 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/tech-training-shorts-gray/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-gray/1.png',
-      '/apparel/bottom/tech-training-shorts-gray/size-chart.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -607,7 +623,9 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-black/1.png',
-      '/apparel/bottom/motion-tech-shorts-black/size-chart.png',
+      '/apparel/bottom/motion-tech-shorts-black/2.png',
+      '/apparel/bottom/motion-tech-shorts-black/3.png',
+      '/apparel/bottom/motion-tech-shorts-black/4.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -657,7 +675,8 @@ export const products: Record<ProductSlug, Product> = {
     images: [
       '/apparel/training-top/quarter-zip-flex-blue/1.png',
       '/apparel/training-top/quarter-zip-flex-blue/2.png',
-      '/apparel/training-top/quarter-zip-flex-blue/size-chart.png',
+      '/apparel/training-top/quarter-zip-flex-blue/3.png',
+      '/apparel/training-top/quarter-zip-flex-blue/4.png',
     ],
     tagline: '편안한 넥라인과 컬러 배색, 슬림한 퍼포먼스 핏으로 활동성과 스타일을 모두 갖춘 쿼터 집업.',
     description:
@@ -701,7 +720,9 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-gray/1.png',
-      '/apparel/bottom/motion-tech-shorts-gray/size-chart.png',
+      '/apparel/bottom/motion-tech-shorts-gray/2.png',
+      '/apparel/bottom/motion-tech-shorts-gray/3.png',
+      '/apparel/bottom/motion-tech-shorts-gray/4.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -751,12 +772,13 @@ export const products: Record<ProductSlug, Product> = {
     images: [
       '/apparel/training-top/quarter-zip-flex-light-green/1.png',
       '/apparel/training-top/quarter-zip-flex-light-green/2.png',
-      '/apparel/training-top/quarter-zip-flex-light-green/size-chart.png',
+      '/apparel/training-top/quarter-zip-flex-light-green/3.png',
+      '/apparel/training-top/quarter-zip-flex-light-green/4.png',
     ],
     tagline: '편안한 넥라인과 컬러 배색, 슬림한 퍼포먼스 핏으로 활동성과 스타일을 모두 갖춘 쿼터 집업.',
     description:
       'Quarter Zip Flex은 쿼터 집업 넥 구조로 온도 조절이 용이하고, 심플하면서도 활동적인 착용감을 제공하는 퍼포먼스 아이템입니다. 신체 라인을 자연스럽게 잡아주는 슬림핏 실루엣에 라글란 소매 설계를 더해 움직임이 편안하며, 스포츠 웨어에 최적화된 안정적인 핏을 완성합니다. 소매 핑거홀 디테일은 착용감을 높여주고 자유로운 활동성을 돕습니다. 트렌디한 컬러 배색과 빛반사 로고가 더해져, 야간 스포츠 활동 시 시인성을 확보하면서도 세련된 퍼포먼스 웨어 감성을 살렸습니다.',
-    sizes: ['M', 'L', 'XL', '2XL'],
+    sizes: ['M', 'L', 'XL'],
     features: [
       { label: '쿼터 집업 넥', detail: ' — 온도 조절이 용이한 반집업 디자인' },
       { label: '슬림핏 실루엣', detail: ' — 신체 라인을 잡아주는 퍼포먼스 핏' },
@@ -768,7 +790,6 @@ export const products: Record<ProductSlug, Product> = {
       { size: 'M', length: 66, chest: 94, sleeve: 73.5 },
       { size: 'L', length: 68.5, chest: 99, sleeve: 75.5 },
       { size: 'XL', length: 71, chest: 104, sleeve: 78 },
-      { size: '2XL', length: 73.5, chest: 109, sleeve: 80.5 },
     ],
     details: {
       functions: [
@@ -1575,6 +1596,270 @@ export const products: Record<ProductSlug, Product> = {
         { title: '테크웨어 봉제 디자인', description: '퍼포먼스 무드를 살린 기능적 봉제 디테일.' },
       ],
       material: '폴리에스터 80% + 스판덱스 20%. 신축성 있는 피케 조직으로 독특한 텍스처와 기능성을 동시에. 중량 160g.',
+    },
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // 4차 추가 상품 (부츠스킨, ID 33~36)
+  // ════════════════════════════════════════════════════════════════
+
+  [PRODUCT_SLUGS.BOOTSKIN_NUMBER]: {
+    id: PRODUCT_IDS.BOOTSKIN_NUMBER,
+    slug: PRODUCT_SLUGS.BOOTSKIN_NUMBER,
+    name: 'Boot Skin — 숫자',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '번호 선택',
+    image: '/apparel/bootskin/number/1-number-detail.png',
+    images: [
+      '/apparel/bootskin/number/1-number-detail.png',
+      '/apparel/bootskin/number/2-number-detail.png',
+      '/apparel/bootskin/number/1-0.png',
+      '/apparel/bootskin/number/2-1.png',
+      '/apparel/bootskin/number/3-2.png',
+      '/apparel/bootskin/number/4-3.png',
+      '/apparel/bootskin/number/5-4.png',
+      '/apparel/bootskin/number/6-5.png',
+      '/apparel/bootskin/number/7-6.png',
+      '/apparel/bootskin/number/8-7.png',
+      '/apparel/bootskin/number/9-8.png',
+      '/apparel/bootskin/number/10-9.png',
+    ],
+    sizeImages: {
+      '0': '/apparel/bootskin/number/1-0.png',
+      '1': '/apparel/bootskin/number/2-1.png',
+      '2': '/apparel/bootskin/number/3-2.png',
+      '3': '/apparel/bootskin/number/4-3.png',
+      '4': '/apparel/bootskin/number/5-4.png',
+      '5': '/apparel/bootskin/number/6-5.png',
+      '6': '/apparel/bootskin/number/7-6.png',
+      '7': '/apparel/bootskin/number/8-7.png',
+      '8': '/apparel/bootskin/number/9-8.png',
+      '9': '/apparel/bootskin/number/10-9.png',
+    },
+    tagline: '부츠에 붙이는 숫자 스티커 — 0부터 9까지 원하는 번호를 선택하세요.',
+    description: '축구화나 럭비화에 붙이는 숫자 부츠스킨입니다. 0부터 9까지 원하는 번호를 중복 선택해 주문할 수 있습니다.',
+    sizes: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    features: [
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+      { label: '깔끔한 블랙 컬러', detail: ' — 어떤 화색에도 잘 어울리는 베이직 톤' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_ALPHABET]: {
+    id: PRODUCT_IDS.BOOTSKIN_ALPHABET,
+    slug: PRODUCT_SLUGS.BOOTSKIN_ALPHABET,
+    name: 'Boot Skin — 이니셜',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '알파벳 선택',
+    image: '/apparel/bootskin/alphabet/1-alphabet-detail.png',
+    images: [
+      '/apparel/bootskin/alphabet/1-alphabet-detail.png',
+      '/apparel/bootskin/alphabet/1-A.png',
+      '/apparel/bootskin/alphabet/2-B.png',
+      '/apparel/bootskin/alphabet/3-C.png',
+      '/apparel/bootskin/alphabet/4-D.png',
+      '/apparel/bootskin/alphabet/5-E.png',
+      '/apparel/bootskin/alphabet/6-F.png',
+      '/apparel/bootskin/alphabet/7-G.png',
+      '/apparel/bootskin/alphabet/8-H.png',
+      '/apparel/bootskin/alphabet/9-I.png',
+      '/apparel/bootskin/alphabet/10-J.png',
+      '/apparel/bootskin/alphabet/11-K.png',
+      '/apparel/bootskin/alphabet/12-L.png',
+      '/apparel/bootskin/alphabet/13-M.png',
+      '/apparel/bootskin/alphabet/14-N.png',
+      '/apparel/bootskin/alphabet/15-O.png',
+      '/apparel/bootskin/alphabet/16-P.png',
+      '/apparel/bootskin/alphabet/17-Q.png',
+      '/apparel/bootskin/alphabet/18-R.png',
+      '/apparel/bootskin/alphabet/19-S.png',
+      '/apparel/bootskin/alphabet/20-T.png',
+      '/apparel/bootskin/alphabet/21-U.png',
+      '/apparel/bootskin/alphabet/22-V.png',
+      '/apparel/bootskin/alphabet/23-W.png',
+      '/apparel/bootskin/alphabet/24-X.png',
+      '/apparel/bootskin/alphabet/25-Y.png',
+      '/apparel/bootskin/alphabet/26-Z.png',
+    ],
+    sizeImages: {
+      'A': '/apparel/bootskin/alphabet/1-A.png',
+      'B': '/apparel/bootskin/alphabet/2-B.png',
+      'C': '/apparel/bootskin/alphabet/3-C.png',
+      'D': '/apparel/bootskin/alphabet/4-D.png',
+      'E': '/apparel/bootskin/alphabet/5-E.png',
+      'F': '/apparel/bootskin/alphabet/6-F.png',
+      'G': '/apparel/bootskin/alphabet/7-G.png',
+      'H': '/apparel/bootskin/alphabet/8-H.png',
+      'I': '/apparel/bootskin/alphabet/9-I.png',
+      'J': '/apparel/bootskin/alphabet/10-J.png',
+      'K': '/apparel/bootskin/alphabet/11-K.png',
+      'L': '/apparel/bootskin/alphabet/12-L.png',
+      'M': '/apparel/bootskin/alphabet/13-M.png',
+      'N': '/apparel/bootskin/alphabet/14-N.png',
+      'O': '/apparel/bootskin/alphabet/15-O.png',
+      'P': '/apparel/bootskin/alphabet/16-P.png',
+      'Q': '/apparel/bootskin/alphabet/17-Q.png',
+      'R': '/apparel/bootskin/alphabet/18-R.png',
+      'S': '/apparel/bootskin/alphabet/19-S.png',
+      'T': '/apparel/bootskin/alphabet/20-T.png',
+      'U': '/apparel/bootskin/alphabet/21-U.png',
+      'V': '/apparel/bootskin/alphabet/22-V.png',
+      'W': '/apparel/bootskin/alphabet/23-W.png',
+      'X': '/apparel/bootskin/alphabet/24-X.png',
+      'Y': '/apparel/bootskin/alphabet/25-Y.png',
+      'Z': '/apparel/bootskin/alphabet/26-Z.png',
+    },
+    tagline: '부츠에 붙이는 알파벳 스티커 — A부터 Z까지 원하는 글자를 선택하세요.',
+    description: '축구화나 럭비화에 붙이는 알파벳 부츠스킨입니다. A부터 Z까지 원하는 글자를 중복 선택해 주문할 수 있습니다.',
+    sizes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+    features: [
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+      { label: '깔끔한 블랙 컬러', detail: ' — 어떤 화색에도 잘 어울리는 베이직 톤' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_SYMBOL]: {
+    id: PRODUCT_IDS.BOOTSKIN_SYMBOL,
+    slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOL,
+    name: 'Boot Skin — 심볼',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '심볼 선택',
+    image: '/apparel/bootskin/faith-symbol/1-cross-detail.png',
+    images: [
+      '/apparel/bootskin/faith-symbol/1-cross-detail.png',
+      '/apparel/bootskin/faith-symbol/1-CROSS.png',
+      '/apparel/bootskin/faith-symbol/2-JESUS-detail.png',
+      '/apparel/bootskin/faith-symbol/2-JESUS.png',
+      '/apparel/bootskin/faith-symbol/3-philippians-detail.png',
+      '/apparel/bootskin/faith-symbol/3-PHIL-4-13.png',
+      '/apparel/bootskin/faith-symbol/4-100percent-JESUS-detail.png',
+      '/apparel/bootskin/faith-symbol/4-100--JESUS.png',
+    ],
+    sizeImages: {
+      'CROSS': '/apparel/bootskin/faith-symbol/1-cross-detail.png',
+      'JESUS': '/apparel/bootskin/faith-symbol/2-JESUS-detail.png',
+      'PHIL 4:13': '/apparel/bootskin/faith-symbol/3-philippians-detail.png',
+      '100% JESUS': '/apparel/bootskin/faith-symbol/4-100percent-JESUS-detail.png',
+    },
+    tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS 심볼 스티커.',
+    description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS 중 원하는 심볼을 선택해 주문하세요.',
+    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS'],
+    features: [
+      { label: '믿음을 담은 디자인', detail: ' — 경기장에서 믿음을 표현' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '신앙 심볼 디자인', description: '십자가, JESUS, 빌립보서 4:13, 100% JESUS — 경기장에서 믿음을 표현.' },
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.UNDERWRAP_TAPING]: {
+    id: PRODUCT_IDS.UNDERWRAP_TAPING,
+    slug: PRODUCT_SLUGS.UNDERWRAP_TAPING,
+    name: 'Underwrap Tape (6cm)',
+    category: 'taping',
+    comingSoon: true,
+    image: '/apparel/taping/underwrap-taping/1.png',
+    images: [
+      '/apparel/taping/underwrap-taping/1.png',
+      '/apparel/taping/underwrap-taping/2.png',
+      '/apparel/taping/underwrap-taping/3.png',
+    ],
+    tagline: 'C 테이프 전 피부를 보호하고 압박 테이핑까지 활용 가능한 멀티 스포츠 언더랩.',
+    description:
+      '강한 접착 테이프 사용 전 피부 자극을 최소화하는 언더랩 테이프입니다. 우수한 신축성으로 무릎·발목·종아리 등 굴곡 부위에도 편안하게 밀착되며, 통기성 소재로 장시간 착용에도 쾌적한 사용감을 제공합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '피부 마찰 보호', detail: ' — 강한 접착 테이프 전 자극과 쓸림 최소화' },
+      { label: '우수한 신축성', detail: ' — 굴곡 부위에도 편안하게 밀착' },
+      { label: '압박 서포트 활용', detail: ' — 원하는 부위를 안정감 있게 압박 유지' },
+      { label: '통기성 소재', detail: ' — 장시간 착용에도 쾌적한 사용감' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '멀티 스포츠 언더랩', description: 'C 테이프 전 피부 보호부터 압박 테이핑까지 다양한 활용 가능.' },
+        { title: '피부 마찰 보호', description: '강한 접착 테이프 사용 전 피부 자극과 쓸림 최소화.' },
+        { title: '우수한 신축성', description: '무릎·발목·종아리 등 굴곡 부위에도 편안하게 밀착.' },
+        { title: '압박 서포트 활용', description: '운동 시 원하는 부위를 안정감 있게 감아 압박 유지 가능.' },
+        { title: '통기성 소재', description: '장시간 착용에도 답답함을 줄여 쾌적한 사용감 제공.' },
+      ],
+      design: [
+        { title: '심플 베이지 컬러', description: '피부 색과 가장 비슷한 컬러로 자연스러운 연출.' },
+        { title: '가볍고 유연한 타입', description: '부피감이 적어 활동 중에도 편안한 착용 가능.' },
+      ],
+      material: '폴리우레탄. 가로 6cm × 길이 20m. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_KOREA]: {
+    id: PRODUCT_IDS.BOOTSKIN_KOREA,
+    slug: PRODUCT_SLUGS.BOOTSKIN_KOREA,
+    name: 'Boot Skin — Korea',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '스타일 선택',
+    image: '/apparel/bootskin/nation/1-nation-flag.png',
+    images: [
+      '/apparel/bootskin/nation/1-nation-flag.png',
+      '/apparel/bootskin/nation/2-KOREA.png',
+    ],
+    sizeImages: {
+      '태극기': '/apparel/bootskin/nation/1-nation-flag.png',
+      'KOREA': '/apparel/bootskin/nation/2-KOREA.png',
+    },
+    tagline: '대한민국을 부츠에 — 태극기와 KOREA 스티커.',
+    description: '축구화나 럭비화에 붙이는 코리아 부츠스킨입니다. 태극기와 KOREA 중 원하는 스타일을 선택해 주문하세요.',
+    sizes: ['태극기', 'KOREA'],
+    features: [
+      { label: '대한민국 아이덴티티', detail: ' — 경기장에서 코리아를 표현' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '코리아 디자인', description: '태극기와 KOREA 레터링 — 경기장에서 대한민국을 표현.' },
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
     },
   },
 };

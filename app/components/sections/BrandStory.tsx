@@ -47,7 +47,7 @@ export default function BrandStory() {
             <div className={styles.imageCol}>
               <div className={styles.imageWrap}>
                 <Image
-                  src="/apparel/training-top/quarter-zip-training-top/thumb.png"
+                  src="\brandstroy\sportswear-brandstory-detail.png"
                   alt="브로스픽 스포츠웨어"
                   fill
                   style={{ objectFit: 'cover' }}

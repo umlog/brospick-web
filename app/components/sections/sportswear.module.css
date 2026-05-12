@@ -297,7 +297,7 @@
 /* ===== 모바일 ===== */
 @media (max-width: 768px) {
   .section {
-    padding: 60px 0 80px;
+    padding: 0 0 80px;
   }
 
   .inner {
