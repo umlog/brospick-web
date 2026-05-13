@@ -167,6 +167,7 @@ export interface Product {
   sizeImages?: Record<string, string>; // size value -> 해당 사이즈 선택 시 보여줄 이미지 경로
   sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
+  imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
   details: ProductDetails;
 }
 
@@ -668,9 +669,10 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.QUARTER_ZIP_FLEX_BLUE]: {
     id: PRODUCT_IDS.QUARTER_ZIP_FLEX_BLUE,
     slug: PRODUCT_SLUGS.QUARTER_ZIP_FLEX_BLUE,
-    name: 'Quarter-Zip Flex (Blue)',
+    name: 'Aero Quarter-Zip Flex (Blue)',
     category: 'training-top',
     comingSoon: false,
+    imageZoom: true,
     image: '/apparel/training-top/quarter-zip-flex-blue/1.png',
     images: [
       '/apparel/training-top/quarter-zip-flex-blue/1.png',
@@ -765,9 +767,10 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.QUARTER_ZIP_FLEX_LIGHT_GREEN]: {
     id: PRODUCT_IDS.QUARTER_ZIP_FLEX_LIGHT_GREEN,
     slug: PRODUCT_SLUGS.QUARTER_ZIP_FLEX_LIGHT_GREEN,
-    name: 'Quarter-Zip Flex (Light Green)',
+    name: 'Aero Quarter-Zip Flex (Light Green)',
     category: 'training-top',
     comingSoon: false,
+    imageZoom: true,
     image: '/apparel/training-top/quarter-zip-flex-light-green/1.png',
     images: [
       '/apparel/training-top/quarter-zip-flex-light-green/1.png',
@@ -810,7 +813,7 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.CROSS_C_TAPING_BLACK]: {
     id: PRODUCT_IDS.CROSS_C_TAPING_BLACK,
     slug: PRODUCT_SLUGS.CROSS_C_TAPING_BLACK,
-    name: 'Cross C-Tape (Black) (3.8cm)',
+    name: 'Mini Cross C-Tape (3.8cm)',
     category: 'taping',
     comingSoon: false,
     image: '/apparel/taping/cross-c-taping-black/1.png',
@@ -1040,7 +1043,7 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK]: {
     id: PRODUCT_IDS.CROSS_C_TAPE_5CM_BLACK,
     slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK,
-    name: 'Cross C-Tape (Black) (5cm)',
+    name: 'Cross C-Tape (5cm)',
     category: 'taping',
     comingSoon: false,
     image: '/apparel/taping/cross-c-tape-5cm-black/1.png',
@@ -1883,6 +1886,7 @@ export const productList = Object.values(products)
     comingSoon: p.comingSoon ?? false,
     popularBadge: p.popularBadge,
     variants: p.variants,
+    imageZoom: p.imageZoom,
   }));
 
 // 할인율 계산 헬퍼

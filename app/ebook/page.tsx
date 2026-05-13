@@ -89,7 +89,7 @@ export default async function EbookPage() {
 
         <div className={styles.heroStatsBar}>
           <div className={styles.heroStat}>
-            <span className={styles.heroStatValue}>136</span>
+            <span className={styles.heroStatValue}>40</span>
             <span className={styles.heroStatLabel}>페이지</span>
           </div>
           <div className={styles.heroStatDivider} />

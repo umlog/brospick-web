@@ -329,6 +329,14 @@
   transform: scale(1.05);
 }
 
+.productImageZoom img {
+  transform: scale(1.18);
+}
+
+.productCard:hover .productImageZoom img {
+  transform: scale(1.23);
+}
+
 .productInfo {
   padding: var(--space-md);
   display: flex;

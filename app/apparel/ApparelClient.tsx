@@ -219,7 +219,7 @@ export default function ApparelClient({ initialPrices }: Props) {
                 </div>
               ) : (
                 <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.productCard} onClick={() => sessionStorage.setItem('apparel-scroll', String(window.scrollY))}>
-                  <div className={styles.productImage}>
+                  <div className={`${styles.productImage} ${product.imageZoom ? styles.productImageZoom : ''}`}>
                     <img
                       src={product.image}
                       alt={product.name}
