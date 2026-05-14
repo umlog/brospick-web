@@ -534,6 +534,8 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/tech-training-shorts-black/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-black/1.png',
+      '/apparel/bottom/tech-training-shorts-black/2.png',
+      '/apparel/bottom/tech-training-shorts-black/3.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -579,6 +581,9 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/tech-training-shorts-gray/1.png',
     images: [
       '/apparel/bottom/tech-training-shorts-gray/1.png',
+      '/apparel/bottom/tech-training-shorts-gray/2.png',
+      '/apparel/bottom/tech-training-shorts-gray/3.png',
+      '/apparel/bottom/tech-training-shorts-gray/4.png',
     ],
     tagline: '경량 기능성 원단과 사이드 슬릿, 안정적인 밴딩 구조로 퍼포먼스와 착용감을 동시에 잡은 테크 트레이닝 쇼츠.',
     description:
@@ -624,9 +629,6 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-black/1.png',
-      '/apparel/bottom/motion-tech-shorts-black/2.png',
-      '/apparel/bottom/motion-tech-shorts-black/3.png',
-      '/apparel/bottom/motion-tech-shorts-black/4.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -722,9 +724,6 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-gray/1.png',
-      '/apparel/bottom/motion-tech-shorts-gray/2.png',
-      '/apparel/bottom/motion-tech-shorts-gray/3.png',
-      '/apparel/bottom/motion-tech-shorts-gray/4.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
