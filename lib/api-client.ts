@@ -170,6 +170,12 @@ export const apiClient = {
 
     sync: () =>
       request<{ inserted: number }>('/api/admin/products/sync', { method: 'POST' }),
+
+    reorder: (orders: { id: number; sort_order: number }[]) =>
+      request<{ ok: true }>('/api/admin/products/reorder', {
+        method: 'POST',
+        body: { orders },
+      }),
   },
 
   blog: {

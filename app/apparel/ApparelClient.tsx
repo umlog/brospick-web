@@ -74,24 +74,21 @@ export default function ApparelClient({ initialPrices }: Props) {
     const aPrice = aDb?.price ?? 0;
     const bPrice = bDb?.price ?? 0;
 
-    // 핀 고정 항상 최우선
-    if (aSortOrder !== null && bSortOrder !== null) return aSortOrder - bSortOrder;
-    if (aSortOrder !== null) return -1;
-    if (bSortOrder !== null) return 1;
-
     // 커밍순 항상 마지막
     if (!aComingSoon && bComingSoon) return -1;
     if (aComingSoon && !bComingSoon) return 1;
-
-    // 커밍순끼리는 순서 유지
     if (aComingSoon && bComingSoon) return 0;
 
     // 판매중끼리 정렬
     if (sortMode === 'recommended') {
-      // BEST 배지 우선, 그 다음 가격 높은순
+      // BEST 배지 우선
       const aBest = a.popularBadge ? 1 : 0;
       const bBest = b.popularBadge ? 1 : 0;
       if (bBest !== aBest) return bBest - aBest;
+      // 그 다음 sort_order 순
+      if (aSortOrder !== null && bSortOrder !== null) return aSortOrder - bSortOrder;
+      if (aSortOrder !== null) return -1;
+      if (bSortOrder !== null) return 1;
       return bPrice - aPrice;
     }
     if (sortMode === 'price_desc') return bPrice - aPrice;

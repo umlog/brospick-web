@@ -14,7 +14,7 @@ export const PRODUCT_SLUGS = {
   QUARTER_ZIP_TRAINING_TOP: 'quarter-zip-training-top',
   FLEX_QUARTER_ZIP_TOP_BLACK: 'flex-quarter-zip-top-black',
   FLEX_QUARTER_ZIP_TOP_GRAY: 'flex-quarter-zip-top-gray',
-  REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 'reflective-run-tshirt-camel-gray',
+  REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 'reflective-run-t-shirt-camel-gray',
   RUNNING_LONG_SLEEVE_TOP_GRAY: 'running-long-sleeve-top-gray',
   RUNNING_LONG_SLEEVE_TOP_BLACK: 'running-long-sleeve-top-black',
   GRID_ZIP_HOODIE: 'grid-zip-hoodie',
@@ -26,9 +26,9 @@ export const PRODUCT_SLUGS = {
   QUARTER_ZIP_FLEX_LIGHT_GREEN: 'quarter-zip-flex-light-green',
   MOTION_TECH_PANTS_BLACK: 'motion-tech-pants-black',
   MOTION_TECH_PANTS_GRAY: 'motion-tech-pants-gray',
-  CROSS_C_TAPING_BLACK: 'cross-c-taping-black',
-  CROSS_C_TAPING_GOLD: 'cross-c-taping-gold',
-  PHILIPPIANS_413_C_TAPING: 'philippians-413-c-taping',
+  CROSS_C_TAPING_BLACK: 'mini-cross-c-tape-38',
+  CROSS_C_TAPING_GOLD: 'cross-c-tape-gold',
+  PHILIPPIANS_413_C_TAPING: 'philippians-413-c-tape',
   // ── 2차 추가 상품 ──
   KINESIOLOGY_TAPE_BLACK: 'kinesiology-tape-black',
   KINESIOLOGY_TAPE_CAMO: 'kinesiology-tape-camo',
@@ -37,21 +37,27 @@ export const PRODUCT_SLUGS = {
   ATHLETIC_CALF_SLEEVES_WHITE: 'athletic-calf-sleeves-white',
   ATHLETIC_LONG_SOCKS_BLACK: 'athletic-long-socks-black',
   ATHLETIC_LONG_SOCKS_WHITE: 'athletic-long-socks-white',
+  CROSS_C_TAPE_5CM: 'cross-c-tape-5cm',
   CROSS_C_TAPE_5CM_BLACK: 'cross-c-tape-5cm-black',
   C_TAPE_WHITE: 'c-tape-white',
   C_TAPE_BLACK: 'c-tape-black',
-  PHILIPPIANS_413_CREW_SOCKS_BLACK: 'philippians-413-crew-socks-black',
-  PHILIPPIANS_413_CREW_SOCKS_WHITE: 'philippians-413-crew-socks-white',
+  PHILIPPIANS_413_CREW_SOCKS_BLACK: 'philippians-413-non-slip-crew-socks-black',
+  PHILIPPIANS_413_CREW_SOCKS_WHITE: 'philippians-413-non-slip-crew-socks-white',
   // ── 3차 추가 상품 ──
-  COOL_TECH_TSHIRT_BLACK: 'cool-tech-tshirt-black',
-  COOL_TECH_TSHIRT_WHITE: 'cool-tech-tshirt-white',
+  COOL_TECH_TSHIRT_BLACK: 'cool-tech-t-shirt-black',
+  COOL_TECH_TSHIRT_WHITE: 'cool-tech-t-shirt-white',
   // ── 4차 추가 상품 (부츠스킨) ──
   BOOTSKIN_NUMBER: 'bootskin-number',
-  BOOTSKIN_ALPHABET: 'bootskin-alphabet',
+  BOOTSKIN_ALPHABET: 'bootskin-initial',
   BOOTSKIN_SYMBOL: 'bootskin-symbol',
   BOOTSKIN_KOREA: 'bootskin-korea',
   // ── 5차 추가 상품 ──
-  UNDERWRAP_TAPING: 'underwrap-taping',
+  UNDERWRAP_TAPING: 'underwrap-tape',
+  // ── 6차 추가 상품 ──
+  COOLMAX_TSHIRT_BLACK: 'coolmax-t-shirt-black',
+  COOLMAX_TSHIRT_WHITE: 'coolmax-t-shirt-cream-white',
+  // ── 7차 추가 상품 ──
+  CROSS_C_TAPE_38: 'cross-c-tape-38',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
@@ -84,7 +90,7 @@ export const PRODUCT_IDS = {
   ATHLETIC_CALF_SLEEVES_WHITE: 23,
   ATHLETIC_LONG_SOCKS_BLACK: 24,
   ATHLETIC_LONG_SOCKS_WHITE: 25,
-  CROSS_C_TAPE_5CM_BLACK: 26,
+  CROSS_C_TAPE_5CM: 26,
   C_TAPE_WHITE: 27,
   C_TAPE_BLACK: 28,
   PHILIPPIANS_413_CREW_SOCKS_BLACK: 29,
@@ -99,6 +105,12 @@ export const PRODUCT_IDS = {
   BOOTSKIN_KOREA: 36,
   // ── 5차 추가 상품 ──
   UNDERWRAP_TAPING: 37,
+  // ── 6차 추가 상품 ──
+  COOLMAX_TSHIRT_BLACK: 38,
+  COOLMAX_TSHIRT_WHITE: 39,
+  // ── 7차 추가 상품 ──
+  CROSS_C_TAPE_38: 40,
+  CROSS_C_TAPE_5CM_BLACK: 41,
 } as const;
 
 export interface SizeChartRow {
@@ -106,6 +118,7 @@ export interface SizeChartRow {
   length: number;   // 총장
   chest?: number;   // 가슴단면 or 가슴둘레 (top용)
   sleeve?: number;  // 소매길이 (top용)
+  shoulder?: number; // 어깨너비 (top용, 선택)
   hem?: number;     // 밑단
   waist?: number;   // 허리(반둘레) - shorts/pants용
   hip?: number;     // 엉덩이 - shorts/pants용
@@ -168,6 +181,7 @@ export interface Product {
   sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
   imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
+  detailBanners?: string[];             // 상세 배너 이미지 배열 (jpg/png 모두 가능)
   details: ProductDetails;
 }
 
@@ -274,23 +288,23 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Reflective Run T-Shirt (Camel Gray)',
     category: 'top',
     comingSoon: false,
-    image: '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
+    image: '/apparel/top/reflective-run-t-shirt-camel-gray/1.png',
     images: [
-      '/apparel/top/reflective-run-tshirt-camel-gray/1.png',
-      '/apparel/top/reflective-run-tshirt-camel-gray/2.png',
-      '/apparel/top/reflective-run-tshirt-camel-gray/3.png',
-      '/apparel/top/reflective-run-tshirt-camel-gray/4.png',
+      '/apparel/top/reflective-run-t-shirt-camel-gray/1.png',
+      '/apparel/top/reflective-run-t-shirt-camel-gray/2.png',
+      '/apparel/top/reflective-run-t-shirt-camel-gray/3.png',
+      '/apparel/top/reflective-run-t-shirt-camel-gray/4.png',
     ],
     tagline: '가볍고, 빠르게 마르고, 형태는 그대로',
     description:
-      '카멜 그레이 쇼트 슬리브는 소로나 50% + 폴리에스터(스판덱스 혼합) 50%의 경량 혼방 원단으로 제작되어, 입었을 때의 부담감을 최소화한 기능성 트레이닝 상의입니다. 일상 훈련부터 원정 경기까지, 주름 없이 가방에서 꺼내 바로 착용할 수 있고, 땀을 빠르게 배출해 쾌적한 착용감을 오래 유지합니다. 후면 봉제선과 브로스픽 심볼에 적용된 빛반사 스티치는 야간 훈련 시 시인성을 높이는 동시에 제품에 디테일을 더합니다. UPF 50+ 자외선 차단 기능으로 야외 활동에서도 피부를 보호합니다.',
+      '카멜 그레이 쇼트 슬리브는 소로나 50% + 폴리에스터(스판덱스 혼합) 50%의 경량 혼방 원단으로 제작되어, 입었을 때의 부담감을 최소화한 기능성 트레이닝 상의입니다. 일상 훈련부터 원정 경기까지, 주름 없이 가방에서 꺼내 바로 착용할 수 있고, 땀을 빠르게 배출해 쾌적한 착용감을 오래 유지합니다. 후면 봉제선과 브로스픽 심볼에 적용된 빛반사 스티치는 야간 훈련 시 시인성을 높이는 동시에 제품에 디테일을 더합니다. SPF50+ / PA++++ 자외선 차단 기능으로 야외 활동에서도 피부를 보호합니다.',
     sizes: ['M', 'L', 'XL', '2XL'],
     features: [
       { label: '노 아이언 관리', detail: ' — 주름에 강한 원단으로 가방에서 꺼내 바로 착용 가능' },
       { label: '초경량 155G', detail: ' — 착용 중 원단의 무게감을 거의 느끼지 못합니다' },
       { label: 'QUICK-DRY + BREATHABLE', detail: ' — 빠른 땀 배출과 우수한 통기성으로 훈련 내내 쾌적' },
       { label: '빛반사 스티치 디테일', detail: ' — 야간 훈련 시인성 + 브로스픽 아이덴티티를 동시에' },
-      { label: 'UPF 50+ 자외선 차단', detail: ' — 야외 훈련, 경기 모두 커버' },
+      { label: 'SPF50+ / PA++++ 자외선 차단', detail: ' — 야외 훈련, 경기 모두 커버' },
     ],
     sizeChart: [
       { size: 'M', length: 70, chest: 53.5, sleeve: 21.5 },
@@ -303,7 +317,7 @@ export const products: Record<ProductSlug, Product> = {
         { title: '노 아이언 관리', description: '주름에 강한 원단으로 가방에서 꺼내 바로 착용 가능.' },
         { title: 'QUICK-DRY', description: '땀을 빠르게 흡수·건조해 훈련 내내 쾌적함 유지.' },
         { title: 'BREATHABLE', description: '우수한 통기성으로 장시간 착용에도 답답함 없음.' },
-        { title: 'UPF 50+', description: '자외선 차단 기능으로 야외 활동에서도 피부 보호.' },
+        { title: 'SPF50+ / PA++++', description: '자외선 차단 기능으로 야외 활동에서도 피부 보호.' },
         { title: '초경량 155G', description: '착용 중 원단의 무게감을 거의 느끼지 못하는 가벼운 착용감.' },
       ],
       design: [
@@ -313,6 +327,9 @@ export const products: Record<ProductSlug, Product> = {
       material:
         '소로나 50% + 폴리에스터(스판덱스 혼합) 50%. 가볍고 부드러운 촉감, 세탁 후 형태 변형 없는 내구성.',
     },
+    detailBanners: [
+      '/apparel/top/reflective-run-t-shirt-camel-gray/detail-banner-1.png',
+    ],
   },
 
   [PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_GRAY]: {
@@ -322,13 +339,16 @@ export const products: Record<ProductSlug, Product> = {
     popularBadge: 'BEST',
     category: 'training-top',
     comingSoon: false,
-    image: '/apparel/training-top/flex-quarter-zip-top-gray/thumb.png',
+    image: '/apparel/training-top/flex-quarter-zip-top-gray/1.png',
     images: [
-      '/apparel/training-top/flex-quarter-zip-top-gray/thumb.png',
-      '/apparel/training-top/flex-quarter-zip-top-gray/thumb2.png',
-      '/apparel/training-top/flex-quarter-zip-top-gray/detail-1.png',
-      '/apparel/training-top/flex-quarter-zip-top-gray/detail-2.png',
-      '/apparel/training-top/flex-quarter-zip-top-gray/detail-3.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/1.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/2.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/3.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/4.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/5.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/6.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/7.png',
+      '/apparel/training-top/flex-quarter-zip-top-gray/8.png',
     ],
     tagline: '벌집 구조 원단으로 통기성과 쿨링을 동시에 — 쿼터집 트레이닝 탑 (그레이)',
     description:
@@ -570,6 +590,10 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material: '폴리에스터 92%, 스판덱스 8%. 가볍고 신축성 좋은 프리미엄 기능성 원단.',
     },
+    detailBanners: [
+      '/apparel/bottom/tech-training-shorts-black/detail-banner-1.png',
+      '/apparel/bottom/tech-training-shorts-black/detail-banner-2.png',
+    ],
   },
 
   [PRODUCT_SLUGS.TECH_TRAINING_SHORTS_GRAY]: {
@@ -618,6 +642,10 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material: '폴리에스터 92%, 스판덱스 8%. 가볍고 신축성 좋은 프리미엄 기능성 원단.',
     },
+    detailBanners: [
+      '/apparel/bottom/tech-training-shorts-gray/detail-banner-1.png',
+      '/apparel/bottom/tech-training-shorts-gray/detail-banner-2.png',
+    ],
   },
 
   [PRODUCT_SLUGS.MOTION_TECH_SHORTS_BLACK]: {
@@ -629,6 +657,15 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-black/1.png',
+      '/apparel/bottom/motion-tech-shorts-black/2.png',
+      '/apparel/bottom/motion-tech-shorts-black/3.png',
+      '/apparel/bottom/motion-tech-shorts-black/4.png',
+      '/apparel/bottom/motion-tech-shorts-black/5.png',
+      '/apparel/bottom/motion-tech-shorts-black/6.png',
+      '/apparel/bottom/motion-tech-shorts-black/7.png',
+      '/apparel/bottom/motion-tech-shorts-black/8.png',
+      '/apparel/bottom/motion-tech-shorts-black/9.png',
+      '/apparel/bottom/motion-tech-shorts-black/10.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -666,6 +703,9 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material: '폴리에스터 92%, 스판덱스 8%. 가볍고 신축성 좋은 프리미엄 기능성 원단.',
     },
+    detailBanners: [
+      '/apparel/bottom/motion-tech-shorts-black/detail-banner-1.png',
+    ],
   },
 
   [PRODUCT_SLUGS.QUARTER_ZIP_FLEX_BLUE]: {
@@ -724,6 +764,15 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-shorts-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-shorts-gray/1.png',
+      '/apparel/bottom/motion-tech-shorts-gray/2.png',
+      '/apparel/bottom/motion-tech-shorts-gray/3.png',
+      '/apparel/bottom/motion-tech-shorts-gray/4.png',
+      '/apparel/bottom/motion-tech-shorts-gray/5.png',
+      '/apparel/bottom/motion-tech-shorts-gray/6.png',
+      '/apparel/bottom/motion-tech-shorts-gray/7.png',
+      '/apparel/bottom/motion-tech-shorts-gray/8.png',
+      '/apparel/bottom/motion-tech-shorts-gray/9.png',
+      '/apparel/bottom/motion-tech-shorts-gray/10.png',
     ],
     tagline: '언밸런스 기장과 사이드 슬릿, 반사 디테일에 행거 루프까지 더해 실용성과 퍼포먼스를 완성한 테크 쇼츠.',
     description:
@@ -761,6 +810,9 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material: '폴리에스터 92%, 스판덱스 8%. 가볍고 신축성 좋은 프리미엄 기능성 원단.',
     },
+    detailBanners: [
+      '/apparel/bottom/motion-tech-shorts-gray/detail-banner-1.png',
+    ],
   },
 
   [PRODUCT_SLUGS.QUARTER_ZIP_FLEX_LIGHT_GREEN]: {
@@ -815,10 +867,10 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Mini Cross C-Tape (3.8cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/taping/cross-c-taping-black/1.png',
+    image: '/apparel/taping/mini-cross-c-tape-38/1.png',
     images: [
-      '/apparel/taping/cross-c-taping-black/3.png',
-      '/apparel/taping/cross-c-taping-black/4.png',
+      '/apparel/taping/mini-cross-c-tape-38/3.png',
+      '/apparel/taping/mini-cross-c-tape-38/4.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -852,10 +904,10 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Cross C-Tape (Gold) (3.8cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/taping/cross-c-taping-gold/1.png',
+    image: '/apparel/taping/cross-c-tape-gold/1.png',
     images: [
-      '/apparel/taping/cross-c-taping-gold/1.png',
-      '/apparel/taping/cross-c-taping-gold/2.png',
+      '/apparel/taping/cross-c-tape-gold/1.png',
+      '/apparel/taping/cross-c-tape-gold/2.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -889,11 +941,11 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Philippians 4:13 C-Tape (5cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/taping/philippians-413-c-taping/1.png',
+    image: '/apparel/taping/philippians-413-c-tape/1.png',
     images: [
-      '/apparel/taping/philippians-413-c-taping/1.png',
-      '/apparel/taping/philippians-413-c-taping/2.png',
-      '/apparel/taping/philippians-413-c-taping/3.png',
+      '/apparel/taping/philippians-413-c-tape/1.png',
+      '/apparel/taping/philippians-413-c-tape/2.png',
+      '/apparel/taping/philippians-413-c-tape/3.png',
     ],
     tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
     description:
@@ -1039,17 +1091,17 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
-  [PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK]: {
-    id: PRODUCT_IDS.CROSS_C_TAPE_5CM_BLACK,
-    slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK,
+  [PRODUCT_SLUGS.CROSS_C_TAPE_5CM]: {
+    id: PRODUCT_IDS.CROSS_C_TAPE_5CM,
+    slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM,
     name: 'Cross C-Tape (5cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/taping/cross-c-tape-5cm-black/1.png',
+    image: '/apparel/taping/cross-c-tape-5cm/1.png',
     images: [
-      '/apparel/taping/cross-c-tape-5cm-black/1.png',
-      '/apparel/taping/cross-c-tape-5cm-black/2.png',
-      '/apparel/taping/cross-c-tape-5cm-black/3.png',
+      '/apparel/taping/cross-c-tape-5cm/1.png',
+      '/apparel/taping/cross-c-tape-5cm/2.png',
+      '/apparel/taping/cross-c-tape-5cm/3.png',
     ],
     tagline: '프리미엄 코튼 원단과 크로스 포인트 패턴으로 관절을 단단하게 고정하는 스포츠 테이핑.',
     description:
@@ -1074,14 +1126,52 @@ export const products: Record<ProductSlug, Product> = {
         { title: '블랙 컬러 베이스', description: '강한 존재감과 스포츠 감성 연출.' },
         { title: '콤팩트 롤 타입', description: '휴대 및 보관이 간편한 실용적인 구조.' },
       ],
-      material: '코튼. 폭 5cm × 길이 7m.',
+      material: '코튼. 폭 5cm × 길이 7m. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK]: {
+    id: PRODUCT_IDS.CROSS_C_TAPE_5CM_BLACK,
+    slug: PRODUCT_SLUGS.CROSS_C_TAPE_5CM_BLACK,
+    name: 'Cross C-Tape (Black) (5cm)',
+    category: 'taping',
+    comingSoon: false,
+    image: '/apparel/taping/cross-c-tape-5cm-black/1.png',
+    images: [
+      '/apparel/taping/cross-c-tape-5cm-black/1.png',
+      '/apparel/taping/cross-c-tape-5cm-black/2.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 크로스 포인트 패턴으로 관절을 단단하게 고정하는 스포츠 테이핑.',
+    description:
+      '비탄성 고정 테이프로 늘어나지 않는 구조가 관절을 단단하게 고정해 줍니다. 강력한 접착력으로 운동 중에도 쉽게 풀리지 않으며, 손목, 발목 등 움직임이 많은 부위 고정에 적합합니다. 프리미엄 코튼 원단을 사용해 오래 착용해도 자극이 적으며, 톱니형 절개 구조로 손쉽게 뜯어 빠른 테이핑이 가능합니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '비탄성 고정 테이프', detail: ' — 관절을 단단하게 고정' },
+      { label: '강력한 접착력', detail: ' — 운동 중에도 쉽게 풀리지 않음' },
+      { label: '관절 보호 서포트', detail: ' — 손목, 발목 등 다양한 부위 고정' },
+      { label: '빠른 테이핑', detail: ' — 간편하게 감아 고정하는 실전용 구성' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '비탄성 고정 구조', description: '늘어나지 않는 구조로 관절을 단단하게 고정.' },
+        { title: '강력한 접착력', description: '운동 중에도 쉽게 풀리지 않는 안정적인 유지력.' },
+        { title: '관절 보호 서포트', description: '손목, 발목 등 움직임이 많은 부위 고정에 적합.' },
+        { title: '빠른 테이핑', description: '간편하게 감아 고정하는 실전용 스포츠 테이프.' },
+      ],
+      design: [
+        { title: '크로스 포인트 패턴', description: '시각적인 포인트와 브랜딩 요소를 강조하는 디자인.' },
+        { title: '블랙 컬러 베이스', description: '강한 존재감과 스포츠 감성 연출.' },
+        { title: '콤팩트 롤 타입', description: '휴대 및 보관이 간편한 실용적인 구조.' },
+      ],
+      material: '코튼. 폭 5cm × 길이 7m. 제조국: 중국.',
     },
   },
 
   [PRODUCT_SLUGS.C_TAPE_WHITE]: {
     id: PRODUCT_IDS.C_TAPE_WHITE,
     slug: PRODUCT_SLUGS.C_TAPE_WHITE,
-    name: 'C-Tape (3.8cm)',
+    name: 'C-Tape (White) (3.8cm)',
     category: 'taping',
     comingSoon: false,
     image: '/apparel/taping/c-tape-white/1.png',
@@ -1316,9 +1406,9 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Philippians 4:13 Non-Slip Crew Socks (Black)',
     category: 'socks',
     comingSoon: false,
-    image: '/apparel/socks/philippians-413-crew-socks-black/1.png',
+    image: '/apparel/socks/philippians-413-non-slip-crew-socks-black/1.png',
     images: [
-      '/apparel/socks/philippians-413-crew-socks-black/1.png',
+      '/apparel/socks/philippians-413-non-slip-crew-socks-black/1.png',
     ],
     tagline: '논슬립 그립 도트와 빌립보서 4:13 레터링으로 믿음과 퍼포먼스를 하나로 담은 크루 양말.',
     description:
@@ -1356,9 +1446,9 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Philippians 4:13 Non-Slip Crew Socks (White)',
     category: 'socks',
     comingSoon: false,
-    image: '/apparel/socks/philippians-413-crew-socks-white/1.png',
+    image: '/apparel/socks/philippians-413-non-slip-crew-socks-white/1.png',
     images: [
-      '/apparel/socks/philippians-413-crew-socks-white/1.png',
+      '/apparel/socks/philippians-413-non-slip-crew-socks-white/1.png',
     ],
     tagline: '논슬립 그립 도트와 빌립보서 4:13 레터링으로 믿음과 퍼포먼스를 하나로 담은 크루 양말.',
     description:
@@ -1400,11 +1490,11 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-pants-black/1.png',
     images: [
       '/apparel/bottom/motion-tech-pants-black/1.png',
-      '/apparel/bottom/motion-tech-pants-black/detail-1.png',
-      '/apparel/bottom/motion-tech-pants-black/detail-2.png',
-      '/apparel/bottom/motion-tech-pants-black/detail-3.png',
-      '/apparel/bottom/motion-tech-pants-black/detail-4.png',
-      '/apparel/bottom/motion-tech-pants-black/detail-5.png',
+      '/apparel/bottom/motion-tech-pants-black/2.png',
+      '/apparel/bottom/motion-tech-pants-black/3.png',
+      '/apparel/bottom/motion-tech-pants-black/4.png',
+      '/apparel/bottom/motion-tech-pants-black/5.png',
+      '/apparel/bottom/motion-tech-pants-black/6.png',
     ],
     tagline: '프리미엄 기능성 원단과 뛰어난 신축성, 빠른 건조력으로 어떤 운동에서도 완성도 높은 핏을 구현한 테크 팬츠.',
     description:
@@ -1449,11 +1539,11 @@ export const products: Record<ProductSlug, Product> = {
     image: '/apparel/bottom/motion-tech-pants-gray/1.png',
     images: [
       '/apparel/bottom/motion-tech-pants-gray/1.png',
-      '/apparel/bottom/motion-tech-pants-gray/detail-1.png',
-      '/apparel/bottom/motion-tech-pants-gray/detail-2.png',
-      '/apparel/bottom/motion-tech-pants-gray/detail-3.png',
-      '/apparel/bottom/motion-tech-pants-gray/detail-4.png',
-      '/apparel/bottom/motion-tech-pants-gray/detail-5.png',
+      '/apparel/bottom/motion-tech-pants-gray/2.png',
+      '/apparel/bottom/motion-tech-pants-gray/3.png',
+      '/apparel/bottom/motion-tech-pants-gray/4.png',
+      '/apparel/bottom/motion-tech-pants-gray/5.png',
+      '/apparel/bottom/motion-tech-pants-gray/6.png',
     ],
     tagline: '프리미엄 기능성 원단과 뛰어난 신축성, 빠른 건조력으로 어떤 운동에서도 완성도 높은 핏을 구현한 테크 팬츠.',
     description:
@@ -1495,20 +1585,20 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Cool Tech T-Shirt (Black)',
     category: 'top',
     comingSoon: false,
-    image: '/apparel/top/cool-tech-tshirt-black/1.png',
+    image: '/apparel/top/cool-tech-t-shirt-black/1.png',
     images: [
-      '/apparel/top/cool-tech-tshirt-black/1.png',
-      '/apparel/top/cool-tech-tshirt-black/2.png',
-      '/apparel/top/cool-tech-tshirt-black/3.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-1.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-2.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-3.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-4.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-5.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-6.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-7.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-8.png',
-      '/apparel/top/cool-tech-tshirt-black/detail-9.png',
+      '/apparel/top/cool-tech-t-shirt-black/1.png',
+      '/apparel/top/cool-tech-t-shirt-black/2.png',
+      '/apparel/top/cool-tech-t-shirt-black/3.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-1.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-2.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-3.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-4.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-5.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-6.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-7.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-8.png',
+      '/apparel/top/cool-tech-t-shirt-black/detail-9.png',
     ],
     tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
     description:
@@ -1551,20 +1641,20 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Cool Tech T-Shirt (White)',
     category: 'top',
     comingSoon: false,
-    image: '/apparel/top/cool-tech-tshirt-white/1.png',
+    image: '/apparel/top/cool-tech-t-shirt-white/1.png',
     images: [
-      '/apparel/top/cool-tech-tshirt-white/1.png',
-      '/apparel/top/cool-tech-tshirt-white/2.png',
-      '/apparel/top/cool-tech-tshirt-white/3.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-1.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-2.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-3.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-4.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-5.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-6.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-7.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-8.png',
-      '/apparel/top/cool-tech-tshirt-white/detail-9.png',
+      '/apparel/top/cool-tech-t-shirt-white/1.png',
+      '/apparel/top/cool-tech-t-shirt-white/2.png',
+      '/apparel/top/cool-tech-t-shirt-white/3.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-1.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-2.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-3.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-4.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-5.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-6.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-7.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-8.png',
+      '/apparel/top/cool-tech-t-shirt-white/detail-9.png',
     ],
     tagline: '가볍고 빠르게 마르는, 움직임에 최적화된 테크 반팔',
     description:
@@ -1608,7 +1698,7 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.BOOTSKIN_NUMBER]: {
     id: PRODUCT_IDS.BOOTSKIN_NUMBER,
     slug: PRODUCT_SLUGS.BOOTSKIN_NUMBER,
-    name: 'Boot Skin — 숫자',
+    name: 'BOOT SKIN 번호',
     category: 'boot-skin',
     comingSoon: false,
     multiSelect: true,
@@ -1662,71 +1752,71 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.BOOTSKIN_ALPHABET]: {
     id: PRODUCT_IDS.BOOTSKIN_ALPHABET,
     slug: PRODUCT_SLUGS.BOOTSKIN_ALPHABET,
-    name: 'Boot Skin — 이니셜',
+    name: 'BOOT SKIN 이니셜',
     category: 'boot-skin',
     comingSoon: false,
     multiSelect: true,
-    sizeLabel: '알파벳 선택',
-    image: '/apparel/bootskin/alphabet/1-alphabet-detail.png',
+    sizeLabel: '이니셜 선택',
+    image: '/apparel/bootskin/initial/1-alphabet-detail.png',
     images: [
-      '/apparel/bootskin/alphabet/1-alphabet-detail.png',
-      '/apparel/bootskin/alphabet/1-A.png',
-      '/apparel/bootskin/alphabet/2-B.png',
-      '/apparel/bootskin/alphabet/3-C.png',
-      '/apparel/bootskin/alphabet/4-D.png',
-      '/apparel/bootskin/alphabet/5-E.png',
-      '/apparel/bootskin/alphabet/6-F.png',
-      '/apparel/bootskin/alphabet/7-G.png',
-      '/apparel/bootskin/alphabet/8-H.png',
-      '/apparel/bootskin/alphabet/9-I.png',
-      '/apparel/bootskin/alphabet/10-J.png',
-      '/apparel/bootskin/alphabet/11-K.png',
-      '/apparel/bootskin/alphabet/12-L.png',
-      '/apparel/bootskin/alphabet/13-M.png',
-      '/apparel/bootskin/alphabet/14-N.png',
-      '/apparel/bootskin/alphabet/15-O.png',
-      '/apparel/bootskin/alphabet/16-P.png',
-      '/apparel/bootskin/alphabet/17-Q.png',
-      '/apparel/bootskin/alphabet/18-R.png',
-      '/apparel/bootskin/alphabet/19-S.png',
-      '/apparel/bootskin/alphabet/20-T.png',
-      '/apparel/bootskin/alphabet/21-U.png',
-      '/apparel/bootskin/alphabet/22-V.png',
-      '/apparel/bootskin/alphabet/23-W.png',
-      '/apparel/bootskin/alphabet/24-X.png',
-      '/apparel/bootskin/alphabet/25-Y.png',
-      '/apparel/bootskin/alphabet/26-Z.png',
+      '/apparel/bootskin/initial/1-alphabet-detail.png',
+      '/apparel/bootskin/initial/1-A.png',
+      '/apparel/bootskin/initial/2-B.png',
+      '/apparel/bootskin/initial/3-C.png',
+      '/apparel/bootskin/initial/4-D.png',
+      '/apparel/bootskin/initial/5-E.png',
+      '/apparel/bootskin/initial/6-F.png',
+      '/apparel/bootskin/initial/7-G.png',
+      '/apparel/bootskin/initial/8-H.png',
+      '/apparel/bootskin/initial/9-I.png',
+      '/apparel/bootskin/initial/10-J.png',
+      '/apparel/bootskin/initial/11-K.png',
+      '/apparel/bootskin/initial/12-L.png',
+      '/apparel/bootskin/initial/13-M.png',
+      '/apparel/bootskin/initial/14-N.png',
+      '/apparel/bootskin/initial/15-O.png',
+      '/apparel/bootskin/initial/16-P.png',
+      '/apparel/bootskin/initial/17-Q.png',
+      '/apparel/bootskin/initial/18-R.png',
+      '/apparel/bootskin/initial/19-S.png',
+      '/apparel/bootskin/initial/20-T.png',
+      '/apparel/bootskin/initial/21-U.png',
+      '/apparel/bootskin/initial/22-V.png',
+      '/apparel/bootskin/initial/23-W.png',
+      '/apparel/bootskin/initial/24-X.png',
+      '/apparel/bootskin/initial/25-Y.png',
+      '/apparel/bootskin/initial/26-Z.png',
     ],
     sizeImages: {
-      'A': '/apparel/bootskin/alphabet/1-A.png',
-      'B': '/apparel/bootskin/alphabet/2-B.png',
-      'C': '/apparel/bootskin/alphabet/3-C.png',
-      'D': '/apparel/bootskin/alphabet/4-D.png',
-      'E': '/apparel/bootskin/alphabet/5-E.png',
-      'F': '/apparel/bootskin/alphabet/6-F.png',
-      'G': '/apparel/bootskin/alphabet/7-G.png',
-      'H': '/apparel/bootskin/alphabet/8-H.png',
-      'I': '/apparel/bootskin/alphabet/9-I.png',
-      'J': '/apparel/bootskin/alphabet/10-J.png',
-      'K': '/apparel/bootskin/alphabet/11-K.png',
-      'L': '/apparel/bootskin/alphabet/12-L.png',
-      'M': '/apparel/bootskin/alphabet/13-M.png',
-      'N': '/apparel/bootskin/alphabet/14-N.png',
-      'O': '/apparel/bootskin/alphabet/15-O.png',
-      'P': '/apparel/bootskin/alphabet/16-P.png',
-      'Q': '/apparel/bootskin/alphabet/17-Q.png',
-      'R': '/apparel/bootskin/alphabet/18-R.png',
-      'S': '/apparel/bootskin/alphabet/19-S.png',
-      'T': '/apparel/bootskin/alphabet/20-T.png',
-      'U': '/apparel/bootskin/alphabet/21-U.png',
-      'V': '/apparel/bootskin/alphabet/22-V.png',
-      'W': '/apparel/bootskin/alphabet/23-W.png',
-      'X': '/apparel/bootskin/alphabet/24-X.png',
-      'Y': '/apparel/bootskin/alphabet/25-Y.png',
-      'Z': '/apparel/bootskin/alphabet/26-Z.png',
+      'A': '/apparel/bootskin/initial/1-A.png',
+      'B': '/apparel/bootskin/initial/2-B.png',
+      'C': '/apparel/bootskin/initial/3-C.png',
+      'D': '/apparel/bootskin/initial/4-D.png',
+      'E': '/apparel/bootskin/initial/5-E.png',
+      'F': '/apparel/bootskin/initial/6-F.png',
+      'G': '/apparel/bootskin/initial/7-G.png',
+      'H': '/apparel/bootskin/initial/8-H.png',
+      'I': '/apparel/bootskin/initial/9-I.png',
+      'J': '/apparel/bootskin/initial/10-J.png',
+      'K': '/apparel/bootskin/initial/11-K.png',
+      'L': '/apparel/bootskin/initial/12-L.png',
+      'M': '/apparel/bootskin/initial/13-M.png',
+      'N': '/apparel/bootskin/initial/14-N.png',
+      'O': '/apparel/bootskin/initial/15-O.png',
+      'P': '/apparel/bootskin/initial/16-P.png',
+      'Q': '/apparel/bootskin/initial/17-Q.png',
+      'R': '/apparel/bootskin/initial/18-R.png',
+      'S': '/apparel/bootskin/initial/19-S.png',
+      'T': '/apparel/bootskin/initial/20-T.png',
+      'U': '/apparel/bootskin/initial/21-U.png',
+      'V': '/apparel/bootskin/initial/22-V.png',
+      'W': '/apparel/bootskin/initial/23-W.png',
+      'X': '/apparel/bootskin/initial/24-X.png',
+      'Y': '/apparel/bootskin/initial/25-Y.png',
+      'Z': '/apparel/bootskin/initial/26-Z.png',
     },
-    tagline: '부츠에 붙이는 알파벳 스티커 — A부터 Z까지 원하는 글자를 선택하세요.',
-    description: '축구화나 럭비화에 붙이는 알파벳 부츠스킨입니다. A부터 Z까지 원하는 글자를 중복 선택해 주문할 수 있습니다.',
+    tagline: '부츠에 붙이는 이니셜 스티커 — A부터 Z까지 원하는 글자를 선택하세요.',
+    description: '축구화나 럭비화에 붙이는 이니셜 부츠스킨입니다. A부터 Z까지 원하는 글자를 중복 선택해 주문할 수 있습니다.',
     sizes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
     features: [
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -1747,7 +1837,7 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.BOOTSKIN_SYMBOL]: {
     id: PRODUCT_IDS.BOOTSKIN_SYMBOL,
     slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOL,
-    name: 'Boot Skin — 심볼',
+    name: 'BOOT SKIN 심볼',
     category: 'boot-skin',
     comingSoon: false,
     multiSelect: true,
@@ -1795,11 +1885,11 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Underwrap Tape (6cm)',
     category: 'taping',
     comingSoon: true,
-    image: '/apparel/taping/underwrap-taping/1.png',
+    image: '/apparel/taping/underwrap-tape/1.png',
     images: [
-      '/apparel/taping/underwrap-taping/1.png',
-      '/apparel/taping/underwrap-taping/2.png',
-      '/apparel/taping/underwrap-taping/3.png',
+      '/apparel/taping/underwrap-tape/1.png',
+      '/apparel/taping/underwrap-tape/2.png',
+      '/apparel/taping/underwrap-tape/3.png',
     ],
     tagline: 'C 테이프 전 피부를 보호하고 압박 테이핑까지 활용 가능한 멀티 스포츠 언더랩.',
     description:
@@ -1831,23 +1921,24 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.BOOTSKIN_KOREA]: {
     id: PRODUCT_IDS.BOOTSKIN_KOREA,
     slug: PRODUCT_SLUGS.BOOTSKIN_KOREA,
-    name: 'Boot Skin — Korea',
+    name: 'BOOT SKIN 국기',
     category: 'boot-skin',
     comingSoon: false,
     multiSelect: true,
     sizeLabel: '스타일 선택',
-    image: '/apparel/bootskin/nation/1-nation-flag.png',
+    image: '/apparel/bootskin/nation/1-KOREA-detail.png',
     images: [
-      '/apparel/bootskin/nation/1-nation-flag.png',
-      '/apparel/bootskin/nation/2-KOREA.png',
+      '/apparel/bootskin/nation/1-KOREA-detail.png',
+      '/apparel/bootskin/nation/1-KOREA.png',
+      '/apparel/bootskin/nation/2-nation-flag.png',
     ],
     sizeImages: {
-      '태극기': '/apparel/bootskin/nation/1-nation-flag.png',
-      'KOREA': '/apparel/bootskin/nation/2-KOREA.png',
+      'KOREA': '/apparel/bootskin/nation/1-KOREA.png',
+      '태극기': '/apparel/bootskin/nation/2-nation-flag.png',
     },
     tagline: '대한민국을 부츠에 — 태극기와 KOREA 스티커.',
     description: '축구화나 럭비화에 붙이는 코리아 부츠스킨입니다. 태극기와 KOREA 중 원하는 스타일을 선택해 주문하세요.',
-    sizes: ['태극기', 'KOREA'],
+    sizes: ['KOREA', '태극기'],
     features: [
       { label: '대한민국 아이덴티티', detail: ' — 경기장에서 코리아를 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -1863,6 +1954,154 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material: '방수 접착 소재.',
     },
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // 6차 추가 상품 (COOLMAX T-Shirt, ID 38~39)
+  // ════════════════════════════════════════════════════════════════
+
+  [PRODUCT_SLUGS.COOLMAX_TSHIRT_BLACK]: {
+    id: PRODUCT_IDS.COOLMAX_TSHIRT_BLACK,
+    slug: PRODUCT_SLUGS.COOLMAX_TSHIRT_BLACK,
+    name: 'COOLMAX T-Shirt (Black)',
+    category: 'top',
+    comingSoon: false,
+    image: '/apparel/top/coolmax-t-shirt-black/1.png',
+    images: [
+      '/apparel/top/coolmax-t-shirt-black/1.png',
+      '/apparel/top/coolmax-t-shirt-black/2.png',
+      '/apparel/top/coolmax-t-shirt-black/3.png',
+      '/apparel/top/coolmax-t-shirt-black/4.png',
+    ],
+    tagline: 'COOLMAX® 흡습속건 원단, 일상부터 러닝까지',
+    description:
+      'COOLMAX® 기능성 원단으로 제작된 190g 초경량 반팔 티셔츠. 빠른 흡습속건으로 땀과 열기를 신속하게 배출하고, 통기성 있는 원단 구조로 운동 내내 산뜻한 착용감을 유지합니다. 재생 원사를 활용한 친환경 소재로 일상복부터 러닝, 트레이닝, 여행까지 다양하게 활용 가능한 올라운드 퍼포먼스 티셔츠.',
+    sizes: ['M', 'L', 'XL'],
+    features: [
+      { label: 'COOLMAX® 기능성 원단', detail: ' — 빠른 흡습속건으로 쾌적한 착용감 유지' },
+      { label: '초경량 190G', detail: ' — 가볍고 부담 없는 착용감' },
+      { label: '뛰어난 통기성', detail: ' — 운동 중에도 답답하지 않은 시원한 착용감' },
+      { label: '친환경 재생 원사', detail: ' — 재생 원사를 활용한 친환경 소재' },
+      { label: '릴렉스드 실루엣', detail: ' — 단독 착용부터 레이어드까지 자유로운 스타일링' },
+    ],
+    chestLabel: '가슴둘레',
+    sizeChart: [
+      { size: 'M', length: 71, chest: 55, sleeve: 22, shoulder: 49 },
+      { size: 'L', length: 74, chest: 57, sleeve: 23, shoulder: 51 },
+      { size: 'XL', length: 76, chest: 59, sleeve: 24, shoulder: 53 },
+    ],
+    details: {
+      functions: [
+        { title: 'COOLMAX® 흡습속건', description: '땀과 열기를 빠르게 배출해 운동 내내 산뜻하고 쾌적한 착용감을 유지합니다.' },
+        { title: 'Quick Dry Technology', description: '빠르게 마르는 드라이 기능으로 운동 후에도 상쾌한 컨디션을 유지합니다.' },
+        { title: '초경량 190G', description: '약 190g의 초경량 원단으로 부담 없이 편안하게 착용 가능합니다.' },
+        { title: '뛰어난 통기성', description: '통기성이 뛰어난 원단 구조로 답답함 없이 시원한 착용감을 제공합니다.' },
+        { title: '친환경 재생 원사', description: '재생 원사를 활용한 친환경 기능성 소재로 지속가능한 스포츠 라이프를 지원합니다.' },
+      ],
+      design: [
+        { title: 'Minimal Essential Design', description: '군더더기 없는 실루엣과 깔끔한 핏으로 어디에나 자연스럽게 매치됩니다.' },
+        { title: 'Relaxed Silhouette', description: '여유로운 핏감으로 단독 착용은 물론 레이어드 스타일링에도 적합합니다.' },
+        { title: 'Everyday Performance Tee', description: '매일 입기 좋은 디자인과 기능성을 동시에 담은 퍼포먼스 베이직 티셔츠.' },
+      ],
+      material: '폴리에스터 100%. COOLMAX® 기능성 원단. 중량 약 190g. 제조국: 중국.',
+    },
+    detailBanners: [
+      '/apparel/top/coolmax-t-shirt-black/detail-banner-1.png',
+      '/apparel/top/coolmax-t-shirt-black/detail-banner-2.png',
+      '/apparel/top/coolmax-t-shirt-black/detail-banner-3.png',
+      '/apparel/top/coolmax-t-shirt-black/detail-banner-4.png',
+    ],
+  },
+
+  [PRODUCT_SLUGS.CROSS_C_TAPE_38]: {
+    id: PRODUCT_IDS.CROSS_C_TAPE_38,
+    slug: PRODUCT_SLUGS.CROSS_C_TAPE_38,
+    name: 'Cross C-Tape (3.8cm)',
+    category: 'taping',
+    comingSoon: false,
+    image: '/apparel/taping/cross-c-tape-38/1.png',
+    images: [
+      '/apparel/taping/cross-c-tape-38/1.png',
+      '/apparel/taping/cross-c-tape-38/2.png',
+      '/apparel/taping/cross-c-tape-38/3.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
+    description:
+      '프리미엄 코튼 원단을 사용해 부드럽고 피부 친화적인 착용감을 제공하는 C 테이핑입니다. 톱니형 구조로 손쉽게 뜯어 사용할 수 있어 편리하며, 오래 착용해도 자극이 적어 안정적인 사용이 가능합니다. 손목 및 발목 고정용으로 활용하기 좋으며, 운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 사용할 수 있습니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '프리미엄 코튼 원단', detail: ' — 부드럽고 피부 친화적인 사용감' },
+      { label: '톱니형 절개 구조', detail: ' — 손쉽게 뜯어 사용' },
+      { label: '오래 착용해도 자극이 적은 편안함' },
+      { label: '손목 및 발목 고정용 활용' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '프리미엄 코튼 원단', description: '부드럽고 피부 친화적인 착용감 제공.' },
+        { title: '톱니형 절개 구조', description: '손쉽게 뜯어 사용할 수 있어 편리함.' },
+        { title: '저자극 장시간 착용', description: '오래 착용해도 자극이 적어 안정적인 사용 가능.' },
+        { title: '손목·발목 고정', description: '운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 활용.' },
+      ],
+      design: [
+        { title: '십자가 C 로고 디테일', description: '실용성과 안정감을 살린 브로스픽 아이덴티티 디자인.' },
+        { title: '콤팩트 롤 타입', description: '휴대 및 보관이 간편한 실용적인 구조.' },
+      ],
+      material: '코튼. 폭 3.8cm × 길이 9.14m. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.COOLMAX_TSHIRT_WHITE]: {
+    id: PRODUCT_IDS.COOLMAX_TSHIRT_WHITE,
+    slug: PRODUCT_SLUGS.COOLMAX_TSHIRT_WHITE,
+    name: 'COOLMAX T-Shirt (Cream White)',
+    category: 'top',
+    comingSoon: true,
+    image: '/apparel/top/coolmax-t-shirt-cream-white/1.png',
+    images: [
+      '/apparel/top/coolmax-t-shirt-cream-white/1.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/2.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/3.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/4.png',
+    ],
+    tagline: 'COOLMAX® 흡습속건 원단, 일상부터 러닝까지',
+    description:
+      'COOLMAX® 기능성 원단으로 제작된 190g 초경량 반팔 티셔츠. 빠른 흡습속건으로 땀과 열기를 신속하게 배출하고, 통기성 있는 원단 구조로 운동 내내 산뜻한 착용감을 유지합니다. 재생 원사를 활용한 친환경 소재로 일상복부터 러닝, 트레이닝, 여행까지 다양하게 활용 가능한 올라운드 퍼포먼스 티셔츠.',
+    sizes: ['M', 'L', 'XL'],
+    features: [
+      { label: 'COOLMAX® 기능성 원단', detail: ' — 빠른 흡습속건으로 쾌적한 착용감 유지' },
+      { label: '초경량 190G', detail: ' — 가볍고 부담 없는 착용감' },
+      { label: '뛰어난 통기성', detail: ' — 운동 중에도 답답하지 않은 시원한 착용감' },
+      { label: '친환경 재생 원사', detail: ' — 재생 원사를 활용한 친환경 소재' },
+      { label: '릴렉스드 실루엣', detail: ' — 단독 착용부터 레이어드까지 자유로운 스타일링' },
+    ],
+    chestLabel: '가슴둘레',
+    sizeChart: [
+      { size: 'M', length: 71, chest: 55, sleeve: 22, shoulder: 49 },
+      { size: 'L', length: 74, chest: 57, sleeve: 23, shoulder: 51 },
+      { size: 'XL', length: 76, chest: 59, sleeve: 24, shoulder: 53 },
+    ],
+    details: {
+      functions: [
+        { title: 'COOLMAX® 흡습속건', description: '땀과 열기를 빠르게 배출해 운동 내내 산뜻하고 쾌적한 착용감을 유지합니다.' },
+        { title: 'Quick Dry Technology', description: '빠르게 마르는 드라이 기능으로 운동 후에도 상쾌한 컨디션을 유지합니다.' },
+        { title: '초경량 190G', description: '약 190g의 초경량 원단으로 부담 없이 편안하게 착용 가능합니다.' },
+        { title: '뛰어난 통기성', description: '통기성이 뛰어난 원단 구조로 답답함 없이 시원한 착용감을 제공합니다.' },
+        { title: '친환경 재생 원사', description: '재생 원사를 활용한 친환경 기능성 소재로 지속가능한 스포츠 라이프를 지원합니다.' },
+      ],
+      design: [
+        { title: 'Minimal Essential Design', description: '군더더기 없는 실루엣과 깔끔한 핏으로 어디에나 자연스럽게 매치됩니다.' },
+        { title: 'Relaxed Silhouette', description: '여유로운 핏감으로 단독 착용은 물론 레이어드 스타일링에도 적합합니다.' },
+        { title: 'Everyday Performance Tee', description: '매일 입기 좋은 디자인과 기능성을 동시에 담은 퍼포먼스 베이직 티셔츠.' },
+      ],
+      material: '폴리에스터 100%. COOLMAX® 기능성 원단. 중량 약 190g. 제조국: 중국.',
+    },
+    detailBanners: [
+      '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-1.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-2.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-3.png',
+      '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-4.png',
+    ],
   },
 };
 

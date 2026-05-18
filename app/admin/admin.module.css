@@ -1718,6 +1718,66 @@
 
 .pmPageHeader {
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pmSaveOrderBtn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-accent, #3b82f6);
+  color: #fff;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pmSaveOrderBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.pmDragHandle {
+  cursor: grab;
+  color: var(--color-text-secondary);
+  font-size: 18px;
+  line-height: 1;
+  user-select: none;
+  opacity: 0.45;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+  padding: 2px 4px;
+}
+
+.pmDragHandle:hover {
+  opacity: 0.9;
+}
+
+.pmDragHandle:active {
+  cursor: grabbing;
+}
+
+.pmDragOverlay {
+  background: var(--color-bg-secondary);
+  border: 1.5px solid var(--color-accent, #3b82f6);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.pmDragHint {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  margin: 4px 0 0;
+  opacity: 0.7;
 }
 
 .pmTitle {

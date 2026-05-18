@@ -41,14 +41,103 @@
 }
 
 .imageSection {
-  position: sticky;
-  top: 100px;
   height: fit-content;
   min-width: 0;
 }
 
+.carouselSticky {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+/* PC 전용 배너 (imageSection 안, carouselSticky 아래) */
+.detailBannerDesktop {
+  margin-top: 12px;
+}
+
 @media (max-width: 968px) {
-  .imageSection {
+  .detailBannerDesktop {
+    display: none;
+  }
+}
+
+/* 모바일 전용 배너 (infoSection 안, 아코디언 위) */
+.detailBannerMobile {
+  display: none;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 968px) {
+  .detailBannerMobile {
+    display: block;
+  }
+}
+
+/* 상세 배너 — PC: 왼쪽 열(imageSection 아래) / 모바일: infoSection 아래 */
+.detailBannerSection {
+  grid-column: 1;
+  min-width: 0;
+}
+
+
+.detailBannerImage {
+  width: 100%;
+  display: block;
+}
+
+.detailBannerRest {
+  position: relative;
+}
+
+.detailBannerRest.collapsed {
+  max-height: 160px;
+  overflow: hidden;
+}
+
+.detailBannerFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--color-bg, #0a0a0a));
+  pointer-events: none;
+}
+
+.detailBannerToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: color var(--anim-fast), border-color var(--anim-fast);
+}
+
+.detailBannerToggle:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-secondary);
+}
+
+.detailBannerToggleIcon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.detailBannerToggleIcon.rotated {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 968px) {
+  .carouselSticky {
     position: static;
   }
 }

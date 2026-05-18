@@ -9,7 +9,7 @@ const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
 
 interface Props {
-  initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null }>;
+  initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null; sort_order: number | null }>;
 }
 
 export default function Sportswear({ initialPrices }: Props) {
@@ -51,13 +51,18 @@ export default function Sportswear({ initialPrices }: Props) {
   const sorted = [...productList].sort((a, b) => {
     const aDb = dbPrices[a.id];
     const bDb = dbPrices[b.id];
+    const aSortOrder = aDb?.sort_order ?? null;
+    const bSortOrder = bDb?.sort_order ?? null;
+    if (aSortOrder !== null && bSortOrder !== null) return aSortOrder - bSortOrder;
+    if (aSortOrder !== null) return -1;
+    if (bSortOrder !== null) return 1;
     const aComingSoon = aDb ? aDb.coming_soon : a.comingSoon;
     const bComingSoon = bDb ? bDb.coming_soon : b.comingSoon;
     if (aComingSoon !== bComingSoon) return aComingSoon ? 1 : -1;
     const aDate = aDb?.launched_at ? new Date(aDb.launched_at).getTime() : -Infinity;
     const bDate = bDb?.launched_at ? new Date(bDb.launched_at).getTime() : -Infinity;
     if (bDate !== aDate) return bDate - aDate;
-    return a.id - b.id; // tie-breaker: id 순
+    return a.id - b.id;
   });
 
   const filtered = active === ALL ? sorted : sorted.filter((p) => p.category === active);

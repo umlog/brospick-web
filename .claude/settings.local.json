@@ -55,7 +55,14 @@
       "Bash(printf 'EBOOK_PDF_BUCKET=ebooks\\\\nEBOOK_PDF_PATH=BROSPICK - The Overseas Football Playbook.pdf\\\\n')",
       "mcp__claude_ai_Supabase__get_project",
       "Bash(findstr \":3000\")",
-      "mcp__plugin_playwright_playwright__browser_fill_form"
+      "mcp__plugin_playwright_playwright__browser_fill_form",
+      "Bash(py --version)",
+      "Bash(mv public/apparel/top/reflective-run-tshirt-camel-gray public/apparel/top/reflective-run-t-shirt-camel-gray)",
+      "Bash(mv public/apparel/top/cool-tech-tshirt-black public/apparel/top/cool-tech-t-shirt-black)",
+      "Bash(mv public/apparel/top/cool-tech-tshirt-white public/apparel/top/cool-tech-t-shirt-white)",
+      "Bash(mv public/apparel/top/coolmax-tshirt-black public/apparel/top/coolmax-t-shirt-black)",
+      "Bash(mv public/apparel/top/coolmax-tshirt-white public/apparel/top/coolmax-t-shirt-cream-white)",
+      "Bash(grep:*)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

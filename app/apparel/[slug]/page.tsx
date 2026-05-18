@@ -34,5 +34,8 @@ export default async function ProductDetailPage({
   }
 
   const { price, sizes, comingSoon } = await getProductData(product.id);
-  return <ProductDetailClient params={params} initialPrice={price} initialSizes={sizes} dbComingSoon={comingSoon} />;
+  const effectiveComingSoon = process.env.NODE_ENV === 'development'
+    ? (product.comingSoon ?? comingSoon)
+    : comingSoon;
+  return <ProductDetailClient params={params} initialPrice={price} initialSizes={sizes} dbComingSoon={effectiveComingSoon} />;
 }

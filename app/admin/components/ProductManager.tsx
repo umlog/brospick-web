@@ -1,6 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { products as staticProducts, CATEGORY_LABELS } from '@/lib/products';
 import type { useProductCatalog } from '../hooks/useProductCatalog';
 import type { useProductSizes } from '../hooks/useProductSizes';
@@ -145,6 +162,7 @@ function ProductCard({
   sizes,
   staticSizes,
   thumbnail,
+  dragHandleProps,
   onCatalogUpdate,
   onStatusChange,
   onStockUpdate,
@@ -155,7 +173,8 @@ function ProductCard({
   sizes: ProductSize[];
   staticSizes: string[];
   thumbnail?: string;
-  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean; sort_order?: number | null }) => Promise<void>;
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
+  onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => Promise<void>;
   onStatusChange: (id: number, size: string, status: string) => Promise<void>;
   onStockUpdate: (id: number, size: string, stock: number) => Promise<void>;
   onDelayTextUpdate: (id: number, size: string, text: string | null) => Promise<void>;
@@ -165,7 +184,6 @@ function ProductCard({
   const [originalPrice, setOriginalPrice] = useState(
     product.original_price != null ? String(product.original_price) : ''
   );
-  const [sortOrder, setSortOrder] = useState(product.sort_order != null ? String(product.sort_order) : '');
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -173,7 +191,6 @@ function ProductCard({
       setName(product.name);
       setPrice(String(product.price));
       setOriginalPrice(product.original_price != null ? String(product.original_price) : '');
-      setSortOrder(product.sort_order != null ? String(product.sort_order) : '');
       setDirty(false);
     }
   }, [product, catalogSaving]);
@@ -191,12 +208,10 @@ function ProductCard({
       showToast('올바른 정가를 입력해주세요.', 'error');
       return;
     }
-    const parsedSortOrder = sortOrder === '' ? null : parseInt(sortOrder, 10);
     await onCatalogUpdate(product.id, {
       name: name.trim(),
       price: parsedPrice,
       original_price: parsedOriginal,
-      sort_order: parsedSortOrder,
     });
     setDirty(false);
   };
@@ -212,6 +227,11 @@ function ProductCard({
   return (
     <div className={`${styles.pmCard} ${dirty ? styles.pmCardDirty : ''}`}>
       <div className={styles.pmCardHeader}>
+        {dragHandleProps && (
+          <div className={styles.pmDragHandle} {...dragHandleProps} title="드래그하여 순서 변경">
+            ⠿
+          </div>
+        )}
         {thumbnail ? (
           <img src={thumbnail} alt={product.name} className={styles.pmThumbnail} />
         ) : (
@@ -270,19 +290,6 @@ function ProductCard({
         >
           {product.coming_soon ? 'COMING SOON' : '출시됨'}
         </button>
-        <div className={styles.pmSortOrderField}>
-          <span className={styles.pmSortOrderLabel}>핀</span>
-          <input
-            className={styles.pmSortOrderInput}
-            type="number"
-            value={sortOrder}
-            onChange={(e) => { setSortOrder(e.target.value); mark(); }}
-            onKeyDown={onEnter}
-            disabled={catalogSaving}
-            placeholder="–"
-            min={1}
-          />
-        </div>
       </div>
 
       {staticSizes.length > 0 && (
@@ -304,6 +311,38 @@ function ProductCard({
   );
 }
 
+// ── SortableProductCard ──────────────────────────────────────────
+function SortableProductCard({
+  product,
+  isDragEnabled,
+  ...cardProps
+}: {
+  product: AdminProduct;
+  isDragEnabled: boolean;
+} & Omit<React.ComponentProps<typeof ProductCard>, 'product' | 'dragHandleProps'>) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: product.id,
+    disabled: !isDragEnabled,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.3 : 1,
+      }}
+    >
+      <ProductCard
+        product={product}
+        dragHandleProps={isDragEnabled ? { ...attributes, ...listeners } : undefined}
+        {...cardProps}
+      />
+    </div>
+  );
+}
+
 // ── ProductManager ───────────────────────────────────────────────
 export function ProductManager({
   catalogState,
@@ -313,17 +352,60 @@ export function ProductManager({
   sizesState: SizesState;
 }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const { products, loading: catalogLoading, saving: catalogSaving, updateProduct } = catalogState;
+  const [orderedIds, setOrderedIds] = useState<number[]>([]);
+  const [orderDirty, setOrderDirty] = useState(false);
+  const [orderSaving, setOrderSaving] = useState(false);
+  const [activeId, setActiveId] = useState<number | null>(null);
+
+  const { products, loading: catalogLoading, saving: catalogSaving, updateProduct, reorderProducts } = catalogState;
   const { sizes, loading: sizesLoading, updateSize, updateStock, updateDelayText } = sizesState;
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
+
+  useEffect(() => {
+    if (!orderDirty) {
+      setOrderedIds(products.map((p) => p.id));
+    }
+  }, [products, orderDirty]);
 
   const idToCategory = Object.fromEntries(
     Object.values(staticProducts).map((p) => [p.id, p.category])
   );
 
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter((p) => idToCategory[p.id] === selectedCategory);
+  const isDragEnabled = selectedCategory === 'all';
 
+  const displayProducts = orderedIds
+    .map((id) => products.find((p) => p.id === id))
+    .filter((p): p is AdminProduct => p !== undefined)
+    .filter((p) => selectedCategory === 'all' || idToCategory[p.id] === selectedCategory);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as number);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    setActiveId(null);
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    setOrderedIds((prev) => {
+      const oldIndex = prev.indexOf(active.id as number);
+      const newIndex = prev.indexOf(over.id as number);
+      return arrayMove(prev, oldIndex, newIndex);
+    });
+    setOrderDirty(true);
+  };
+
+  const handleSaveOrder = async () => {
+    setOrderSaving(true);
+    const orders = orderedIds.map((id, index) => ({ id, sort_order: index + 1 }));
+    await reorderProducts(orders);
+    setOrderSaving(false);
+    setOrderDirty(false);
+  };
+
+  const activeProduct = activeId ? products.find((p) => p.id === activeId) : null;
   const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
 
   if (catalogLoading || sizesLoading) {
@@ -337,6 +419,15 @@ export function ProductManager({
           <h3 className={styles.pmTitle}>상품 관리</h3>
           <p className={styles.pmDesc}>가격·이름·사이즈 재고를 한 화면에서 수정합니다.</p>
         </div>
+        {orderDirty && (
+          <button
+            className={styles.pmSaveOrderBtn}
+            onClick={handleSaveOrder}
+            disabled={orderSaving}
+          >
+            {orderSaving ? '저장 중…' : '순서 저장'}
+          </button>
+        )}
       </div>
 
       <div className={styles.catalogFilterTabs}>
@@ -361,29 +452,51 @@ export function ProductManager({
         })}
       </div>
 
-      <div className={styles.pmList}>
-        {filteredProducts.length === 0 ? (
-          <p className={styles.catalogEmpty}>해당 카테고리에 상품이 없습니다.</p>
-        ) : (
-          filteredProducts.map((product) => {
-            const staticProduct = Object.values(staticProducts).find((p) => p.id === product.id);
-            return (
-              <ProductCard
-                key={product.id}
-                product={product}
-                catalogSaving={catalogSaving === product.id}
-                sizes={sizes.filter((s) => s.product_id === product.id)}
-                staticSizes={staticProduct?.sizes ?? []}
-                thumbnail={staticProduct?.images?.[0]}
-                onCatalogUpdate={updateProduct}
-                onStatusChange={updateSize}
-                onStockUpdate={updateStock}
-                onDelayTextUpdate={updateDelayText}
-              />
-            );
-          })
-        )}
-      </div>
+      {!isDragEnabled && (
+        <p className={styles.pmDragHint}>순서 변경은 전체 탭에서 가능합니다.</p>
+      )}
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={orderedIds} strategy={verticalListSortingStrategy}>
+          <div className={styles.pmList}>
+            {displayProducts.length === 0 ? (
+              <p className={styles.catalogEmpty}>해당 카테고리에 상품이 없습니다.</p>
+            ) : (
+              displayProducts.map((product) => {
+                const staticProduct = Object.values(staticProducts).find((p) => p.id === product.id);
+                return (
+                  <SortableProductCard
+                    key={product.id}
+                    product={product}
+                    isDragEnabled={isDragEnabled}
+                    catalogSaving={catalogSaving === product.id}
+                    sizes={sizes.filter((s) => s.product_id === product.id)}
+                    staticSizes={staticProduct?.sizes ?? []}
+                    thumbnail={staticProduct?.images?.[0]}
+                    onCatalogUpdate={updateProduct}
+                    onStatusChange={updateSize}
+                    onStockUpdate={updateStock}
+                    onDelayTextUpdate={updateDelayText}
+                  />
+                );
+              })
+            )}
+          </div>
+        </SortableContext>
+
+        <DragOverlay>
+          {activeProduct && (
+            <div className={styles.pmDragOverlay}>
+              {activeProduct.name}
+            </div>
+          )}
+        </DragOverlay>
+      </DndContext>
     </div>
   );
 }

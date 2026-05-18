@@ -7,6 +7,9 @@ import { showToast } from '../lib/toast';
 
 function sortProducts(list: AdminProduct[]): AdminProduct[] {
   return [...list].sort((a, b) => {
+    if (a.sort_order !== null && b.sort_order !== null) return a.sort_order - b.sort_order;
+    if (a.sort_order !== null) return -1;
+    if (b.sort_order !== null) return 1;
     if (a.coming_soon !== b.coming_soon) return a.coming_soon ? 1 : -1;
     const aDate = a.launched_at ? new Date(a.launched_at).getTime() : -Infinity;
     const bDate = b.launched_at ? new Date(b.launched_at).getTime() : -Infinity;
@@ -82,5 +85,27 @@ export function useProductCatalog() {
     []
   );
 
-  return { products, loading, error, saving, hasLoaded, fetchProducts, updateProduct, unsynced, syncing, syncProducts };
+  const reorderProducts = useCallback(
+    async (orders: { id: number; sort_order: number }[]) => {
+      try {
+        await apiClient.products.reorder(orders);
+        const orderMap = new Map(orders.map((o) => [o.id, o.sort_order]));
+        setProducts((prev) =>
+          sortProducts(
+            prev.map((p) => ({
+              ...p,
+              sort_order: orderMap.get(p.id) ?? p.sort_order,
+            }))
+          )
+        );
+        showToast('순서가 저장되었습니다.', 'success');
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : '순서 저장 실패';
+        showToast(msg, 'error');
+      }
+    },
+    []
+  );
+
+  return { products, loading, error, saving, hasLoaded, fetchProducts, updateProduct, reorderProducts, unsynced, syncing, syncProducts };
 }

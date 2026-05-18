@@ -54,9 +54,8 @@ interface Props {
 
 export default function ProductDetailClient({ params, initialPrice, initialSizes, dbComingSoon }: Props) {
   const router = useRouter();
-  const { addToCart, getTotalPrice } = useCart();
+  const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [showSuccess, setShowSuccess] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
@@ -71,6 +70,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const lensRef = useRef<HTMLDivElement>(null);
   const zoomPanelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
+  const [bannerExpanded, setBannerExpanded] = useState(false);
 
   const product = products[params.slug as ProductSlug];
 
@@ -114,22 +114,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }
 
   const checkSelectedStock = (): boolean => {
-    if (product.multiSelect) {
-      for (const size of selectedSizes) {
-        const key = `${product.id}-${size}`;
-        const status = sizeStatuses[key];
-        const stock = sizeStocks[key] ?? 0;
-        if (status === 'sold_out' || stock <= 0) {
-          alert(`'${size}'는 품절되었습니다.`);
-          return false;
-        }
-        if (quantity > stock) {
-          alert(`'${size}'의 재고가 부족합니다. (남은 재고: ${stock}개)`);
-          return false;
-        }
-      }
-      return true;
-    }
     const key = `${product.id}-${selectedSize}`;
     const status = sizeStatuses[key];
     if (status === undefined) return true;
@@ -146,22 +130,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   };
 
   const handleAddToCart = () => {
-    if (product.multiSelect) {
-      if (selectedSizes.length === 0) {
-        alert('원하는 옵션을 선택해주세요.');
-        return;
-      }
-      if (price === undefined) return;
-      if (!checkSelectedStock()) return;
-      for (const size of selectedSizes) {
-        addToCart({ id: product.id, name: productName!, price, size, image: product.image, quantity });
-      }
-      setSelectedSizes([]);
-      setQuantity(1);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2000);
-      return;
-    }
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
@@ -185,10 +153,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   useEffect(() => {
     if (!product) return;
-    if (product.multiSelect) {
-      setSelectedSizes([]);
-      return;
-    }
     if (product.sizes.includes('XL')) {
       setSelectedSize('XL');
     } else {
@@ -197,12 +161,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [product?.slug]);
 
   useEffect(() => {
-    if (!product || Object.keys(sizeStatuses).length === 0) return;
-    if (product.multiSelect) {
-      setSelectedSizes((prev) => prev.filter((s) => sizeStatuses[`${product.id}-${s}`] !== 'sold_out'));
-      return;
-    }
-    if (!selectedSize) return;
+    if (!product || Object.keys(sizeStatuses).length === 0 || !selectedSize) return;
     const currentKey = `${product.id}-${selectedSize}`;
     if (sizeStatuses[currentKey] === 'sold_out') {
       const fallback = product.sizes.find((s) => sizeStatuses[`${product.id}-${s}`] !== 'sold_out');
@@ -211,21 +170,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [sizeStatuses]);
 
   const handleSizeSelect = (size: string) => {
-    if (product.multiSelect) {
-      setSelectedSizes((prev) =>
-        prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-      );
-    } else {
-      setSelectedSize(size);
-      setQuantity(1);
-    }
-    // 선택한 항목에 대응하는 이미지로 캐러셀 이동
-    if (product.sizeImages?.[size]) {
-      const targetImg = product.sizeImages[size];
-      const imgs = product.images.filter((img) => !img.includes('size-chart'));
-      const idx = imgs.indexOf(targetImg);
-      if (idx !== -1) emblaApi?.scrollTo(idx);
-    }
+    setSelectedSize(size);
+    setQuantity(1);
   };
 
   useEffect(() => {
@@ -290,19 +236,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [currentImage]);
 
   const handleBuyNow = () => {
-    if (product.multiSelect) {
-      if (selectedSizes.length === 0) {
-        alert('원하는 옵션을 선택해주세요.');
-        return;
-      }
-      if (price === undefined) return;
-      if (!checkSelectedStock()) return;
-      for (const size of selectedSizes) {
-        addToCart({ id: product.id, name: productName!, price, size, image: product.image, quantity });
-      }
-      router.push('/checkout');
-      return;
-    }
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
@@ -445,6 +378,40 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               className={styles.zoomPanel}
               style={{ display: 'none', backgroundImage: `url(${product.images[currentImage]})` }}
             />
+
+            {product.detailBanners && product.detailBanners.length > 0 && (
+              <div className={styles.detailBannerDesktop}>
+                <img
+                  src={product.detailBanners[0]}
+                  alt={`${product.name} 상세 이미지 1`}
+                  className={styles.detailBannerImage}
+                />
+                {product.detailBanners.length > 1 && (
+                  <>
+                    <div className={`${styles.detailBannerRest} ${!bannerExpanded ? styles.collapsed : ''}`}>
+                      {product.detailBanners.slice(1).map((src, i) => (
+                        <img
+                          key={i + 1}
+                          src={src}
+                          alt={`${product.name} 상세 이미지 ${i + 2}`}
+                          className={styles.detailBannerImage}
+                        />
+                      ))}
+                      {!bannerExpanded && <div className={styles.detailBannerFade} />}
+                    </div>
+                    <button
+                      className={styles.detailBannerToggle}
+                      onClick={() => setBannerExpanded((v) => !v)}
+                    >
+                      {bannerExpanded ? '상세 이미지 접기' : '상세 이미지 더 보기'}
+                      <span className={`${styles.detailBannerToggleIcon} ${bannerExpanded ? styles.rotated : ''}`}>
+                        ∨
+                      </span>
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           <div className={styles.infoSection}>
@@ -469,21 +436,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 <span className={styles.price}>—</span>
               )}
             </div>
-
-            {product.multiSelect && selectedSizes.length > 0 && price !== undefined && (
-              <div className={styles.multiSelectTotal}>
-                <span className={styles.multiSelectTotalLabel}>
-                  {selectedSizes.length}개 × {quantity}개
-                </span>
-                <span className={styles.multiSelectTotalPrice}>
-                  총 ₩{(price * selectedSizes.length * quantity).toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            {product.category === 'boot-skin' && (
-              <p className={styles.unitNote}>1개 주문 시 2매 구성 (좌·우 각 1매)</p>
-            )}
 
             {product.category === 'taping' ? (
               <div className={styles.sizeChartInline}>
@@ -589,13 +541,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
             ) : (
               <>
                 {product.sizes.length >= 1 && <div className={styles.sizeSection}>
-                  <h3>
-                    {product.sizeLabel ?? '사이즈 선택'}
-                    {product.multiSelect && selectedSizes.length > 0 && (
-                      <span className={styles.selectedCount}>{selectedSizes.length}개 선택</span>
-                    )}
-                  </h3>
-                  <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
+                  <h3>사이즈 선택</h3>
+                  <div className={styles.sizeOptions}>
                     {product.sizes.map((size) => {
                       const key = `${product.id}-${size}`;
                       const sizeStatus = sizeStatuses[key] || 'available';
@@ -604,13 +551,11 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       const isDelayed = sizeStatus === 'delayed';
                       const delayText = sizeDelayTexts[key] || '지연배송';
                       const showLowStock = !isSoldOut && stock !== null && stock > 0 && stock <= 5;
-                      const isSelected = product.multiSelect
-                        ? selectedSizes.includes(size)
-                        : selectedSize === size;
                       return (
                         <button
                           key={size}
-                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${isSelected ? styles.selected : ''} ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
+                          className={`${styles.sizeButton} ${selectedSize === size ? styles.selected : ''
+                            } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
                           onClick={() => {
                             if (isSoldOut) return;
                             if (isDelayed) {
@@ -680,33 +625,17 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     바로 구매하기
                   </button>
                 </div>
-                {product.category !== 'taping' && product.category !== 'socks' && product.category !== 'boot-skin' &&
+                {product.category !== 'taping' && product.category !== 'socks' &&
                   product.slug !== 'quarter-zip-flex-blue' && product.slug !== 'quarter-zip-flex-light-green' && (
                     <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
                       맞춤 로고각인 가능
                     </button>
                   )}
-                {(() => {
-                  const cartTotal = getTotalPrice();
-                  const freeShipping = cartTotal >= SHIPPING.freeThreshold;
-                  const remaining = SHIPPING.freeThreshold - cartTotal;
-                  return (
-                    <div className={styles.shippingNotices}>
-                      <span>15시 이전 결제 시 당일 발송</span>
-                      <span className={freeShipping ? styles.shippingFree : cartTotal > 0 ? styles.shippingProgress : ''}>
-                        {freeShipping
-                          ? '무료 배송 조건 달성!'
-                          : cartTotal > 0
-                          ? `무료 배송까지 ₩${remaining.toLocaleString()} 더`
-                          : `${SHIPPING.freeThreshold.toLocaleString()}원 이상 결제 시 무료 배송`}
-                      </span>
-                    </div>
-                  );
-                })()}
+                <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
               </>
             )}
 
-            {product.category !== 'taping' && product.category !== 'boot-skin' && (
+            {product.category !== 'taping' && (
               <div className={styles.careSection}>
                 {CARE_INSTRUCTIONS.map((instruction, i) => (
                   <span key={i} className={styles.careTag}>{instruction}</span>
@@ -719,6 +648,40 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 <span key={i} className={styles.featureChip}>{f.label}</span>
               ))}
             </div>
+
+            {product.detailBanners && product.detailBanners.length > 0 && (
+              <div className={styles.detailBannerMobile}>
+                <img
+                  src={product.detailBanners[0]}
+                  alt={`${product.name} 상세 이미지 1`}
+                  className={styles.detailBannerImage}
+                />
+                {product.detailBanners.length > 1 && (
+                  <>
+                    <div className={`${styles.detailBannerRest} ${!bannerExpanded ? styles.collapsed : ''}`}>
+                      {product.detailBanners.slice(1).map((src, i) => (
+                        <img
+                          key={i + 1}
+                          src={src}
+                          alt={`${product.name} 상세 이미지 ${i + 2}`}
+                          className={styles.detailBannerImage}
+                        />
+                      ))}
+                      {!bannerExpanded && <div className={styles.detailBannerFade} />}
+                    </div>
+                    <button
+                      className={styles.detailBannerToggle}
+                      onClick={() => setBannerExpanded((v) => !v)}
+                    >
+                      {bannerExpanded ? '상세 이미지 접기' : '상세 이미지 더 보기'}
+                      <span className={`${styles.detailBannerToggleIcon} ${bannerExpanded ? styles.rotated : ''}`}>
+                        ∨
+                      </span>
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
 
             <div className={styles.accordionGroup}>
               <Accordion title="제품 설명" defaultOpen={true}>
@@ -750,7 +713,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 </div>
               </Accordion>
 
-              {product.category !== 'taping' && product.category !== 'boot-skin' && <Accordion title="사이즈 가이드">
+              {product.category !== 'taping' && <Accordion title="사이즈 가이드">
                 <div className={styles.accordionContent}>
                   <p className={styles.sizeUnit}>단위: cm</p>
                   <table className={styles.sizeTable}>
@@ -895,44 +858,10 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
       {!isComingSoon && (
         <div className={styles.stickyBuyBar}>
-          {price !== undefined && (() => {
-            const cartTotal = getTotalPrice();
-            const pct = Math.min(100, Math.round((cartTotal / SHIPPING.freeThreshold) * 100));
-            const isFree = cartTotal >= SHIPPING.freeThreshold;
-            return (
-              <div className={styles.shippingBanner}>
-                <span className={`${styles.shippingBannerText} ${isFree ? styles.shippingBannerFreeText : ''}`}>
-                  {isFree
-                    ? '무료 배송 조건 달성!'
-                    : `무료 배송까지 ₩${(SHIPPING.freeThreshold - cartTotal).toLocaleString()} 더`}
-                </span>
-                <div className={styles.shippingBannerTrack}>
-                  <div
-                    className={`${styles.shippingBannerFill} ${isFree ? styles.shippingBannerFillFree : ''}`}
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-              </div>
-            );
-          })()}
           <div className={styles.stickyBuyBarInner}>
             <div className={styles.stickyBuyBarInfo}>
-              <span className={styles.stickyBuyBarPrice}>
-                {price !== undefined
-                  ? product.multiSelect && selectedSizes.length > 0
-                    ? `₩${(price * selectedSizes.length * quantity).toLocaleString()}`
-                    : `₩${price.toLocaleString()}`
-                  : '—'}
-              </span>
-              {product.multiSelect ? (
-                <span className={styles.stickyBuyBarSize}>
-                  {selectedSizes.length === 0
-                    ? '옵션을 선택하세요'
-                    : selectedSizes.length <= 4
-                    ? selectedSizes.join(', ')
-                    : `${selectedSizes.slice(0, 4).join(', ')} 외 ${selectedSizes.length - 4}개`}
-                </span>
-              ) : product.sizes.length > 1 && (
+              <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
+              {product.sizes.length > 1 && (
                 <span className={styles.stickyBuyBarSize}>
                   {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
                 </span>

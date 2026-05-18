@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { productList } from '@/lib/products';
 import ApparelClient from './ApparelClient';
 
 async function getPrices() {
@@ -15,5 +16,14 @@ async function getPrices() {
 
 export default async function ApparelPage() {
   const prices = await getPrices();
+
+  if (process.env.NODE_ENV === 'development') {
+    for (const product of productList) {
+      if (prices[product.id] !== undefined && product.comingSoon !== undefined) {
+        prices[product.id].coming_soon = product.comingSoon;
+      }
+    }
+  }
+
   return <ApparelClient initialPrices={prices} />;
 }
