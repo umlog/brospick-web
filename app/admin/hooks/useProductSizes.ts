@@ -21,6 +21,15 @@ export function useProductSizes() {
     }
   }, []);
 
+  const upsertLocal = (updated: ProductSize) => {
+    setSizes((prev) => {
+      const exists = prev.some((s) => s.product_id === updated.product_id && s.size === updated.size);
+      return exists
+        ? prev.map((s) => (s.product_id === updated.product_id && s.size === updated.size ? updated : s))
+        : [...prev, updated];
+    });
+  };
+
   const updateSize = async (productId: number, size: string, status: string, delayText?: string | null) => {
     try {
       const result = await apiClient.productSizes.update({
@@ -29,13 +38,7 @@ export function useProductSizes() {
         status,
         ...(delayText !== undefined && { delay_text: delayText }),
       });
-      setSizes((prev) =>
-        prev.map((s) =>
-          s.product_id === productId && s.size === size
-            ? { ...s, status: result.size.status as ProductSize['status'], delay_text: result.size.delay_text }
-            : s
-        )
-      );
+      upsertLocal(result.size);
     } catch (err) {
       showToast(err instanceof Error ? err.message : '변경에 실패했습니다.', 'error');
     }
@@ -43,18 +46,8 @@ export function useProductSizes() {
 
   const updateDelayText = async (productId: number, size: string, delayText: string | null) => {
     try {
-      const result = await apiClient.productSizes.update({
-        productId,
-        size,
-        delay_text: delayText,
-      });
-      setSizes((prev) =>
-        prev.map((s) =>
-          s.product_id === productId && s.size === size
-            ? { ...s, delay_text: result.size.delay_text }
-            : s
-        )
-      );
+      const result = await apiClient.productSizes.update({ productId, size, delay_text: delayText });
+      upsertLocal(result.size);
     } catch (err) {
       showToast(err instanceof Error ? err.message : '지연배송 텍스트 변경에 실패했습니다.', 'error');
     }
@@ -63,13 +56,7 @@ export function useProductSizes() {
   const updateStock = async (productId: number, size: string, stock: number) => {
     try {
       const result = await apiClient.productSizes.update({ productId, size, stock });
-      setSizes((prev) =>
-        prev.map((s) =>
-          s.product_id === productId && s.size === size
-            ? { ...s, stock: result.size.stock, status: result.size.status as ProductSize['status'] }
-            : s
-        )
-      );
+      upsertLocal(result.size);
     } catch (err) {
       showToast(err instanceof Error ? err.message : '재고 변경에 실패했습니다.', 'error');
     }

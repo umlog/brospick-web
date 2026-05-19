@@ -557,6 +557,34 @@
   transition: color 0.2s, opacity 0.2s;
 }
 
+.bulkInquiryButton {
+  display: block;
+  margin-top: var(--space-sm);
+  font-size: var(--size-xs);
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: inherit;
+  animation: logoPulse 2.8s ease-in-out infinite;
+}
+
+.bulkInquiryButton:hover {
+  animation: none;
+  color: #e53935;
+  opacity: 1;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.bulkInquiryButton + .returnNotice {
+  margin-top: 4px;
+}
+
 .logoInquiryButton + .returnNotice {
   margin-top: 4px;
 }
@@ -1406,4 +1434,112 @@
 
 .lightboxClose:hover {
   color: #fff;
+}
+
+/* ===== Before/After Slider ===== */
+.beforeAfterContainer {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: pan-y;
+  margin: var(--space-lg) 0;
+  background: var(--color-bg-secondary);
+}
+
+.beforeAfterImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+
+.beforeAfterHandle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.beforeAfterLine {
+  width: 2px;
+  flex: 1;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.beforeAfterKnob {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  color: #111;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.beforeAfterLabel {
+  position: absolute;
+  top: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.beforeAfterLabelAfter {
+  left: 12px;
+}
+
+.beforeAfterLabelBefore {
+  right: 12px;
+}
+
+/* ===== Boot-skin FAQ ===== */
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-md);
+}
+
+.faqItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.faqQuestion {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.faqAnswer {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
 }

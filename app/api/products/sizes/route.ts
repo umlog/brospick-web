@@ -101,10 +101,23 @@ export async function PATCH(request: NextRequest) {
       }
     }
 
+    // 기존 행 존재 여부 확인 (없으면 insert, 있으면 update)
+    const { data: existing } = await supabaseAdmin
+      .from('product_sizes')
+      .select('status, stock')
+      .match({ product_id: productId, size })
+      .single();
+
+    if (!existing) {
+      // 신규 row — 기본값 설정
+      const stockNum = typeof updateData.stock === 'number' ? updateData.stock : 0;
+      updateData.status = updateData.status ?? (stockNum > 0 ? 'available' : 'sold_out');
+      updateData.stock = updateData.stock ?? 0;
+    }
+
     const { data, error } = await supabaseAdmin
       .from('product_sizes')
-      .update(updateData)
-      .match({ product_id: productId, size })
+      .upsert({ product_id: productId, size, ...updateData }, { onConflict: 'product_id,size' })
       .select('product_id, size, status, stock, delay_text')
       .single();
 

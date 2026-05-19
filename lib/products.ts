@@ -182,6 +182,7 @@ export interface Product {
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
   imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
   detailBanners?: string[];             // 상세 배너 이미지 배열 (jpg/png 모두 가능)
+  beforeAfterImages?: { before: string; after: string; label?: string }; // Before/After 비교 슬라이더
   details: ProductDetails;
 }
 
@@ -1700,6 +1701,11 @@ export const products: Record<ProductSlug, Product> = {
     slug: PRODUCT_SLUGS.BOOTSKIN_NUMBER,
     name: 'BOOT SKIN 번호',
     category: 'boot-skin',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: ['/apparel/bootskin/BootSkinBanner/detail-banner-1.png'],
     comingSoon: false,
     multiSelect: true,
     sizeLabel: '번호 선택',
@@ -1757,6 +1763,11 @@ export const products: Record<ProductSlug, Product> = {
     comingSoon: false,
     multiSelect: true,
     sizeLabel: '이니셜 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: ['/apparel/bootskin/BootSkinBanner/detail-banner-1.png'],
     image: '/apparel/bootskin/initial/1-alphabet-detail.png',
     images: [
       '/apparel/bootskin/initial/1-alphabet-detail.png',
@@ -1842,6 +1853,11 @@ export const products: Record<ProductSlug, Product> = {
     comingSoon: false,
     multiSelect: true,
     sizeLabel: '심볼 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: ['/apparel/bootskin/BootSkinBanner/detail-banner-1.png'],
     image: '/apparel/bootskin/faith-symbol/1-cross-detail.png',
     images: [
       '/apparel/bootskin/faith-symbol/1-cross-detail.png',
@@ -1926,6 +1942,11 @@ export const products: Record<ProductSlug, Product> = {
     comingSoon: false,
     multiSelect: true,
     sizeLabel: '스타일 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: ['/apparel/bootskin/BootSkinBanner/detail-banner-1.png'],
     image: '/apparel/bootskin/nation/1-KOREA-detail.png',
     images: [
       '/apparel/bootskin/nation/1-KOREA-detail.png',

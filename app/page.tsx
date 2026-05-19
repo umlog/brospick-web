@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import Manifesto from './components/sections/Manifesto';
 import Project from './components/sections/Project';
 import Blog from './components/sections/Blog';
+import EbookPromo from './components/sections/EbookPromo';
 import Future from './components/sections/Future';
 // import PickerApp from './components/sections/PickerApp';
 import Sportswear from './components/sections/Sportswear';
@@ -28,6 +29,7 @@ export default async function Home() {
       <ScrollHint />
       <Sportswear initialPrices={prices} />
       <BrandStory />
+      <EbookPromo />
       <Blog />
       <Manifesto />
       <Project />

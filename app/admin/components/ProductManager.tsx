@@ -50,6 +50,7 @@ function SizeRow({
   onStockUpdate: (id: number, size: string, stock: number) => Promise<void>;
   onDelayTextUpdate: (id: number, size: string, text: string | null) => Promise<void>;
 }) {
+  const isNew = !sizeData;
   const currentStatus = sizeData?.status ?? 'available';
   const [stock, setStock] = useState(sizeData?.stock ?? 0);
   const [stockDirty, setStockDirty] = useState(false);
@@ -97,8 +98,7 @@ function SizeRow({
         ))}
       </div>
 
-      {sizeData && (
-        <div className={styles.pmStockStepper}>
+      <div className={styles.pmStockStepper}>
           <button
             className={styles.pmStepBtn}
             onClick={() => { setStock(Math.max(0, stock - 1)); setStockDirty(true); }}
@@ -127,11 +127,10 @@ function SizeRow({
           </button>
           {stockDirty && (
             <button className={styles.pmInlineSaveBtn} onClick={handleStockSave} disabled={stockSaving}>
-              {stockSaving ? '…' : '저장'}
+              {stockSaving ? '…' : (isNew ? '초기화' : '저장')}
             </button>
           )}
         </div>
-      )}
 
       {sizeData && currentStatus === 'delayed' && (
         <div className={styles.pmDelayRow}>

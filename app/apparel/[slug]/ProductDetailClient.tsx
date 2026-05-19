@@ -8,6 +8,7 @@ import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug } from '../../../lib/products';
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './product-detail.module.css';
+import BeforeAfterSlider from './BeforeAfterSlider';
 
 function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -64,6 +65,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const [thumbRef, thumbApi] = useEmblaCarousel({ dragFree: true, containScroll: 'keepSnaps', align: 'start' });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [logoInquiryOpen, setLogoInquiryOpen] = useState(false);
+  const [bulkInquiryOpen, setBulkInquiryOpen] = useState(false);
   const [imgScale, setImgScale] = useState(1);
   const [isPinching, setIsPinching] = useState(false);
   const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
@@ -625,12 +627,17 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     바로 구매하기
                   </button>
                 </div>
-                {product.category !== 'taping' && product.category !== 'socks' &&
+                {product.category !== 'taping' && product.category !== 'socks' && product.category !== 'boot-skin' &&
                   product.slug !== 'quarter-zip-flex-blue' && product.slug !== 'quarter-zip-flex-light-green' && (
                     <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
                       맞춤 로고각인 가능
                     </button>
                   )}
+                {(product.category === 'taping' || product.category === 'socks' || product.category === 'boot-skin') && (
+                  <button className={styles.bulkInquiryButton} onClick={() => setBulkInquiryOpen(true)}>
+                    대량주문 문의
+                  </button>
+                )}
                 <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
               </>
             )}
@@ -683,7 +690,56 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               </div>
             )}
 
+            {product.beforeAfterImages && (
+              <BeforeAfterSlider
+                before={product.beforeAfterImages.before}
+                after={product.beforeAfterImages.after}
+              />
+            )}
+
             <div className={styles.accordionGroup}>
+              {product.category === 'boot-skin' && (
+                <Accordion title="자주 묻는 질문 (FAQ)" defaultOpen={true}>
+                  <div className={styles.faqList}>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. BOOT SKIN은 일반 스티커나 열전사 필름과 어떻게 다른가요?</p>
+                      <p className={styles.faqAnswer}>일반 비닐 스티커는 두껍고 쉽게 들뜨거나 벗겨질 수 있으며, 열전사 필름은 열프레스 장비가 필요합니다. 반면 Boot Skin은 <strong>국내 고급 잉크와 접착 기술</strong>을 사용한 기계로 생산하여 축구화 표면에 자연스럽게 밀착됩니다. <strong>두꺼운 가장자리가 없어</strong> 걸리거나 들뜰 가능성이 적고, <strong>별도의 열 작업 없이</strong> 집에서도 쉽게 부착할 수 있습니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 방수와 날씨 변화에 강한가요?</p>
+                      <p className={styles.faqAnswer}>네. Boot Skin은 다양한 환경에서도 안정적으로 유지됩니다. 비나 젖은 환경에서 <strong>완전 방수</strong>, 직사광선에도 색이 쉽게 바래지 않는 <strong>자외선 저항</strong>, <strong>영하 10°C ~ 영상 60°C 온도 안정성</strong>, 마찰과 흠집을 줄여주는 <strong>보호 코팅</strong>, 진흙도 디자인 손상 없이 쉽게 닦아낼 수 있습니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 어떤 축구화 브랜드와 소재에 사용할 수 있나요?</p>
+                      <p className={styles.faqAnswer}><strong>Nike, Adidas, Puma 등 모든 브랜드</strong>의 축구화에 사용 가능하며, <strong>천연 가죽과 합성 가죽 소재 모두</strong>에 적용할 수 있습니다. Boot Skin의 접착 기술은 축구화 표면에 안정적으로 부착되도록 설계되었습니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 어떤 사이즈가 있나요?</p>
+                      <p className={styles.faqAnswer}>Boot Skin은 <strong>5mm와 10mm</strong> 높이의 전사 제품을 제공합니다. 각 제품 페이지의 옵션 이미지를 확인하시면 정확한 크기를 확인하실 수 있습니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 부착 후 바로 경기해도 되나요?</p>
+                      <p className={styles.faqAnswer}>바로 사용할 수는 있지만, 최대 접착력을 위해 <strong>1~2시간 경화 시간</strong>을 권장합니다. 가장 좋은 결과를 위해 <strong>경기 전날 부착</strong>하는 것을 추천합니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 얼마나 오래 지속되나요?</p>
+                      <p className={styles.faqAnswer}>올바르게 부착된 Boot Skin은 정기적인 플레이 기준 <strong>여러 시즌</strong>, <strong>200시간 이상</strong>의 경기 사용, <strong>300회 이상</strong>의 훈련 세션을 견딜 수 있습니다. 저가형 제품과는 다른 내구성을 제공합니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 경기 중 손상되면 어떻게 되나요?</p>
+                      <p className={styles.faqAnswer}>Boot Skin은 <strong>슬라이딩 태클·축구화 간 접촉</strong>, <strong>인조잔디 마찰</strong>, <strong>스터드 자국과 스크래치</strong>, <strong>강한 볼 임팩트</strong>에도 견딜 수 있도록 제작되었습니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 카탈로그에 없는 맞춤 디자인도 제작할 수 있나요?</p>
+                      <p className={styles.faqAnswer}>물론입니다. 원하시는 로고 파일이나 팀 로고를 보내주시면 제작 가능 여부를 확인해 드립니다. 맞춤 디자인은 제작 처리 기간이 <strong>2~3일 추가</strong>됩니다.</p>
+                    </div>
+                    <div className={styles.faqItem}>
+                      <p className={styles.faqQuestion}>Q. 팀 주문이나 대량 구매 할인도 제공하나요?</p>
+                      <p className={styles.faqAnswer}>네. 팀 주문 및 도매 가격 문의는 이메일 또는 인스타그램 DM으로 직접 연락해 주세요. BROSPICK은 팀 전체의 아이덴티티 표현을 돕는 것을 좋아하며, <strong>대량 주문 시 특별 가격</strong>을 제공합니다.</p>
+                    </div>
+                  </div>
+                </Accordion>
+              )}
               <Accordion title="제품 설명" defaultOpen={true}>
                 <div className={styles.accordionContent}>
                   {product.details.functions.length > 0 && (
@@ -713,7 +769,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 </div>
               </Accordion>
 
-              {product.category !== 'taping' && <Accordion title="사이즈 가이드">
+              {product.category !== 'taping' && product.category !== 'boot-skin' && <Accordion title="사이즈 가이드">
                 <div className={styles.accordionContent}>
                   <p className={styles.sizeUnit}>단위: cm</p>
                   <table className={styles.sizeTable}>
@@ -878,6 +934,33 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               <button className={styles.stickyBuyButton} onClick={handleBuyNow} disabled={price === undefined}>
                 바로 구매
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {bulkInquiryOpen && (
+        <div className={styles.lightboxOverlay} onClick={() => setBulkInquiryOpen(false)}>
+          <div className={styles.logoInquiryModal} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.lightboxClose} onClick={() => setBulkInquiryOpen(false)}>✕</button>
+            <h3 className={styles.logoInquiryTitle}>대량주문 문의</h3>
+            <p className={styles.logoInquiryDesc}>
+              팀, 단체, 기업 대량주문은 편하게 연락 주세요.<br />
+              수량에 따라 맞춤 견적을 안내해 드립니다.
+            </p>
+            <div className={styles.logoInquiryContacts}>
+              <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer" className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>Instagram DM</span>
+                <span className={styles.logoInquiryContactValue}>@team.brospick</span>
+              </a>
+              <a href={`mailto:${CONTACT.email}`} className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>이메일</span>
+                <span className={styles.logoInquiryContactValue}>{CONTACT.email}</span>
+              </a>
+              <a href={`tel:${CONTACT.phone}`} className={styles.logoInquiryContact}>
+                <span className={styles.logoInquiryContactLabel}>전화 / 문자</span>
+                <span className={styles.logoInquiryContactValue}>{CONTACT.phone}</span>
+              </a>
             </div>
           </div>
         </div>

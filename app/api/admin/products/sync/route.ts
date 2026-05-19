@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
-import { productList } from '@/lib/products';
+import { productList, products as staticProducts } from '@/lib/products';
 
 // lib/products.ts 기준으로 DB에 없는 상품 목록 조회
 export async function GET(request: NextRequest) {
@@ -56,6 +56,23 @@ export async function POST(request: NextRequest) {
 
     const { error } = await supabaseAdmin.from('products').insert(toInsert);
     if (error) return apiError(`등록 실패: ${error.message}`, 500);
+
+    // 사이즈 정보 자동 삽입 (stock=0, status=sold_out)
+    const sizesToInsert = Object.values(staticProducts)
+      .filter((p) => !dbIds.has(p.id) && p.sizes && p.sizes.length > 0)
+      .flatMap((p) =>
+        p.sizes.map((size) => ({
+          product_id: p.id,
+          size,
+          status: 'sold_out',
+          stock: 0,
+        }))
+      );
+
+    if (sizesToInsert.length > 0) {
+      const { error: sizesError } = await supabaseAdmin.from('product_sizes').insert(sizesToInsert);
+      if (sizesError) return apiError(`사이즈 등록 실패: ${sizesError.message}`, 500);
+    }
 
     return NextResponse.json({ inserted: toInsert.length });
   });
