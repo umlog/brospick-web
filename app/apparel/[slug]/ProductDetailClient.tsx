@@ -179,7 +179,10 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   useEffect(() => {
     if (!product) return;
-    if (product.multiSelect) return;
+    if (product.multiSelect) {
+      setSelectedSizes([]);
+      return;
+    }
     if (product.sizes.includes('XL')) {
       setSelectedSize('XL');
     } else {
@@ -199,10 +202,11 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   const handleSizeSelect = (size: string) => {
     if (product.multiSelect) {
+      const isRemoving = selectedSizes.includes(size);
       setSelectedSizes((prev) =>
-        prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+        isRemoving ? prev.filter((s) => s !== size) : [...prev, size]
       );
-      if (product.sizeImages?.[size]) {
+      if (!isRemoving && product.sizeImages?.[size]) {
         const carousel = product.images.filter((img) => !img.includes('size-chart'));
         const idx = carousel.indexOf(product.sizeImages![size]);
         if (idx >= 0) emblaApi?.scrollTo(idx);
@@ -720,7 +724,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               </>
             )}
 
-            {product.category !== 'taping' && (
+            {product.category !== 'taping' && product.category !== 'boot-skin' && (
               <div className={styles.careSection}>
                 {CARE_INSTRUCTIONS.map((instruction, i) => (
                   <span key={i} className={styles.careTag}>{instruction}</span>
