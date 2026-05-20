@@ -57,6 +57,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const router = useRouter();
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [showSuccess, setShowSuccess] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
@@ -117,6 +118,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }
 
   const checkSelectedStock = (): boolean => {
+    if (product.multiSelect) return true;
     const key = `${product.id}-${selectedSize}`;
     const status = sizeStatuses[key];
     if (status === undefined) return true;
@@ -133,6 +135,27 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   };
 
   const handleAddToCart = () => {
+    if (product.multiSelect) {
+      if (selectedSizes.length === 0) {
+        alert('선택 항목을 선택해주세요.');
+        return;
+      }
+      if (price === undefined) return;
+      for (const size of selectedSizes) {
+        addToCart({
+          id: product.id,
+          name: productName!,
+          price,
+          size,
+          image: product.image,
+          quantity,
+        });
+      }
+      setQuantity(1);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
+      return;
+    }
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
@@ -156,6 +179,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   useEffect(() => {
     if (!product) return;
+    if (product.multiSelect) return;
     if (product.sizes.includes('XL')) {
       setSelectedSize('XL');
     } else {
@@ -164,7 +188,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [product?.slug]);
 
   useEffect(() => {
-    if (!product || Object.keys(sizeStatuses).length === 0 || !selectedSize) return;
+    if (!product || product.multiSelect) return;
+    if (Object.keys(sizeStatuses).length === 0 || !selectedSize) return;
     const currentKey = `${product.id}-${selectedSize}`;
     if (sizeStatuses[currentKey] === 'sold_out') {
       const fallback = product.sizes.find((s) => sizeStatuses[`${product.id}-${s}`] !== 'sold_out');
@@ -173,6 +198,17 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [sizeStatuses]);
 
   const handleSizeSelect = (size: string) => {
+    if (product.multiSelect) {
+      setSelectedSizes((prev) =>
+        prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+      );
+      if (product.sizeImages?.[size]) {
+        const carousel = product.images.filter((img) => !img.includes('size-chart'));
+        const idx = carousel.indexOf(product.sizeImages![size]);
+        if (idx >= 0) emblaApi?.scrollTo(idx);
+      }
+      return;
+    }
     setSelectedSize(size);
     setQuantity(1);
     if (product.sizeImages?.[size]) {
@@ -261,6 +297,25 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [currentImage]);
 
   const handleBuyNow = () => {
+    if (product.multiSelect) {
+      if (selectedSizes.length === 0) {
+        alert('선택 항목을 선택해주세요.');
+        return;
+      }
+      if (price === undefined) return;
+      for (const size of selectedSizes) {
+        addToCart({
+          id: product.id,
+          name: productName!,
+          price,
+          size,
+          image: product.image,
+          quantity,
+        });
+      }
+      router.push('/checkout');
+      return;
+    }
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
@@ -579,7 +634,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       return (
                         <button
                           key={size}
-                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${selectedSize === size ? styles.selected : ''
+                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${product.multiSelect ? (selectedSizes.includes(size) ? styles.selected : '') : (selectedSize === size ? styles.selected : '')
                             } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
                           onClick={() => {
                             if (isSoldOut) return;
@@ -618,7 +673,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                         className={styles.quantityButton}
                         onClick={() => {
                           const key = `${product.id}-${selectedSize}`;
-                          const stock = selectedSize ? (sizeStocks[key] || Infinity) : Infinity;
+                          const stock = (!product.multiSelect && selectedSize) ? (sizeStocks[key] || Infinity) : Infinity;
                           setQuantity(Math.min(quantity + 1, stock));
                         }}
                       >
@@ -626,7 +681,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       </button>
                     </div>
                     {(() => {
-                      if (!selectedSize) return null;
+                      if (product.multiSelect || !selectedSize) return null;
                       const key = `${product.id}-${selectedSize}`;
                       const status = sizeStatuses[key];
                       const stock = sizeStocks[key] ?? 0;
@@ -942,7 +997,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               <span className={styles.stickyBuyBarPrice}>{price !== undefined ? `₩${price.toLocaleString()}` : '—'}</span>
               {product.sizes.length > 1 && (
                 <span className={styles.stickyBuyBarSize}>
-                  {selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요'}
+                  {product.multiSelect
+                    ? (selectedSizes.length > 0 ? `선택: ${selectedSizes.join(', ')}` : '선택하세요')
+                    : (selectedSize ? `사이즈: ${selectedSize}` : '사이즈를 선택하세요')}
                 </span>
               )}
             </div>

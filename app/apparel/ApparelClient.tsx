@@ -9,7 +9,7 @@ const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
 
 const CATEGORY_REPRESENTATIVE_IMAGE: Partial<Record<ProductCategory, string>> = {
-  //'training-top': '/brandstroy/sportswear-brandstory.png',
+  'training-top': '/brandstroy/sportswear-trainingtop-thumb.png',
   'top': '/apparel/top/cool-tech-t-shirt-black/1.png',
   'bottom': '/apparel/bottom/tech-training-shorts-gray/1.png',
   'socks': '/apparel/socks/athletic-long-socks-white/1.png',
