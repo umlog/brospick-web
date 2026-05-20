@@ -1,0 +1,251 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - generic [ref=e6]:
+        - button "메뉴 열기" [ref=e7] [cursor=pointer]
+        - button "테마 전환" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+      - link [ref=e19] [cursor=pointer]:
+        - /url: /cart
+        - img [ref=e20]
+  - main [ref=e22]:
+    - main [ref=e23]:
+      - generic [ref=e24]:
+        - link "← 의류 목록으로 돌아가기" [ref=e25] [cursor=pointer]:
+          - /url: /apparel
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]:
+                - generic [ref=e30]:
+                  - img "BOOT SKIN 번호 1"
+                - generic [ref=e31]:
+                  - img "BOOT SKIN 번호 2"
+                - generic [ref=e32]:
+                  - img "BOOT SKIN 번호 3"
+                - generic [ref=e33]:
+                  - img "BOOT SKIN 번호 4"
+                - generic [ref=e34]:
+                  - img "BOOT SKIN 번호 5"
+                - generic [ref=e35]:
+                  - img "BOOT SKIN 번호 6"
+                - generic [ref=e36]:
+                  - img "BOOT SKIN 번호 7"
+                - generic [ref=e37]:
+                  - img "BOOT SKIN 번호 8"
+                - generic [ref=e38]:
+                  - img "BOOT SKIN 번호 9"
+                - generic [ref=e39]:
+                  - img "BOOT SKIN 번호 10"
+                - generic [ref=e40]:
+                  - img "BOOT SKIN 번호 11"
+                - generic [ref=e41]:
+                  - img "BOOT SKIN 번호 12"
+              - button "이전 이미지":
+                - img
+              - button "다음 이미지" [ref=e42] [cursor=pointer]:
+                - img [ref=e43]
+            - generic [ref=e45]:
+              - button "이미지 1" [ref=e46] [cursor=pointer]
+              - button "이미지 2" [ref=e47] [cursor=pointer]
+              - button "이미지 3" [ref=e48] [cursor=pointer]
+              - button "이미지 4" [ref=e49] [cursor=pointer]
+              - button "이미지 5" [ref=e50] [cursor=pointer]
+              - button "이미지 6" [ref=e51] [cursor=pointer]
+              - button "이미지 7" [ref=e52] [cursor=pointer]
+              - button "이미지 8" [ref=e53] [cursor=pointer]
+              - button "이미지 9" [ref=e54] [cursor=pointer]
+              - button "이미지 10" [ref=e55] [cursor=pointer]
+              - button "이미지 11" [ref=e56] [cursor=pointer]
+              - button "이미지 12" [ref=e57] [cursor=pointer]
+          - generic [ref=e58]:
+            - heading "BOOT SKIN 번호" [level=1] [ref=e59]
+            - generic [ref=e60]:
+              - generic [ref=e61]: ₩3,000
+              - generic [ref=e62]: ₩5,000
+              - generic [ref=e63]: 40%
+            - generic [ref=e64]:
+              - heading "번호 선택" [level=3] [ref=e65]
+              - generic [ref=e66]:
+                - button "0" [ref=e67] [cursor=pointer]
+                - button "1" [ref=e68] [cursor=pointer]
+                - button "2" [ref=e69] [cursor=pointer]
+                - button "3" [ref=e70] [cursor=pointer]
+                - button "4" [ref=e71] [cursor=pointer]
+                - button "5" [ref=e72] [cursor=pointer]
+                - button "6" [ref=e73] [cursor=pointer]
+                - button "7" [ref=e74] [cursor=pointer]
+                - button "8" [ref=e75] [cursor=pointer]
+                - button "9" [ref=e76] [cursor=pointer]
+            - generic [ref=e77]:
+              - heading "수량" [level=3] [ref=e78]
+              - generic [ref=e80]:
+                - button "−" [ref=e81] [cursor=pointer]
+                - generic [ref=e82]: "1"
+                - button "+" [ref=e83] [cursor=pointer]
+            - button "대량주문 문의" [ref=e84] [cursor=pointer]
+            - paragraph [ref=e85]: 15시 이전 결제 시 당일 발송
+            - generic [ref=e86]:
+              - generic [ref=e87]: 건조기 사용 금지
+              - generic [ref=e88]: 온수세탁 금지
+            - generic [ref=e89]:
+              - generic [ref=e90]: 방수 내구성 소재
+              - generic [ref=e91]: 깔끔한 블랙 컬러
+            - img "BOOT SKIN 번호 상세 이미지 1" [ref=e93]
+            - generic [ref=e94]:
+              - generic:
+                - generic:
+                  - img
+                  - img
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - button "자주 묻는 질문 (FAQ) +" [expanded] [ref=e97] [cursor=pointer]:
+                  - generic [ref=e98]: 자주 묻는 질문 (FAQ)
+                  - generic [ref=e99]: +
+                - generic [ref=e101]:
+                  - generic [ref=e102]:
+                    - paragraph [ref=e103]: Q. BOOT SKIN은 일반 스티커나 열전사 필름과 어떻게 다른가요?
+                    - paragraph [ref=e104]:
+                      - text: 일반 비닐 스티커는 두껍고 쉽게 들뜨거나 벗겨질 수 있으며, 열전사 필름은 열프레스 장비가 필요합니다. 반면 Boot Skin은
+                      - strong [ref=e105]: 국내 고급 잉크와 접착 기술
+                      - text: 을 사용한 기계로 생산하여 축구화 표면에 자연스럽게 밀착됩니다.
+                      - strong [ref=e106]: 두꺼운 가장자리가 없어
+                      - text: 걸리거나 들뜰 가능성이 적고,
+                      - strong [ref=e107]: 별도의 열 작업 없이
+                      - text: 집에서도 쉽게 부착할 수 있습니다.
+                  - generic [ref=e108]:
+                    - paragraph [ref=e109]: Q. 방수와 날씨 변화에 강한가요?
+                    - paragraph [ref=e110]:
+                      - text: 네. Boot Skin은 다양한 환경에서도 안정적으로 유지됩니다. 비나 젖은 환경에서
+                      - strong [ref=e111]: 완전 방수
+                      - text: ", 직사광선에도 색이 쉽게 바래지 않는"
+                      - strong [ref=e112]: 자외선 저항
+                      - text: ","
+                      - strong [ref=e113]: 영하 10°C ~ 영상 60°C 온도 안정성
+                      - text: ", 마찰과 흠집을 줄여주는"
+                      - strong [ref=e114]: 보호 코팅
+                      - text: ", 진흙도 디자인 손상 없이 쉽게 닦아낼 수 있습니다."
+                  - generic [ref=e115]:
+                    - paragraph [ref=e116]: Q. 어떤 축구화 브랜드와 소재에 사용할 수 있나요?
+                    - paragraph [ref=e117]:
+                      - strong [ref=e118]: Nike, Adidas, Puma 등 모든 브랜드
+                      - text: 의 축구화에 사용 가능하며,
+                      - strong [ref=e119]: 천연 가죽과 합성 가죽 소재 모두
+                      - text: 에 적용할 수 있습니다. Boot Skin의 접착 기술은 축구화 표면에 안정적으로 부착되도록 설계되었습니다.
+                  - generic [ref=e120]:
+                    - paragraph [ref=e121]: Q. 어떤 사이즈가 있나요?
+                    - paragraph [ref=e122]:
+                      - text: Boot Skin은
+                      - strong [ref=e123]: 5mm와 10mm
+                      - text: 높이의 전사 제품을 제공합니다. 각 제품 페이지의 옵션 이미지를 확인하시면 정확한 크기를 확인하실 수 있습니다.
+                  - generic [ref=e124]:
+                    - paragraph [ref=e125]: Q. 부착 후 바로 경기해도 되나요?
+                    - paragraph [ref=e126]:
+                      - text: 바로 사용할 수는 있지만, 최대 접착력을 위해
+                      - strong [ref=e127]: 1~2시간 경화 시간
+                      - text: 을 권장합니다. 가장 좋은 결과를 위해
+                      - strong [ref=e128]: 경기 전날 부착
+                      - text: 하는 것을 추천합니다.
+                  - generic [ref=e129]:
+                    - paragraph [ref=e130]: Q. 얼마나 오래 지속되나요?
+                    - paragraph [ref=e131]:
+                      - text: 올바르게 부착된 Boot Skin은 정기적인 플레이 기준
+                      - strong [ref=e132]: 여러 시즌
+                      - text: ","
+                      - strong [ref=e133]: 200시간 이상
+                      - text: 의 경기 사용,
+                      - strong [ref=e134]: 300회 이상
+                      - text: 의 훈련 세션을 견딜 수 있습니다. 저가형 제품과는 다른 내구성을 제공합니다.
+                  - generic [ref=e135]:
+                    - paragraph [ref=e136]: Q. 경기 중 손상되면 어떻게 되나요?
+                    - paragraph [ref=e137]:
+                      - text: Boot Skin은
+                      - strong [ref=e138]: 슬라이딩 태클·축구화 간 접촉
+                      - text: ","
+                      - strong [ref=e139]: 인조잔디 마찰
+                      - text: ","
+                      - strong [ref=e140]: 스터드 자국과 스크래치
+                      - text: ","
+                      - strong [ref=e141]: 강한 볼 임팩트
+                      - text: 에도 견딜 수 있도록 제작되었습니다.
+                  - generic [ref=e142]:
+                    - paragraph [ref=e143]: Q. 카탈로그에 없는 맞춤 디자인도 제작할 수 있나요?
+                    - paragraph [ref=e144]:
+                      - text: 물론입니다. 원하시는 로고 파일이나 팀 로고를 보내주시면 제작 가능 여부를 확인해 드립니다. 맞춤 디자인은 제작 처리 기간이
+                      - strong [ref=e145]: 2~3일 추가
+                      - text: 됩니다.
+                  - generic [ref=e146]:
+                    - paragraph [ref=e147]: Q. 팀 주문이나 대량 구매 할인도 제공하나요?
+                    - paragraph [ref=e148]:
+                      - text: 네. 팀 주문 및 도매 가격 문의는 이메일 또는 인스타그램 DM으로 직접 연락해 주세요. BROSPICK은 팀 전체의 아이덴티티 표현을 돕는 것을 좋아하며,
+                      - strong [ref=e149]: 대량 주문 시 특별 가격
+                      - text: 을 제공합니다.
+              - generic [ref=e150]:
+                - button "제품 설명 +" [expanded] [ref=e151] [cursor=pointer]:
+                  - generic [ref=e152]: 제품 설명
+                  - generic [ref=e153]: +
+                - generic [ref=e155]:
+                  - heading "기능" [level=4] [ref=e156]
+                  - list [ref=e157]:
+                    - listitem [ref=e158]:
+                      - text: •
+                      - strong [ref=e159]: 강한 접착력
+                      - text: — 경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.
+                  - heading "디자인" [level=4] [ref=e160]
+                  - list [ref=e161]:
+                    - listitem [ref=e162]:
+                      - text: •
+                      - strong [ref=e163]: 블랙 컬러
+                      - text: — 어떤 부츠 색상에도 잘 어울리는 베이직 블랙.
+                  - heading "소재" [level=4] [ref=e164]
+                  - paragraph [ref=e165]: 방수 접착 소재.
+              - button "배송 +" [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]: 배송
+                - generic [ref=e169]: +
+              - button "반품 & 교환 +" [ref=e171] [cursor=pointer]:
+                - generic [ref=e172]: 반품 & 교환
+                - generic [ref=e173]: +
+        - generic [ref=e174]:
+          - heading "관련 상품" [level=2] [ref=e175]
+          - generic [ref=e176]:
+            - link "BOOT SKIN 이니셜 BOOT SKIN 이니셜" [ref=e177] [cursor=pointer]:
+              - /url: /apparel/bootskin-initial
+              - img "BOOT SKIN 이니셜" [ref=e179]
+              - paragraph [ref=e180]: BOOT SKIN 이니셜
+            - link "BOOT SKIN 심볼 BOOT SKIN 심볼" [ref=e181] [cursor=pointer]:
+              - /url: /apparel/bootskin-symbol
+              - img "BOOT SKIN 심볼" [ref=e183]
+              - paragraph [ref=e184]: BOOT SKIN 심볼
+            - link "BOOT SKIN 국기 BOOT SKIN 국기" [ref=e185] [cursor=pointer]:
+              - /url: /apparel/bootskin-korea
+              - img "BOOT SKIN 국기" [ref=e187]
+              - paragraph [ref=e188]: BOOT SKIN 국기
+            - link "Quarter-Zip Training Top Quarter-Zip Training Top" [ref=e189] [cursor=pointer]:
+              - /url: /apparel/quarter-zip-training-top
+              - img "Quarter-Zip Training Top" [ref=e191]
+              - paragraph [ref=e192]: Quarter-Zip Training Top
+      - generic [ref=e194]:
+        - generic [ref=e195]:
+          - generic [ref=e196]: ₩3,000
+          - generic [ref=e197]: "사이즈: 0"
+        - generic [ref=e198]:
+          - button "장바구니" [ref=e199] [cursor=pointer]
+          - button "바로 구매" [ref=e200] [cursor=pointer]
+  - contentinfo [ref=e201]:
+    - generic [ref=e202]:
+      - button "고객서비스 +" [ref=e204] [cursor=pointer]:
+        - generic [ref=e205]: 고객서비스
+        - generic [ref=e206]: +
+      - button "지원 +" [ref=e208] [cursor=pointer]:
+        - generic [ref=e209]: 지원
+        - generic [ref=e210]: +
+      - button "BROSPICK +" [ref=e212] [cursor=pointer]:
+        - generic [ref=e213]: BROSPICK
+        - generic [ref=e214]: +
+    - generic [ref=e216]:
+      - img "Brospick" [ref=e217]
+      - paragraph [ref=e218]: © 2026 BROSPICK. All rights reserved.
+  - alert [ref=e219]

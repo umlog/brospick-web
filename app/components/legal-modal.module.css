@@ -52,6 +52,8 @@
 
 .body {
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: var(--space-xl);
   flex: 1;
 }
@@ -129,11 +131,15 @@
   }
 
   .table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     font-size: 0.7rem;
   }
 
   .table th,
   .table td {
     padding: var(--space-xs) var(--space-sm);
+    white-space: nowrap;
   }
 }

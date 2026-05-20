@@ -36,6 +36,7 @@
   object-position: center bottom;
   animation: kenBurns 14s ease-in-out both;
   transform-origin: center center;
+  will-change: transform;
 }
 
 @keyframes kenBurns {

@@ -7,7 +7,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-md);
-  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
@@ -234,6 +233,12 @@
 .submitButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .submitButton {
+    touch-action: manipulation;
+  }
 }
 
 .orderSummary {

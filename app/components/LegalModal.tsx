@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { COMPANY, CONTACT } from '../../lib/constants';
 import styles from './legal-modal.module.css';
 
@@ -190,16 +190,25 @@ const CONTENT: Record<LegalModalType, React.ComponentType> = {
 
 export function LegalModal({ type, onClose }: LegalModalProps) {
   const Content = CONTENT[type];
+  const scrollY = useRef(0);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKey);
-    document.body.style.overflow = 'hidden';
+
+    scrollY.current = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY.current}px`;
+    document.body.style.width = '100%';
+
     return () => {
       document.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY.current);
     };
   }, [onClose]);
 

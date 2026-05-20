@@ -73,6 +73,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const zoomPanelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const [bannerExpanded, setBannerExpanded] = useState(false);
+  const modalScrollY = useRef(0);
 
   const product = products[params.slug as ProductSlug];
 
@@ -174,6 +175,11 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
     setQuantity(1);
+    if (product.sizeImages?.[size]) {
+      const carousel = product.images.filter((img) => !img.includes('size-chart'));
+      const idx = carousel.indexOf(product.sizeImages![size]);
+      if (idx >= 0) emblaApi?.scrollTo(idx);
+    }
   };
 
   useEffect(() => {
@@ -202,6 +208,23 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     setIsPinching(false);
     pinchRef.current = null;
   }, [currentImage]);
+
+  // 모달/라이트박스 열릴 때 iOS 호환 scroll lock
+  useEffect(() => {
+    const anyOpen = lightboxOpen || bulkInquiryOpen || logoInquiryOpen;
+    if (anyOpen) {
+      modalScrollY.current = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${modalScrollY.current}px`;
+      document.body.style.width = '100%';
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, modalScrollY.current);
+      };
+    }
+  }, [lightboxOpen, bulkInquiryOpen, logoInquiryOpen]);
 
   const getPinchDist = (touches: React.TouchList) => {
     const dx = touches[0].clientX - touches[1].clientX;
@@ -543,8 +566,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
             ) : (
               <>
                 {product.sizes.length >= 1 && <div className={styles.sizeSection}>
-                  <h3>사이즈 선택</h3>
-                  <div className={styles.sizeOptions}>
+                  <h3>{product.sizeLabel ?? '사이즈 선택'}</h3>
+                  <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
                     {product.sizes.map((size) => {
                       const key = `${product.id}-${size}`;
                       const sizeStatus = sizeStatuses[key] || 'available';
@@ -556,7 +579,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       return (
                         <button
                           key={size}
-                          className={`${styles.sizeButton} ${selectedSize === size ? styles.selected : ''
+                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${selectedSize === size ? styles.selected : ''
                             } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
                           onClick={() => {
                             if (isSoldOut) return;
