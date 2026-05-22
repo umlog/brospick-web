@@ -44,6 +44,7 @@
     overflow-x: auto;
     gap: 12px;
     scroll-snap-type: x mandatory;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     /* 양쪽 패딩으로 첫/마지막 카드 살짝 보이게 */
@@ -261,6 +262,7 @@
     margin-right: calc(-1 * var(--space-md));
     padding: 0 var(--space-md);
     scrollbar-width: none;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
   }
 

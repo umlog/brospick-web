@@ -208,7 +208,7 @@
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 480px) {
   .trigger {
-    bottom: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom));
     right: 16px;
     width: 54px;
     height: 54px;
@@ -216,7 +216,7 @@
 
   .panel {
     right: 16px;
-    bottom: 84px;
+    bottom: calc(max(20px, env(safe-area-inset-bottom)) + 64px);
     width: calc(100vw - 32px);
     max-width: 300px;
   }

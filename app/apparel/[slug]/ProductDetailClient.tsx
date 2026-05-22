@@ -59,6 +59,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [quantityInput, setQuantityInput] = useState('1');
   const [showSuccess, setShowSuccess] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -77,6 +78,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const modalScrollY = useRef(0);
 
   const product = products[params.slug as ProductSlug];
+  const isBulkCategory = product?.category === 'taping' || product?.category === 'socks' || product?.category === 'boot-skin';
 
   // 서버에서 받은 초기 데이터로 size 맵 구성
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>(() => {
@@ -248,6 +250,10 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     setIsPinching(false);
     pinchRef.current = null;
   }, [currentImage]);
+
+  useEffect(() => {
+    setQuantityInput(String(quantity));
+  }, [quantity]);
 
   // 모달/라이트박스 열릴 때 iOS 호환 scroll lock
   useEffect(() => {
@@ -500,6 +506,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
           <div className={styles.infoSection}>
             <h1 className={styles.productName}>{productName}</h1>
+            {product.category === 'boot-skin' && (
+              <span className={styles.quantityBadge}>2개입 / 2pcs</span>
+            )}
 
             <div className={styles.priceSection}>
               {price !== undefined ? (
@@ -672,7 +681,33 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       >
                         −
                       </button>
-                      <span className={styles.quantity}>{quantity}</span>
+                      {isBulkCategory ? (
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          className={styles.quantityInput}
+                          value={quantityInput}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/\D/g, '');
+                            setQuantityInput(raw);
+                            const n = parseInt(raw, 10);
+                            if (!isNaN(n) && n >= 1) {
+                              const key = `${product.id}-${selectedSize}`;
+                              const stock = (!product.multiSelect && selectedSize) ? (sizeStocks[key] || Infinity) : Infinity;
+                              setQuantity(Math.min(n, stock));
+                            }
+                          }}
+                          onBlur={() => {
+                            const n = parseInt(quantityInput, 10);
+                            if (!quantityInput || isNaN(n) || n < 1) {
+                              setQuantity(1);
+                              setQuantityInput('1');
+                            }
+                          }}
+                        />
+                      ) : (
+                        <span className={styles.quantity}>{quantity}</span>
+                      )}
                       <button
                         className={styles.quantityButton}
                         onClick={() => {
@@ -717,7 +752,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                   )}
                 {(product.category === 'taping' || product.category === 'socks' || product.category === 'boot-skin') && (
                   <button className={styles.bulkInquiryButton} onClick={() => setBulkInquiryOpen(true)}>
-                    대량주문 문의
+                    커스텀 주문 문의
                   </button>
                 )}
                 <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
@@ -1027,10 +1062,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         <div className={styles.lightboxOverlay} onClick={() => setBulkInquiryOpen(false)}>
           <div className={styles.logoInquiryModal} onClick={(e) => e.stopPropagation()}>
             <button className={styles.lightboxClose} onClick={() => setBulkInquiryOpen(false)}>✕</button>
-            <h3 className={styles.logoInquiryTitle}>대량주문 문의</h3>
+            <h3 className={styles.logoInquiryTitle}>커스텀 주문 문의</h3>
             <p className={styles.logoInquiryDesc}>
-              팀, 단체, 기업 대량주문은 편하게 연락 주세요.<br />
-              수량에 따라 맞춤 견적을 안내해 드립니다.
+              팀 로고 및 이외 커스텀 주문 제작은 메일 혹은 인스타그램 DM으로 문의 부탁드립니다.
             </p>
             <div className={styles.logoInquiryContacts}>
               <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer" className={styles.logoInquiryContact}>

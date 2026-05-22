@@ -254,7 +254,7 @@
 .emblaSlide img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
@@ -358,6 +358,14 @@
   .productName {
     font-size: var(--size-xl);
   }
+}
+
+.quantityBadge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
 }
 
 .priceSection {
@@ -699,6 +707,7 @@
   .sizeOptions {
     flex-wrap: nowrap;
     overflow-x: auto;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 4px;
@@ -905,10 +914,32 @@
   text-align: center;
 }
 
+.quantityInput {
+  font-size: var(--size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  width: 56px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid var(--color-accent);
+  outline: none;
+  padding: 2px 0;
+}
+
+.quantityInput:focus {
+  border-bottom-color: var(--color-text-primary);
+}
+
 @media (max-width: 768px) {
   .quantity {
     font-size: var(--size-base);
     min-width: 28px;
+  }
+
+  .quantityInput {
+    font-size: var(--size-base);
+    width: 44px;
   }
 }
 
@@ -1444,8 +1475,14 @@
   cursor: col-resize;
   user-select: none;
   touch-action: pan-y;
-  margin: var(--space-lg) 0;
+  margin: var(--space-lg) 16px;
   background: var(--color-bg-secondary);
+}
+
+@media (min-width: 640px) {
+  .beforeAfterContainer {
+    margin: var(--space-lg) 0;
+  }
 }
 
 .beforeAfterImg {

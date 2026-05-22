@@ -84,7 +84,6 @@ export const RETURN_POLICY = {
 } as const;
 
 export const CARE_INSTRUCTIONS = [
-  '건조기 사용 금지',
   '온수세탁 금지',
 ] as const;
 

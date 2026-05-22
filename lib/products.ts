@@ -12,7 +12,6 @@ export const PRODUCT_FALLBACK_IMAGE = '/apparel/training-top/quarter-zip-trainin
 // URL + 코드 식별자 (오타 방지용 타입 안전 상수)
 export const PRODUCT_SLUGS = {
   QUARTER_ZIP_TRAINING_TOP: 'quarter-zip-training-top',
-  FLEX_QUARTER_ZIP_TOP_BLACK: 'flex-quarter-zip-top-black',
   FLEX_QUARTER_ZIP_TOP_GRAY: 'flex-quarter-zip-top-gray',
   REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 'reflective-run-t-shirt-camel-gray',
   RUNNING_LONG_SLEEVE_TOP_GRAY: 'running-long-sleeve-top-gray',
@@ -65,7 +64,6 @@ export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
 // DB FK (Supabase product_sizes.product_id) 숫자 ID 중앙화
 export const PRODUCT_IDS = {
   QUARTER_ZIP_TRAINING_TOP: 1,
-  FLEX_QUARTER_ZIP_TOP_BLACK: 2,
   FLEX_QUARTER_ZIP_TOP_GRAY: 3,
   REFLECTIVE_RUN_TSHIRT_CAMEL_GRAY: 4,
   RUNNING_LONG_SLEEVE_TOP_GRAY: 5,
@@ -238,52 +236,6 @@ export const products: Record<ProductSlug, Product> = {
       ],
       material:
         '프리미엄 기능성 폴리에스터 + 스판 혼방. 부드러운 터치감과 높은 신축성, 세탁 시 수축과 뒤틀림을 최소화한 내구성.',
-    },
-  },
-
-  [PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_BLACK]: {
-    id: PRODUCT_IDS.FLEX_QUARTER_ZIP_TOP_BLACK,
-    slug: PRODUCT_SLUGS.FLEX_QUARTER_ZIP_TOP_BLACK,
-    name: 'Flex Quarter-Zip Top (Black)',
-    category: 'training-top',
-    comingSoon: true,
-    image: '/apparel/training-top/flex-quarter-zip-top-black/thumb.png',
-    images: [
-      '/apparel/training-top/flex-quarter-zip-top-black/thumb.png',
-      '/apparel/training-top/flex-quarter-zip-top-black/thumb2.png',
-      '/apparel/training-top/flex-quarter-zip-top-black/detail-1.png',
-      '/apparel/training-top/flex-quarter-zip-top-black/detail-2.png',
-      '/apparel/training-top/flex-quarter-zip-top-black/detail-3.png',
-    ],
-    tagline: '바디 라인을 정돈하며, 격한 움직임도 자유롭게 — 쿼터집 트레이닝 탑 (블랙)',
-    description:
-      '편안한 착용감과 슬림한 실루엣을 동시에 잡은 Quarter-Zip Training Top. 탄탄한 고신축 원단으로 몸을 안정감 있게 잡아주면서도 움직임은 자유롭고, 땀은 빠르게 건조되어 격한 운동에도 쾌적함을 유지해 줍니다.',
-    sizes: ['S', 'M', 'L', 'XL', '2XL'],
-    features: [
-      { label: '편안함과 슬림한 핏의 균형', detail: ' 바디 라인을 정돈해주면서도 답답함 없는 착용감.' },
-      { label: '탄탄한 고신축 원단', detail: ' 움직임에 자연스럽게 반응하는 안정적인 핏감.' },
-      { label: '자유로운 활동성', detail: ' 러닝, 웨이트, 구기 종목까지 폭넓게 대응.' },
-      { label: '빠른 수분 배출 시스템', detail: ' 땀을 빠르게 흡수·건조해 운동 내내 쾌적함 유지.' },
-    ],
-    chestLabel: '가슴둘레',
-    sizeChart: [
-      { size: 'S', length: 63, chest: 92, sleeve: 68 },
-      { size: 'M', length: 66, chest: 98, sleeve: 71 },
-      { size: 'L', length: 69, chest: 104, sleeve: 74 },
-      { size: 'XL', length: 72, chest: 110, sleeve: 77 },
-      { size: '2XL', length: 75, chest: 116, sleeve: 80 },
-    ],
-    details: {
-      functions: [
-        { title: '숄더 포인트 디테일', description: '미니멀한 상의에 입체적인 포인트 연출.' },
-        { title: '하프 집업 넥라인', description: '체온 조절이 쉬운 구조로 실용성과 스타일 동시 확보.' },
-        { title: '핑거홀 디자인', description: '핑거홀 디자인으로 안정적인 착용감.' },
-        { title: '미니멀 로고 배치', description: '전면 심볼, 후면 BROSPICK 레터링으로 정체성 강조.' },
-        { title: '리플렉티브 디테일', description: '조명 아래에서 은은하게 드러나는 기능적 포인트.' },
-      ],
-      design: [],
-      material:
-        '프리미엄 기능성 폴리에스터 + 스판 블렌드. 부드러운 터치감, 우수한 복원력, 세탁 후 뒤틀림과 수축 최소화.',
     },
   },
 
