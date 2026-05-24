@@ -12,8 +12,10 @@ export async function DELETE(
       return apiError('권한이 없습니다.', 401);
     }
 
+    const restoreStock = request.nextUrl.searchParams.get('restore_stock') === 'true';
+
     try {
-      const result = await orderService.deleteOrder(params.id);
+      const result = await orderService.deleteOrder(params.id, restoreStock);
       return NextResponse.json(result);
     } catch (err: unknown) {
       const e = err as Error;

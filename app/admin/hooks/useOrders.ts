@@ -117,11 +117,29 @@ export function useOrders(notifyOnChange: boolean) {
     const ok = await showConfirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`);
     if (!ok) return;
 
+    // 재고가 차감된 상태인지 판단
+    // - 무통장입금 + 입금대기: 주문 생성 시점에 차감됨
+    // - 입금확인 / 배송중 / 배송완료 / 발송지연: 카카오·무통장 모두 차감됨
+    // - 카카오페이 결제중 / 카카오페이 + 입금대기: 차감 안 됨
+    const order = allOrders.find((o) => o.id === orderId);
+    const isDelayed = /^(\d+)(주|일) 뒤 발송$/.test(order?.status ?? '');
+    const confirmedStatuses = ['입금확인', '배송중', '배송완료'];
+    const stockWasDecremented = order && (
+      confirmedStatuses.includes(order.status) ||
+      isDelayed ||
+      (order.status === '입금대기' && order.payment_method === '무통장입금')
+    );
+
+    let restoreStock = false;
+    if (stockWasDecremented) {
+      restoreStock = await showConfirm(`재고를 원래대로 돌려놓을까요?\n(${order!.order_items.map((i) => `${i.product_name} ${i.size} x${i.quantity}`).join(', ')})`);
+    }
+
     setProcessing(orderId, true);
     try {
-      await apiClient.orders.delete(orderId);
+      await apiClient.orders.delete(orderId, restoreStock);
       setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
-      showToast('주문이 삭제되었습니다.', 'success');
+      showToast(restoreStock ? '주문이 삭제되고 재고가 복구되었습니다.' : '주문이 삭제되었습니다.', 'success');
     } catch {
       showToast('주문 삭제에 실패했습니다.', 'error');
     } finally {

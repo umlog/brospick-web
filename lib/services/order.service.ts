@@ -280,14 +280,18 @@ export class OrderService {
     return { order: data };
   }
 
-  // 주문 삭제 (재고 복구 포함)
-  async deleteOrder(orderId: string) {
-    // 삭제 전 상태와 아이템 조회 (재고 복구 여부 판단)
-    const { data: order } = await supabaseAdmin
-      .from('orders')
-      .select('status, payment_method, order_items(product_id, size, quantity)')
-      .eq('id', orderId)
-      .single();
+  // 주문 삭제
+  async deleteOrder(orderId: string, restoreStock: boolean) {
+    // restoreStock=true 시 아이템 조회 필요
+    let orderItems: Array<{ product_id: number | null; size: string; quantity: number }> = [];
+    if (restoreStock) {
+      const { data: order } = await supabaseAdmin
+        .from('orders')
+        .select('order_items(product_id, size, quantity)')
+        .eq('id', orderId)
+        .single();
+      orderItems = Array.isArray(order?.order_items) ? order.order_items : [];
+    }
 
     const { error } = await supabaseAdmin.from('orders').delete().eq('id', orderId);
     if (error) {
@@ -295,21 +299,11 @@ export class OrderService {
       throw new Error(`주문 삭제에 실패했습니다: ${error.message}`);
     }
 
-    // 재고 복구 대상:
-    // 1. 입금확인 이후 상태 (카카오/무통장 모두)
-    // 2. 입금대기 + 무통장입금 (주문 생성 시점에 재고가 차감됐으므로)
-    const restoreStatuses = STOCK_RESTORE_STATUSES as readonly string[];
-    const isBankTransferPending =
-      order?.status === OrderStatus.PENDING_PAYMENT &&
-      order?.payment_method === '무통장입금';
-    if (order && (restoreStatuses.includes(order.status) || isDelayStatus(order.status) || isBankTransferPending)) {
-      const items = Array.isArray(order.order_items) ? order.order_items : [];
+    if (restoreStock && orderItems.length > 0) {
       await inventoryService.restoreStock(
-        items.filter((i: { product_id: number | null }) => i.product_id).map((i: { product_id: number; size: string; quantity: number }) => ({
-          product_id: i.product_id,
-          size: i.size,
-          quantity: i.quantity,
-        }))
+        orderItems
+          .filter((i) => i.product_id)
+          .map((i) => ({ product_id: i.product_id!, size: i.size, quantity: i.quantity }))
       );
     }
 

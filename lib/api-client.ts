@@ -75,8 +75,8 @@ export const apiClient = {
         body,
       }),
 
-    delete: (id: string) =>
-      request<{ success: true }>(`/api/orders/${id}`, {
+    delete: (id: string, restoreStock: boolean) =>
+      request<{ success: true }>(`/api/orders/${id}?restore_stock=${restoreStock}`, {
         method: 'DELETE',
       }),
 
