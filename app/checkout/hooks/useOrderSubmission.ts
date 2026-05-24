@@ -20,9 +20,11 @@ export function useOrderSubmission(
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+    setIsSubmitting(true);
 
     if (!formData.privacyConsent || !formData.thirdPartyConsent) {
       alert('필수 약관에 동의해 주세요.');
+      setIsSubmitting(false);
       return;
     }
 
@@ -35,10 +37,9 @@ export function useOrderSubmission(
 
     if (formData.paymentMethod === 'bank' && !formData.depositorName.trim()) {
       alert('입금자명을 입력해 주세요.');
+      setIsSubmitting(false);
       return;
     }
-
-    setIsSubmitting(true);
 
     try {
       if (formData.paymentMethod === 'kakaopay') {
