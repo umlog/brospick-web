@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-// Supabase 헬스체크 - 주기적으로 호출하여 무료 플랜 비활성 방지
 export async function GET() {
   try {
     const { error } = await supabaseAdmin
-      .from('orders')
-      .select('*', { count: 'exact', head: true });
+      .from('products')
+      .select('id')
+      .limit(1);
 
     if (error) {
       return NextResponse.json(
-        { status: 'error', message: error.message },
-        { status: 500 }
+        { status: 'degraded', error: 'DB unavailable', timestamp: new Date().toISOString() },
+        { status: 503 }
       );
     }
 
@@ -19,10 +19,10 @@ export async function GET() {
       status: 'ok',
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { status: 'error', message: 'Health check failed' },
-      { status: 500 }
+      { status: 'degraded', error: 'Health check failed', timestamp: new Date().toISOString() },
+      { status: 503 }
     );
   }
 }
