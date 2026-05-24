@@ -1,0 +1,957 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e70]:
+    - main [ref=e71]:
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - heading "주문 관리" [level=1] [ref=e74]
+          - generic [ref=e75]:
+            - button "새로고침" [ref=e76] [cursor=pointer]
+            - button "로그아웃" [ref=e77] [cursor=pointer]
+        - generic [ref=e78]:
+          - button "주문 관리" [ref=e79] [cursor=pointer]
+          - button "교환/반품" [ref=e80] [cursor=pointer]
+          - button "상품 관리" [ref=e81] [cursor=pointer]
+          - button "대시보드" [ref=e82] [cursor=pointer]
+          - button "블로그 관리" [ref=e83] [cursor=pointer]
+          - button "마케팅 이메일" [ref=e84] [cursor=pointer]
+          - button "전자책 주문" [ref=e85] [cursor=pointer]
+        - textbox "주문번호, 고객명, 전화번호 검색..." [ref=e87]
+        - generic [ref=e88]:
+          - textbox [ref=e89] [cursor=pointer]
+          - generic [ref=e90]: ~
+          - textbox [ref=e91] [cursor=pointer]
+        - generic [ref=e92]:
+          - button "전체" [ref=e93] [cursor=pointer]
+          - button "입금대기" [ref=e94] [cursor=pointer]
+          - button "입금확인" [ref=e95] [cursor=pointer]
+          - button "발송 지연" [ref=e96] [cursor=pointer]
+          - button "배송준비" [ref=e97] [cursor=pointer]
+          - button "배송중" [ref=e98] [cursor=pointer]
+          - button "배송완료" [ref=e99] [cursor=pointer]
+          - button "취소요청" [ref=e100] [cursor=pointer]
+          - button "취소완료" [ref=e101] [cursor=pointer]
+        - generic [ref=e102]:
+          - generic [ref=e103]: 마케팅 동의
+          - button "전체" [ref=e104] [cursor=pointer]
+          - button "동의" [ref=e105] [cursor=pointer]
+          - button "미동의" [ref=e106] [cursor=pointer]
+          - button "CSV 내보내기" [ref=e107] [cursor=pointer]
+        - generic [ref=e108]:
+          - generic [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]:
+              - generic [ref=e112]: BP-20260523-4715
+              - generic [ref=e113]: 2026. 05. 24. 오전 12:01
+            - generic [ref=e114]:
+              - generic [ref=e115]: 이해윤
+              - generic [ref=e116]: 마케팅
+              - generic [ref=e117]: ₩4,500
+              - generic [ref=e118]: 입금대기
+          - generic [ref=e120] [cursor=pointer]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: BP-20260523-2150
+              - generic [ref=e123]: 2026. 05. 23. 오후 11:28
+            - generic [ref=e124]:
+              - generic [ref=e125]: 김지호
+              - generic [ref=e126]: 마케팅
+              - generic [ref=e127]: ₩6,500
+              - generic [ref=e128]: 입금대기
+          - generic [ref=e130] [cursor=pointer]:
+            - generic [ref=e131]:
+              - generic [ref=e132]: BP-20260523-7628
+              - generic [ref=e133]: 2026. 05. 23. 오후 11:05
+            - generic [ref=e134]:
+              - generic [ref=e135]: 김나경
+              - generic [ref=e136]: 마케팅
+              - generic [ref=e137]: ₩13,500
+              - generic [ref=e138]: 입금확인
+          - generic [ref=e140] [cursor=pointer]:
+            - generic [ref=e141]:
+              - generic [ref=e142]: BP-20260523-4233
+              - generic [ref=e143]: 2026. 05. 23. 오후 10:57
+            - generic [ref=e144]:
+              - generic [ref=e145]: 김시온
+              - generic [ref=e146]: 마케팅
+              - generic [ref=e147]: ₩12,000
+              - generic [ref=e148]: 입금확인
+          - generic [ref=e150] [cursor=pointer]:
+            - generic [ref=e151]:
+              - generic [ref=e152]: BP-20260523-9263
+              - generic [ref=e153]: 2026. 05. 23. 오후 10:48
+            - generic [ref=e154]:
+              - generic [ref=e155]: 김서영
+              - generic [ref=e156]: 마케팅
+              - generic [ref=e157]: ₩6,000
+              - generic [ref=e158]: 입금확인
+          - generic [ref=e160] [cursor=pointer]:
+            - generic [ref=e161]:
+              - generic [ref=e162]: BP-20260523-4680
+              - generic [ref=e163]: 2026. 05. 23. 오후 10:20
+            - generic [ref=e164]:
+              - generic [ref=e165]: 윤예준
+              - generic [ref=e166]: 마케팅
+              - generic [ref=e167]: ₩4,500
+              - generic [ref=e168]: 입금확인
+          - generic [ref=e170] [cursor=pointer]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: BP-20260523-6350
+              - generic [ref=e173]: 2026. 05. 23. 오후 10:03
+            - generic [ref=e174]:
+              - generic [ref=e175]: 최충만
+              - generic [ref=e176]: ₩10,000
+              - generic [ref=e177]: 입금확인
+          - generic [ref=e179] [cursor=pointer]:
+            - generic [ref=e180]:
+              - generic [ref=e181]: BP-20260523-6054
+              - generic [ref=e182]: 2026. 05. 23. 오후 10:01
+            - generic [ref=e183]:
+              - generic [ref=e184]: 김진구
+              - generic [ref=e185]: 마케팅
+              - generic [ref=e186]: ₩20,000
+              - generic [ref=e187]: 입금확인
+          - generic [ref=e189] [cursor=pointer]:
+            - generic [ref=e190]:
+              - generic [ref=e191]: BP-20260523-4167
+              - generic [ref=e192]: 2026. 05. 23. 오후 08:51
+            - generic [ref=e193]:
+              - generic [ref=e194]: 엄지영
+              - generic [ref=e195]: 마케팅
+              - generic [ref=e196]: ₩13,000
+              - generic [ref=e197]: 입금확인
+          - generic [ref=e199] [cursor=pointer]:
+            - generic [ref=e200]:
+              - generic [ref=e201]: BP-20260523-7946
+              - generic [ref=e202]: 2026. 05. 23. 오후 08:25
+            - generic [ref=e203]:
+              - generic [ref=e204]: 김지현
+              - generic [ref=e205]: 마케팅
+              - generic [ref=e206]: ₩9,000
+              - generic [ref=e207]: 입금대기
+          - generic [ref=e209] [cursor=pointer]:
+            - generic [ref=e210]:
+              - generic [ref=e211]: BP-20260523-3302
+              - generic [ref=e212]: 2026. 05. 23. 오후 08:12
+            - generic [ref=e213]:
+              - generic [ref=e214]: 박승진
+              - generic [ref=e215]: 마케팅
+              - generic [ref=e216]: ₩18,000
+              - generic [ref=e217]: 카카오페이 결제중
+          - generic [ref=e219] [cursor=pointer]:
+            - generic [ref=e220]:
+              - generic [ref=e221]: BP-20260523-7059
+              - generic [ref=e222]: 2026. 05. 23. 오후 08:12
+            - generic [ref=e223]:
+              - generic [ref=e224]: 박승진
+              - generic [ref=e225]: 마케팅
+              - generic [ref=e226]: ₩18,000
+              - generic [ref=e227]: 입금확인
+          - generic [ref=e229] [cursor=pointer]:
+            - generic [ref=e230]:
+              - generic [ref=e231]: BP-20260523-9302
+              - generic [ref=e232]: 2026. 05. 23. 오후 06:06
+            - generic [ref=e233]:
+              - generic [ref=e234]: 문하임
+              - generic [ref=e235]: 마케팅
+              - generic [ref=e236]: ₩6,500
+              - generic [ref=e237]: 카카오페이 결제중
+          - generic [ref=e239] [cursor=pointer]:
+            - generic [ref=e240]:
+              - generic [ref=e241]: BP-20260523-9168
+              - generic [ref=e242]: 2026. 05. 23. 오후 05:44
+            - generic [ref=e243]:
+              - generic [ref=e244]: 김영태
+              - generic [ref=e245]: 마케팅
+              - generic [ref=e246]: ₩23,000
+              - generic [ref=e247]: 입금확인
+          - generic [ref=e249] [cursor=pointer]:
+            - generic [ref=e250]:
+              - generic [ref=e251]: BP-20260523-4595
+              - generic [ref=e252]: 2026. 05. 23. 오후 05:10
+            - generic [ref=e253]:
+              - generic [ref=e254]: 성민승
+              - generic [ref=e255]: 마케팅
+              - generic [ref=e256]: ₩15,000
+              - generic [ref=e257]: 입금확인
+          - generic [ref=e259] [cursor=pointer]:
+            - generic [ref=e260]:
+              - generic [ref=e261]: BP-20260523-2610
+              - generic [ref=e262]: 2026. 05. 23. 오후 05:02
+            - generic [ref=e263]:
+              - generic [ref=e264]: 최록희
+              - generic [ref=e265]: 마케팅
+              - generic [ref=e266]: ₩6,000
+              - generic [ref=e267]: 입금확인
+          - generic [ref=e269] [cursor=pointer]:
+            - generic [ref=e270]:
+              - generic [ref=e271]: BP-20260523-8468
+              - generic [ref=e272]: 2026. 05. 23. 오후 03:27
+            - generic [ref=e273]:
+              - generic [ref=e274]: 유이원
+              - generic [ref=e275]: ₩25,000
+              - generic [ref=e276]: 입금확인
+          - generic [ref=e278] [cursor=pointer]:
+            - generic [ref=e279]:
+              - generic [ref=e280]: BP-20260523-7280
+              - generic [ref=e281]: 2026. 05. 23. 오후 03:21
+            - generic [ref=e282]:
+              - generic [ref=e283]: 김재민
+              - generic [ref=e284]: 마케팅
+              - generic [ref=e285]: ₩20,000
+              - generic [ref=e286]: 입금확인
+          - generic [ref=e288] [cursor=pointer]:
+            - generic [ref=e289]:
+              - generic [ref=e290]: BP-20260523-3147
+              - generic [ref=e291]: 2026. 05. 23. 오후 02:31
+            - generic [ref=e292]:
+              - generic [ref=e293]: 명성진
+              - generic [ref=e294]: 마케팅
+              - generic [ref=e295]: ₩16,000
+              - generic [ref=e296]: 입금확인
+          - generic [ref=e298] [cursor=pointer]:
+            - generic [ref=e299]:
+              - generic [ref=e300]: BP-20260523-9350
+              - generic [ref=e301]: 2026. 05. 23. 오후 02:20
+            - generic [ref=e302]:
+              - generic [ref=e303]: 박찬현
+              - generic [ref=e304]: 마케팅
+              - generic [ref=e305]: ₩23,000
+              - generic [ref=e306]: 입금대기
+          - generic [ref=e308] [cursor=pointer]:
+            - generic [ref=e309]:
+              - generic [ref=e310]: BP-20260523-9159
+              - generic [ref=e311]: 2026. 05. 23. 오전 10:55
+            - generic [ref=e312]:
+              - generic [ref=e313]: 송민교
+              - generic [ref=e314]: 마케팅
+              - generic [ref=e315]: ₩10,000
+              - generic [ref=e316]: 배송중
+          - generic [ref=e318] [cursor=pointer]:
+            - generic [ref=e319]:
+              - generic [ref=e320]: BP-20260522-4098
+              - generic [ref=e321]: 2026. 05. 23. 오전 08:28
+            - generic [ref=e322]:
+              - generic [ref=e323]: 심예슬
+              - generic [ref=e324]: 마케팅
+              - generic [ref=e325]: ₩17,000
+              - generic [ref=e326]: 배송중
+          - generic [ref=e328] [cursor=pointer]:
+            - generic [ref=e329]:
+              - generic [ref=e330]: BP-20260522-4316
+              - generic [ref=e331]: 2026. 05. 23. 오전 08:15
+            - generic [ref=e332]:
+              - generic [ref=e333]: 홍영준
+              - generic [ref=e334]: ₩28,000
+              - generic [ref=e335]: 배송중
+          - generic [ref=e337] [cursor=pointer]:
+            - generic [ref=e338]:
+              - generic [ref=e339]: BP-20260522-2951
+              - generic [ref=e340]: 2026. 05. 22. 오후 09:49
+            - generic [ref=e341]:
+              - generic [ref=e342]: 엄태경
+              - generic [ref=e343]: ₩14,000
+              - generic [ref=e344]: 배송중
+          - generic [ref=e346] [cursor=pointer]:
+            - generic [ref=e347]:
+              - generic [ref=e348]: BP-20260522-2066
+              - generic [ref=e349]: 2026. 05. 22. 오후 07:10
+            - generic [ref=e350]:
+              - generic [ref=e351]: 이재진
+              - generic [ref=e352]: 마케팅
+              - generic [ref=e353]: ₩24,000
+              - generic [ref=e354]: 배송중
+          - generic [ref=e356] [cursor=pointer]:
+            - generic [ref=e357]:
+              - generic [ref=e358]: BP-20260522-7920
+              - generic [ref=e359]: 2026. 05. 22. 오후 06:16
+            - generic [ref=e360]:
+              - generic [ref=e361]: 조희원
+              - generic [ref=e362]: 마케팅
+              - generic [ref=e363]: ₩9,000
+              - generic [ref=e364]: 배송중
+          - generic [ref=e366] [cursor=pointer]:
+            - generic [ref=e367]:
+              - generic [ref=e368]: BP-20260522-3225
+              - generic [ref=e369]: 2026. 05. 22. 오후 04:36
+            - generic [ref=e370]:
+              - generic [ref=e371]: 김건남
+              - generic [ref=e372]: 마케팅
+              - generic [ref=e373]: ₩10,000
+              - generic [ref=e374]: 배송중
+          - generic [ref=e376] [cursor=pointer]:
+            - generic [ref=e377]:
+              - generic [ref=e378]: BP-20260521-7379
+              - generic [ref=e379]: 2026. 05. 21. 오후 12:09
+            - generic [ref=e380]:
+              - generic [ref=e381]: 정주현
+              - generic [ref=e382]: ₩29,900
+              - generic [ref=e383]: 배송완료
+          - generic [ref=e385] [cursor=pointer]:
+            - generic [ref=e386]:
+              - generic [ref=e387]: BP-20260519-3076
+              - generic [ref=e388]: 2026. 05. 19. 오후 04:44
+            - generic [ref=e389]:
+              - generic [ref=e390]: 진영웅
+              - generic [ref=e391]: 마케팅
+              - generic [ref=e392]: ₩8,000
+              - generic [ref=e393]: 배송완료
+          - generic [ref=e395] [cursor=pointer]:
+            - generic [ref=e396]:
+              - generic [ref=e397]: BP-20260518-2569
+              - generic [ref=e398]: 2026. 05. 18. 오후 07:49
+            - generic [ref=e399]:
+              - generic [ref=e400]: 진동현
+              - generic [ref=e401]: ₩17,000
+              - generic [ref=e402]: 배송중
+          - generic [ref=e404] [cursor=pointer]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: BP-20260518-3077
+              - generic [ref=e407]: 2026. 05. 18. 오후 01:56
+            - generic [ref=e408]:
+              - generic [ref=e409]: 박유찬
+              - generic [ref=e410]: 마케팅
+              - generic [ref=e411]: ₩50,400
+              - generic [ref=e412]: 배송중
+          - generic [ref=e414] [cursor=pointer]:
+            - generic [ref=e415]:
+              - generic [ref=e416]: BP-20260517-5368
+              - generic [ref=e417]: 2026. 05. 17. 오후 10:04
+            - generic [ref=e418]:
+              - generic [ref=e419]: 김성훈
+              - generic [ref=e420]: 마케팅
+              - generic [ref=e421]: ₩8,000
+              - generic [ref=e422]: 배송완료
+          - generic [ref=e424] [cursor=pointer]:
+            - generic [ref=e425]:
+              - generic [ref=e426]: BP-20260514-8032
+              - generic [ref=e427]: 2026. 05. 14. 오후 02:34
+            - generic [ref=e428]:
+              - generic [ref=e429]: 이재희
+              - generic [ref=e430]: ₩13,100
+              - generic [ref=e431]: 배송완료
+          - generic [ref=e433] [cursor=pointer]:
+            - generic [ref=e434]:
+              - generic [ref=e435]: BP-20260513-8849
+              - generic [ref=e436]: 2026. 05. 13. 오후 11:32
+            - generic [ref=e437]:
+              - generic [ref=e438]: 김지헌
+              - generic [ref=e439]: ₩29,400
+              - generic [ref=e440]: 배송중
+          - generic [ref=e442] [cursor=pointer]:
+            - generic [ref=e443]:
+              - generic [ref=e444]: BP-20260513-5896
+              - generic [ref=e445]: 2026. 05. 13. 오후 12:47
+            - generic [ref=e446]:
+              - generic [ref=e447]: 최명환
+              - generic [ref=e448]: 마케팅
+              - generic [ref=e449]: ₩6,500
+              - generic [ref=e450]: 배송중
+          - generic [ref=e452] [cursor=pointer]:
+            - generic [ref=e453]:
+              - generic [ref=e454]: BP-20260513-4697
+              - generic [ref=e455]: 2026. 05. 13. 오전 11:52
+            - generic [ref=e456]:
+              - generic [ref=e457]: 성민철
+              - generic [ref=e458]: 마케팅
+              - generic [ref=e459]: ₩9,000
+              - generic [ref=e460]: 배송완료
+          - generic [ref=e462] [cursor=pointer]:
+            - generic [ref=e463]:
+              - generic [ref=e464]: BP-20260511-3143
+              - generic [ref=e465]: 2026. 05. 11. 오후 02:05
+            - generic [ref=e466]:
+              - generic [ref=e467]: 최민영
+              - generic [ref=e468]: 마케팅
+              - generic [ref=e469]: ₩14,000
+              - generic [ref=e470]: 배송완료
+          - generic [ref=e472] [cursor=pointer]:
+            - generic [ref=e473]:
+              - generic [ref=e474]: BP-20260509-4855
+              - generic [ref=e475]: 2026. 05. 09. 오후 07:06
+            - generic [ref=e476]:
+              - generic [ref=e477]: 김시준
+              - generic [ref=e478]: 마케팅
+              - generic [ref=e479]: ₩20,500
+              - generic [ref=e480]: 배송중
+          - generic [ref=e482] [cursor=pointer]:
+            - generic [ref=e483]:
+              - generic [ref=e484]: BP-20260508-9808
+              - generic [ref=e485]: 2026. 05. 08. 오후 08:35
+            - generic [ref=e486]:
+              - generic [ref=e487]: 최상연
+              - generic [ref=e488]: 마케팅
+              - generic [ref=e489]: ₩10,500
+              - generic [ref=e490]: 배송완료
+          - generic [ref=e492] [cursor=pointer]:
+            - generic [ref=e493]:
+              - generic [ref=e494]: BP-20260507-9123
+              - generic [ref=e495]: 2026. 05. 07. 오전 10:06
+            - generic [ref=e496]:
+              - generic [ref=e497]: 김기범
+              - generic [ref=e498]: ₩29,900
+              - generic [ref=e499]: 배송완료
+          - generic [ref=e501] [cursor=pointer]:
+            - generic [ref=e502]:
+              - generic [ref=e503]: BP-20260506-5077
+              - generic [ref=e504]: 2026. 05. 06. 오후 09:50
+            - generic [ref=e505]:
+              - generic [ref=e506]: 손진기
+              - generic [ref=e507]: ₩6,500
+              - generic [ref=e508]: 배송중
+          - generic [ref=e510] [cursor=pointer]:
+            - generic [ref=e511]:
+              - generic [ref=e512]: BP-20260504-9466
+              - generic [ref=e513]: 2026. 05. 04. 오후 10:55
+            - generic [ref=e514]:
+              - generic [ref=e515]: 박준영
+              - generic [ref=e516]: 마케팅
+              - generic [ref=e517]: ₩5,500
+              - generic [ref=e518]: 배송완료
+          - generic [ref=e520] [cursor=pointer]:
+            - generic [ref=e521]:
+              - generic [ref=e522]: BP-20260504-6771
+              - generic [ref=e523]: 2026. 05. 04. 오후 10:12
+            - generic [ref=e524]:
+              - generic [ref=e525]: 김승준
+              - generic [ref=e526]: 마케팅
+              - generic [ref=e527]: ₩53,800
+              - generic [ref=e528]: 배송완료
+          - generic [ref=e530] [cursor=pointer]:
+            - generic [ref=e531]:
+              - generic [ref=e532]: BP-20260502-9123
+              - generic [ref=e533]: 2026. 05. 02. 오후 09:50
+            - generic [ref=e534]:
+              - generic [ref=e535]: 박준성
+              - generic [ref=e536]: 마케팅
+              - generic [ref=e537]: ₩18,000
+              - generic [ref=e538]: 배송완료
+          - generic [ref=e540] [cursor=pointer]:
+            - generic [ref=e541]:
+              - generic [ref=e542]: BP-20260502-8583
+              - generic [ref=e543]: 2026. 05. 02. 오후 12:23
+            - generic [ref=e544]:
+              - generic [ref=e545]: 김시환
+              - generic [ref=e546]: 마케팅
+              - generic [ref=e547]: ₩50,000
+              - generic [ref=e548]: 배송완료
+          - generic [ref=e550] [cursor=pointer]:
+            - generic [ref=e551]:
+              - generic [ref=e552]: BP-20260501-8522
+              - generic [ref=e553]: 2026. 05. 02. 오전 12:54
+            - generic [ref=e554]:
+              - generic [ref=e555]: 최시영
+              - generic [ref=e556]: 마케팅
+              - generic [ref=e557]: ₩5,500
+              - generic [ref=e558]: 배송완료
+          - generic [ref=e560] [cursor=pointer]:
+            - generic [ref=e561]:
+              - generic [ref=e562]: BP-20260429-7305
+              - generic [ref=e563]: 2026. 04. 29. 오후 09:18
+            - generic [ref=e564]:
+              - generic [ref=e565]: 전건
+              - generic [ref=e566]: 마케팅
+              - generic [ref=e567]: ₩29,900
+              - generic [ref=e568]: 배송완료
+          - generic [ref=e570] [cursor=pointer]:
+            - generic [ref=e571]:
+              - generic [ref=e572]: BP-20260429-3812
+              - generic [ref=e573]: 2026. 04. 29. 오후 01:45
+            - generic [ref=e574]:
+              - generic [ref=e575]: 장요한
+              - generic [ref=e576]: 마케팅
+              - generic [ref=e577]: ₩13,000
+              - generic [ref=e578]: 배송완료
+          - generic [ref=e580] [cursor=pointer]:
+            - generic [ref=e581]:
+              - generic [ref=e582]: BP-20260428-3733
+              - generic [ref=e583]: 2026. 04. 28. 오후 10:15
+            - generic [ref=e584]:
+              - generic [ref=e585]: 송주원
+              - generic [ref=e586]: 마케팅
+              - generic [ref=e587]: ₩28,900
+              - generic [ref=e588]: 배송완료
+          - generic [ref=e590] [cursor=pointer]:
+            - generic [ref=e591]:
+              - generic [ref=e592]: BP-20260424-6708
+              - generic [ref=e593]: 2026. 04. 24. 오후 10:35
+            - generic [ref=e594]:
+              - generic [ref=e595]: 이윤재
+              - generic [ref=e596]: 마케팅
+              - generic [ref=e597]: ₩5,500
+              - generic [ref=e598]: 배송완료
+          - generic [ref=e600] [cursor=pointer]:
+            - generic [ref=e601]:
+              - generic [ref=e602]: BP-20260424-2431
+              - generic [ref=e603]: 2026. 04. 24. 오후 04:29
+            - generic [ref=e604]:
+              - generic [ref=e605]: 유예송
+              - generic [ref=e606]: 마케팅
+              - generic [ref=e607]: ₩10,000
+              - generic [ref=e608]: 배송중
+          - generic [ref=e610] [cursor=pointer]:
+            - generic [ref=e611]:
+              - generic [ref=e612]: BP-20260423-9568
+              - generic [ref=e613]: 2026. 04. 23. 오후 07:15
+            - generic [ref=e614]:
+              - generic [ref=e615]: 유혜숙
+              - generic [ref=e616]: 마케팅
+              - generic [ref=e617]: ₩13,000
+              - generic [ref=e618]: 배송완료
+          - generic [ref=e620] [cursor=pointer]:
+            - generic [ref=e621]:
+              - generic [ref=e622]: BP-20260423-1779
+              - generic [ref=e623]: 2026. 04. 23. 오후 06:18
+            - generic [ref=e624]:
+              - generic [ref=e625]: 박태양
+              - generic [ref=e626]: 마케팅
+              - generic [ref=e627]: ₩8,000
+              - generic [ref=e628]: 배송완료
+          - generic [ref=e630] [cursor=pointer]:
+            - generic [ref=e631]:
+              - generic [ref=e632]: BP-20260422-2787
+              - generic [ref=e633]: 2026. 04. 22. 오후 02:46
+            - generic [ref=e634]:
+              - generic [ref=e635]: 신병우
+              - generic [ref=e636]: 마케팅
+              - generic [ref=e637]: ₩9,000
+              - generic [ref=e638]: 배송완료
+          - generic [ref=e640] [cursor=pointer]:
+            - generic [ref=e641]:
+              - generic [ref=e642]: BP-20260421-5328
+              - generic [ref=e643]: 2026. 04. 22. 오전 08:18
+            - generic [ref=e644]:
+              - generic [ref=e645]: 최민규
+              - generic [ref=e646]: ₩21,000
+              - generic [ref=e647]: 배송완료
+          - generic [ref=e649] [cursor=pointer]:
+            - generic [ref=e650]:
+              - generic [ref=e651]: BP-20260421-9816
+              - generic [ref=e652]: 2026. 04. 22. 오전 01:17
+            - generic [ref=e653]:
+              - generic [ref=e654]: 정고운
+              - generic [ref=e655]: 마케팅
+              - generic [ref=e656]: ₩6,500
+              - generic [ref=e657]: 배송완료
+          - generic [ref=e659] [cursor=pointer]:
+            - generic [ref=e660]:
+              - generic [ref=e661]: BP-20260421-9075
+              - generic [ref=e662]: 2026. 04. 21. 오후 11:14
+            - generic [ref=e663]:
+              - generic [ref=e664]: 이도헌
+              - generic [ref=e665]: 마케팅
+              - generic [ref=e666]: ₩6,500
+              - generic [ref=e667]: 배송완료
+          - generic [ref=e669] [cursor=pointer]:
+            - generic [ref=e670]:
+              - generic [ref=e671]: BP-20260421-5146
+              - generic [ref=e672]: 2026. 04. 21. 오후 10:19
+            - generic [ref=e673]:
+              - generic [ref=e674]: 김도윤
+              - generic [ref=e675]: 마케팅
+              - generic [ref=e676]: ₩8,000
+              - generic [ref=e677]: 배송완료
+          - generic [ref=e679] [cursor=pointer]:
+            - generic [ref=e680]:
+              - generic [ref=e681]: BP-20260421-9861
+              - generic [ref=e682]: 2026. 04. 21. 오후 06:32
+            - generic [ref=e683]:
+              - generic [ref=e684]: 오서우
+              - generic [ref=e685]: ₩6,500
+              - generic [ref=e686]: 배송완료
+          - generic [ref=e688] [cursor=pointer]:
+            - generic [ref=e689]:
+              - generic [ref=e690]: BP-20260421-2444
+              - generic [ref=e691]: 2026. 04. 21. 오후 06:17
+            - generic [ref=e692]:
+              - generic [ref=e693]: 이준섭
+              - generic [ref=e694]: 마케팅
+              - generic [ref=e695]: ₩6,500
+              - generic [ref=e696]: 배송완료
+          - generic [ref=e698] [cursor=pointer]:
+            - generic [ref=e699]:
+              - generic [ref=e700]: BP-20260421-2692
+              - generic [ref=e701]: 2026. 04. 21. 오후 05:42
+            - generic [ref=e702]:
+              - generic [ref=e703]: 한서진
+              - generic [ref=e704]: 마케팅
+              - generic [ref=e705]: ₩8,000
+              - generic [ref=e706]: 배송완료
+          - generic [ref=e708] [cursor=pointer]:
+            - generic [ref=e709]:
+              - generic [ref=e710]: BP-20260420-8968
+              - generic [ref=e711]: 2026. 04. 21. 오전 08:21
+            - generic [ref=e712]:
+              - generic [ref=e713]: 김성주
+              - generic [ref=e714]: 마케팅
+              - generic [ref=e715]: ₩8,000
+              - generic [ref=e716]: 배송완료
+          - generic [ref=e718] [cursor=pointer]:
+            - generic [ref=e719]:
+              - generic [ref=e720]: BP-20260420-9668
+              - generic [ref=e721]: 2026. 04. 20. 오후 09:08
+            - generic [ref=e722]:
+              - generic [ref=e723]: 김승진
+              - generic [ref=e724]: 마케팅
+              - generic [ref=e725]: ₩8,600
+              - generic [ref=e726]: 배송완료
+          - generic [ref=e728] [cursor=pointer]:
+            - generic [ref=e729]:
+              - generic [ref=e730]: BP-20260420-6298
+              - generic [ref=e731]: 2026. 04. 20. 오후 09:04
+            - generic [ref=e732]:
+              - generic [ref=e733]: 이선교
+              - generic [ref=e734]: ₩11,400
+              - generic [ref=e735]: 배송완료
+          - generic [ref=e737] [cursor=pointer]:
+            - generic [ref=e738]:
+              - generic [ref=e739]: BP-20260420-3839
+              - generic [ref=e740]: 2026. 04. 20. 오후 06:16
+            - generic [ref=e741]:
+              - generic [ref=e742]: 김영휘
+              - generic [ref=e743]: 마케팅
+              - generic [ref=e744]: ₩5,800
+              - generic [ref=e745]: 배송완료
+          - generic [ref=e747] [cursor=pointer]:
+            - generic [ref=e748]:
+              - generic [ref=e749]: BP-20260420-4011
+              - generic [ref=e750]: 2026. 04. 20. 오후 02:57
+            - generic [ref=e751]:
+              - generic [ref=e752]: 박겸
+              - generic [ref=e753]: 마케팅
+              - generic [ref=e754]: ₩8,000
+              - generic [ref=e755]: 배송완료
+          - generic [ref=e757] [cursor=pointer]:
+            - generic [ref=e758]:
+              - generic [ref=e759]: BP-20260420-9439
+              - generic [ref=e760]: 2026. 04. 20. 오후 02:57
+            - generic [ref=e761]:
+              - generic [ref=e762]: 최민영
+              - generic [ref=e763]: 마케팅
+              - generic [ref=e764]: ₩8,000
+              - generic [ref=e765]: 배송완료
+          - generic [ref=e767] [cursor=pointer]:
+            - generic [ref=e768]:
+              - generic [ref=e769]: BP-20260420-4288
+              - generic [ref=e770]: 2026. 04. 20. 오후 01:34
+            - generic [ref=e771]:
+              - generic [ref=e772]: 문서인
+              - generic [ref=e773]: 마케팅
+              - generic [ref=e774]: ₩10,500
+              - generic [ref=e775]: 배송완료
+          - generic [ref=e777] [cursor=pointer]:
+            - generic [ref=e778]:
+              - generic [ref=e779]: BP-20260419-2081
+              - generic [ref=e780]: 2026. 04. 19. 오후 10:56
+            - generic [ref=e781]:
+              - generic [ref=e782]: 김지구
+              - generic [ref=e783]: 마케팅
+              - generic [ref=e784]: ₩10,500
+              - generic [ref=e785]: 배송완료
+          - generic [ref=e787] [cursor=pointer]:
+            - generic [ref=e788]:
+              - generic [ref=e789]: BP-20260419-6697
+              - generic [ref=e790]: 2026. 04. 19. 오후 09:28
+            - generic [ref=e791]:
+              - generic [ref=e792]: 최준서
+              - generic [ref=e793]: 마케팅
+              - generic [ref=e794]: ₩13,000
+              - generic [ref=e795]: 배송완료
+          - generic [ref=e797] [cursor=pointer]:
+            - generic [ref=e798]:
+              - generic [ref=e799]: BP-20260419-4368
+              - generic [ref=e800]: 2026. 04. 19. 오후 07:44
+            - generic [ref=e801]:
+              - generic [ref=e802]: 김형원
+              - generic [ref=e803]: 마케팅
+              - generic [ref=e804]: ₩8,000
+              - generic [ref=e805]: 배송완료
+          - generic [ref=e807] [cursor=pointer]:
+            - generic [ref=e808]:
+              - generic [ref=e809]: BP-20260419-4499
+              - generic [ref=e810]: 2026. 04. 19. 오후 07:38
+            - generic [ref=e811]:
+              - generic [ref=e812]: 마성훈
+              - generic [ref=e813]: ₩8,000
+              - generic [ref=e814]: 배송완료
+          - generic [ref=e816] [cursor=pointer]:
+            - generic [ref=e817]:
+              - generic [ref=e818]: BP-20260419-8902
+              - generic [ref=e819]: 2026. 04. 19. 오후 03:39
+            - generic [ref=e820]:
+              - generic [ref=e821]: 송주원
+              - generic [ref=e822]: 마케팅
+              - generic [ref=e823]: ₩28,900
+              - generic [ref=e824]: 배송완료
+          - generic [ref=e826] [cursor=pointer]:
+            - generic [ref=e827]:
+              - generic [ref=e828]: BP-20260418-4925
+              - generic [ref=e829]: 2026. 04. 18. 오후 05:02
+            - generic [ref=e830]:
+              - generic [ref=e831]: 황성욱
+              - generic [ref=e832]: 마케팅
+              - generic [ref=e833]: ₩54,800
+              - generic [ref=e834]: 배송완료
+          - generic [ref=e836] [cursor=pointer]:
+            - generic [ref=e837]:
+              - generic [ref=e838]: BP-20260417-5125
+              - generic [ref=e839]: 2026. 04. 17. 오후 10:02
+            - generic [ref=e840]:
+              - generic [ref=e841]: 최주원
+              - generic [ref=e842]: 마케팅
+              - generic [ref=e843]: ₩8,000
+              - generic [ref=e844]: 배송완료
+          - generic [ref=e846] [cursor=pointer]:
+            - generic [ref=e847]:
+              - generic [ref=e848]: BP-20260417-9827
+              - generic [ref=e849]: 2026. 04. 17. 오후 09:18
+            - generic [ref=e850]:
+              - generic [ref=e851]: 송하준
+              - generic [ref=e852]: 마케팅
+              - generic [ref=e853]: ₩5,500
+              - generic [ref=e854]: 배송완료
+          - generic [ref=e856] [cursor=pointer]:
+            - generic [ref=e857]:
+              - generic [ref=e858]: BP-20260417-5010
+              - generic [ref=e859]: 2026. 04. 17. 오후 08:48
+            - generic [ref=e860]:
+              - generic [ref=e861]: 장재원
+              - generic [ref=e862]: 마케팅
+              - generic [ref=e863]: ₩8,000
+              - generic [ref=e864]: 배송완료
+          - generic [ref=e866] [cursor=pointer]:
+            - generic [ref=e867]:
+              - generic [ref=e868]: BP-20260417-8738
+              - generic [ref=e869]: 2026. 04. 17. 오후 01:43
+            - generic [ref=e870]:
+              - generic [ref=e871]: 유지원
+              - generic [ref=e872]: 마케팅
+              - generic [ref=e873]: ₩5,500
+              - generic [ref=e874]: 배송완료
+          - generic [ref=e876] [cursor=pointer]:
+            - generic [ref=e877]:
+              - generic [ref=e878]: BP-20260417-7540
+              - generic [ref=e879]: 2026. 04. 17. 오전 11:02
+            - generic [ref=e880]:
+              - generic [ref=e881]: 이승민
+              - generic [ref=e882]: 마케팅
+              - generic [ref=e883]: ₩29,900
+              - generic [ref=e884]: 배송완료
+          - generic [ref=e886] [cursor=pointer]:
+            - generic [ref=e887]:
+              - generic [ref=e888]: BP-20260416-2795
+              - generic [ref=e889]: 2026. 04. 16. 오후 12:16
+            - generic [ref=e890]:
+              - generic [ref=e891]: 선일겸
+              - generic [ref=e892]: ₩28,900
+              - generic [ref=e893]: 배송완료
+          - generic [ref=e895] [cursor=pointer]:
+            - generic [ref=e896]:
+              - generic [ref=e897]: BP-20260412-8351
+              - generic [ref=e898]: 2026. 04. 12. 오후 03:50
+            - generic [ref=e899]:
+              - generic [ref=e900]: 권우협
+              - generic [ref=e901]: 마케팅
+              - generic [ref=e902]: ₩30,400
+              - generic [ref=e903]: 배송완료
+          - generic [ref=e905] [cursor=pointer]:
+            - generic [ref=e906]:
+              - generic [ref=e907]: BP-20260411-9357
+              - generic [ref=e908]: 2026. 04. 11. 오후 05:12
+            - generic [ref=e909]:
+              - generic [ref=e910]: 김현경
+              - generic [ref=e911]: 마케팅
+              - generic [ref=e912]: ₩55,300
+              - generic [ref=e913]: 배송완료
+          - generic [ref=e915] [cursor=pointer]:
+            - generic [ref=e916]:
+              - generic [ref=e917]: BP-20260408-1109
+              - generic [ref=e918]: 2026. 04. 08. 오후 11:30
+            - generic [ref=e919]:
+              - generic [ref=e920]: 변선우
+              - generic [ref=e921]: 마케팅
+              - generic [ref=e922]: ₩54,800
+              - generic [ref=e923]: 배송완료
+          - generic [ref=e925] [cursor=pointer]:
+            - generic [ref=e926]:
+              - generic [ref=e927]: BP-20260406-2542
+              - generic [ref=e928]: 2026. 04. 07. 오전 01:09
+            - generic [ref=e929]:
+              - generic [ref=e930]: 김예건
+              - generic [ref=e931]: 마케팅
+              - generic [ref=e932]: ₩29,900
+              - generic [ref=e933]: 배송완료
+          - generic [ref=e935] [cursor=pointer]:
+            - generic [ref=e936]:
+              - generic [ref=e937]: BP-20260321-7072
+              - generic [ref=e938]: 2026. 03. 21. 오후 07:52
+            - generic [ref=e939]:
+              - generic [ref=e940]: 오세진
+              - generic [ref=e941]: 마케팅
+              - generic [ref=e942]: ₩29,900
+              - generic [ref=e943]: 배송완료
+          - generic [ref=e945] [cursor=pointer]:
+            - generic [ref=e946]:
+              - generic [ref=e947]: BP-20260316-4872
+              - generic [ref=e948]: 2026. 03. 16. 오후 03:35
+            - generic [ref=e949]:
+              - generic [ref=e950]: 김규빈
+              - generic [ref=e951]: ₩29,900
+              - generic [ref=e952]: 배송완료
+          - generic [ref=e954] [cursor=pointer]:
+            - generic [ref=e955]:
+              - generic [ref=e956]: BP-20260315-2273
+              - generic [ref=e957]: 2026. 03. 15. 오후 07:22
+            - generic [ref=e958]:
+              - generic [ref=e959]: 전준
+              - generic [ref=e960]: ₩29,900
+              - generic [ref=e961]: 배송완료
+          - generic [ref=e963] [cursor=pointer]:
+            - generic [ref=e964]:
+              - generic [ref=e965]: BP-20260311-9409
+              - generic [ref=e966]: 2026. 03. 11. 오전 10:10
+            - generic [ref=e967]:
+              - generic [ref=e968]: 이민우
+              - generic [ref=e969]: 마케팅
+              - generic [ref=e970]: ₩29,900
+              - generic [ref=e971]: 배송완료
+          - generic [ref=e973] [cursor=pointer]:
+            - generic [ref=e974]:
+              - generic [ref=e975]: BP-20260221-9237
+              - generic [ref=e976]: 2026. 02. 22. 오전 07:41
+            - generic [ref=e977]:
+              - generic [ref=e978]: 변주용
+              - generic [ref=e979]: ₩26,900
+              - generic [ref=e980]: 배송완료
+          - generic [ref=e982] [cursor=pointer]:
+            - generic [ref=e983]:
+              - generic [ref=e984]: BP-20260220-2805
+              - generic [ref=e985]: 2026. 02. 20. 오후 08:36
+            - generic [ref=e986]:
+              - generic [ref=e987]: 최재민
+              - generic [ref=e988]: ₩29,900
+              - generic [ref=e989]: 배송완료
+          - generic [ref=e991] [cursor=pointer]:
+            - generic [ref=e992]:
+              - generic [ref=e993]: BP-20260220-3550
+              - generic [ref=e994]: 2026. 02. 20. 오후 07:10
+            - generic [ref=e995]:
+              - generic [ref=e996]: 전병영
+              - generic [ref=e997]: ₩29,900
+              - generic [ref=e998]: 배송완료
+          - generic [ref=e1000] [cursor=pointer]:
+            - generic [ref=e1001]:
+              - generic [ref=e1002]: BP-20260220-2442
+              - generic [ref=e1003]: 2026. 02. 20. 오전 10:21
+            - generic [ref=e1004]:
+              - generic [ref=e1005]: 김은빈
+              - generic [ref=e1006]: ₩29,900
+              - generic [ref=e1007]: 배송완료
+          - generic [ref=e1009] [cursor=pointer]:
+            - generic [ref=e1010]:
+              - generic [ref=e1011]: BP-20260215-3784
+              - generic [ref=e1012]: 2026. 02. 16. 오전 01:40
+            - generic [ref=e1013]:
+              - generic [ref=e1014]: 전병영
+              - generic [ref=e1015]: ₩29,900
+              - generic [ref=e1016]: 배송완료
+          - generic [ref=e1018] [cursor=pointer]:
+            - generic [ref=e1019]:
+              - generic [ref=e1020]: BP-20260212-6966
+              - generic [ref=e1021]: 2026. 02. 12. 오후 04:52
+            - generic [ref=e1022]:
+              - generic [ref=e1023]: 채호영
+              - generic [ref=e1024]: ₩29,900
+              - generic [ref=e1025]: 배송완료
+          - generic [ref=e1027] [cursor=pointer]:
+            - generic [ref=e1028]:
+              - generic [ref=e1029]: BP-20260210-9884
+              - generic [ref=e1030]: 2026. 02. 10. 오후 07:36
+            - generic [ref=e1031]:
+              - generic [ref=e1032]: 임규빈
+              - generic [ref=e1033]: ₩31,900
+              - generic [ref=e1034]: 배송완료
+          - generic [ref=e1036] [cursor=pointer]:
+            - generic [ref=e1037]:
+              - generic [ref=e1038]: BP-20260210-1168
+              - generic [ref=e1039]: 2026. 02. 10. 오후 05:27
+            - generic [ref=e1040]:
+              - generic [ref=e1041]: 채호영
+              - generic [ref=e1042]: ₩31,900
+              - generic [ref=e1043]: 배송완료
+          - generic [ref=e1045] [cursor=pointer]:
+            - generic [ref=e1046]:
+              - generic [ref=e1047]: BP-20260210-8333
+              - generic [ref=e1048]: 2026. 02. 10. 오전 10:53
+            - generic [ref=e1049]:
+              - generic [ref=e1050]: 정선우
+              - generic [ref=e1051]: ₩31,900
+              - generic [ref=e1052]: 배송완료
+      - button "👁 1" [ref=e1054] [cursor=pointer]
+  - contentinfo [ref=e26]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - link "주문 조회" [ref=e32] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e33]:
+            - link "취소 / 교환 / 반품" [ref=e34] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e35]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "인스타그램" [ref=e39] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e40]:
+            - link "스레드" [ref=e41] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e42]:
+            - link "이메일 문의" [ref=e43] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e44]:
+            - link "전화 문의" [ref=e45] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e46]:
+            - button "개인정보 처리방침" [ref=e47] [cursor=pointer]
+          - listitem [ref=e48]:
+            - button "쿠키 정책" [ref=e49] [cursor=pointer]
+          - listitem [ref=e50]:
+            - button "면책 조항" [ref=e51] [cursor=pointer]
+      - generic [ref=e52]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e54]:
+          - listitem [ref=e55]: "회사: BROSPICK"
+          - listitem [ref=e56]: "대표자: 홍주영"
+          - listitem [ref=e57]: "사업자번호: 847-07-03351"
+          - listitem [ref=e58]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e59]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e60]: "전화번호: 010-2687-6269"
+          - listitem [ref=e61]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e63]:
+      - img "Brospick" [ref=e64]
+      - paragraph [ref=e65]: © 2026 BROSPICK. All rights reserved.
+  - button "고객센터" [ref=e66] [cursor=pointer]:
+    - img [ref=e67]
+  - alert [ref=e69]

@@ -1,0 +1,115 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link "1" [ref=e237] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+          - generic [ref=e238]: "1"
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e239]:
+    - main [ref=e240]:
+      - generic [ref=e241]:
+        - heading "장바구니" [level=1] [ref=e242]
+        - generic [ref=e243]:
+          - generic [ref=e244]:
+            - generic [ref=e246] [cursor=pointer]:
+              - checkbox "전체 선택" [ref=e247]
+              - generic [ref=e248]: 전체 선택
+            - generic [ref=e249]:
+              - checkbox [ref=e251] [cursor=pointer]
+              - img "Quarter-Zip Training Top" [ref=e253]
+              - generic [ref=e254]:
+                - heading "Quarter-Zip Training Top" [level=3] [ref=e255]
+                - paragraph [ref=e256]: "사이즈: M"
+                - paragraph [ref=e257]: ₩26,900
+              - generic [ref=e258]:
+                - generic [ref=e259]:
+                  - button "−" [ref=e260] [cursor=pointer]
+                  - generic [ref=e261]: "1"
+                  - button "+" [ref=e262] [cursor=pointer]
+                - button "삭제" [ref=e263] [cursor=pointer]
+              - generic [ref=e264]: ₩26,900
+          - generic [ref=e266]:
+            - heading "주문 요약" [level=2] [ref=e267]
+            - generic [ref=e269]:
+              - generic [ref=e270]: ₩50,000 이상 무료배송
+              - generic [ref=e271]: 0%
+            - generic [ref=e273]:
+              - generic [ref=e274]: 선택된 상품 (0개)
+              - generic [ref=e275]: ₩0
+            - generic [ref=e276]:
+              - generic [ref=e277]: 배송비 (주문당 1회)
+              - generic [ref=e278]: ₩3,000
+            - generic [ref=e280]:
+              - generic [ref=e281]: 총 결제 금액
+              - generic [ref=e282]: ₩3,000
+            - button "결제하기 (0개)" [disabled] [ref=e283]
+            - link "쇼핑 계속하기" [ref=e284] [cursor=pointer]:
+              - /url: /apparel
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - generic [ref=e288]: ₩3,000
+          - generic [ref=e289]: 항목을 선택해주세요
+        - button "결제하기" [disabled] [ref=e290]
+  - contentinfo [ref=e196]:
+    - generic [ref=e197]:
+      - generic [ref=e198]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e200]:
+          - listitem [ref=e201]:
+            - link "주문 조회" [ref=e202] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e203]:
+            - link "취소 / 교환 / 반품" [ref=e204] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e205]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e207]:
+          - listitem [ref=e208]:
+            - link "인스타그램" [ref=e209] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e210]:
+            - link "스레드" [ref=e211] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e212]:
+            - link "이메일 문의" [ref=e213] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e214]:
+            - link "전화 문의" [ref=e215] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e216]:
+            - button "개인정보 처리방침" [ref=e217] [cursor=pointer]
+          - listitem [ref=e218]:
+            - button "쿠키 정책" [ref=e219] [cursor=pointer]
+          - listitem [ref=e220]:
+            - button "면책 조항" [ref=e221] [cursor=pointer]
+      - generic [ref=e222]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e224]:
+          - listitem [ref=e225]: "회사: BROSPICK"
+          - listitem [ref=e226]: "대표자: 홍주영"
+          - listitem [ref=e227]: "사업자번호: 847-07-03351"
+          - listitem [ref=e228]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e229]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e230]: "전화번호: 010-2687-6269"
+          - listitem [ref=e231]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e233]:
+      - img "Brospick" [ref=e234]
+      - paragraph [ref=e235]: © 2026 BROSPICK. All rights reserved.
+  - alert [ref=e236]

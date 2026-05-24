@@ -63,7 +63,9 @@
       "Bash(mv public/apparel/top/coolmax-tshirt-black public/apparel/top/coolmax-t-shirt-black)",
       "Bash(mv public/apparel/top/coolmax-tshirt-white public/apparel/top/coolmax-t-shirt-cream-white)",
       "Bash(grep:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "mcp__plugin_playwright_playwright__browser_network_requests",
+      "mcp__plugin_playwright_playwright__browser_console_messages"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"
