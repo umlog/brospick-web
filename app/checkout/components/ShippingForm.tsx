@@ -16,16 +16,37 @@ const EMAIL_DOMAINS = [
   'icloud.com',
 ];
 
+const DELIVERY_NOTE_PRESETS = [
+  '문 앞에 놓아주세요',
+  '경비실에 맡겨주세요',
+  '택배함에 넣어주세요',
+  '부재 시 경비실에 맡겨주세요',
+  '직접 받겠습니다',
+  '직접 입력',
+];
+
+export interface SavedShippingInfo {
+  name: string;
+  phone: string;
+  email: string;
+  postalCode: string;
+  address: string;
+  addressDetail: string;
+}
+
 interface ShippingFormProps {
   formData: CheckoutFormData;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onAddressSearch: () => void;
+  savedInfo: SavedShippingInfo | null;
+  onUseSavedInfo: () => void;
 }
 
-export function ShippingForm({ formData, onInputChange, onAddressSearch }: ShippingFormProps) {
+export function ShippingForm({ formData, onInputChange, onAddressSearch, savedInfo, onUseSavedInfo }: ShippingFormProps) {
   const [emailUser, setEmailUser] = useState('');
   const [emailDomain, setEmailDomain] = useState('');
   const [isCustomDomain, setIsCustomDomain] = useState(false);
+  const [usingSaved, setUsingSaved] = useState(false);
 
   const fireEmailChange = (user: string, domain: string) => {
     const combined = user && domain ? `${user}@${domain}` : '';
@@ -59,9 +80,25 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch }: Shipp
     fireEmailChange(emailUser, domain);
   };
 
+  const handleUseSavedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsingSaved(e.target.checked);
+    if (e.target.checked) onUseSavedInfo();
+  };
+
   return (
     <section className={styles.formSection}>
       <h2>배송 정보</h2>
+
+      {savedInfo && (
+        <label className={styles.savedInfoCheckbox}>
+          <input
+            type="checkbox"
+            checked={usingSaved}
+            onChange={handleUseSavedChange}
+          />
+          <span>이전 배송정보 사용하기 ({savedInfo.name} / {savedInfo.phone})</span>
+        </label>
+      )}
       <div className={styles.formGroup}>
         <label htmlFor="name">이름 *</label>
         <input
@@ -168,15 +205,52 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch }: Shipp
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="deliveryNote">배송 시 요청사항</label>
-        <input
-          type="text"
-          id="deliveryNote"
-          name="deliveryNote"
-          value={formData.deliveryNote}
-          onChange={onInputChange}
-          placeholder="공동현관 비밀번호: 0000"
-        />
+        <DeliveryNoteField value={formData.deliveryNote} onChange={onInputChange} />
       </div>
     </section>
+  );
+}
+
+function DeliveryNoteField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+}) {
+  const isCustom = value !== '' && !DELIVERY_NOTE_PRESETS.slice(0, -1).includes(value);
+  const [showCustom, setShowCustom] = useState(isCustom);
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === '직접 입력') {
+      setShowCustom(true);
+      onChange({ target: { name: 'deliveryNote', value: '' } } as React.ChangeEvent<HTMLInputElement>);
+    } else {
+      setShowCustom(false);
+      onChange({ target: { name: 'deliveryNote', value: e.target.value } } as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
+
+  const selectValue = showCustom ? '직접 입력' : (value || '');
+
+  return (
+    <>
+      <select value={selectValue} onChange={handleSelectChange}>
+        <option value="">선택하세요</option>
+        {DELIVERY_NOTE_PRESETS.map((preset) => (
+          <option key={preset} value={preset}>{preset}</option>
+        ))}
+      </select>
+      {showCustom && (
+        <input
+          type="text"
+          name="deliveryNote"
+          value={value}
+          onChange={onChange}
+          placeholder="요청사항을 직접 입력해주세요"
+          style={{ marginTop: '8px' }}
+        />
+      )}
+    </>
   );
 }

@@ -56,6 +56,27 @@
   color: var(--color-text-primary);
 }
 
+.savedInfoCheckbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.savedInfoCheckbox input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .formGroup {
   display: flex;
   flex-direction: column;

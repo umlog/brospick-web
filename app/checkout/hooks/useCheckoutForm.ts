@@ -1,6 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { CheckoutFormData, DaumPostcodeData } from '../types';
 import { parsePostcodeResult } from '../utils';
+import type { SavedShippingInfo } from '../components/ShippingForm';
+
+const COOKIE_NAME = 'brospick_shipping';
+const COOKIE_DAYS = 90;
+
+function readShippingCookie(): SavedShippingInfo | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.split('; ').find((c) => c.startsWith(`${COOKIE_NAME}=`));
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+  } catch {
+    return null;
+  }
+}
+
+export function saveShippingToCookie(data: SavedShippingInfo) {
+  if (typeof document === 'undefined') return;
+  const expires = new Date();
+  expires.setDate(expires.getDate() + COOKIE_DAYS);
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(data))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+}
 
 const INITIAL_FORM_DATA: CheckoutFormData = {
   name: '',
@@ -19,6 +41,11 @@ const INITIAL_FORM_DATA: CheckoutFormData = {
 
 export function useCheckoutForm() {
   const [formData, setFormData] = useState<CheckoutFormData>(INITIAL_FORM_DATA);
+  const [savedInfo, setSavedInfo] = useState<SavedShippingInfo | null>(null);
+
+  useEffect(() => {
+    setSavedInfo(readShippingCookie());
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -40,6 +67,19 @@ export function useCheckoutForm() {
     }));
   };
 
+  const applySavedInfo = () => {
+    if (!savedInfo) return;
+    setFormData((prev) => ({
+      ...prev,
+      name: savedInfo.name,
+      phone: savedInfo.phone,
+      email: savedInfo.email,
+      postalCode: savedInfo.postalCode,
+      address: savedInfo.address,
+      addressDetail: savedInfo.addressDetail,
+    }));
+  };
+
   const openAddressSearch = () => {
     if (typeof window === 'undefined' || !window.daum?.Postcode) return;
 
@@ -56,5 +96,5 @@ export function useCheckoutForm() {
     }).open();
   };
 
-  return { formData, handleInputChange, handleConsentChange, handleAllConsentChange, openAddressSearch };
+  return { formData, handleInputChange, handleConsentChange, handleAllConsentChange, openAddressSearch, savedInfo, applySavedInfo };
 }

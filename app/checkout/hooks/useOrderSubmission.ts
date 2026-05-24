@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, CartItem } from '../../contexts/CartContext';
 import { buildOrderPayload, removePurchasedItems } from '../utils';
 import type { CheckoutFormData } from '../types';
 import { apiClient } from '@/lib/api-client';
 import { validateCartStock } from '@/lib/validateStock';
+import { saveShippingToCookie } from './useCheckoutForm';
 
 export function useOrderSubmission(
   formData: CheckoutFormData,
@@ -16,14 +17,17 @@ export function useOrderSubmission(
   const router = useRouter();
   const { clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
 
     if (!formData.privacyConsent || !formData.thirdPartyConsent) {
       alert('필수 약관에 동의해 주세요.');
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
       return;
     }
@@ -31,12 +35,14 @@ export function useOrderSubmission(
     const stockErrors = await validateCartStock(checkoutItems);
     if (stockErrors.length > 0) {
       alert(stockErrors.join('\n'));
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
       return;
     }
 
     if (formData.paymentMethod === 'bank' && !formData.depositorName.trim()) {
       alert('입금자명을 입력해 주세요.');
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
       return;
     }
@@ -49,6 +55,7 @@ export function useOrderSubmission(
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : '주문에 실패했습니다. 다시 시도해주세요.');
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -63,6 +70,15 @@ export function useOrderSubmission(
 
   const handleKakaoPaySubmit = async () => {
     const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
+
+    saveShippingToCookie({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      postalCode: formData.postalCode,
+      address: formData.address,
+      addressDetail: formData.addressDetail,
+    });
 
     const res = await fetch('/api/payment/kakao/ready', {
       method: 'POST',
@@ -84,7 +100,16 @@ export function useOrderSubmission(
     const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
     const data = await apiClient.orders.create(payload);
 
+    saveShippingToCookie({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      postalCode: formData.postalCode,
+      address: formData.address,
+      addressDetail: formData.addressDetail,
+    });
     clearCheckoutCart(checkoutItems);
+    isSubmittingRef.current = false;
     setIsSubmitting(false);
 
     const params = new URLSearchParams({

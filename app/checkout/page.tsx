@@ -13,7 +13,7 @@ import styles from './checkout-page.module.css';
 
 export default function CheckoutPage() {
   const { checkoutItems, selectedTotalPrice, isLoading } = useCheckoutItems();
-  const { formData, handleInputChange, handleConsentChange, handleAllConsentChange, openAddressSearch } = useCheckoutForm();
+  const { formData, handleInputChange, handleConsentChange, handleAllConsentChange, openAddressSearch, savedInfo, applySavedInfo } = useCheckoutForm();
   const { isSubmitting, handleSubmit } = useOrderSubmission(
     formData,
     checkoutItems,
@@ -39,6 +39,8 @@ export default function CheckoutPage() {
                 formData={formData}
                 onInputChange={handleInputChange}
                 onAddressSearch={openAddressSearch}
+                savedInfo={savedInfo}
+                onUseSavedInfo={applySavedInfo}
               />
               <PaymentSection
                 formData={formData}
