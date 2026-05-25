@@ -90,14 +90,34 @@ export class NotificationService {
   }
 
   // 주문 생성 알림 (고객 확인 이메일 + 관리자 알림 + 알림톡)
-  notifyOrderCreated(data: OrderNotificationData): void {
+  async notifyOrderCreated(data: OrderNotificationData): Promise<void> {
     const trackingUrl = this.trackingUrl(data.siteUrl, data.orderNumber);
 
+    const emailPromises: Promise<void>[] = [];
+
     if (data.customerEmail) {
-      sendOrderConfirmationEmail({
+      emailPromises.push(
+        sendOrderConfirmationEmail({
+          orderNumber: data.orderNumber,
+          customerName: data.customerName,
+          customerEmail: data.customerEmail,
+          totalAmount: data.totalAmount,
+          shippingFee: data.shippingFee,
+          depositorName: data.depositorName,
+          items: data.items,
+          address: data.address,
+          addressDetail: data.addressDetail ?? undefined,
+          trackingUrl,
+          paymentMethod: data.paymentMethod,
+        }).catch((err) => console.error('Order confirmation email error:', err))
+      );
+    }
+
+    emailPromises.push(
+      sendNewOrderNotificationEmail({
         orderNumber: data.orderNumber,
         customerName: data.customerName,
-        customerEmail: data.customerEmail,
+        customerEmail: data.customerEmail ?? '',
         totalAmount: data.totalAmount,
         shippingFee: data.shippingFee,
         depositorName: data.depositorName,
@@ -106,22 +126,10 @@ export class NotificationService {
         addressDetail: data.addressDetail ?? undefined,
         trackingUrl,
         paymentMethod: data.paymentMethod,
-      }).catch((err) => console.error('Order confirmation email error:', err));
-    }
+      }).catch((err) => console.error('Admin notification email error:', err))
+    );
 
-    sendNewOrderNotificationEmail({
-      orderNumber: data.orderNumber,
-      customerName: data.customerName,
-      customerEmail: data.customerEmail ?? '',
-      totalAmount: data.totalAmount,
-      shippingFee: data.shippingFee,
-      depositorName: data.depositorName,
-      items: data.items,
-      address: data.address,
-      addressDetail: data.addressDetail ?? undefined,
-      trackingUrl,
-      paymentMethod: data.paymentMethod,
-    }).catch((err) => console.error('Admin notification email error:', err));
+    await Promise.all(emailPromises);
 
     // 카카오페이는 결제 완료된 주문이므로 무통장입금 안내 알림톡 발송하지 않음
     if (data.paymentMethod !== 'kakaopay') {

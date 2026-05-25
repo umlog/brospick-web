@@ -172,27 +172,27 @@ export class OrderService {
       );
     }
 
-    // 알림 발송 (비동기, 카카오페이는 approve 시점에 발송)
+    // 알림 발송 (카카오페이는 approve 시점에 발송)
     if (!options.skipNotification) {
-    notificationService.notifyOrderCreated({
-      orderNumber: order.order_number,
-      customerName,
-      customerEmail: customerEmail ?? null,
-      customerPhone,
-      totalAmount: order.total_amount,
-      shippingFee: order.shipping_fee,
-      depositorName: depositorName || customerName,
-      items: verifiedItems.map((i) => ({
-        productName: i.productName,
-        size: i.size,
-        quantity: i.quantity,
-        price: i.price,
-      })),
-      address,
-      addressDetail: addressDetail ?? null,
-      siteUrl,
-      paymentMethod: paymentMethod ?? '무통장입금',
-    });
+      await notificationService.notifyOrderCreated({
+        orderNumber: order.order_number,
+        customerName,
+        customerEmail: customerEmail ?? null,
+        customerPhone,
+        totalAmount: order.total_amount,
+        shippingFee: order.shipping_fee,
+        depositorName: depositorName || customerName,
+        items: verifiedItems.map((i) => ({
+          productName: i.productName,
+          size: i.size,
+          quantity: i.quantity,
+          price: i.price,
+        })),
+        address,
+        addressDetail: addressDetail ?? null,
+        siteUrl,
+        paymentMethod: paymentMethod ?? '무통장입금',
+      });
     }
 
     return {
