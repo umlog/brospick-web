@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { orderService } from '@/lib/services';
 
-// 주문 삭제 (관리자)
+// 주문 소프트 삭제 → 휴지통 이동 (관리자)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -12,10 +12,8 @@ export async function DELETE(
       return apiError('권한이 없습니다.', 401);
     }
 
-    const restoreStock = request.nextUrl.searchParams.get('restore_stock') === 'true';
-
     try {
-      const result = await orderService.deleteOrder(params.id, restoreStock);
+      const result = await orderService.deleteOrder(params.id);
       return NextResponse.json(result);
     } catch (err: unknown) {
       const e = err as Error;
@@ -58,14 +56,14 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const { status, sendNotification, trackingNumber } = body;
+    const { status, sendNotification, trackingNumber, carrier } = body;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || '';
 
     try {
       const result = await orderService.updateOrderStatus(
         params.id,
         status,
-        { sendNotification: !!sendNotification, trackingNumber },
+        { sendNotification: !!sendNotification, trackingNumber, carrier },
         siteUrl
       );
       return NextResponse.json(result);

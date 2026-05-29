@@ -32,7 +32,7 @@ export function useOrderSubmission(
       return;
     }
 
-    const stockErrors = await validateCartStock(checkoutItems);
+const stockErrors = await validateCartStock(checkoutItems);
     if (stockErrors.length > 0) {
       alert(stockErrors.join('\n'));
       isSubmittingRef.current = false;

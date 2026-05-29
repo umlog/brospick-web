@@ -1,0 +1,595 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Brospick" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Brospick" [ref=e5]
+      - navigation [ref=e6]:
+        - link "BROSPICK" [ref=e7] [cursor=pointer]:
+          - /url: /#manifesto
+        - link "BLOG" [ref=e8] [cursor=pointer]:
+          - /url: /interviews
+        - link "SPORTWEAR" [ref=e9] [cursor=pointer]:
+          - /url: /apparel-showcase
+        - link "EBOOK" [ref=e10] [cursor=pointer]:
+          - /url: /ebook
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e12]
+        - button "테마 전환" [ref=e14] [cursor=pointer]:
+          - img [ref=e17]
+  - main [ref=e19]:
+    - generic:
+      - img
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - paragraph [ref=e23]: COLLECTION
+        - heading "브로스픽 의류" [level=2] [ref=e24]
+      - generic [ref=e25]:
+        - button "전체" [ref=e26] [cursor=pointer]
+        - button "트레이닝 탑" [ref=e27] [cursor=pointer]
+        - button "상의" [ref=e28] [cursor=pointer]
+        - button "아우터" [ref=e29] [cursor=pointer]
+        - button "하의" [ref=e30] [cursor=pointer]
+        - button "테이핑" [ref=e31] [cursor=pointer]
+        - button "양말" [ref=e32] [cursor=pointer]
+        - button "부츠스킨" [ref=e33] [cursor=pointer]
+      - generic [ref=e34]:
+        - button "이전": ‹
+        - button "다음" [ref=e35] [cursor=pointer]: ›
+        - generic [ref=e36]:
+          - link "Cool Tech T-Shirt (White) Cool Tech T-Shirt (White) ₩22,900 ₩39,000 41%" [ref=e37] [cursor=pointer]:
+            - /url: /apparel/cool-tech-t-shirt-white
+            - img "Cool Tech T-Shirt (White)" [ref=e39]
+            - generic [ref=e40]:
+              - paragraph [ref=e41]: Cool Tech T-Shirt (White)
+              - generic [ref=e42]:
+                - generic [ref=e43]: ₩22,900
+                - generic [ref=e44]: ₩39,000
+                - generic [ref=e45]: 41%
+          - link "Cool Tech T-Shirt (Black) Cool Tech T-Shirt (Black) ₩22,900 ₩39,000 41%" [ref=e46] [cursor=pointer]:
+            - /url: /apparel/cool-tech-t-shirt-black
+            - img "Cool Tech T-Shirt (Black)" [ref=e48]
+            - generic [ref=e49]:
+              - paragraph [ref=e50]: Cool Tech T-Shirt (Black)
+              - generic [ref=e51]:
+                - generic [ref=e52]: ₩22,900
+                - generic [ref=e53]: ₩39,000
+                - generic [ref=e54]: 41%
+          - link "COOLMAX T-Shirt (Black) COOLMAX T-Shirt (Black) ₩21,900 ₩29,000 24%" [ref=e55] [cursor=pointer]:
+            - /url: /apparel/coolmax-t-shirt-black
+            - img "COOLMAX T-Shirt (Black)" [ref=e57]
+            - generic [ref=e58]:
+              - paragraph [ref=e59]: COOLMAX T-Shirt (Black)
+              - generic [ref=e60]:
+                - generic [ref=e61]: ₩21,900
+                - generic [ref=e62]: ₩29,000
+                - generic [ref=e63]: 24%
+          - link "COOLMAX T-Shirt (Cream White) COOLMAX T-Shirt (Cream White) ₩21,900 ₩29,000 24%" [ref=e64] [cursor=pointer]:
+            - /url: /apparel/coolmax-t-shirt-cream-white
+            - img "COOLMAX T-Shirt (Cream White)" [ref=e66]
+            - generic [ref=e67]:
+              - paragraph [ref=e68]: COOLMAX T-Shirt (Cream White)
+              - generic [ref=e69]:
+                - generic [ref=e70]: ₩21,900
+                - generic [ref=e71]: ₩29,000
+                - generic [ref=e72]: 24%
+          - link "GRID ZIP HOODIE GRID ZIP HOODIE ₩49,000 ₩69,000 29%" [ref=e73] [cursor=pointer]:
+            - /url: /apparel/grid-zip-hoodie
+            - img "GRID ZIP HOODIE" [ref=e75]
+            - generic [ref=e76]:
+              - paragraph [ref=e77]: GRID ZIP HOODIE
+              - generic [ref=e78]:
+                - generic [ref=e79]: ₩49,000
+                - generic [ref=e80]: ₩69,000
+                - generic [ref=e81]: 29%
+          - link "Aero Quarter-Zip Flex (Light Green) Aero Quarter-Zip Flex (Light Green) ₩28,900 ₩59,000 51%" [ref=e82] [cursor=pointer]:
+            - /url: /apparel/quarter-zip-flex-light-green
+            - img "Aero Quarter-Zip Flex (Light Green)" [ref=e84]
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: Aero Quarter-Zip Flex (Light Green)
+              - generic [ref=e87]:
+                - generic [ref=e88]: ₩28,900
+                - generic [ref=e89]: ₩59,000
+                - generic [ref=e90]: 51%
+          - link "Motion Tech Pants (Black) Motion Tech Pants (Black) ₩23,900 ₩38,900 39%" [ref=e91] [cursor=pointer]:
+            - /url: /apparel/motion-tech-pants-black
+            - img "Motion Tech Pants (Black)" [ref=e93]
+            - generic [ref=e94]:
+              - paragraph [ref=e95]: Motion Tech Pants (Black)
+              - generic [ref=e96]:
+                - generic [ref=e97]: ₩23,900
+                - generic [ref=e98]: ₩38,900
+                - generic [ref=e99]: 39%
+          - link "Motion Tech Pants (Gray) Motion Tech Pants (Gray) ₩23,900 ₩38,900 39%" [ref=e100] [cursor=pointer]:
+            - /url: /apparel/motion-tech-pants-gray
+            - img "Motion Tech Pants (Gray)" [ref=e102]
+            - generic [ref=e103]:
+              - paragraph [ref=e104]: Motion Tech Pants (Gray)
+              - generic [ref=e105]:
+                - generic [ref=e106]: ₩23,900
+                - generic [ref=e107]: ₩38,900
+                - generic [ref=e108]: 39%
+          - link "Tech Training Shorts (Black) Tech Training Shorts (Black) ₩23,900 ₩35,900 33%" [ref=e109] [cursor=pointer]:
+            - /url: /apparel/tech-training-shorts-black
+            - img "Tech Training Shorts (Black)" [ref=e111]
+            - generic [ref=e112]:
+              - paragraph [ref=e113]: Tech Training Shorts (Black)
+              - generic [ref=e114]:
+                - generic [ref=e115]: ₩23,900
+                - generic [ref=e116]: ₩35,900
+                - generic [ref=e117]: 33%
+          - link "Motion Tech Shorts (Gray) Motion Tech Shorts (Gray) ₩22,900 ₩35,900 36%" [ref=e118] [cursor=pointer]:
+            - /url: /apparel/motion-tech-shorts-gray
+            - img "Motion Tech Shorts (Gray)" [ref=e120]
+            - generic [ref=e121]:
+              - paragraph [ref=e122]: Motion Tech Shorts (Gray)
+              - generic [ref=e123]:
+                - generic [ref=e124]: ₩22,900
+                - generic [ref=e125]: ₩35,900
+                - generic [ref=e126]: 36%
+          - link "Reflective Run T-Shirt (Camel Gray) Reflective Run T-Shirt (Camel Gray) ₩21,900 ₩29,000 24%" [ref=e127] [cursor=pointer]:
+            - /url: /apparel/reflective-run-t-shirt-camel-gray
+            - img "Reflective Run T-Shirt (Camel Gray)" [ref=e129]
+            - generic [ref=e130]:
+              - paragraph [ref=e131]: Reflective Run T-Shirt (Camel Gray)
+              - generic [ref=e132]:
+                - generic [ref=e133]: ₩21,900
+                - generic [ref=e134]: ₩29,000
+                - generic [ref=e135]: 24%
+          - link "Aero Quarter-Zip Flex (Blue) Aero Quarter-Zip Flex (Blue) ₩28,900 ₩59,000 51%" [ref=e136] [cursor=pointer]:
+            - /url: /apparel/quarter-zip-flex-blue
+            - img "Aero Quarter-Zip Flex (Blue)" [ref=e138]
+            - generic [ref=e139]:
+              - paragraph [ref=e140]: Aero Quarter-Zip Flex (Blue)
+              - generic [ref=e141]:
+                - generic [ref=e142]: ₩28,900
+                - generic [ref=e143]: ₩59,000
+                - generic [ref=e144]: 51%
+          - link "Motion Tech Shorts (Black) Motion Tech Shorts (Black) ₩22,900 ₩35,900 36%" [ref=e145] [cursor=pointer]:
+            - /url: /apparel/motion-tech-shorts-black
+            - img "Motion Tech Shorts (Black)" [ref=e147]
+            - generic [ref=e148]:
+              - paragraph [ref=e149]: Motion Tech Shorts (Black)
+              - generic [ref=e150]:
+                - generic [ref=e151]: ₩22,900
+                - generic [ref=e152]: ₩35,900
+                - generic [ref=e153]: 36%
+          - link "Tech Training Shorts (Gray) Tech Training Shorts (Gray) ₩23,900 ₩35,900 33%" [ref=e154] [cursor=pointer]:
+            - /url: /apparel/tech-training-shorts-gray
+            - img "Tech Training Shorts (Gray)" [ref=e156]
+            - generic [ref=e157]:
+              - paragraph [ref=e158]: Tech Training Shorts (Gray)
+              - generic [ref=e159]:
+                - generic [ref=e160]: ₩23,900
+                - generic [ref=e161]: ₩35,900
+                - generic [ref=e162]: 33%
+          - link "Quarter-Zip Training Top BEST Quarter-Zip Training Top ₩26,900 ₩59,000 54%" [ref=e163] [cursor=pointer]:
+            - /url: /apparel/quarter-zip-training-top
+            - generic [ref=e164]:
+              - img "Quarter-Zip Training Top" [ref=e165]
+              - generic: BEST
+            - generic [ref=e166]:
+              - paragraph [ref=e167]: Quarter-Zip Training Top
+              - generic [ref=e168]:
+                - generic [ref=e169]: ₩26,900
+                - generic [ref=e170]: ₩59,000
+                - generic [ref=e171]: 54%
+          - link "Flex Quarter-Zip Top (Gray) BEST Flex Quarter-Zip Top (Gray) ₩22,900 ₩69,000 67%" [ref=e172] [cursor=pointer]:
+            - /url: /apparel/flex-quarter-zip-top-gray
+            - generic [ref=e173]:
+              - img "Flex Quarter-Zip Top (Gray)" [ref=e174]
+              - generic: BEST
+            - generic [ref=e175]:
+              - paragraph [ref=e176]: Flex Quarter-Zip Top (Gray)
+              - generic [ref=e177]:
+                - generic [ref=e178]: ₩22,900
+                - generic [ref=e179]: ₩69,000
+                - generic [ref=e180]: 67%
+          - link "Running Long Sleeve Top (Gray) BEST Running Long Sleeve Top (Gray) ₩25,900 ₩49,000 47%" [ref=e181] [cursor=pointer]:
+            - /url: /apparel/running-long-sleeve-top-gray
+            - generic [ref=e182]:
+              - img "Running Long Sleeve Top (Gray)" [ref=e183]
+              - generic: BEST
+            - generic [ref=e184]:
+              - paragraph [ref=e185]: Running Long Sleeve Top (Gray)
+              - generic [ref=e186]:
+                - generic [ref=e187]: ₩25,900
+                - generic [ref=e188]: ₩49,000
+                - generic [ref=e189]: 47%
+          - link "Running Long Sleeve Top (Black) BEST Running Long Sleeve Top (Black) ₩25,900 ₩49,000 47%" [ref=e190] [cursor=pointer]:
+            - /url: /apparel/running-long-sleeve-top-black
+            - generic [ref=e191]:
+              - img "Running Long Sleeve Top (Black)" [ref=e192]
+              - generic: BEST
+            - generic [ref=e193]:
+              - paragraph [ref=e194]: Running Long Sleeve Top (Black)
+              - generic [ref=e195]:
+                - generic [ref=e196]: ₩25,900
+                - generic [ref=e197]: ₩49,000
+                - generic [ref=e198]: 47%
+          - link "Mini Cross C-Tape (3.8cm) Mini Cross C-Tape (3.8cm) ₩3,000 ₩3,500 14%" [ref=e199] [cursor=pointer]:
+            - /url: /apparel/mini-cross-c-tape-38
+            - img "Mini Cross C-Tape (3.8cm)" [ref=e201]
+            - generic [ref=e202]:
+              - paragraph [ref=e203]: Mini Cross C-Tape (3.8cm)
+              - generic [ref=e204]:
+                - generic [ref=e205]: ₩3,000
+                - generic [ref=e206]: ₩3,500
+                - generic [ref=e207]: 14%
+          - link "Cross C-Tape (Gold) (3.8cm) Cross C-Tape (Gold) (3.8cm) ₩3,000 ₩3,500 14%" [ref=e208] [cursor=pointer]:
+            - /url: /apparel/cross-c-tape-gold
+            - img "Cross C-Tape (Gold) (3.8cm)" [ref=e210]
+            - generic [ref=e211]:
+              - paragraph [ref=e212]: Cross C-Tape (Gold) (3.8cm)
+              - generic [ref=e213]:
+                - generic [ref=e214]: ₩3,000
+                - generic [ref=e215]: ₩3,500
+                - generic [ref=e216]: 14%
+          - link "Philippians 4:13 C-Tape (5cm) Philippians 4:13 C-Tape (5cm) ₩3,500 ₩4,500 22%" [ref=e217] [cursor=pointer]:
+            - /url: /apparel/philippians-413-c-tape
+            - img "Philippians 4:13 C-Tape (5cm)" [ref=e219]
+            - generic [ref=e220]:
+              - paragraph [ref=e221]: Philippians 4:13 C-Tape (5cm)
+              - generic [ref=e222]:
+                - generic [ref=e223]: ₩3,500
+                - generic [ref=e224]: ₩4,500
+                - generic [ref=e225]: 22%
+          - link "Kinesiology Tape (Black) (5cm) Kinesiology Tape (Black) (5cm) ₩2,500 ₩3,900 36%" [ref=e226] [cursor=pointer]:
+            - /url: /apparel/kinesiology-tape-black
+            - img "Kinesiology Tape (Black) (5cm)" [ref=e228]
+            - generic [ref=e229]:
+              - paragraph [ref=e230]: Kinesiology Tape (Black) (5cm)
+              - generic [ref=e231]:
+                - generic [ref=e232]: ₩2,500
+                - generic [ref=e233]: ₩3,900
+                - generic [ref=e234]: 36%
+          - link "Kinesiology Tape (Camo) (5cm) Kinesiology Tape (Camo) (5cm) ₩3,500 ₩5,000 30%" [ref=e235] [cursor=pointer]:
+            - /url: /apparel/kinesiology-tape-camo
+            - img "Kinesiology Tape (Camo) (5cm)" [ref=e237]
+            - generic [ref=e238]:
+              - paragraph [ref=e239]: Kinesiology Tape (Camo) (5cm)
+              - generic [ref=e240]:
+                - generic [ref=e241]: ₩3,500
+                - generic [ref=e242]: ₩5,000
+                - generic [ref=e243]: 30%
+          - link "Kinesiology Tape (5cm) Kinesiology Tape (5cm) ₩2,500 ₩3,900 36%" [ref=e244] [cursor=pointer]:
+            - /url: /apparel/kinesiology-tape
+            - img "Kinesiology Tape (5cm)" [ref=e246]
+            - generic [ref=e247]:
+              - paragraph [ref=e248]: Kinesiology Tape (5cm)
+              - generic [ref=e249]:
+                - generic [ref=e250]: ₩2,500
+                - generic [ref=e251]: ₩3,900
+                - generic [ref=e252]: 36%
+          - link "Underwrap Tape (6cm) Underwrap Tape (6cm) ₩1,500 ₩2,500 40%" [ref=e253] [cursor=pointer]:
+            - /url: /apparel/underwrap-tape
+            - img "Underwrap Tape (6cm)" [ref=e255]
+            - generic [ref=e256]:
+              - paragraph [ref=e257]: Underwrap Tape (6cm)
+              - generic [ref=e258]:
+                - generic [ref=e259]: ₩1,500
+                - generic [ref=e260]: ₩2,500
+                - generic [ref=e261]: 40%
+          - link "Philippians 4:13 Non-Slip Crew Socks (White) Philippians 4:13 Non-Slip Crew Socks (White) ₩6,900 ₩11,900 42%" [ref=e262] [cursor=pointer]:
+            - /url: /apparel/philippians-413-non-slip-crew-socks-white
+            - img "Philippians 4:13 Non-Slip Crew Socks (White)" [ref=e264]
+            - generic [ref=e265]:
+              - paragraph [ref=e266]: Philippians 4:13 Non-Slip Crew Socks (White)
+              - generic [ref=e267]:
+                - generic [ref=e268]: ₩6,900
+                - generic [ref=e269]: ₩11,900
+                - generic [ref=e270]: 42%
+          - link "Philippians 4:13 Non-Slip Crew Socks (Black) Philippians 4:13 Non-Slip Crew Socks (Black) ₩6,900 ₩11,900 42%" [ref=e271] [cursor=pointer]:
+            - /url: /apparel/philippians-413-non-slip-crew-socks-black
+            - img "Philippians 4:13 Non-Slip Crew Socks (Black)" [ref=e273]
+            - generic [ref=e274]:
+              - paragraph [ref=e275]: Philippians 4:13 Non-Slip Crew Socks (Black)
+              - generic [ref=e276]:
+                - generic [ref=e277]: ₩6,900
+                - generic [ref=e278]: ₩11,900
+                - generic [ref=e279]: 42%
+          - link "Athletic Calf Sleeves (Black) Athletic Calf Sleeves (Black) ₩8,900 ₩13,900 36%" [ref=e280] [cursor=pointer]:
+            - /url: /apparel/athletic-calf-sleeves-black
+            - img "Athletic Calf Sleeves (Black)" [ref=e282]
+            - generic [ref=e283]:
+              - paragraph [ref=e284]: Athletic Calf Sleeves (Black)
+              - generic [ref=e285]:
+                - generic [ref=e286]: ₩8,900
+                - generic [ref=e287]: ₩13,900
+                - generic [ref=e288]: 36%
+          - link "Athletic Calf Sleeves (White) Athletic Calf Sleeves (White) ₩8,900 ₩13,900 36%" [ref=e289] [cursor=pointer]:
+            - /url: /apparel/athletic-calf-sleeves-white
+            - img "Athletic Calf Sleeves (White)" [ref=e291]
+            - generic [ref=e292]:
+              - paragraph [ref=e293]: Athletic Calf Sleeves (White)
+              - generic [ref=e294]:
+                - generic [ref=e295]: ₩8,900
+                - generic [ref=e296]: ₩13,900
+                - generic [ref=e297]: 36%
+          - link "Athletic Long Socks (Black) Athletic Long Socks (Black) ₩10,900 ₩15,900 31%" [ref=e298] [cursor=pointer]:
+            - /url: /apparel/athletic-long-socks-black
+            - img "Athletic Long Socks (Black)" [ref=e300]
+            - generic [ref=e301]:
+              - paragraph [ref=e302]: Athletic Long Socks (Black)
+              - generic [ref=e303]:
+                - generic [ref=e304]: ₩10,900
+                - generic [ref=e305]: ₩15,900
+                - generic [ref=e306]: 31%
+          - link "Athletic Long Socks (White) Athletic Long Socks (White) ₩10,900 ₩15,900 31%" [ref=e307] [cursor=pointer]:
+            - /url: /apparel/athletic-long-socks-white
+            - img "Athletic Long Socks (White)" [ref=e309]
+            - generic [ref=e310]:
+              - paragraph [ref=e311]: Athletic Long Socks (White)
+              - generic [ref=e312]:
+                - generic [ref=e313]: ₩10,900
+                - generic [ref=e314]: ₩15,900
+                - generic [ref=e315]: 31%
+          - link "Cross C-Tape (5cm) Cross C-Tape (5cm) ₩3,500 ₩4,000 13%" [ref=e316] [cursor=pointer]:
+            - /url: /apparel/cross-c-tape-5cm
+            - img "Cross C-Tape (5cm)" [ref=e318]
+            - generic [ref=e319]:
+              - paragraph [ref=e320]: Cross C-Tape (5cm)
+              - generic [ref=e321]:
+                - generic [ref=e322]: ₩3,500
+                - generic [ref=e323]: ₩4,000
+                - generic [ref=e324]: 13%
+          - link "C-Tape (White) (3.8cm) C-Tape (White) (3.8cm) ₩1,500" [ref=e325] [cursor=pointer]:
+            - /url: /apparel/c-tape-white
+            - img "C-Tape (White) (3.8cm)" [ref=e327]
+            - generic [ref=e328]:
+              - paragraph [ref=e329]: C-Tape (White) (3.8cm)
+              - generic [ref=e331]: ₩1,500
+          - link "C-Tape Black (3.8cm) C-Tape Black (3.8cm) ₩1,500 ₩1,800 17%" [ref=e332] [cursor=pointer]:
+            - /url: /apparel/c-tape-black
+            - img "C-Tape Black (3.8cm)" [ref=e334]
+            - generic [ref=e335]:
+              - paragraph [ref=e336]: C-Tape Black (3.8cm)
+              - generic [ref=e337]:
+                - generic [ref=e338]: ₩1,500
+                - generic [ref=e339]: ₩1,800
+                - generic [ref=e340]: 17%
+          - link "Cross C-Tape (3.8cm) Cross C-Tape (3.8cm) ₩3,000 ₩3,500 14%" [ref=e341] [cursor=pointer]:
+            - /url: /apparel/cross-c-tape-38
+            - img "Cross C-Tape (3.8cm)" [ref=e343]
+            - generic [ref=e344]:
+              - paragraph [ref=e345]: Cross C-Tape (3.8cm)
+              - generic [ref=e346]:
+                - generic [ref=e347]: ₩3,000
+                - generic [ref=e348]: ₩3,500
+                - generic [ref=e349]: 14%
+          - link "Cross C-Tape (Black) (5cm) Cross C-Tape (Black) (5cm) ₩3,500 ₩4,000 13%" [ref=e350] [cursor=pointer]:
+            - /url: /apparel/cross-c-tape-5cm-black
+            - img "Cross C-Tape (Black) (5cm)" [ref=e352]
+            - generic [ref=e353]:
+              - paragraph [ref=e354]: Cross C-Tape (Black) (5cm)
+              - generic [ref=e355]:
+                - generic [ref=e356]: ₩3,500
+                - generic [ref=e357]: ₩4,000
+                - generic [ref=e358]: 13%
+          - link "BOOT SKIN 번호 BOOT SKIN 번호 ₩4,000 ₩6,900 42%" [ref=e359] [cursor=pointer]:
+            - /url: /apparel/bootskin-number
+            - img "BOOT SKIN 번호" [ref=e361]
+            - generic [ref=e362]:
+              - paragraph [ref=e363]: BOOT SKIN 번호
+              - generic [ref=e364]:
+                - generic [ref=e365]: ₩4,000
+                - generic [ref=e366]: ₩6,900
+                - generic [ref=e367]: 42%
+          - link "BOOT SKIN 이니셜 BOOT SKIN 이니셜 ₩4,000 ₩6,900 42%" [ref=e368] [cursor=pointer]:
+            - /url: /apparel/bootskin-initial
+            - img "BOOT SKIN 이니셜" [ref=e370]
+            - generic [ref=e371]:
+              - paragraph [ref=e372]: BOOT SKIN 이니셜
+              - generic [ref=e373]:
+                - generic [ref=e374]: ₩4,000
+                - generic [ref=e375]: ₩6,900
+                - generic [ref=e376]: 42%
+          - link "BOOT SKIN 심볼 BOOT SKIN 심볼 ₩5,000 ₩8,900 44%" [ref=e377] [cursor=pointer]:
+            - /url: /apparel/bootskin-symbol
+            - img "BOOT SKIN 심볼" [ref=e379]
+            - generic [ref=e380]:
+              - paragraph [ref=e381]: BOOT SKIN 심볼
+              - generic [ref=e382]:
+                - generic [ref=e383]: ₩5,000
+                - generic [ref=e384]: ₩8,900
+                - generic [ref=e385]: 44%
+          - link "BOOT SKIN 국기 BOOT SKIN 국기 ₩5,000 ₩8,900 44%" [ref=e386] [cursor=pointer]:
+            - /url: /apparel/bootskin-korea
+            - img "BOOT SKIN 국기" [ref=e388]
+            - generic [ref=e389]:
+              - paragraph [ref=e390]: BOOT SKIN 국기
+              - generic [ref=e391]:
+                - generic [ref=e392]: ₩5,000
+                - generic [ref=e393]: ₩8,900
+                - generic [ref=e394]: 44%
+      - link "모두 보기" [ref=e396] [cursor=pointer]:
+        - /url: /apparel
+    - generic [ref=e397]:
+      - link "브로스픽 스포츠웨어 BROSPICK SPORTSWEAR 브로스픽은 선수의 움직임에 맞게 설계합니다. 트레이닝의 모든 순간을 함께하는 의류. 경기장 밖에서도 선수다운 스타일을 유지할 수 있도록, 기능성과 디자인을 동시에 담았습니다. 브로스픽 스포츠웨어는 단순한 운동복이 아닙니다. 선수가 자신을 표현하는 방식입니다. more →" [ref=e398] [cursor=pointer]:
+        - /url: /apparel
+        - img "브로스픽 스포츠웨어" [ref=e401]
+        - generic [ref=e402]:
+          - paragraph [ref=e403]: BROSPICK SPORTSWEAR
+          - heading "브로스픽은 선수의 움직임에 맞게 설계합니다." [level=2] [ref=e404]:
+            - text: 브로스픽은 선수의 움직임에
+            - text: 맞게 설계합니다.
+          - paragraph [ref=e405]: 트레이닝의 모든 순간을 함께하는 의류. 경기장 밖에서도 선수다운 스타일을 유지할 수 있도록, 기능성과 디자인을 동시에 담았습니다.
+          - paragraph [ref=e406]: 브로스픽 스포츠웨어는 단순한 운동복이 아닙니다. 선수가 자신을 표현하는 방식입니다.
+          - generic [ref=e407]:
+            - text: more
+            - generic [ref=e408]: →
+      - generic [ref=e409]:
+        - button "스포츠웨어" [ref=e410] [cursor=pointer]
+        - button "이북" [ref=e411] [cursor=pointer]
+    - generic [ref=e413]:
+      - generic [ref=e414]:
+        - generic [ref=e415]:
+          - paragraph [ref=e416]: BROSPICK E-BOOK
+          - heading "해외 축구 진출 가이드" [level=2] [ref=e417]
+        - link "자세히 보기 →" [ref=e418] [cursor=pointer]:
+          - /url: /ebook
+          - text: 자세히 보기
+          - generic [ref=e419]: →
+      - link "BROSPICK The Overseas Football Playbook E-BOOK · 2026 BROSPICK E-BOOK · 2026 The Overseas Football Playbook 해외 축구 진출을 꿈꾸는 선수들을 위한 단 하나의 실전 가이드. 159,000원 89,000원 얼리버드 지금 구매하기 →" [ref=e420] [cursor=pointer]:
+        - /url: /ebook
+        - generic [ref=e426]:
+          - paragraph [ref=e428]: BROSPICK
+          - paragraph [ref=e430]: The Overseas Football Playbook
+          - paragraph [ref=e431]: E-BOOK · 2026
+        - generic [ref=e436]:
+          - paragraph [ref=e437]: BROSPICK E-BOOK · 2026
+          - heading "The Overseas Football Playbook" [level=3] [ref=e438]
+          - paragraph [ref=e439]: 해외 축구 진출을 꿈꾸는 선수들을 위한 단 하나의 실전 가이드.
+          - generic [ref=e440]:
+            - generic [ref=e441]: 159,000원
+            - generic [ref=e442]: 89,000원
+            - generic [ref=e443]: 얼리버드
+          - generic [ref=e444]: 지금 구매하기 →
+    - generic [ref=e446]:
+      - generic [ref=e447]:
+        - generic [ref=e448]:
+          - paragraph [ref=e449]: BROSPICK BLOG
+          - heading "선수 이야기" [level=2] [ref=e450]
+        - link "전체 보기 →" [ref=e451] [cursor=pointer]:
+          - /url: /interviews
+          - text: 전체 보기
+          - generic [ref=e452]: →
+      - generic [ref=e453]:
+        - link "김희준 김희준 Australian State League (ASL) · CDM / CM 부상을 이겨낸 단단함 위에 쌓아올린 미드필더. 경희대학교 김희준은 볼 소유와 위치선정으로 경기를 지배한다. 더 알아보기 →" [ref=e454] [cursor=pointer]:
+          - /url: /interviews/7
+          - img "김희준" [ref=e456]
+          - generic [ref=e457]:
+            - heading "김희준" [level=3] [ref=e458]
+            - paragraph [ref=e459]: Australian State League (ASL) · CDM / CM
+            - paragraph [ref=e460]: 부상을 이겨낸 단단함 위에 쌓아올린 미드필더. 경희대학교 김희준은 볼 소유와 위치선정으로 경기를 지배한다.
+            - generic [ref=e461]: 더 알아보기 →
+        - link "이준희 이준희 경희대학교 체육부 · GK 작은 키로 한계를 정의받지 않는 골키퍼. 경희대학교 체육부 이준희는 반사신경과 예측으로 새로운 GK의 기준을 만들어가고 있다. 더 알아보기 →" [ref=e462] [cursor=pointer]:
+          - /url: /interviews/6
+          - img "이준희" [ref=e464]
+          - generic [ref=e465]:
+            - heading "이준희" [level=3] [ref=e466]
+            - paragraph [ref=e467]: 경희대학교 체육부 · GK
+            - paragraph [ref=e468]: 작은 키로 한계를 정의받지 않는 골키퍼. 경희대학교 체육부 이준희는 반사신경과 예측으로 새로운 GK의 기준을 만들어가고 있다.
+            - generic [ref=e469]: 더 알아보기 →
+        - link "유은철 유은철 동국대학교 · LW, RB 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기. 더 알아보기 →" [ref=e470] [cursor=pointer]:
+          - /url: /interviews/5
+          - img "유은철" [ref=e472]
+          - generic [ref=e473]:
+            - heading "유은철" [level=3] [ref=e474]
+            - paragraph [ref=e475]: 동국대학교 · LW, RB
+            - paragraph [ref=e476]: 7살부터 시작한 16년 엘리트 코스, 전국대회 입상 경력을 바탕으로 동국대학교에서 뛰고 있는 유은철 선수의 이야기.
+            - generic [ref=e477]: 더 알아보기 →
+    - generic [ref=e481]:
+      - generic [ref=e482]:
+        - paragraph [ref=e483]: BROSPICK
+        - heading "우리가 존재하는 이유" [level=2] [ref=e484]
+      - generic [ref=e485]:
+        - generic [ref=e487]:
+          - generic [ref=e488]: "01"
+          - heading "브로스픽의 철학" [level=3] [ref=e489]
+          - paragraph [ref=e490]: 브로스픽은 한국 축구 선수들이 마주한 현실적인 한계를 깨기 위해 탄생했습니다. 선수를 위한 새로운 시스템이 필요하다는 믿음에서 시작됐습니다.
+        - generic [ref=e492]:
+          - generic [ref=e493]: "02"
+          - heading "문제를 직시하다" [level=3] [ref=e494]
+          - paragraph [ref=e495]: 국내 선수들은 불공정한 구조 속에서 기회를 얻지 못하고 잠재력을 잃고 있습니다. 우리는 이런 현실이 잘못되었다고 판단했습니다.
+        - generic [ref=e497]:
+          - generic [ref=e498]: "03"
+          - heading "다음 주인공은 당신입니다" [level=3] [ref=e499]
+          - paragraph [ref=e500]: 더 이상 국내 시스템의 한계 속에서 꿈을 포기하지 마세요. 브로스픽을 통해 당신의 이야기를 세계에 보여주세요.
+    - generic [ref=e502]:
+      - heading "What We Do" [level=2] [ref=e504]
+      - generic [ref=e506]:
+        - paragraph [ref=e507]: 시스템이 놓친 선수, 우리가 다시 선택합니다.
+        - paragraph [ref=e508]: 우리는 유명한 선수를 찾지 않습니다.
+        - paragraph [ref=e509]: 사라지기엔 아까운 선수를 찾습니다.
+        - paragraph [ref=e510]: 평가가 아니라, 발견을 위해 움직입니다.
+      - generic [ref=e511]:
+        - generic [ref=e513]:
+          - generic [ref=e514]:
+            - generic [ref=e515]: "1"
+            - heading "선수 발굴" [level=3] [ref=e516]
+          - paragraph [ref=e517]: 무명 대학 선수부터 성인·하부리그 선수까지 직접 찾습니다
+        - generic [ref=e519]:
+          - generic [ref=e520]:
+            - generic [ref=e521]: "2"
+            - heading "해외 리그 진출 서포트" [level=3] [ref=e522]
+          - paragraph [ref=e523]: 기존 에이전시의 높은 비용 구조를 변화시킵니다.
+        - generic [ref=e525]:
+          - generic [ref=e526]:
+            - generic [ref=e527]: "3"
+            - heading "선수 홍보" [level=3] [ref=e528]
+          - paragraph [ref=e529]: 의류 협찬 및 인터뷰·플레이 영상으로 선수를 시장에 노출합니다
+        - generic [ref=e531]:
+          - generic [ref=e532]:
+            - generic [ref=e533]: "4"
+            - heading "브로스픽의 플랫폼화" [level=3] [ref=e534]
+          - paragraph [ref=e535]: 컨텐츠를 넘어, 기록·연결·커뮤니티를 담은 어플을 준비 중입니다.
+    - generic [ref=e537]:
+      - heading "Our Services" [level=2] [ref=e539]
+      - generic [ref=e540]:
+        - generic [ref=e542]:
+          - generic [ref=e543]:
+            - generic [ref=e544]: "01"
+            - heading "해외리그 진출 서포트" [level=3] [ref=e545]
+          - paragraph [ref=e546]: 해외리그 기회를 얻기 원하는 선수의 진출 기회를 연결합니다.
+        - generic [ref=e548]:
+          - generic [ref=e549]:
+            - generic [ref=e550]: "02"
+            - heading "개인/팀 웨어" [level=3] [ref=e551]
+          - paragraph [ref=e552]: 각 팀마다 비슷한 디자인 웨어에서 벗어나, 트렌드와 협업으로 새로운 스타일을 제안합니다.
+        - generic [ref=e554]:
+          - generic [ref=e555]:
+            - generic [ref=e556]: "03"
+            - heading "선수 기록 플랫폼" [level=3] [ref=e557]
+          - paragraph [ref=e558]: 선수 개인 커리어를 기반으로 해외 진출 기회를 연결하는 플레이어 마켓형 플랫폼입니다.
+  - contentinfo [ref=e559]:
+    - generic [ref=e560]:
+      - generic [ref=e561]:
+        - button "고객서비스":
+          - generic: 고객서비스
+        - list [ref=e563]:
+          - listitem [ref=e564]:
+            - link "주문 조회" [ref=e565] [cursor=pointer]:
+              - /url: /tracking
+          - listitem [ref=e566]:
+            - link "취소 / 교환 / 반품" [ref=e567] [cursor=pointer]:
+              - /url: /returns
+      - generic [ref=e568]:
+        - button "지원":
+          - generic: 지원
+        - list [ref=e570]:
+          - listitem [ref=e571]:
+            - link "인스타그램" [ref=e572] [cursor=pointer]:
+              - /url: https://www.instagram.com/team.brospick/
+          - listitem [ref=e573]:
+            - link "스레드" [ref=e574] [cursor=pointer]:
+              - /url: https://www.threads.com/@team.brospick?
+          - listitem [ref=e575]:
+            - link "이메일 문의" [ref=e576] [cursor=pointer]:
+              - /url: mailto:team.brospick@gmail.com
+          - listitem [ref=e577]:
+            - link "전화 문의" [ref=e578] [cursor=pointer]:
+              - /url: tel:010-2687-6269
+          - listitem [ref=e579]:
+            - button "개인정보 처리방침" [ref=e580] [cursor=pointer]
+          - listitem [ref=e581]:
+            - button "쿠키 정책" [ref=e582] [cursor=pointer]
+          - listitem [ref=e583]:
+            - button "면책 조항" [ref=e584] [cursor=pointer]
+      - generic [ref=e585]:
+        - button "BROSPICK":
+          - generic: BROSPICK
+        - list [ref=e587]:
+          - listitem [ref=e588]: "회사: BROSPICK"
+          - listitem [ref=e589]: "대표자: 홍주영"
+          - listitem [ref=e590]: "사업자번호: 847-07-03351"
+          - listitem [ref=e591]: "통신판매업: 제 2026-경기파주-0883 호"
+          - listitem [ref=e592]: "주소: 경기도 파주시 금정20길 19"
+          - listitem [ref=e593]: "전화번호: 010-2687-6269"
+          - listitem [ref=e594]: "개인정보보호 책임자: 홍주영"
+    - generic [ref=e596]:
+      - img "Brospick" [ref=e597]
+      - paragraph [ref=e598]: © 2026 BROSPICK. All rights reserved.
+  - button "고객센터" [ref=e599] [cursor=pointer]:
+    - img [ref=e600]

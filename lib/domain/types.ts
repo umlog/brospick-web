@@ -47,6 +47,7 @@ export interface Order {
   cancel_refund_holder?: string | null;
   cancel_refund_amount?: number | null;
   cancel_refund_completed?: boolean;
+  deleted_at?: string | null;
 }
 
 // -----------------------------------------------------------------------------
@@ -231,6 +232,7 @@ export interface StatusChangeEmailData {
   status: string;
   trackingUrl: string;
   trackingNumber?: string;
+  carrier?: string;
 }
 
 export interface PaymentReminderEmailData {

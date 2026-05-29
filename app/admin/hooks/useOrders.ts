@@ -3,11 +3,22 @@ import type { Order } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
 import { showConfirm } from '../lib/confirm';
+import { OrderStatus } from '@/lib/domain/enums';
+
+// 일괄 변경 가능한 상태 (운송장·날짜 입력 불필요한 것만)
+export const BULK_ELIGIBLE_STATUSES = [
+  OrderStatus.PAYMENT_CONFIRMED,
+  OrderStatus.PREPARING,
+  OrderStatus.DELIVERED,
+] as const;
+
+const BULK_SKIP_STATUSES: string[] = [OrderStatus.CANCEL_REQUESTED, OrderStatus.CANCELLED];
 
 export function useOrders(notifyOnChange: boolean) {
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [processingOrders, setProcessingOrders] = useState<Set<string>>(new Set());
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
   const [filterStatus, setFilterStatus] = useState('');
   const [filterMarketing, setFilterMarketing] = useState<boolean | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,7 +73,7 @@ export function useOrders(notifyOnChange: boolean) {
     }
   }, []);
 
-  const handleStatusChange = async (orderId: string, newStatus: string, trackingNumber?: string) => {
+  const handleStatusChange = async (orderId: string, newStatus: string, trackingNumber?: string, carrier?: string) => {
     const order = allOrders.find((o) => o.id === orderId);
     const hasEmail = order?.customer_email;
     const willNotify = notifyOnChange && hasEmail;
@@ -80,6 +91,7 @@ export function useOrders(notifyOnChange: boolean) {
         status: newStatus,
         sendNotification: notifyOnChange,
         ...(trackingNumber && { trackingNumber }),
+        ...(carrier && { carrier }),
       });
 
       setAllOrders((prev) =>
@@ -114,34 +126,65 @@ export function useOrders(notifyOnChange: boolean) {
   };
 
   const handleDeleteOrder = async (orderId: string, orderNumber: string) => {
-    const ok = await showConfirm(`주문 ${orderNumber}을(를) 정말 삭제할까요?\n삭제하면 복구할 수 없습니다.`);
+    const ok = await showConfirm(`주문 ${orderNumber}을(를) 휴지통으로 이동할까요?\n언제든지 복구할 수 있습니다.`);
     if (!ok) return;
-
-    // 재고가 차감된 상태인지 판단
-    // - 무통장입금 + 입금대기: 주문 생성 시점에 차감됨
-    // - 입금확인 / 배송중 / 배송완료 / 발송지연: 카카오·무통장 모두 차감됨
-    // - 카카오페이 결제중 / 카카오페이 + 입금대기: 차감 안 됨
-    const order = allOrders.find((o) => o.id === orderId);
-    const isDelayed = /^(\d+)(주|일) 뒤 발송$/.test(order?.status ?? '');
-    const confirmedStatuses = ['입금확인', '배송중', '배송완료'];
-    const stockWasDecremented = order && (
-      confirmedStatuses.includes(order.status) ||
-      isDelayed ||
-      (order.status === '입금대기' && order.payment_method === '무통장입금')
-    );
-
-    let restoreStock = false;
-    if (stockWasDecremented) {
-      restoreStock = await showConfirm(`재고를 원래대로 돌려놓을까요?\n(${order!.order_items.map((i) => `${i.product_name} ${i.size} x${i.quantity}`).join(', ')})`);
-    }
 
     setProcessing(orderId, true);
     try {
-      await apiClient.orders.delete(orderId, restoreStock);
+      await apiClient.orders.delete(orderId);
       setAllOrders((prev) => prev.filter((o) => o.id !== orderId));
-      showToast(restoreStock ? '주문이 삭제되고 재고가 복구되었습니다.' : '주문이 삭제되었습니다.', 'success');
+      showToast('주문이 휴지통으로 이동되었습니다.', 'success');
     } catch {
       showToast('주문 삭제에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(orderId, false);
+    }
+  };
+
+  // ── 휴지통 ──────────────────────────────────────────
+  const [trashMode, setTrashMode] = useState(false);
+  const [trashedOrders, setTrashedOrders] = useState<Order[]>([]);
+  const [trashLoading, setTrashLoading] = useState(false);
+
+  const fetchTrashedOrders = useCallback(async () => {
+    setTrashLoading(true);
+    try {
+      const data = await apiClient.orders.listTrashed();
+      setTrashedOrders(data.orders);
+    } catch {
+      showToast('휴지통 조회에 실패했습니다.', 'error');
+    } finally {
+      setTrashLoading(false);
+    }
+  }, []);
+
+  const handleRestoreOrder = async (orderId: string, orderNumber: string) => {
+    const ok = await showConfirm(`주문 ${orderNumber}을(를) 복구할까요?`);
+    if (!ok) return;
+
+    setProcessing(orderId, true);
+    try {
+      await apiClient.orders.restore(orderId);
+      setTrashedOrders((prev) => prev.filter((o) => o.id !== orderId));
+      showToast('주문이 복구되었습니다.', 'success');
+    } catch {
+      showToast('복구에 실패했습니다.', 'error');
+    } finally {
+      setProcessing(orderId, false);
+    }
+  };
+
+  const handlePermanentDelete = async (orderId: string, orderNumber: string) => {
+    const ok = await showConfirm(`주문 ${orderNumber}을(를) 영구 삭제할까요?\n이 작업은 되돌릴 수 없습니다.`);
+    if (!ok) return;
+
+    setProcessing(orderId, true);
+    try {
+      await apiClient.orders.permanentDelete(orderId);
+      setTrashedOrders((prev) => prev.filter((o) => o.id !== orderId));
+      showToast('영구 삭제되었습니다.', 'success');
+    } catch {
+      showToast('영구 삭제에 실패했습니다.', 'error');
     } finally {
       setProcessing(orderId, false);
     }
@@ -172,6 +215,85 @@ export function useOrders(notifyOnChange: boolean) {
     setFilterStatus(status);
   };
 
+  const toggleSelectOrder = (orderId: string) => {
+    setSelectedOrders((prev) => {
+      const next = new Set(prev);
+      if (next.has(orderId)) next.delete(orderId);
+      else next.add(orderId);
+      return next;
+    });
+  };
+
+  const selectAllVisible = () => setSelectedOrders(new Set(orders.map((o) => o.id)));
+
+  const clearSelection = () => setSelectedOrders(new Set());
+
+  const handleBulkStatusChange = async (newStatus: string) => {
+    const selected = orders.filter((o) => selectedOrders.has(o.id));
+    const toChange = selected.filter(
+      (o) => o.status !== newStatus && !BULK_SKIP_STATUSES.includes(o.status)
+    );
+    const skipped = selected.length - toChange.length;
+
+    if (toChange.length === 0) {
+      showToast('변경 가능한 주문이 없습니다.', 'info');
+      return;
+    }
+
+    const notifyCount = notifyOnChange ? toChange.filter((o) => o.customer_email).length : 0;
+    let msg = `${toChange.length}건을 "${newStatus}"(으)로 변경할까요?`;
+    if (notifyCount > 0) msg += `\n이메일 알림 ${notifyCount}건 발송됩니다.`;
+    if (skipped > 0) msg += `\n(${skipped}건은 상태가 맞지 않아 건너뜁니다)`;
+
+    const ok = await showConfirm(msg);
+    if (!ok) return;
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      toChange.forEach((o) => next.add(o.id));
+      return next;
+    });
+
+    const results = await Promise.allSettled(
+      toChange.map((order) =>
+        apiClient.orders.updateStatus(order.id, {
+          status: newStatus,
+          sendNotification: notifyOnChange,
+        })
+      )
+    );
+
+    const successIds = new Set<string>();
+    let failCount = 0;
+    results.forEach((result, i) => {
+      if (result.status === 'fulfilled') successIds.add(toChange[i].id);
+      else failCount++;
+    });
+
+    if (successIds.size > 0) {
+      setAllOrders((prev) =>
+        prev.map((o) => (successIds.has(o.id) ? { ...o, status: newStatus } : o))
+      );
+    }
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      toChange.forEach((o) => next.delete(o.id));
+      return next;
+    });
+
+    setSelectedOrders(new Set());
+
+    if (failCount === 0) {
+      showToast(
+        `${successIds.size}건 변경 완료${skipped > 0 ? ` (${skipped}건 건너뜀)` : ''}`,
+        'success'
+      );
+    } else {
+      showToast(`${successIds.size}건 성공, ${failCount}건 실패`, 'error');
+    }
+  };
+
   const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
     const ok = await showConfirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`);
     if (!ok) return;
@@ -195,6 +317,7 @@ export function useOrders(notifyOnChange: boolean) {
     allOrders,
     loading,
     processingOrders,
+    selectedOrders,
     filterStatus,
     filterMarketing,
     setFilterMarketing,
@@ -211,5 +334,17 @@ export function useOrders(notifyOnChange: boolean) {
     handleFilterChange,
     handleRevokeMarketing,
     handleCancelRefundComplete,
+    toggleSelectOrder,
+    selectAllVisible,
+    clearSelection,
+    handleBulkStatusChange,
+    // 휴지통
+    trashMode,
+    setTrashMode,
+    trashedOrders,
+    trashLoading,
+    fetchTrashedOrders,
+    handleRestoreOrder,
+    handlePermanentDelete,
   };
 }

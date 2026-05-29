@@ -68,17 +68,30 @@ export const apiClient = {
 
     updateStatus: (
       id: string,
-      body: { status: string; sendNotification?: boolean; trackingNumber?: string }
+      body: { status: string; sendNotification?: boolean; trackingNumber?: string; carrier?: string }
     ) =>
       request<{ order: Order }>(`/api/orders/${id}`, {
         method: 'PATCH',
         body,
       }),
 
-    delete: (id: string, restoreStock: boolean) =>
-      request<{ success: true }>(`/api/orders/${id}?restore_stock=${restoreStock}`, {
+    delete: (id: string) =>
+      request<{ success: true }>(`/api/orders/${id}`, {
         method: 'DELETE',
       }),
+
+    restore: (id: string) =>
+      request<{ success: true }>(`/api/orders/${id}/restore`, {
+        method: 'POST',
+      }),
+
+    permanentDelete: (id: string) =>
+      request<{ success: true }>(`/api/orders/${id}/permanent`, {
+        method: 'DELETE',
+      }),
+
+    listTrashed: () =>
+      request<{ orders: Order[] }>('/api/orders?trash=true'),
 
     sendPaymentReminder: (id: string) =>
       request<{ success: true }>(`/api/orders/${id}`, {

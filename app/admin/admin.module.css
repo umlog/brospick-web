@@ -2612,3 +2612,264 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ── 체크박스 & 선택 ─────────────────────────────── */
+.orderCheckboxWrapper {
+  display: flex;
+  align-items: center;
+  padding-right: var(--space-md);
+  flex-shrink: 0;
+}
+
+.orderCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+}
+
+.orderCardSelected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.selectAllBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.selectAllLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.selectionClearBtn {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 2px 10px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.selectionClearBtn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+/* ── 일괄 액션 바 (하단 고정) ────────────────────── */
+.bulkBar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-accent);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90vw;
+}
+
+.bulkBarInfo {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.bulkActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.bulkStatusBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.bulkStatusBtn:hover {
+  opacity: 0.85;
+}
+
+.bulkClearBtn {
+  padding: var(--space-sm) var(--space-md);
+  background: none;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.bulkClearBtn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.logenExportBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.logenExportBtn:hover {
+  opacity: 0.85;
+}
+
+/* ── 휴지통 토글 ─────────────────────────────────── */
+.trashToggleBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.trashToggleBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: none;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.trashToggleBtn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.trashToggleBtnActive {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.trashModeLabel {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ── 휴지통 카드 ─────────────────────────────────── */
+.trashCard {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  opacity: 0.85;
+}
+
+.trashCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+}
+
+.trashDeletedAt {
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+.trashCardItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg) var(--space-md);
+}
+
+.trashItemChip {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+}
+
+.trashCardActions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.trashRestoreBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid #22c55e;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.trashRestoreBtn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.trashRestoreBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.trashPermanentDeleteBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.trashPermanentDeleteBtn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.trashPermanentDeleteBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

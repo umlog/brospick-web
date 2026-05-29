@@ -101,9 +101,19 @@ export const SOCIAL_MEDIA = {
   threads: 'https://www.threads.com/@team.brospick?',
 } as const;
 
-export const CARRIERS = ['CJ대한통운', '한진택배', '롯데택배', '로젠택배', '우체국택배'] as const;
+export const CARRIERS = ['로젠택배', 'CJ대한통운', '한진택배', '롯데택배', '우체국택배'] as const;
+export type Carrier = typeof CARRIERS[number];
 
 export const TRACKING = {
-  defaultCarrier: 'CJ대한통운',
-  cjBaseUrl: 'https://trace.cjlogistics.com/next/tracking.html?wblNo=',
+  defaultCarrier: '로젠택배' as Carrier,
+  trackingUrl: (carrier: Carrier, trackingNumber: string): string => {
+    const encoded = encodeURIComponent(trackingNumber);
+    switch (carrier) {
+      case '로젠택배':     return `https://www.ilogen.com/web/personal/trace/${encoded}`;
+      case 'CJ대한통운':   return `https://cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo=${encoded}`;
+      case '한진택배':     return `https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KOR&wblnumText2=${encoded}`;
+      case '롯데택배':     return `https://www.lotteglogis.com/home/reservation/tracking/index?InvNo=${encoded}`;
+      case '우체국택배':   return `https://service.epost.go.kr/trace.RetrieveEmsRigiPrclDeliv.retrieve?sid1=${encoded}`;
+    }
+  },
 } as const;

@@ -4,7 +4,7 @@
 // =============================================================================
 
 import { escapeHtml, sendMail } from './transporter';
-import { BANK, TRACKING } from '@/lib/constants';
+import { BANK, TRACKING, type Carrier } from '@/lib/constants';
 import type { StatusChangeEmailData, PaymentReminderEmailData, OrderCancelEmailData, AdminCancelNotificationEmailData } from '@/lib/domain/types';
 import { OrderStatus } from '@/lib/domain/enums';
 
@@ -34,15 +34,16 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
   if (!info) return;
 
   const copyButtonStyle = `display:inline-block;margin-left:8px;padding:2px 8px;background:#eee;border-radius:4px;font-size:11px;color:#555;text-decoration:none;cursor:pointer;vertical-align:middle;`;
-  const cjTrackingUrl = data.trackingNumber
-    ? `${TRACKING.cjBaseUrl}${encodeURIComponent(data.trackingNumber)}`
+  const carrierName = (data.carrier || TRACKING.defaultCarrier) as Carrier;
+  const carrierTrackingUrl = data.trackingNumber
+    ? TRACKING.trackingUrl(carrierName, data.trackingNumber)
     : '';
 
   const trackingNumberHtml = data.trackingNumber ? `
       <div style="background:#f0f6ff;border:1px solid #d0e3ff;border-radius:8px;padding:16px;margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <span style="font-size:13px;color:#888;">택배사</span>
-          <span style="font-size:14px;color:#333;font-weight:600;">${TRACKING.defaultCarrier}</span>
+          <span style="font-size:14px;color:#333;font-weight:600;">${escapeHtml(carrierName)}</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <span style="font-size:13px;color:#888;">운송장번호</span>
@@ -59,8 +60,8 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
           </span>
         </div>
         <div style="text-align:center;margin-top:14px;">
-          <a href="${cjTrackingUrl}" style="display:inline-block;background:#003876;color:#fff;padding:10px 24px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">
-            ${TRACKING.defaultCarrier} 배송 조회
+          <a href="${carrierTrackingUrl}" style="display:inline-block;background:#003876;color:#fff;padding:10px 24px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">
+            ${escapeHtml(carrierName)} 배송 조회
           </a>
         </div>
       </div>` : `

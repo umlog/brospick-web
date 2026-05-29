@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { OrderStatus } from '@/lib/domain/enums';
+import { TRACKING } from '@/lib/constants';
 import { showToast } from '../lib/toast';
 
-type StatusChangeFn = (orderId: string, newStatus: string, trackingNumber?: string) => Promise<void>;
+type StatusChangeFn = (orderId: string, newStatus: string, trackingNumber?: string, carrier?: string) => Promise<void>;
 
 export function useOrderActions(handleStatusChange: StatusChangeFn) {
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [trackingModal, setTrackingModal] = useState<string | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
+  const [carrierInput, setCarrierInput] = useState<string>(TRACKING.defaultCarrier);
   const [delayModal, setDelayModal] = useState<string | null>(null);
   const [delayWeeks, setDelayWeeks] = useState(3);
   const [delayUnit, setDelayUnit] = useState<'주' | '일'>('주');
@@ -21,6 +23,7 @@ export function useOrderActions(handleStatusChange: StatusChangeFn) {
   const handleShippingClick = (orderId: string) => {
     setTrackingModal(orderId);
     setTrackingInput('');
+    setCarrierInput(TRACKING.defaultCarrier);
   };
 
   const handleDelayClick = (orderId: string, currentStatus: string) => {
@@ -41,9 +44,15 @@ export function useOrderActions(handleStatusChange: StatusChangeFn) {
       showToast('운송장번호를 입력해주세요.', 'error');
       return;
     }
-    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim());
+    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim(), carrierInput);
     setTrackingModal(null);
     setTrackingInput('');
+    setCarrierInput(TRACKING.defaultCarrier);
+  };
+
+  const handleTrackingCancel = () => {
+    setTrackingModal(null);
+    setCarrierInput(TRACKING.defaultCarrier);
   };
 
   const handleDelaySubmit = () => {
@@ -56,10 +65,12 @@ export function useOrderActions(handleStatusChange: StatusChangeFn) {
     expandedOrder,
     trackingModal,
     trackingInput,
+    carrierInput,
     delayModal,
     delayWeeks,
     delayUnit,
     setTrackingInput,
+    setCarrierInput,
     setTrackingModal,
     setDelayModal,
     setDelayWeeks,
@@ -69,6 +80,7 @@ export function useOrderActions(handleStatusChange: StatusChangeFn) {
     handleShippingClick,
     handleDelayClick,
     handleTrackingSubmit,
+    handleTrackingCancel,
     handleDelaySubmit,
   };
 }

@@ -47,6 +47,10 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
   const [emailDomain, setEmailDomain] = useState('');
   const [isCustomDomain, setIsCustomDomain] = useState(false);
   const [usingSaved, setUsingSaved] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const isValidEmail = (user: string, domain: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(`${user}@${domain}`);
 
   const fireEmailChange = (user: string, domain: string) => {
     const combined = user && domain ? `${user}@${domain}` : '';
@@ -58,7 +62,16 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
   const handleEmailUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const user = e.target.value;
     setEmailUser(user);
+    setEmailError(null);
     fireEmailChange(user, emailDomain);
+  };
+
+  const handleEmailUserBlur = () => {
+    if (emailUser && emailDomain) {
+      setEmailError(isValidEmail(emailUser, emailDomain) ? null : '올바른 이메일 형식이 아닙니다.');
+    } else if (emailUser && !emailDomain) {
+      setEmailError('도메인을 선택하거나 입력해주세요.');
+    }
   };
 
   const handleDomainSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,10 +79,14 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
     if (value === '__custom__') {
       setIsCustomDomain(true);
       setEmailDomain('');
+      setEmailError(null);
       fireEmailChange(emailUser, '');
     } else {
       setIsCustomDomain(false);
       setEmailDomain(value);
+      if (emailUser) {
+        setEmailError(isValidEmail(emailUser, value) ? null : '올바른 이메일 형식이 아닙니다.');
+      }
       fireEmailChange(emailUser, value);
     }
   };
@@ -77,7 +94,14 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
   const handleCustomDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const domain = e.target.value;
     setEmailDomain(domain);
+    setEmailError(null);
     fireEmailChange(emailUser, domain);
+  };
+
+  const handleCustomDomainBlur = () => {
+    if (emailUser && emailDomain) {
+      setEmailError(isValidEmail(emailUser, emailDomain) ? null : '올바른 이메일 형식이 아닙니다.');
+    }
   };
 
   const handleUseSavedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +154,7 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
             id="emailUser"
             value={emailUser}
             onChange={handleEmailUserChange}
+            onBlur={handleEmailUserBlur}
             placeholder="이메일 아이디"
             required
             autoComplete="email"
@@ -140,6 +165,7 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
               type="text"
               value={emailDomain}
               onChange={handleCustomDomainChange}
+              onBlur={handleCustomDomainBlur}
               placeholder="직접 입력"
               required
             />
@@ -157,6 +183,8 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
             </select>
           )}
         </div>
+        {emailError && <p className={styles.emailError}>{emailError}</p>}
+        <p className={styles.emailHint}>주문번호와 배송진행 등의 현황은 모두 메일로 발송되니 수신 가능한 정확한 메일 주소 기재부탁드립니다.</p>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="postalCode">우편번호 *</label>

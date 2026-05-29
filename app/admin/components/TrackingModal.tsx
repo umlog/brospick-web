@@ -5,6 +5,8 @@ interface TrackingModalProps {
   title: string;
   value: string;
   onChange: (value: string) => void;
+  carrier?: string;
+  onCarrierChange?: (carrier: string) => void;
   onSubmit: () => void;
   onCancel: () => void;
   submitLabel: string;
@@ -15,6 +17,8 @@ export function TrackingModal({
   title,
   value,
   onChange,
+  carrier = TRACKING.defaultCarrier,
+  onCarrierChange,
   onSubmit,
   onCancel,
   submitLabel,
@@ -24,9 +28,13 @@ export function TrackingModal({
     <div className={styles.trackingModal}>
       <h4>{title}</h4>
       {showCarrierSelect && (
-        <select className={styles.carrierSelect} defaultValue={TRACKING.defaultCarrier}>
-          {CARRIERS.map((carrier) => (
-            <option key={carrier} value={carrier}>{carrier}</option>
+        <select
+          className={styles.carrierSelect}
+          value={carrier}
+          onChange={(e) => onCarrierChange?.(e.target.value)}
+        >
+          {CARRIERS.map((c) => (
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
       )}

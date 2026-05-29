@@ -45,6 +45,7 @@ export interface StatusNotificationData {
   productName: string;
   status: string;
   trackingNumber?: string | null;
+  carrier?: string | null;
   siteUrl: string;
 }
 
@@ -157,6 +158,7 @@ export class NotificationService {
         status: data.status,
         trackingUrl,
         trackingNumber: data.trackingNumber ?? undefined,
+        carrier: data.carrier ?? undefined,
       }).catch((err) => console.error('Status change email error:', err));
     }
 

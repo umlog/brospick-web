@@ -10,18 +10,22 @@ import styles from '../admin.module.css';
 interface OrderCardProps {
   order: Order;
   expanded: boolean;
+  selected: boolean;
   trackingModal: string | null;
   trackingInput: string;
+  carrierInput: string;
   notifyOnChange: boolean;
   delayModal: string | null;
   delayWeeks: number;
   delayUnit: '주' | '일';
   processing: boolean;
   onToggleExpand: (orderId: string) => void;
+  onToggleSelect: (orderId: string) => void;
   onStatusChange: (orderId: string, newStatus: string) => void;
   onShippingClick: (orderId: string) => void;
   onTrackingSubmit: () => void;
   onTrackingInputChange: (value: string) => void;
+  onCarrierChange: (carrier: string) => void;
   onTrackingCancel: () => void;
   onNotifyChange: (value: boolean) => void;
   onDelayClick: (orderId: string, currentStatus: string) => void;
@@ -38,18 +42,22 @@ interface OrderCardProps {
 export function OrderCard({
   order,
   expanded,
+  selected,
   trackingModal,
   trackingInput,
+  carrierInput,
   notifyOnChange,
   delayModal,
   delayWeeks,
   delayUnit,
   processing,
   onToggleExpand,
+  onToggleSelect,
   onStatusChange,
   onShippingClick,
   onTrackingSubmit,
   onTrackingInputChange,
+  onCarrierChange,
   onTrackingCancel,
   onNotifyChange,
   onDelayClick,
@@ -65,11 +73,22 @@ export function OrderCard({
   const isDelayStatus = /^(\d+)(주|일) 뒤 발송$/.test(order.status);
 
   return (
-    <div className={styles.orderCard}>
+    <div className={`${styles.orderCard} ${selected ? styles.orderCardSelected : ''}`}>
       <div
         className={styles.orderHeader}
         onClick={() => onToggleExpand(order.id)}
       >
+        <div
+          className={styles.orderCheckboxWrapper}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            type="checkbox"
+            className={styles.orderCheckbox}
+            checked={selected}
+            onChange={() => onToggleSelect(order.id)}
+          />
+        </div>
         <div className={styles.orderMeta}>
           <span className={styles.orderNumber}>{order.order_number}</span>
           <span className={styles.orderDate}>{formatDate(order.created_at)}</span>
@@ -166,6 +185,8 @@ export function OrderCard({
                 title="운송장번호 입력"
                 value={trackingInput}
                 onChange={onTrackingInputChange}
+                carrier={carrierInput}
+                onCarrierChange={onCarrierChange}
                 onSubmit={onTrackingSubmit}
                 onCancel={onTrackingCancel}
                 submitLabel="배송중으로 변경"

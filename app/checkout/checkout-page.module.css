@@ -136,6 +136,19 @@
   flex-shrink: 0;
 }
 
+.emailError {
+  margin-top: var(--space-xs);
+  font-size: var(--size-sm);
+  color: #e53e3e;
+}
+
+.emailHint {
+  margin-top: var(--space-xs);
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
 .addressSearch {
   display: flex;
   gap: var(--space-sm);

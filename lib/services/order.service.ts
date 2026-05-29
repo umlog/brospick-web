@@ -54,11 +54,12 @@ export class OrderService {
     return (VALID_ORDER_STATUSES as readonly string[]).includes(status) || isDelayStatus(status);
   }
 
-  // 주문 목록 조회
+  // 주문 목록 조회 (휴지통 제외)
   async listOrders(filter?: { status?: string }) {
     let query = supabaseAdmin
       .from('orders')
       .select('*, order_items (*)')
+      .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
     if (filter?.status) {
@@ -67,6 +68,18 @@ export class OrderService {
 
     const { data, error } = await query;
     if (error) throw new Error(`주문 조회에 실패했습니다: ${error.message}`);
+    return { orders: data };
+  }
+
+  // 휴지통 목록 조회
+  async listTrashedOrders() {
+    const { data, error } = await supabaseAdmin
+      .from('orders')
+      .select('*, order_items (*)')
+      .not('deleted_at', 'is', null)
+      .order('deleted_at', { ascending: false });
+
+    if (error) throw new Error(`휴지통 조회에 실패했습니다: ${error.message}`);
     return { orders: data };
   }
 
@@ -206,7 +219,7 @@ export class OrderService {
   async updateOrderStatus(
     orderId: string,
     status: string,
-    options: { sendNotification: boolean; trackingNumber?: string },
+    options: { sendNotification: boolean; trackingNumber?: string; carrier?: string },
     siteUrl: string
   ) {
     if (!this.isValidStatus(status)) {
@@ -273,6 +286,7 @@ export class OrderService {
         productName,
         status,
         trackingNumber: data.tracking_number,
+        carrier: options.carrier,
         siteUrl,
       });
     }
@@ -280,31 +294,89 @@ export class OrderService {
     return { order: data };
   }
 
-  // 주문 삭제
-  async deleteOrder(orderId: string, restoreStock: boolean) {
-    // restoreStock=true 시 아이템 조회 필요
-    let orderItems: Array<{ product_id: number | null; size: string; quantity: number }> = [];
-    if (restoreStock) {
-      const { data: order } = await supabaseAdmin
-        .from('orders')
-        .select('order_items(product_id, size, quantity)')
-        .eq('id', orderId)
-        .single();
-      orderItems = Array.isArray(order?.order_items) ? order.order_items : [];
+  // 재고가 차감된 상태인지 판단 (휴지통 이동/복구 시 재고 처리용)
+  private wasStockDecremented(status: string, paymentMethod: string): boolean {
+    // 취소된 주문은 이미 재고 복구됨
+    if (status === OrderStatus.CANCELLED || status === OrderStatus.CANCEL_REQUESTED) return false;
+    // 카카오페이: 결제 완료 전에는 차감 안 됨
+    if (paymentMethod === '카카오페이') {
+      return status !== OrderStatus.KAKAO_PAY_PENDING && status !== OrderStatus.PENDING_PAYMENT;
     }
+    // 무통장입금: 주문 생성 시 즉시 차감
+    return true;
+  }
 
-    const { error } = await supabaseAdmin.from('orders').delete().eq('id', orderId);
+  // 주문 소프트 삭제 (휴지통으로 이동) + 재고 즉시 복구
+  async deleteOrder(orderId: string) {
+    const { data: order } = await supabaseAdmin
+      .from('orders')
+      .select('status, payment_method, order_items(product_id, size, quantity)')
+      .eq('id', orderId)
+      .is('deleted_at', null)
+      .single();
+
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', orderId)
+      .is('deleted_at', null);
+
     if (error) {
-      console.error('Order delete error:', error);
+      console.error('Order soft delete error:', error);
       throw new Error(`주문 삭제에 실패했습니다: ${error.message}`);
     }
 
-    if (restoreStock && orderItems.length > 0) {
-      await inventoryService.restoreStock(
-        orderItems
-          .filter((i) => i.product_id)
-          .map((i) => ({ product_id: i.product_id!, size: i.size, quantity: i.quantity }))
-      );
+    if (order && this.wasStockDecremented(order.status, order.payment_method)) {
+      const items = Array.isArray(order.order_items) ? order.order_items : [];
+      const stockItems = items.filter((i) => i.product_id);
+      if (stockItems.length > 0) {
+        await inventoryService.restoreStock(
+          stockItems.map((i) => ({ product_id: i.product_id!, size: i.size, quantity: i.quantity }))
+        );
+      }
+    }
+
+    return { success: true };
+  }
+
+  // 휴지통에서 복구 + 재고 다시 차감
+  async restoreOrder(orderId: string) {
+    const { data: order } = await supabaseAdmin
+      .from('orders')
+      .select('status, payment_method, order_items(product_id, size, quantity)')
+      .eq('id', orderId)
+      .not('deleted_at', 'is', null)
+      .single();
+
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({ deleted_at: null })
+      .eq('id', orderId)
+      .not('deleted_at', 'is', null);
+
+    if (error) {
+      console.error('Order restore error:', error);
+      throw new Error(`주문 복구에 실패했습니다: ${error.message}`);
+    }
+
+    if (order && this.wasStockDecremented(order.status, order.payment_method)) {
+      const items = Array.isArray(order.order_items) ? order.order_items : [];
+      for (const item of items) {
+        if (item.product_id) {
+          await inventoryService.adjustStock(item.product_id, item.size, -item.quantity);
+        }
+      }
+    }
+
+    return { success: true };
+  }
+
+  // 영구 삭제 (재고는 휴지통 이동 시 이미 복구됨)
+  async permanentDeleteOrder(orderId: string) {
+    const { error } = await supabaseAdmin.from('orders').delete().eq('id', orderId);
+    if (error) {
+      console.error('Order permanent delete error:', error);
+      throw new Error(`영구 삭제에 실패했습니다: ${error.message}`);
     }
 
     return { success: true };

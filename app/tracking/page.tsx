@@ -161,7 +161,7 @@ function TrackingContent() {
                   <div className={styles.orderRow}>
                     <span>운송장번호</span>
                     <a
-                      href={`${TRACKING.cjBaseUrl}${encodeURIComponent(result.tracking_number)}`}
+                      href={TRACKING.trackingUrl(TRACKING.defaultCarrier, result.tracking_number)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.trackingNumber}

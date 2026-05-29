@@ -28,9 +28,12 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') ?? undefined;
+    const trash = searchParams.get('trash') === 'true';
 
     try {
-      const result = await orderService.listOrders({ status });
+      const result = trash
+        ? await orderService.listTrashedOrders()
+        : await orderService.listOrders({ status });
       return NextResponse.json(result);
     } catch (err: unknown) {
       const e = err as Error;
