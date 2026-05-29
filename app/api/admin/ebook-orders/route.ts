@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   return withErrorHandler(async () => {
     if (!isAdminAuthorized(request)) return apiError('권한이 없습니다.', 401);
