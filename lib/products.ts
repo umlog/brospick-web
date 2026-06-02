@@ -57,6 +57,11 @@ export const PRODUCT_SLUGS = {
   COOLMAX_TSHIRT_WHITE: 'coolmax-t-shirt-cream-white',
   // ── 7차 추가 상품 ──
   CROSS_C_TAPE_38: 'cross-c-tape-38',
+  // ── 8차 추가 상품 ──
+  PROVERBS_35_C_TAPING: 'proverbs-35-c-tape',
+  REFLECTIVE_RUNNING_VEST: 'reflective-running-vest',
+  GRIP_SPORTS_SOCKS: 'grip-sports-socks',
+  ACTIVE_COTTON_TEE: 'active-cotton-tee',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
@@ -109,6 +114,11 @@ export const PRODUCT_IDS = {
   // ── 7차 추가 상품 ──
   CROSS_C_TAPE_38: 40,
   CROSS_C_TAPE_5CM_BLACK: 41,
+  // ── 8차 추가 상품 ──
+  PROVERBS_35_C_TAPING: 42,
+  REFLECTIVE_RUNNING_VEST: 43,
+  GRIP_SPORTS_SOCKS: 44,
+  ACTIVE_COTTON_TEE: 45,
 } as const;
 
 export interface SizeChartRow {
@@ -137,6 +147,12 @@ export interface ProductDetails {
   functions: ProductFunctionItem[];
   design: ProductFunctionItem[];
   material: string;
+}
+
+export interface ProductColor {
+  name: string;    // 표시 이름 (예: 'Black', 'White')
+  hex: string;     // 스와치 배경색 (예: '#1a1a1a')
+  images: string[]; // 이 색상 전용 대표 이미지 (캐러셀 앞에 붙음)
 }
 
 export interface ProductVariant {
@@ -178,6 +194,7 @@ export interface Product {
   sizeImages?: Record<string, string>; // size value -> 해당 사이즈 선택 시 보여줄 이미지 경로
   sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
+  colors?: ProductColor[];              // 색상 선택 (있으면 스와치 UI 표시, images는 공통 세부 이미지)
   imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
   detailBanners?: string[];             // 상세 배너 이미지 배열 (jpg/png 모두 가능)
   beforeAfterImages?: { before: string; after: string; label?: string }; // Before/After 비교 슬라이더
@@ -2042,6 +2059,213 @@ export const products: Record<ProductSlug, Product> = {
     },
   },
 
+  // ════════════════════════════════════════════════════════════════
+  // 8차 추가 상품 (ID 42~) — 가격은 docs/product-prices.md 에서 관리
+  // ════════════════════════════════════════════════════════════════
+
+  [PRODUCT_SLUGS.REFLECTIVE_RUNNING_VEST]: {
+    id: PRODUCT_IDS.REFLECTIVE_RUNNING_VEST,
+    slug: PRODUCT_SLUGS.REFLECTIVE_RUNNING_VEST,
+    name: 'Reflective Running Vest',
+    category: 'outer',
+    comingSoon: false,
+    image: '/apparel/outer/reflective-running-vest/gray-1.png',
+    colors: [
+      { name: 'Gray', hex: '#B0B0B0', images: ['/apparel/outer/reflective-running-vest/gray-1.png', '/apparel/outer/reflective-running-vest/gray-2.png'] },
+      { name: 'Black', hex: '#222222', images: ['/apparel/outer/reflective-running-vest/black-1.png', '/apparel/outer/reflective-running-vest/black-2.png'] },
+    ],
+    images: [
+      '/apparel/outer/reflective-running-vest/detail-1.png',
+      '/apparel/outer/reflective-running-vest/detail-2.png',
+      '/apparel/outer/reflective-running-vest/detail-3.png',
+    ],
+    tagline: '반사 소재와 초경량 메쉬 구조로 야간 러닝부터 장거리 트레일까지 안전하고 쾌적한 러닝 베스트.',
+    description:
+      '초경량 나일론 겉감과 통기성 3D 메쉬 구조로 제작된 러닝 베스트입니다. 고반사 소재가 적용되어 야간 러닝 및 저조도 환경에서도 높은 시인성을 확보하며, 하이드레이션 팩 수납 공간과 다수의 포켓을 통해 장거리 러닝에 필요한 물품을 효율적으로 수납할 수 있습니다. 가슴 스트랩과 사이드 조절 스트랩으로 개인 체형에 맞게 안정적으로 착용 가능합니다.',
+    sizes: ['FREE'],
+    features: [
+      { label: 'LIGHTWEIGHT PERFORMANCE FIT', detail: ' — 초경량 베스트 구조로 불필요한 흔들림 없이 편안한 착용감 제공' },
+      { label: 'REFLECTIVE SAFETY SYSTEM', detail: ' — 반사 소재 적용, 야간·저조도 환경에서 높은 시인성 확보' },
+      { label: 'HYDRATION READY DESIGN', detail: ' — 하이드레이션 팩 수납 공간과 튜브 홀더 내장' },
+      { label: 'BREATHABLE 3D MESH', detail: ' — 3D 에어 메쉬로 열기·습기 신속 배출' },
+      { label: 'MULTI STORAGE POCKETS', detail: ' — 스마트폰·에너지젤·카드·열쇠 등 다중 수납' },
+      { label: 'SECURE ZIPPER POCKET', detail: ' — 소지품 보호를 위한 지퍼 포켓' },
+      { label: 'ADJUSTABLE FIT SYSTEM', detail: ' — 가슴·사이드 스트랩으로 체형 맞춤 조절' },
+      { label: 'BOTTLE STORAGE POCKET', detail: ' — 소프트 플라스크 및 물병 수납 설계' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: 'LIGHTWEIGHT PERFORMANCE FIT', description: '몸에 밀착되는 베스트 구조로 달리는 동안 불필요한 흔들림을 줄이고 편안한 착용감을 제공합니다.' },
+        { title: 'REFLECTIVE SAFETY SYSTEM', description: '반사 소재가 적용되어 야간 러닝 및 저조도 환경에서도 높은 시인성을 제공합니다.' },
+        { title: 'HYDRATION READY DESIGN', description: '하이드레이션 팩 수납 공간과 튜브 홀더를 적용하여 장거리 러닝 시 편리하게 수분을 보충할 수 있습니다.' },
+        { title: 'BREATHABLE 3D MESH', description: '3D 에어 메쉬 원단을 적용하여 열기와 습기를 빠르게 배출하며 장시간 착용에도 쾌적함을 유지합니다.' },
+        { title: 'MULTI STORAGE POCKETS', description: '스마트폰, 에너지젤, 카드, 열쇠 등 러닝 필수품을 효율적으로 수납할 수 있습니다.' },
+        { title: 'SECURE ZIPPER POCKET', description: '소지품이 운동 중 떨어지지 않도록 안전하게 보관할 수 있는 지퍼 포켓을 제공합니다.' },
+        { title: 'ADJUSTABLE FIT SYSTEM', description: '가슴 스트랩과 사이드 조절 스트랩을 통해 개인 체형에 맞게 안정적으로 착용할 수 있습니다.' },
+        { title: 'BOTTLE STORAGE POCKET', description: '러닝용 소프트 플라스크 및 물병을 안정적으로 수납할 수 있도록 설계되었습니다.' },
+      ],
+      design: [
+        { title: '미니멀 러닝 실루엣', description: '군더더기 없는 베스트 구조로 러닝 중 공기 저항을 최소화하고 자유로운 팔 움직임을 지원합니다.' },
+        { title: '리플렉티브 포인트 디테일', description: '반사 소재 디테일이 기능성과 디자인을 동시에 살린 스포츠 감성을 완성합니다.' },
+      ],
+      material: '겉감: 나일론. 안감: 폴리에스터. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.GRIP_SPORTS_SOCKS]: {
+    id: PRODUCT_IDS.GRIP_SPORTS_SOCKS,
+    slug: PRODUCT_SLUGS.GRIP_SPORTS_SOCKS,
+    name: 'Grip Sports Socks',
+    category: 'socks',
+    comingSoon: false,
+    image: '/apparel/socks/grip-sports-socks/1.png',
+    images: [
+      '/apparel/socks/grip-sports-socks/1.png',
+      '/apparel/socks/grip-sports-socks/2.png',
+      '/apparel/socks/grip-sports-socks/3.png',
+      '/apparel/socks/grip-sports-socks/4.png',
+      '/apparel/socks/grip-sports-socks/5.png',
+      '/apparel/socks/grip-sports-socks/6.png',
+      '/apparel/socks/grip-sports-socks/7.png',
+      '/apparel/socks/grip-sports-socks/8.png',
+      '/apparel/socks/grip-sports-socks/9.png',
+      '/apparel/socks/grip-sports-socks/10.png',
+      '/apparel/socks/grip-sports-socks/11.png',
+      '/apparel/socks/grip-sports-socks/12.png',
+      '/apparel/socks/grip-sports-socks/13.png',
+      '/apparel/socks/grip-sports-socks/14.png',
+    ],
+    tagline: '강화된 논슬립 그립과 도톰한 쿠셔닝으로 스프린트·점프·방향 전환 시에도 안정적인 착지를 지원하는 스포츠 양말.',
+    description:
+      '발바닥 그립 패턴이 신발 내부 미끄러짐을 줄여주는 논슬립 스포츠 양말입니다. 발뒤꿈치와 전족부에 두꺼운 쿠션 구조를 적용하여 착지 충격을 효과적으로 분산하며, 통기성 니트 조직이 열기와 습기를 빠르게 배출합니다. 신축성 있는 원단이 발을 안정적으로 감싸 흘러내림 없이 편안한 착용감을 제공합니다.',
+    colors: [
+      { name: 'White', hex: '#F0F0F0', images: ['/apparel/socks/grip-sports-socks/1.png'] },
+      { name: 'Black', hex: '#222222', images: ['/apparel/socks/grip-sports-socks/5.png'] },
+      { name: 'Sky Blue', hex: '#87CEEB', images: ['/apparel/socks/grip-sports-socks/8.png'] },
+    ],
+    sizes: ['FREE'],
+    features: [
+      { label: 'NON-SLIP GRIP SYSTEM', detail: ' — 발바닥 그립 패턴으로 신발 내 미끄러짐 방지' },
+      { label: 'CUSHION IMPACT PROTECTION', detail: ' — 발뒤꿈치·전족부 두꺼운 쿠션으로 착지 충격 분산' },
+      { label: 'HEEL STABILITY SUPPORT', detail: ' — 입체 설계로 발뒤꿈치 안정적 고정' },
+      { label: 'ANTI-FRICTION COMFORT', detail: ' — 고밀도 니트 조직으로 마찰 감소' },
+      { label: 'BREATHABLE KNIT TECHNOLOGY', detail: ' — 통기성 메쉬 구조로 열기·습기 배출' },
+      { label: 'ELASTIC FIT', detail: ' — 신축성 원단이 흘러내림 없이 발을 안정적으로 고정' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: 'NON-SLIP GRIP SYSTEM', description: '발바닥 그립 패턴이 신발 내부에서 발생하는 미끄러짐을 줄여주어 급격한 방향 전환, 스프린트, 점프 상황에서도 안정적인 움직임을 지원합니다.' },
+        { title: 'CUSHION IMPACT PROTECTION', description: '발뒤꿈치와 전족부에 적용된 두꺼운 쿠션 구조가 착지 충격을 효과적으로 분산하여 발의 피로도를 줄여줍니다.' },
+        { title: 'HEEL STABILITY SUPPORT', description: '발뒤꿈치를 안정적으로 감싸주는 입체 설계로 양말 내부 움직임을 최소화하고 편안한 착용감을 제공합니다.' },
+        { title: 'ANTI-FRICTION COMFORT', description: '고밀도 니트 조직이 발과 신발 사이의 마찰을 줄여 장시간 운동 시에도 쾌적한 착용 환경을 유지합니다.' },
+        { title: 'BREATHABLE KNIT TECHNOLOGY', description: '공기 순환이 원활한 니트 조직을 적용하여 열기와 습기를 빠르게 배출하고 쾌적한 상태를 유지합니다.' },
+        { title: 'ELASTIC FIT', description: '신축성 있는 원단이 발을 부드럽게 감싸주어 흘러내림 없이 안정적으로 밀착됩니다.' },
+      ],
+      design: [
+        { title: '스포츠 그립 패턴', description: '기능적 그립 패턴이 퍼포먼스와 디자인 포인트를 동시에 완성합니다.' },
+        { title: '3컬러 라인업', description: '화이트, 블랙, 스카이블루 3가지 색상으로 다양한 유니폼과 자유롭게 매치 가능합니다.' },
+      ],
+      material: '면 80% + 폴리에스터 15% + 스판덱스 5%. 무게 약 82g. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.ACTIVE_COTTON_TEE]: {
+    id: PRODUCT_IDS.ACTIVE_COTTON_TEE,
+    slug: PRODUCT_SLUGS.ACTIVE_COTTON_TEE,
+    name: 'Active Cotton Tee',
+    category: 'top',
+    comingSoon: false,
+    image: '/apparel/top/active-cotton-tee/1.png',
+    colors: [
+      { name: 'Black', hex: '#222222', images: ['/apparel/top/active-cotton-tee/1.png'] },
+      { name: 'White', hex: '#F0F0F0', images: ['/apparel/top/active-cotton-tee/3.png'] },
+    ],
+    images: [
+      '/apparel/top/active-cotton-tee/1.png',
+      '/apparel/top/active-cotton-tee/2.png',
+      '/apparel/top/active-cotton-tee/3.png',
+      '/apparel/top/active-cotton-tee/4.png',
+      '/apparel/top/active-cotton-tee/5.png',
+      '/apparel/top/active-cotton-tee/6.png',
+      '/apparel/top/active-cotton-tee/7.png',
+      '/apparel/top/active-cotton-tee/8.png',
+      '/apparel/top/active-cotton-tee/9.png',
+      '/apparel/top/active-cotton-tee/10.png',
+      '/apparel/top/active-cotton-tee/11.png',
+      '/apparel/top/active-cotton-tee/12.png',
+    ],
+    tagline: '가볍고 부드러운 220g 쿨터치 원단에 탄탄한 조직감을 더해, 여름에도 쾌적하고 깔끔하게 착용할 수 있는 세미 오버핏 티셔츠입니다.',
+    description: '가볍고 부드러운 220g 쿨터치 원단에 탄탄한 조직감을 더해, 여름에도 쾌적하고 깔끔하게 착용할 수 있는 세미 오버핏 티셔츠입니다.',
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    chestLabel: '가슴둘레',
+    sizeChart: [
+      { size: 'M', length: 68, chest: 105, sleeve: 21 },
+      { size: 'L', length: 70, chest: 109, sleeve: 22 },
+      { size: 'XL', length: 72, chest: 113, sleeve: 23 },
+      { size: 'XXL', length: 74, chest: 117, sleeve: 24 },
+    ],
+    features: [
+      { label: 'COOL TOUCH FABRIC', detail: ' — 피부에 닿는 순간 산뜻한 쿨링감' },
+      { label: 'LIGHTWEIGHT 220g', detail: ' — 가볍지만 탄탄한 원단 밸런스' },
+      { label: 'SOFT & FLEXIBLE', detail: ' — 부드럽고 유연한 착용감' },
+      { label: 'DENSE KNIT STRUCTURE', detail: ' — 촘촘한 조직감으로 깔끔한 핏 완성' },
+      { label: 'RELAXED OVERFIT', detail: ' — 편안하게 떨어지는 여유로운 실루엣' },
+    ],
+    details: {
+      functions: [
+        { title: 'COOL TOUCH FABRIC', description: '피부에 닿는 순간 산뜻한 촉감이 느껴지며, 더운 날에도 쾌적한 착용감을 유지해줍니다.' },
+        { title: 'LIGHTWEIGHT 220g', description: '220g 경량 원단으로 부담 없이 가볍게 착용할 수 있으며, 일상부터 활동적인 상황까지 편안하게 입기 좋습니다.' },
+        { title: 'HIGH ELASTIC FIBER', description: '움직임에 따라 자연스럽게 늘어나는 탄성감으로 답답함 없이 편안한 핏을 제공합니다.' },
+        { title: 'DENSE KNIT STRUCTURE', description: '얇게 흐물거리는 원단이 아닌, 밀도감 있는 짜임으로 깔끔한 실루엣을 완성합니다.' },
+        { title: 'SOFT SKIN TOUCH', description: '까슬거림 없이 매끄럽고 유연한 터치감으로 장시간 착용에도 편안합니다.' },
+      ],
+      design: [
+        { title: '세미 오버핏 실루엣', description: '여유 있는 어깨선과 넉넉한 품으로 체형을 자연스럽게 커버하며, 트렌디한 무드를 연출합니다.' },
+      ],
+      material: '면 61.6% 폴리에스터 38.4%. 중량 240g. 제조국: 중국.',
+    },
+  },
+
+  [PRODUCT_SLUGS.PROVERBS_35_C_TAPING]: {
+    id: PRODUCT_IDS.PROVERBS_35_C_TAPING,
+    slug: PRODUCT_SLUGS.PROVERBS_35_C_TAPING,
+    name: '잠언 3:5 C-Tape (5cm)',
+    category: 'taping',
+    comingSoon: false,
+    image: '/apparel/taping/proverbs-35-c-tape/1.png',
+    images: [
+      '/apparel/taping/proverbs-35-c-tape/1.png',
+      '/apparel/taping/proverbs-35-c-tape/2.png',
+      '/apparel/taping/proverbs-35-c-tape/3.png',
+    ],
+    tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
+    description:
+      '프리미엄 코튼 원단을 사용해 부드럽고 피부 친화적인 착용감을 제공하는 C 테이핑입니다. 톱니형 구조로 손쉽게 뜯어 사용할 수 있어 편리하며, 오래 착용해도 자극이 적어 안정적인 사용이 가능합니다. 손목 및 발목 고정용으로 활용하기 좋으며, 운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 사용할 수 있습니다.',
+    sizes: ['ONE SIZE'],
+    features: [
+      { label: '프리미엄 코튼 원단', detail: ' — 부드럽고 피부 친화적인 사용감' },
+      { label: '톱니형 절개 구조', detail: ' — 손쉽게 뜯어 사용' },
+      { label: '오래 착용해도 자극이 적은 편안함' },
+      { label: '손목 및 발목 고정용 활용' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '프리미엄 코튼 원단', description: '부드럽고 피부 친화적인 착용감 제공.' },
+        { title: '톱니형 절개 구조', description: '손쉽게 뜯어 사용할 수 있어 편리함.' },
+        { title: '저자극 장시간 착용', description: '오래 착용해도 자극이 적어 안정적인 사용 가능.' },
+        { title: '손목·발목 고정', description: '운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 활용.' },
+      ],
+      design: [
+        { title: '메시지성 디자인', description: '잠언 3:5 메시지와 십자가 모티브가 조화를 이루는 포인트 디자인.' },
+        { title: '스포츠 테이핑 무드', description: '실용성과 안정감을 살린 강한 인상의 디자인.' },
+      ],
+      material: '코튼. 가로 5cm × 길이 7m.',
+    },
+  },
+
   [PRODUCT_SLUGS.COOLMAX_TSHIRT_WHITE]: {
     id: PRODUCT_IDS.COOLMAX_TSHIRT_WHITE,
     slug: PRODUCT_SLUGS.COOLMAX_TSHIRT_WHITE,
@@ -2109,7 +2333,7 @@ export const productList = Object.values(products)
     id: p.id,
     slug: p.slug,
     name: p.name,
-    image: p.images[0],
+    image: p.image,
     description: p.tagline,
     category: p.category,
     comingSoon: p.comingSoon ?? false,

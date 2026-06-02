@@ -838,6 +838,55 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* ── 색상 선택 스와치 ── */
+.colorSection {
+  margin-bottom: var(--space-lg);
+}
+
+.colorSection h3 {
+  font-size: var(--size-lg);
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .colorSection h3 {
+    font-size: var(--size-sm);
+  }
+}
+
+.colorName {
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.colorOptions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.colorSwatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.colorSwatch:hover {
+  transform: scale(1.12);
+  border-color: var(--color-accent);
+}
+
+.colorSwatchSelected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
 .quantitySection {
   display: flex;
   flex-direction: column;

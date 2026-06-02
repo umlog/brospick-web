@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
-import { products, getDiscountPercent, type ProductSlug } from '../../../lib/products';
+import { products, getDiscountPercent, type ProductSlug, type ProductColor } from '../../../lib/products';
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
@@ -75,6 +75,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const zoomPanelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const [bannerExpanded, setBannerExpanded] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<ProductColor | undefined>(undefined);
   const modalScrollY = useRef(0);
 
   const product = products[params.slug as ProductSlug];
@@ -165,12 +166,14 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     if (price === undefined) return;
     if (!checkSelectedStock()) return;
 
+    const cartSize = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+    const cartImage = selectedColor ? selectedColor.images[0] : product.image;
     addToCart({
       id: product.id,
       name: productName!,
       price,
-      size: selectedSize,
-      image: product.image,
+      size: cartSize,
+      image: cartImage,
       quantity,
     });
 
@@ -193,6 +196,33 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [product?.slug]);
 
   useEffect(() => {
+    setSelectedColor(product?.colors?.[0]);
+  }, [product?.slug]);
+
+  useEffect(() => {
+    if (!emblaApi || !thumbApi) return;
+
+    if (selectedColor) {
+      const firstImg = selectedColor.images[0];
+      const mainImages = product.images.filter(img => !img.includes('size-chart'));
+      const idx = mainImages.indexOf(firstImg);
+      if (idx >= 0) {
+        // 스크롤 모드: 캐러셀 내용은 그대로, 해당 위치로만 스크롤
+        setCurrentImage(idx);
+        emblaApi.scrollTo(idx);
+        thumbApi.scrollTo(idx);
+        return;
+      }
+    }
+
+    // 교체 모드: 캐러셀 내용 자체가 바뀌므로 reInit 후 리셋
+    emblaApi.reInit();
+    thumbApi.reInit();
+    setCurrentImage(0);
+    emblaApi.scrollTo(0, true);
+  }, [selectedColor, emblaApi, thumbApi]);
+
+  useEffect(() => {
     if (!product || product.multiSelect) return;
     if (Object.keys(sizeStatuses).length === 0 || !selectedSize) return;
     const currentKey = `${product.id}-${selectedSize}`;
@@ -211,7 +241,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       if (!isRemoving && product.sizeImages?.[size]) {
         const carousel = product.images.filter((img) => !img.includes('size-chart'));
         const idx = carousel.indexOf(product.sizeImages![size]);
-        if (idx >= 0) emblaApi?.scrollTo(idx);
+        if (idx >= 0) { emblaApi?.scrollTo(idx); thumbApi?.scrollTo(idx); }
       }
       return;
     }
@@ -220,16 +250,20 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     if (product.sizeImages?.[size]) {
       const carousel = product.images.filter((img) => !img.includes('size-chart'));
       const idx = carousel.indexOf(product.sizeImages![size]);
-      if (idx >= 0) emblaApi?.scrollTo(idx);
+      if (idx >= 0) { emblaApi?.scrollTo(idx); thumbApi?.scrollTo(idx); }
     }
   };
 
   useEffect(() => {
     if (!emblaApi) return;
-    const onSelect = () => setCurrentImage(emblaApi.selectedScrollSnap());
+    const onSelect = () => {
+      const idx = emblaApi.selectedScrollSnap();
+      setCurrentImage(idx);
+      thumbApi?.scrollTo(idx);
+    };
     emblaApi.on('select', onSelect);
     return () => { emblaApi.off('select', onSelect); };
-  }, [emblaApi]);
+  }, [emblaApi, thumbApi]);
 
   useEffect(() => {
     if (!thumbApi) return;
@@ -345,7 +379,12 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     router.push('/checkout');
   };
 
-  const carouselImages = product.images.filter((img) => !img.includes('size-chart'));
+  const sharedImages = product.images.filter((img) => !img.includes('size-chart'));
+  const firstColorImg = selectedColor?.images[0] ?? product.colors?.[0]?.images[0];
+  const isColorScrollMode = firstColorImg != null && sharedImages.includes(firstColorImg);
+  const carouselImages = (product.colors && !isColorScrollMode)
+    ? [...(selectedColor?.images ?? product.colors[0].images), ...sharedImages]
+    : sharedImages;
 
   return (
     <main className={styles.main}>
@@ -466,7 +505,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
             <div
               ref={zoomPanelRef}
               className={styles.zoomPanel}
-              style={{ display: 'none', backgroundImage: `url(${product.images[currentImage]})` }}
+              style={{ display: 'none', backgroundImage: `url(${carouselImages[currentImage]})` }}
             />
 
             {product.detailBanners && product.detailBanners.length > 0 && (
@@ -633,6 +672,26 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               </div>
             ) : (
               <>
+                {product.colors && product.colors.length > 1 && (
+                  <div className={styles.colorSection}>
+                    <h3>
+                      색상 선택
+                      {selectedColor && <span className={styles.colorName}> — {selectedColor.name}</span>}
+                    </h3>
+                    <div className={styles.colorOptions}>
+                      {product.colors.map((color) => (
+                        <button
+                          key={color.name}
+                          className={`${styles.colorSwatch} ${selectedColor?.name === color.name ? styles.colorSwatchSelected : ''}`}
+                          onClick={() => setSelectedColor(color)}
+                          aria-label={color.name}
+                          title={color.name}
+                          style={{ backgroundColor: color.hex }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {product.sizes.length >= 1 && <div className={styles.sizeSection}>
                   <h3>{product.sizeLabel ?? '사이즈 선택'}</h3>
                   <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
@@ -1015,7 +1074,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 {related.map((p) => (
                   <a key={p.slug} href={`/apparel/${p.slug}`} className={styles.relatedCard}>
                     <div className={styles.relatedImageWrap}>
-                      <img src={p.images[0]} alt={p.name} className={styles.relatedImage} />
+                      <img src={p.image} alt={p.name} className={styles.relatedImage} />
                       {p.comingSoon && (
                         <span className={styles.relatedComingSoonBadge}>COMING SOON</span>
                       )}
@@ -1115,7 +1174,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         <div className={styles.lightboxOverlay} onClick={() => setLightboxOpen(false)}>
           <button className={styles.lightboxClose} onClick={() => setLightboxOpen(false)}>✕</button>
           <img
-            src={product.images[currentImage]}
+            src={carouselImages[currentImage]}
             alt={product.name}
             className={styles.lightboxImage}
             onClick={(e) => e.stopPropagation()}
