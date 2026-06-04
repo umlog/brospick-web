@@ -51,6 +51,12 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         전자책 주문
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'reviews' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('reviews')}
+      >
+        리뷰 관리
+      </button>
     </div>
   );
 }

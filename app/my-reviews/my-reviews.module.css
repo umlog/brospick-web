@@ -1,0 +1,625 @@
+.container {
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.header {
+  background: var(--color-bg-primary);
+  padding: 32px 28px 24px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.header p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Lookup form */
+.form {
+  padding: 28px 28px 16px;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-size: 16px; /* iOS 자동 줌 방지 */
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.inputGroup input:focus {
+  border-color: var(--color-accent);
+}
+
+.inputGroup input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submitButton:hover { opacity: 0.9; }
+.submitButton:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.privacyNotice {
+  padding: 16px 28px 24px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.privacyNotice strong {
+  color: var(--color-text-primary);
+}
+
+.error {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Empty state */
+.empty {
+  padding: 40px 28px;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+}
+
+.emptyHint {
+  font-size: 13px !important;
+  color: var(--color-text-secondary) !important;
+}
+
+/* Review list */
+.reviewList {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewCard {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.reviewMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.productName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.size {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.date {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-left: auto;
+}
+
+.stars {
+  font-size: 16px;
+  color: #f5a623;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.starsEmpty {
+  color: var(--color-border);
+}
+
+.reviewImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.reviewImage {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+
+.sizeInfo {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 4px 0 10px;
+}
+
+.sizeInfoRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.sizeInfoField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sizeInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sizeInputWrapper .sizeInput {
+  padding-right: 36px;
+}
+
+.sizeInput {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.sizeInput:focus {
+  border-color: var(--color-accent);
+}
+
+.sizeUnit {
+  position: absolute;
+  right: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.reviewContent {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0 0 12px;
+  white-space: pre-wrap;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.editButton {
+  padding: 6px 16px;
+  font-size: 13px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.editButton:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.deleteButton {
+  padding: 6px 16px;
+  font-size: 13px;
+  background: none;
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  border-radius: 8px;
+  color: #ff3b30;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.deleteButton:hover {
+  background: rgba(255, 59, 48, 0.08);
+}
+
+/* Delete confirm */
+.deleteConfirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 59, 48, 0.06);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+.deleteConfirm span {
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.deleteConfirmActions {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteConfirmButton {
+  padding: 5px 14px;
+  font-size: 13px;
+  background: #ff3b30;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.deleteConfirmButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Edit form */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.starGroup {}
+
+.formLabel {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0 0 6px;
+  font-weight: 500;
+}
+
+.imageCount {
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.starRow {
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  font-size: 28px;
+  color: var(--color-border);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s, transform 0.1s;
+}
+
+.star:hover { transform: scale(1.15); }
+
+.starFilled { color: #f5a623; }
+
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-size: 16px; /* iOS 자동 줌 방지 */
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 88px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus { border-color: var(--color-accent); }
+
+/* Image section */
+.imageSection {}
+
+.imagePreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.imageThumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.imageThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageOverlayError {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 59, 48, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.imageRemove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.imageAddButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--color-border);
+  background: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  color: var(--color-text-secondary);
+  font-size: 22px;
+}
+
+.imageAddButton:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Edit actions */
+.editActions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancelButton {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.cancelButton:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.saveButton {
+  flex: 2;
+  padding: 10px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.saveButton:hover { opacity: 0.9; }
+.saveButton:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Footer */
+.footer {
+  padding: 12px 16px 20px;
+}
+
+.resetButton {
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.resetButton:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 0;
+    align-items: stretch;
+  }
+
+  .card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    min-height: 100dvh;
+  }
+
+  .header { padding: 24px 20px 20px; }
+  .form { padding: 20px 20px 12px; }
+  .reviewList { padding: 12px; }
+
+  /* 리뷰 카드 내 사진 - 모바일에서 크게 */
+  .reviewImages {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    gap: 6px;
+  }
+
+  .reviewImages::-webkit-scrollbar { display: none; }
+
+  .reviewImage {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  /* 수정/삭제 버튼 - 터치 영역 */
+  .editButton,
+  .deleteButton {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  /* 이미지 업로드 썸네일 */
+  .imageThumb {
+    width: 76px;
+    height: 76px;
+  }
+
+  .imageAddButton {
+    width: 76px;
+    height: 76px;
+    font-size: 24px;
+  }
+
+  /* 별점 */
+  .star {
+    font-size: 32px;
+    padding: 4px;
+  }
+
+  /* 저장 버튼 */
+  .saveButton,
+  .submitButton {
+    font-size: 16px;
+    padding: 13px;
+  }
+}

@@ -18,6 +18,7 @@ import { Dashboard } from './components/Dashboard';
 import { BlogManager } from './components/BlogManager';
 import { MarketingEmailManager } from './components/MarketingEmailManager';
 import { EbookOrderList } from './components/EbookOrderList';
+import { ReviewManager } from './components/ReviewManager';
 import { VisitCounter } from './components/VisitCounter';
 import { Toasts } from './components/Toasts';
 import { ConfirmModal } from './components/ConfirmModal';
@@ -31,6 +32,7 @@ const TAB_TITLES: Record<AdminTab, string> = {
   blog: '블로그 관리',
   marketing: '마케팅 이메일',
   ebook: '전자책 주문',
+  reviews: '리뷰 관리',
 };
 
 export default function AdminPage() {
@@ -141,6 +143,7 @@ export default function AdminPage() {
             onDelete={ebookState.handleDelete}
           />
         )}
+        {activeTab === 'reviews' && <ReviewManager />}
       </div>
       <VisitCounter />
       <Toasts />

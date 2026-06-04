@@ -172,6 +172,16 @@ function OrderCompletePage() {
           </div>
         )}
 
+        <div className={styles.reviewNudge}>
+          <p className={styles.reviewNudgeText}>상품을 받으신 후 솔직한 리뷰를 남겨주세요!</p>
+          <Link
+            href={`/review?orderNumber=${orderData.orderNumber}`}
+            className={styles.reviewNudgeButton}
+          >
+            ★ 리뷰 작성하기
+          </Link>
+        </div>
+
         <div className={styles.actions}>
           <Link href="/" className={styles.homeButton}>
             홈으로 돌아가기

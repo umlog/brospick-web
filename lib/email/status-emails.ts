@@ -94,6 +94,15 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
 
       ${trackingNumberHtml}
 
+      ${data.status === OrderStatus.DELIVERED ? `
+      <div style="background:#fff9e6;border:1px solid #f0c040;border-radius:8px;padding:20px;margin-bottom:24px;text-align:center;">
+        <p style="font-size:15px;color:#1a1a1a;font-weight:700;margin:0 0 8px;">구매하신 상품은 어떠셨나요?</p>
+        <p style="font-size:13px;color:#7a5c00;margin:0 0 16px;line-height:1.6;">솔직한 리뷰를 남겨주시면 다른 고객분들께 큰 도움이 됩니다.</p>
+        <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://brospick.com'}/review?orderNumber=${encodeURIComponent(data.orderNumber)}" style="display:inline-block;background:#f5a623;color:#fff;padding:11px 32px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;">
+          ★ 리뷰 작성하기
+        </a>
+      </div>` : ''}
+
       <div style="text-align:center;margin-top:24px;">
         <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           주문 상태 확인하기

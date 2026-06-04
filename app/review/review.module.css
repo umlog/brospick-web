@@ -1,0 +1,764 @@
+.container {
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.header {
+  background: var(--color-bg-primary);
+  padding: 32px 28px 24px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.header p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.myReviewsLink {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.myReviewsLink:hover {
+  opacity: 0.7;
+}
+
+/* Lookup form */
+.form {
+  padding: 28px;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-size: 16px; /* iOS 자동 줌 방지 */
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.inputGroup input::placeholder,
+.inputGroup textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+.inputGroup textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.submitButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.error {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Order preview */
+.orderPreview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-primary);
+}
+
+.orderNumber {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.customerName {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* Item list */
+.itemList {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.itemCard {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.itemCard:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.itemCardSelected {
+  border-color: var(--color-accent);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.itemCardReviewed {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemMeta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.existingRating {
+  font-size: 12px;
+  color: #f5a623;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.existingContent {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+/* Item badges */
+.itemBadgePending {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.itemBadgeActive {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(0, 122, 255, 0.2);
+  color: #007aff;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.itemBadgeDone {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(142, 142, 147, 0.15);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.itemBadgeNew {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(52, 199, 89, 0.15);
+  color: #34c759;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* Review form (inline, below selected item) */
+.reviewForm {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-accent);
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.starGroup {
+  padding: 0 16px 12px;
+}
+
+.formLabel {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.optional {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+.sizeInfoGroup {
+  padding: 0 16px 4px;
+}
+
+.sizeInfoRow {
+  display: flex;
+  gap: 10px;
+}
+
+.sizeInfoField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sizeInfoField label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.sizeInfoField input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.sizeInfoField input:focus {
+  border-color: var(--color-accent);
+}
+
+.sizeInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sizeInputWrapper input {
+  padding-right: 36px;
+}
+
+.sizeInputReadonly {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  box-sizing: border-box;
+  cursor: default;
+  opacity: 0.7;
+}
+
+.sizeUnit {
+  position: absolute;
+  right: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.reviewHint {
+  margin: 0 16px 12px;
+  padding: 12px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.reviewHintTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0 0 8px;
+}
+
+.reviewHintList {
+  margin: 0;
+  padding: 0 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reviewHintList li {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+}
+
+.star {
+  font-size: 28px;
+  color: var(--color-border);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s, transform 0.1s;
+}
+
+.star:hover {
+  transform: scale(1.15);
+}
+
+.starFilled {
+  color: #f5a623;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  padding: 4px 16px 0;
+}
+
+.formActions .submitButton {
+  flex: 1;
+  width: auto;
+}
+
+.cancelButton {
+  flex: 0 0 auto;
+  padding: 11px 20px;
+  white-space: nowrap;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.cancelButton:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* All done */
+.allDone {
+  padding: 24px 28px 8px;
+  text-align: center;
+}
+
+.allDoneIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(52, 199, 89, 0.15);
+  color: #34c759;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.allDone p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Footer */
+.footer {
+  padding: 16px 16px 20px;
+}
+
+.resetButton {
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.resetButton:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* Image upload section */
+.imageSection {
+  padding: 0 16px 12px;
+}
+
+.imageCount {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-left: 4px;
+  font-weight: 400;
+}
+
+.imagePreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.imageThumb {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.imageThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageOverlayError {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 59, 48, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.imageSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.imageRemove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.imageAddButton {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--color-border);
+  background: var(--color-bg-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.imageAddButton:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.imageAddButton span:first-child {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.imageAddLabel {
+  font-size: 10px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    min-height: 100dvh;
+  }
+
+  /* 헤더 */
+  .header {
+    padding: 20px 16px 16px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    font-size: 13px;
+  }
+
+  .form {
+    padding: 16px;
+  }
+
+  .itemList {
+    padding: 10px;
+  }
+
+  /* 아이템 카드 */
+  .itemCard {
+    padding: 13px 14px;
+    min-height: 54px;
+  }
+
+  .itemName {
+    font-size: 13px;
+  }
+
+  /* 별점 */
+  .stars {
+    gap: 2px;
+  }
+
+  .star {
+    font-size: 28px;
+    padding: 4px;
+  }
+
+  .starGroup {
+    padding: 0 12px 10px;
+  }
+
+  /* 폼 레이블 */
+  .formLabel {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  /* 사이즈 정보 */
+  .sizeInfoGroup {
+    padding: 0 12px 4px;
+  }
+
+  .sizeInfoField label {
+    font-size: 11px;
+  }
+
+  .sizeInfoField input,
+  .sizeInputReadonly {
+    padding: 9px 10px;
+    font-size: 16px;
+  }
+
+  /* textarea */
+  .inputGroup[style] {
+    padding: 0 12px 4px !important;
+  }
+
+  .inputGroup textarea {
+    min-height: 80px;
+    padding: 10px 12px;
+    font-size: 16px; /* iOS 자동 줌 방지 — 절대 내리지 말 것 */
+    line-height: 1.5;
+  }
+
+  /* 힌트 박스 */
+  .reviewHint {
+    margin: 0 12px 10px;
+    padding: 9px 12px;
+  }
+
+  .reviewHintTitle {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+
+  .reviewHintList {
+    gap: 3px;
+  }
+
+  .reviewHintList li {
+    font-size: 11px;
+  }
+
+  /* 이미지 */
+  .imageSection {
+    padding: 0 12px 14px;
+  }
+
+  .imageThumb {
+    width: 68px;
+    height: 68px;
+  }
+
+  .imageAddButton {
+    width: 68px;
+    height: 68px;
+    font-size: 22px;
+  }
+
+  /* 액션 버튼 */
+  .formActions {
+    padding: 4px 12px 0;
+  }
+
+  .cancelButton {
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+
+  .submitButton {
+    font-size: 15px;
+    padding: 13px;
+  }
+}
