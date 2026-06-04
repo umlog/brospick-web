@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -84,12 +84,7 @@ function SizeRow({
   return (
     <div className={styles.pmSizeRow}>
       <span className={styles.pmSizeLabel}>
-        {size.includes(' — ') ? (
-          <>
-            <span>{size.split(' — ')[0]}</span>
-            <span className={styles.pmSizeColorTag}>{size.split(' — ')[1]}</span>
-          </>
-        ) : size}
+        {size.includes(' — ') ? size.split(' — ')[0] : size}
       </span>
 
       <div className={styles.pmStatusToggle}>
@@ -300,17 +295,28 @@ function ProductCard({
 
       {staticSizes.length > 0 && (
         <div className={styles.pmSizesSection}>
-          {staticSizes.map((size) => (
-            <SizeRow
-              key={size}
-              productId={product.id}
-              size={size}
-              sizeData={sizes.find((s) => s.product_id === product.id && s.size === size)}
-              onStatusChange={onStatusChange}
-              onStockUpdate={onStockUpdate}
-              onDelayTextUpdate={onDelayTextUpdate}
-            />
-          ))}
+          {staticSizes.map((size, idx) => {
+            const colorPart = size.includes(' — ') ? size.split(' — ')[1] : null;
+            const prevColorPart = idx > 0 && staticSizes[idx - 1].includes(' — ')
+              ? staticSizes[idx - 1].split(' — ')[1]
+              : null;
+            const showColorHeader = colorPart !== null && colorPart !== prevColorPart;
+            return (
+              <React.Fragment key={size}>
+                {showColorHeader && (
+                  <div className={styles.pmColorGroupHeader}>{colorPart}</div>
+                )}
+                <SizeRow
+                  productId={product.id}
+                  size={size}
+                  sizeData={sizes.find((s) => s.product_id === product.id && s.size === size)}
+                  onStatusChange={onStatusChange}
+                  onStockUpdate={onStockUpdate}
+                  onDelayTextUpdate={onDelayTextUpdate}
+                />
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
     </div>
