@@ -47,6 +47,10 @@ export default function Sportswear({ initialPrices }: Props) {
   };
 
   const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
+  const orderedCategories = [
+    ...usedCategories.filter((c) => c === 'boot-skin'),
+    ...usedCategories.filter((c) => c !== 'boot-skin'),
+  ];
 
   const sorted = [...productList].sort((a, b) => {
     const aDb = dbPrices[a.id];
@@ -89,7 +93,7 @@ export default function Sportswear({ initialPrices }: Props) {
           >
             전체
           </button>
-          {usedCategories.map((cat) => (
+          {orderedCategories.map((cat) => (
             <button
               key={cat}
               className={`${styles.tab} ${active === cat ? styles.tabActive : ''}`}

@@ -9,6 +9,262 @@ import { products, getDiscountPercent, type ProductSlug, type ProductColor } fro
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
+import ReviewLightbox from '../../components/ReviewLightbox';
+
+interface ReviewItem {
+  id: string;
+  rating: number;
+  content: string;
+  reviewer_name: string;
+  created_at: string;
+  images: string[];
+  height?: number | null;
+  usual_size?: string | null;
+  helpful_count: number;
+}
+
+function StarDisplay({ rating, size = 14 }: { rating: number; size?: number }) {
+  return (
+    <span style={{ fontSize: size, color: '#f5a623', letterSpacing: 1 }}>
+      {'★'.repeat(rating)}
+      <span style={{ color: 'var(--color-border)' }}>{'★'.repeat(5 - rating)}</span>
+    </span>
+  );
+}
+
+const PHOTO_PREVIEW = 9;
+
+function ProductReviews({ productId }: { productId: number; productSlug?: string }) {
+  const [reviews, setReviews] = React.useState<ReviewItem[]>([]);
+  const [avgRating, setAvgRating] = React.useState(0);
+  const [count, setCount] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [lastOrder, setLastOrder] = React.useState('');
+  const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null);
+  const [photoOnly, setPhotoOnly] = React.useState(false);
+  const [showAllPhotos, setShowAllPhotos] = React.useState(false);
+  const [likedIds, setLikedIds] = React.useState<Set<string>>(new Set());
+  const [fingerprint, setFingerprint] = React.useState('');
+
+  React.useEffect(() => {
+    const saved = localStorage.getItem('brospick-last-order');
+    if (saved) setLastOrder(saved);
+
+    // fingerprint 초기화
+    let fp = localStorage.getItem('brospick-fp');
+    if (!fp) {
+      fp = crypto.randomUUID();
+      localStorage.setItem('brospick-fp', fp);
+    }
+    setFingerprint(fp);
+
+    // 이미 좋아요한 리뷰 ID 로드
+    try {
+      const liked = JSON.parse(localStorage.getItem('brospick-liked-reviews') || '[]');
+      setLikedIds(new Set(liked));
+    } catch { /* ignore */ }
+
+    fetch(`/api/reviews?productId=${productId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        setReviews(data.reviews ?? []);
+        setAvgRating(data.avgRating ?? 0);
+        setCount(data.count ?? 0);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [productId]);
+
+  const handleLike = async (reviewId: string) => {
+    if (!fingerprint) return;
+    const res = await fetch('/api/reviews/like', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviewId, fingerprint }),
+    });
+    if (!res.ok) return;
+    const { liked, helpful_count } = await res.json();
+
+    setReviews((prev) =>
+      prev.map((r) => (r.id === reviewId ? { ...r, helpful_count } : r))
+    );
+    setLikedIds((prev) => {
+      const next = new Set(prev);
+      liked ? next.add(reviewId) : next.delete(reviewId);
+      localStorage.setItem('brospick-liked-reviews', JSON.stringify([...next]));
+      return next;
+    });
+  };
+
+  const formatDate = (str: string) => {
+    const d = new Date(str);
+    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+  };
+
+  const allPhotos = React.useMemo(() => reviews.flatMap((r) => r.images ?? []), [reviews]);
+
+  const getPhotoOffset = (reviewIndex: number) =>
+    reviews.slice(0, reviewIndex).reduce((acc, r) => acc + (r.images?.length ?? 0), 0);
+
+  const distribution = React.useMemo(
+    () => [5, 4, 3, 2, 1].map((star) => ({ star, cnt: reviews.filter((r) => r.rating === star).length })),
+    [reviews]
+  );
+
+  const photoReviews = React.useMemo(() => reviews.filter((r) => (r.images?.length ?? 0) > 0), [reviews]);
+  const displayedReviews = photoOnly ? photoReviews : reviews;
+  const visiblePhotos = showAllPhotos ? allPhotos : allPhotos.slice(0, PHOTO_PREVIEW);
+  const reviewLink = lastOrder ? `/review?orderNumber=${encodeURIComponent(lastOrder)}` : '/review';
+
+  return (
+    <div className={styles.reviewsSection}>
+      {/* ── 헤더 ── */}
+      <div className={styles.reviewsHeader}>
+        <h2 className={styles.reviewsHeading}>구매 후기</h2>
+        <a href={reviewLink} className={styles.reviewsWriteButton}>리뷰 작성</a>
+      </div>
+
+      {loading ? (
+        <p className={styles.reviewsEmpty}>로딩 중...</p>
+      ) : count === 0 ? (
+        <div className={styles.reviewsEmptyBlock}>
+          <p className={styles.reviewsEmpty}>아직 작성된 리뷰가 없습니다.</p>
+          <a href={reviewLink} className={styles.reviewsEmptyLink}>첫 번째 리뷰를 남겨주세요 →</a>
+        </div>
+      ) : (
+        <>
+          {/* ── 평점 요약 ── */}
+          <div className={styles.ratingSummary}>
+            <div className={styles.ratingLeft}>
+              <span className={styles.ratingNum}>{avgRating}</span>
+              <StarDisplay rating={Math.round(avgRating)} size={20} />
+              <span className={styles.ratingTotal}>{count}개 리뷰</span>
+            </div>
+            <div className={styles.ratingBars}>
+              {distribution.map(({ star, cnt }) => (
+                <div key={star} className={styles.ratingBarRow}>
+                  <span className={styles.ratingBarLabel}>{star}★</span>
+                  <div className={styles.ratingBarBg}>
+                    <div
+                      className={styles.ratingBarFill}
+                      style={{ width: count > 0 ? `${(cnt / count) * 100}%` : '0%' }}
+                    />
+                  </div>
+                  <span className={styles.ratingBarCount}>{cnt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── 포토리뷰 그리드 ── */}
+          {allPhotos.length > 0 && (
+            <div className={styles.photoSection}>
+              <p className={styles.photoSectionTitle}>
+                포토리뷰 <span className={styles.photoSectionCount}>{allPhotos.length}장</span>
+              </p>
+              <div className={styles.photoGrid}>
+                {visiblePhotos.map((url, i) => {
+                  const isLastMore = !showAllPhotos && i === PHOTO_PREVIEW - 1 && allPhotos.length > PHOTO_PREVIEW;
+                  return (
+                    <button key={i} className={styles.photoGridItem} onClick={() => setLightboxIndex(i)}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={url} alt="" />
+                      {isLastMore && (
+                        <div className={styles.photoGridMore}>+{allPhotos.length - PHOTO_PREVIEW}</div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              {!showAllPhotos && allPhotos.length > PHOTO_PREVIEW && (
+                <button className={styles.photoShowMore} onClick={() => setShowAllPhotos(true)}>
+                  전체 사진 보기 ({allPhotos.length}장)
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ── 필터 탭 ── */}
+          <div className={styles.filterTabs}>
+            <button
+              className={`${styles.filterTab} ${!photoOnly ? styles.filterTabActive : ''}`}
+              onClick={() => setPhotoOnly(false)}
+            >
+              전체 <span className={styles.filterTabCount}>{count}</span>
+            </button>
+            {photoReviews.length > 0 && (
+              <button
+                className={`${styles.filterTab} ${photoOnly ? styles.filterTabActive : ''}`}
+                onClick={() => setPhotoOnly(true)}
+              >
+                포토 <span className={styles.filterTabCount}>{photoReviews.length}</span>
+              </button>
+            )}
+          </div>
+
+          {/* ── 리뷰 목록 ── */}
+          <div className={styles.reviewsList}>
+            {displayedReviews.map((r) => {
+              const actualIdx = reviews.indexOf(r);
+              return (
+                <div key={r.id} className={styles.reviewCard}>
+                  <div className={styles.reviewCardMeta}>
+                    <span className={styles.reviewAuthor}>
+                      {r.reviewer_name.slice(0, 1)}*{r.reviewer_name.slice(-1)}
+                    </span>
+                    <span className={styles.reviewDate}>{formatDate(r.created_at)}</span>
+                  </div>
+                  <StarDisplay rating={r.rating} size={14} />
+                  {(r.height || r.usual_size) && (
+                    <p className={styles.reviewSizeInfo}>
+                      {r.height && `키 ${r.height}cm`}
+                      {r.height && r.usual_size && ' · '}
+                      {r.usual_size && `평소 ${r.usual_size}`}
+                    </p>
+                  )}
+                  {(r.images?.length ?? 0) > 0 && (
+                    <div className={styles.reviewImages}>
+                      {r.images.map((url, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={i}
+                          src={url}
+                          alt={`리뷰 이미지 ${i + 1}`}
+                          className={styles.reviewImage}
+                          onClick={() => setLightboxIndex(getPhotoOffset(actualIdx) + i)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <p className={styles.reviewContent}>{r.content}</p>
+                  <button
+                    className={`${styles.likeButton} ${likedIds.has(r.id) ? styles.likeButtonActive : ''}`}
+                    onClick={() => handleLike(r.id)}
+                    aria-label="도움이 됐어요"
+                  >
+                    <span className={styles.likeIcon}>👍</span>
+                    <span>도움이 됐어요</span>
+                    {r.helpful_count > 0 && (
+                      <span className={styles.likeCount}>{r.helpful_count}</span>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {lightboxIndex !== null && (
+        <ReviewLightbox
+          images={allPhotos}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
+    </div>
+  );
+}
 
 function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -122,7 +378,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   const checkSelectedStock = (): boolean => {
     if (product.multiSelect) return true;
-    const key = `${product.id}-${selectedSize}`;
+    const coloredSize = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+    const key = `${product.id}-${coloredSize}`;
     const status = sizeStatuses[key];
     if (status === undefined) return true;
     const stock = sizeStocks[key] ?? 0;
@@ -367,12 +624,14 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     if (price === undefined) return;
     if (!checkSelectedStock()) return;
 
+    const cartSize = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+    const cartImage = selectedColor ? selectedColor.images[0] : product.image;
     addToCart({
       id: product.id,
       name: productName!,
       price,
-      size: selectedSize,
-      image: product.image,
+      size: cartSize,
+      image: cartImage,
       quantity,
     });
 
@@ -696,7 +955,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                   <h3>{product.sizeLabel ?? '사이즈 선택'}</h3>
                   <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
                     {product.sizes.map((size) => {
-                      const key = `${product.id}-${size}`;
+                      const coloredSize = selectedColor ? `${size} — ${selectedColor.name}` : size;
+                      const key = `${product.id}-${coloredSize}`;
                       const sizeStatus = sizeStatuses[key] || 'available';
                       const stock = sizeStocks[key] ?? null;
                       const isSoldOut = sizeStatus === 'sold_out';
@@ -751,7 +1011,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                             setQuantityInput(raw);
                             const n = parseInt(raw, 10);
                             if (!isNaN(n) && n >= 1) {
-                              const key = `${product.id}-${selectedSize}`;
+                              const coloredSz = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+                              const key = `${product.id}-${coloredSz}`;
                               const stock = (!product.multiSelect && selectedSize) ? (sizeStocks[key] || Infinity) : Infinity;
                               setQuantity(Math.min(n, stock));
                             }
@@ -770,7 +1031,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       <button
                         className={styles.quantityButton}
                         onClick={() => {
-                          const key = `${product.id}-${selectedSize}`;
+                          const coloredSz = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+                          const key = `${product.id}-${coloredSz}`;
                           const stock = (!product.multiSelect && selectedSize) ? (sizeStocks[key] || Infinity) : Infinity;
                           setQuantity(Math.min(quantity + 1, stock));
                         }}
@@ -780,7 +1042,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     </div>
                     {(() => {
                       if (product.multiSelect || !selectedSize) return null;
-                      const key = `${product.id}-${selectedSize}`;
+                      const coloredSz = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
+                      const key = `${product.id}-${coloredSz}`;
                       const status = sizeStatuses[key];
                       const stock = sizeStocks[key] ?? 0;
                       if (status && status !== 'sold_out' && stock > 0 && stock <= 5) {
@@ -1054,6 +1317,8 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
           </div>
         </div>
+
+        <ProductReviews productId={product.id} productSlug={product.slug} />
 
         {(() => {
           const related = Object.values(products)

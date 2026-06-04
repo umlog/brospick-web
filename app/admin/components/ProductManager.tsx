@@ -83,7 +83,14 @@ function SizeRow({
 
   return (
     <div className={styles.pmSizeRow}>
-      <span className={styles.pmSizeLabel}>{size}</span>
+      <span className={styles.pmSizeLabel}>
+        {size.includes(' — ') ? (
+          <>
+            <span>{size.split(' — ')[0]}</span>
+            <span className={styles.pmSizeColorTag}>{size.split(' — ')[1]}</span>
+          </>
+        ) : size}
+      </span>
 
       <div className={styles.pmStatusToggle}>
         {(['available', 'sold_out', 'delayed'] as const).map((s) => (
@@ -475,7 +482,11 @@ export function ProductManager({
                     isDragEnabled={isDragEnabled}
                     catalogSaving={catalogSaving === product.id}
                     sizes={sizes.filter((s) => s.product_id === product.id)}
-                    staticSizes={staticProduct?.sizes ?? []}
+                    staticSizes={
+                      staticProduct?.colors?.length
+                        ? staticProduct.colors.flatMap(c => staticProduct.sizes.map(s => `${s} — ${c.name}`))
+                        : (staticProduct?.sizes ?? [])
+                    }
                     thumbnail={staticProduct?.images?.[0]}
                     onCatalogUpdate={updateProduct}
                     onStatusChange={updateSize}

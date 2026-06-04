@@ -125,7 +125,7 @@ export interface BlogPost {
 // 어드민 UI
 // -----------------------------------------------------------------------------
 
-export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing' | 'ebook';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing' | 'ebook' | 'reviews';
 
 // -----------------------------------------------------------------------------
 // 전자책 주문
