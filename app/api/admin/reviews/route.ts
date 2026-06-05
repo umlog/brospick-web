@@ -21,20 +21,24 @@ export async function GET(request: NextRequest) {
       return apiError('리뷰 조회에 실패했습니다.', 500);
     }
 
-    const reviews = (data ?? []).map((r) => ({
-      id: r.id,
-      rating: r.rating,
-      content: r.content,
-      reviewer_name: r.reviewer_name,
-      created_at: r.created_at,
-      images: r.images ?? [],
-      height: r.height ?? null,
-      usual_size: r.usual_size ?? null,
-      helpful_count: r.helpful_count ?? 0,
-      product_id: r.product_id,
-      product_name: (r.order_items as { product_name: string; size: string } | null)?.product_name ?? '',
-      size: (r.order_items as { product_name: string; size: string } | null)?.size ?? '',
-    }));
+    const reviews = (data ?? []).map((r) => {
+      const orderItem = Array.isArray(r.order_items) ? r.order_items[0] : r.order_items;
+      const item = orderItem as { product_name: string; size: string } | null | undefined;
+      return {
+        id: r.id,
+        rating: r.rating,
+        content: r.content,
+        reviewer_name: r.reviewer_name,
+        created_at: r.created_at,
+        images: r.images ?? [],
+        height: r.height ?? null,
+        usual_size: r.usual_size ?? null,
+        helpful_count: r.helpful_count ?? 0,
+        product_id: r.product_id,
+        product_name: item?.product_name ?? '',
+        size: item?.size ?? '',
+      };
+    });
 
     return NextResponse.json({ reviews });
   });
