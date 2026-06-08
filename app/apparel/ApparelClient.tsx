@@ -13,6 +13,7 @@ const CATEGORY_REPRESENTATIVE_IMAGE: Partial<Record<ProductCategory, string>> = 
   'top': '/apparel/top/cool-tech-t-shirt-black/1.png',
   'bottom': '/apparel/bottom/tech-training-shorts-gray/1.png',
   'socks': '/apparel/socks/athletic-long-socks-white/1.png',
+  'set': '/apparel/set/heavy-essential-set/1.png',
 };
 
 function getRepresentativeImage(category: ProductCategory): string {
@@ -60,7 +61,8 @@ export default function ApparelClient({ initialPrices }: Props) {
     }
   }, []);
 
-  const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
+  const productCategories = new Set(productList.map((p) => p.category));
+  const usedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((cat) => productCategories.has(cat));
 
   const baseList = activeCategory === ALL
     ? productList

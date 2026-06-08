@@ -62,6 +62,8 @@ export const PRODUCT_SLUGS = {
   REFLECTIVE_RUNNING_VEST: 'reflective-running-vest',
   GRIP_SPORTS_SOCKS: 'grip-sports-socks',
   ACTIVE_COTTON_TEE: 'active-cotton-tee',
+  // ── 9차 추가 상품 ──
+  HEAVY_ESSENTIAL_SET: 'heavy-essential-set',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
@@ -119,6 +121,8 @@ export const PRODUCT_IDS = {
   REFLECTIVE_RUNNING_VEST: 43,
   GRIP_SPORTS_SOCKS: 44,
   ACTIVE_COTTON_TEE: 45,
+  // ── 9차 추가 상품 ──
+  HEAVY_ESSENTIAL_SET: 46,
 } as const;
 
 export interface SizeChartRow {
@@ -131,6 +135,8 @@ export interface SizeChartRow {
   waist?: number;   // 허리(반둘레) - shorts/pants용
   hip?: number;     // 엉덩이 - shorts/pants용
   rise?: number;    // 앞밑위 - pants용
+  recommendedWeight?: string;  // 권장체중 (예: '45~55')
+  recommendedHeight?: string;  // 권장신장 (예: '165~170')
 }
 
 export interface ProductFeature {
@@ -155,22 +161,34 @@ export interface ProductColor {
   images: string[]; // 이 색상 전용 대표 이미지 (캐러셀 앞에 붙음)
 }
 
+export interface SetPart {
+  label: string;         // '상의' | '하의'
+  image: string;         // 파트 선택 버튼 썸네일
+  startImage: string;    // 이 파트 선택 시 캐러셀이 스크롤될 이미지 경로
+  sizes: string[];
+  sizeChart: SizeChartRow[];
+  sizeChartType?: 'top' | 'shorts' | 'pants';
+  price: number;
+  originalPrice?: number;
+}
+
 export interface ProductVariant {
   label: string;
   image: string;
   color?: string; // CSS color for swatch dot
 }
 
-export type ProductCategory = 'training-top' | 'top' | 'bottom' | 'outer' | 'taping' | 'socks' | 'boot-skin';
+export type ProductCategory = 'training-top' | 'top' | 'bottom' | 'outer' | 'taping' | 'socks' | 'boot-skin' | 'set';
 
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
+  'boot-skin': '부츠스킨',
+  'set': '세트',
   'training-top': '트레이닝 탑',
   'top': '상의',
-  'bottom': '하의',
   'outer': '아우터',
+  'bottom': '하의',
   'taping': '테이핑',
   'socks': '양말',
-  'boot-skin': '부츠스킨',
 };
 
 export interface Product {
@@ -198,6 +216,8 @@ export interface Product {
   imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
   detailBanners?: string[];             // 상세 배너 이미지 배열 (jpg/png 모두 가능)
   beforeAfterImages?: { before: string; after: string; label?: string }; // Before/After 비교 슬라이더
+  categoryAliases?: { category: ProductCategory; image: string }[]; // 다른 카테고리에도 중복 노출 (같은 slug 페이지로 연결)
+  setParts?: SetPart[];  // 세트 상품 전용 — 상의/하의 파트 선택 UI
   details: ProductDetails;
 }
 
@@ -2317,6 +2337,88 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-3.png',
       '/apparel/top/coolmax-t-shirt-cream-white/detail-banner-4.png',
     ],
+  },
+
+  // ── 9차 추가 상품 ──
+  [PRODUCT_SLUGS.HEAVY_ESSENTIAL_SET]: {
+    id: PRODUCT_IDS.HEAVY_ESSENTIAL_SET,
+    slug: PRODUCT_SLUGS.HEAVY_ESSENTIAL_SET,
+    name: 'Heavy Essential Set',
+    category: 'set',
+    // 대표 썸네일 — 이미지 업로드 후 세트 대표 이미지 번호로 교체
+    image: '/apparel/set/heavy-essential-set/1.png',
+    images: [
+      '/apparel/set/heavy-essential-set/1.png',
+      '/apparel/set/heavy-essential-set/2.png',
+      '/apparel/set/heavy-essential-set/3.png',
+      '/apparel/set/heavy-essential-set/4.png',
+      '/apparel/set/heavy-essential-set/5.png',
+      '/apparel/set/heavy-essential-set/6.png',
+      '/apparel/set/heavy-essential-set/7.png',
+      '/apparel/set/heavy-essential-set/8.png',
+      '/apparel/set/heavy-essential-set/9.png',
+      '/apparel/set/heavy-essential-set/10.png',
+      '/apparel/set/heavy-essential-set/11.png',
+      '/apparel/set/heavy-essential-set/12.png',
+    ],
+    tagline: '헤비웨이트 코튼 반팔 + 반바지 세트',
+    description: '고밀도 100% 순면 반팔과 면/폴리 혼방 반바지로 구성된 헤비 에센셜 세트. 탄탄한 조직감과 묵직한 실루엣의 오버핏 세트입니다. 남성 모델 XL · 여성 모델 XS 착용.',
+    sizes: [],
+    sizeChart: [],
+    setParts: [
+      {
+        label: '상의',
+        // 업로드 후 상의 대표 이미지 번호로 교체
+        image: '/apparel/set/heavy-essential-set/1.png',
+        startImage: '/apparel/set/heavy-essential-set/1.png',
+        sizes: ['S', 'M', 'L'],
+        sizeChartType: 'top',
+        sizeChart: [
+          { size: 'S', length: 74, chest: 58, shoulder: 56.5, sleeve: 23.5, recommendedWeight: '45~55', recommendedHeight: '165~170' },
+          { size: 'M', length: 76, chest: 60, shoulder: 58, sleeve: 24, recommendedWeight: '55~65', recommendedHeight: '165~175' },
+          { size: 'L', length: 78, chest: 62, shoulder: 59.5, sleeve: 24.5, recommendedWeight: '60~75', recommendedHeight: '170~180' },
+        ],
+        price: 31900,
+        originalPrice: 39900,
+      },
+      {
+        label: '하의',
+        // 업로드 후 하의 대표 이미지 번호로 교체
+        image: '/apparel/set/heavy-essential-set/2.png',
+        startImage: '/apparel/set/heavy-essential-set/2.png',
+        sizes: ['S', 'M', 'L'],
+        sizeChartType: 'shorts',
+        sizeChart: [
+          { size: 'S', length: 45, waist: 68, hip: 57, hem: 29, recommendedWeight: '55~65', recommendedHeight: '165~170' },
+          { size: 'M', length: 46.5, waist: 72, hip: 59, hem: 30, recommendedWeight: '60~75', recommendedHeight: '165~175' },
+          { size: 'L', length: 48, waist: 76, hip: 61, hem: 31, recommendedWeight: '70~85', recommendedHeight: '170~180' },
+        ],
+        price: 33900,
+        originalPrice: 42900,
+      },
+    ],
+    features: [
+      { label: '프리미엄 코튼' },
+      { label: '헤비웨이트 원단' },
+      { label: '부드러운 터치감' },
+      { label: '우수한 내구성' },
+      { label: '쾌적한 통기성' },
+      { label: '자연스러운 오버핏' },
+      { label: '최소화된 수축률' },
+      { label: '뛰어난 형태 유지력' },
+    ],
+    details: {
+      functions: [
+        { title: '피부에 부드러운 촉감', description: '고밀도로 직조된 순면 원단이 피부에 자연스럽게 밀착되어 부드럽고 편안한 착용감을 제공합니다.' },
+        { title: '탄탄하고 견고한 조직감', description: '헤비웨이트 원단 특유의 묵직하고 안정적인 조직감으로 실루엣이 오래도록 유지됩니다.' },
+        { title: '쾌적한 통기성', description: '자연 소재 특유의 통기성으로 하루 종일 쾌적한 착용감을 유지합니다.' },
+        { title: '우수한 형태 유지력', description: '반복 착용·세탁에도 안정적인 형태를 유지합니다.' },
+      ],
+      design: [
+        { title: '자연스러운 오버핏 실루엣', description: '일반 정사이즈보다 크게 제작되어 여유로운 핏을 연출합니다. 보다 깔끔한 핏을 원하시면 한 사이즈 다운을 권장합니다.' },
+      ],
+      material: '상의: 순면 100% · 305G · 오트그레이 / 하의: 면 80% 폴리에스터 20% · 440G · 오트그레이',
+    },
   },
 };
 

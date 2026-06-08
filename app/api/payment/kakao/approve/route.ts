@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { inventoryService, type StockableItem } from '@/lib/services/inventory.service';
-import { notificationService } from '@/lib/services';
+import { sendOrderConfirmationEmail } from '@/lib/email';
 import { OrderStatus } from '@/lib/domain/enums';
 import { getKakaoPayConfig } from '@/lib/kakao-pay';
 
@@ -84,24 +84,27 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 알림 발송 (approve 시점에 발송)
-    const items = (order.order_items as Array<{ product_name: string; size: string; quantity: number; price: number }>)
-      .map((i) => ({ productName: i.product_name, size: i.size, quantity: i.quantity, price: i.price }));
+    // 고객 확인 이메일 (이메일이 있는 경우만)
+    // 관리자 알림 이메일은 Supabase DB 웹훅 → /api/internal/order-notify 에서 처리
+    if (order.customer_email) {
+      const items = (order.order_items as Array<{ product_name: string; size: string; quantity: number; price: number }>)
+        .map((i) => ({ productName: i.product_name, size: i.size, quantity: i.quantity, price: i.price }));
+      const trackingUrl = `${siteUrl}/tracking?orderNumber=${encodeURIComponent(order.order_number)}`;
 
-    notificationService.notifyOrderCreated({
-      orderNumber: order.order_number,
-      customerName: order.customer_name,
-      customerEmail: order.customer_email,
-      customerPhone: order.customer_phone,
-      totalAmount: order.total_amount,
-      shippingFee: order.shipping_fee,
-      depositorName: order.customer_name,
-      items,
-      address: order.address,
-      addressDetail: order.address_detail,
-      siteUrl,
-      paymentMethod: 'kakaopay',
-    });
+      sendOrderConfirmationEmail({
+        orderNumber: order.order_number,
+        customerName: order.customer_name,
+        customerEmail: order.customer_email,
+        totalAmount: order.total_amount,
+        shippingFee: order.shipping_fee,
+        depositorName: order.customer_name,
+        items,
+        address: order.address,
+        addressDetail: order.address_detail,
+        trackingUrl,
+        paymentMethod: 'kakaopay',
+      }).catch((err) => console.error('KakaoPay customer confirmation email error:', err));
+    }
 
     return NextResponse.redirect(
       `${siteUrl}/order-complete?order=${orderNumber}&amount=${order.total_amount}&shippingFee=${order.shipping_fee}&method=kakao`

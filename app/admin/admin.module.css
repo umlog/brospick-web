@@ -2637,10 +2637,16 @@
 }
 
 /* ── 체크박스 & 선택 ─────────────────────────────── */
+.orderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
 .orderCheckboxWrapper {
   display: flex;
   align-items: center;
-  padding-right: var(--space-md);
+  padding-right: 0;
   flex-shrink: 0;
 }
 

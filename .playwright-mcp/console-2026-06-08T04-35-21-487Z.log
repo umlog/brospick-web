@@ -1,0 +1,4 @@
+[     285ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://logis.ilogen.com/:0
+[   12379ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[   12426ms] [WARNING] ARS popup not required or userInfo is invalid. @ https://logis.ilogen.com/common/utils/Common.js:990
+[   12724ms] [WARNING] Highcharts warning: Consider including the "accessibility.js" module to make your chart more usable for people with disabilities. Set the "accessibility.enabled" option to false to remove this warning. See https://www.highcharts.com/docs/accessibility/accessibility-module. @ https://logis.ilogen.com/common/plugins/ibChart/vendors/highcharts/7.2.1/highcharts/highcharts.js:11

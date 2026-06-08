@@ -489,7 +489,9 @@ export function ProductManager({
                     catalogSaving={catalogSaving === product.id}
                     sizes={sizes.filter((s) => s.product_id === product.id)}
                     staticSizes={
-                      staticProduct?.colors?.length
+                      staticProduct?.setParts?.length
+                        ? staticProduct.setParts.flatMap(part => part.sizes.map(s => `${s} — ${part.label}`))
+                        : staticProduct?.colors?.length
                         ? staticProduct.colors.flatMap(c => staticProduct.sizes.map(s => `${s} — ${c.name}`))
                         : (staticProduct?.sizes ?? [])
                     }

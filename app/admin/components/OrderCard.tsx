@@ -78,20 +78,22 @@ export function OrderCard({
         className={styles.orderHeader}
         onClick={() => onToggleExpand(order.id)}
       >
-        <div
-          className={styles.orderCheckboxWrapper}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <input
-            type="checkbox"
-            className={styles.orderCheckbox}
-            checked={selected}
-            onChange={() => onToggleSelect(order.id)}
-          />
-        </div>
-        <div className={styles.orderMeta}>
-          <span className={styles.orderNumber}>{order.order_number}</span>
-          <span className={styles.orderDate}>{formatDate(order.created_at)}</span>
+        <div className={styles.orderLeft}>
+          <div
+            className={styles.orderCheckboxWrapper}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <input
+              type="checkbox"
+              className={styles.orderCheckbox}
+              checked={selected}
+              onChange={() => onToggleSelect(order.id)}
+            />
+          </div>
+          <div className={styles.orderMeta}>
+            <span className={styles.orderNumber}>{order.order_number}</span>
+            <span className={styles.orderDate}>{formatDate(order.created_at)}</span>
+          </div>
         </div>
         <div className={styles.orderQuick}>
           <span className={styles.orderCustomer}>{order.customer_name}</span>

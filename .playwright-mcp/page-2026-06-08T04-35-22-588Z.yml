@@ -1,0 +1,51 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img "Logo" [ref=e8]
+      - heading "바로집하 빠른배송" [level=1] [ref=e11]:
+        - text: 바로집하
+        - text: 빠른배송
+      - paragraph [ref=e14]:
+        - text: 고객 가치를 최우선으로 하는
+        - text: 대한민국 1등 물류 파트너
+    - paragraph [ref=e16]:
+      - text: 본 시스템은 인가자만 사용하실 수 있으며, 부당한 목적으로 본 사이트를 이용하거나, 불법적인 접근 및 악성 행위 등을 통하여
+      - text: 본 사이트의 안정적 운영을 방해할 경우, 관련 법에 따라 민. 형사상 책임을 질 수 있습니다.
+  - generic [ref=e19]:
+    - generic [ref=e20]: 로젠 통합물류정보시스템
+    - generic [ref=e21]: iLOGEN 로그인
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - textbox "사용자 ID" [ref=e24]
+        - generic [ref=e25]: 
+      - generic [ref=e26]:
+        - textbox "Password" [ref=e27]
+        - generic [ref=e28]: 
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - checkbox "아이디 저장" [ref=e32] [cursor=pointer]
+          - generic [ref=e33] [cursor=pointer]: 아이디 저장
+        - generic [ref=e34]:
+          - checkbox "2차 인증" [ref=e35] [cursor=pointer]
+          - generic [ref=e36] [cursor=pointer]: 2차 인증
+        - link "안내" [ref=e37] [cursor=pointer]:
+          - /url: ""
+      - link "로그인" [ref=e39] [cursor=pointer]:
+        - /url: "#n"
+    - generic [ref=e40]:
+      - list [ref=e41]:
+        - listitem [ref=e42]:
+          - link "지점 연락처 안내" [ref=e43] [cursor=pointer]:
+            - /url: https://www.ilogen.com/web/network/centerInfo
+        - listitem: "|"
+        - listitem [ref=e44]:
+          - link "비밀번호 초기화" [ref=e45] [cursor=pointer]:
+            - /url: "#n"
+        - listitem: "|"
+        - listitem [ref=e46]:
+          - link "원격지원" [ref=e47] [cursor=pointer]:
+            - /url: http://ezh.kr/ilogen
+      - link "사용자 메뉴얼 다운로드" [ref=e49] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e50]: 사용자 메뉴얼 다운로드
+      - paragraph [ref=e52]: COPYRIGHT ⓒ 2025 LOGEN CO., LTD. ALL RIGHTS RESERVED.

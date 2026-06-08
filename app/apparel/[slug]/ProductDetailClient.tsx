@@ -314,6 +314,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedPartIdx, setSelectedPartIdx] = useState(0);
+  const [selectedTopSize, setSelectedTopSize] = useState('');
+  const [selectedBottomSize, setSelectedBottomSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState('1');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -378,6 +381,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   const checkSelectedStock = (): boolean => {
     if (product.multiSelect) return true;
+    if (product.setParts) return true;
     const coloredSize = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
     const key = `${product.id}-${coloredSize}`;
     const status = sizeStatuses[key];
@@ -416,6 +420,23 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       setTimeout(() => setShowSuccess(false), 2000);
       return;
     }
+    if (product.setParts) {
+      if (!selectedTopSize) { alert('상의 사이즈를 선택해주세요.'); return; }
+      if (!selectedBottomSize) { alert('하의 사이즈를 선택해주세요.'); return; }
+      if (price === undefined) return;
+      addToCart({
+        id: product.id,
+        name: productName!,
+        price,
+        size: `상의: ${selectedTopSize} / 하의: ${selectedBottomSize}`,
+        image: product.image,
+        quantity,
+      });
+      setQuantity(1);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
+      return;
+    }
     if (!selectedSize) {
       alert('사이즈를 선택해주세요.');
       return;
@@ -441,6 +462,12 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   useEffect(() => {
     if (!product) return;
+    if (product.setParts) {
+      setSelectedPartIdx(0);
+      setSelectedTopSize('');
+      setSelectedBottomSize('');
+      return;
+    }
     if (product.multiSelect) {
       setSelectedSizes([]);
       return;
@@ -488,6 +515,15 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       if (fallback) setSelectedSize(fallback);
     }
   }, [sizeStatuses]);
+
+  const handlePartSelect = (idx: number) => {
+    setSelectedPartIdx(idx);
+    if (!product.setParts) return;
+    const part = product.setParts[idx];
+    const carousel = product.images.filter((img) => !img.includes('size-chart'));
+    const imgIdx = carousel.indexOf(part.startImage);
+    if (imgIdx >= 0) { emblaApi?.scrollTo(imgIdx); thumbApi?.scrollTo(imgIdx); }
+  };
 
   const handleSizeSelect = (size: string) => {
     if (product.multiSelect) {
@@ -614,6 +650,21 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
           quantity,
         });
       }
+      router.push('/checkout');
+      return;
+    }
+    if (product.setParts) {
+      if (!selectedTopSize) { alert('상의 사이즈를 선택해주세요.'); return; }
+      if (!selectedBottomSize) { alert('하의 사이즈를 선택해주세요.'); return; }
+      if (price === undefined) return;
+      addToCart({
+        id: product.id,
+        name: productName!,
+        price,
+        size: `상의: ${selectedTopSize} / 하의: ${selectedBottomSize}`,
+        image: product.image,
+        quantity,
+      });
       router.push('/checkout');
       return;
     }
@@ -827,6 +878,19 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 <span className={styles.price}>—</span>
               )}
             </div>
+            {price !== undefined && product.setParts && (
+              <p className={styles.setPriceBreakdown}>
+                {product.setParts.map((part, i) => (
+                  <span key={part.label}>
+                    {i > 0 && ' + '}
+                    {part.label} ₩{part.price.toLocaleString()}
+                    {part.originalPrice && (
+                      <s> ₩{part.originalPrice.toLocaleString()}</s>
+                    )}
+                  </span>
+                ))}
+              </p>
+            )}
 
             {product.category === 'taping' ? (
               <div className={styles.sizeChartInline}>
@@ -923,6 +987,85 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               <p className={styles.sizeDisclaimer}>개인 체형 및 착용 취향에 따라 차이가 있을 수 있으며, 1–2cm 오차가 발생할 수 있습니다.</p>
             </div>}
 
+            {product.setParts && (
+              <div className={styles.setPartSelector}>
+                <h3>구성 선택</h3>
+                <div className={styles.setPartOptions}>
+                  {product.setParts.map((part, idx) => (
+                    <button
+                      key={part.label}
+                      className={`${styles.setPartButton} ${selectedPartIdx === idx ? styles.setPartButtonActive : ''}`}
+                      onClick={() => handlePartSelect(idx)}
+                    >
+                      <img src={part.image} alt={part.label} />
+                      <span>{part.label}</span>
+                    </button>
+                  ))}
+                </div>
+                {(() => {
+                  const part = product.setParts![selectedPartIdx];
+                  if (!part || part.sizeChart.length === 0) return null;
+                  return (
+                    <div className={styles.sizeChartInline}>
+                      <p className={styles.sizeUnit}>단위: cm</p>
+                      <table className={styles.sizeTable}>
+                        {part.sizeChartType === 'shorts' ? (
+                          <>
+                            <thead>
+                              <tr>
+                                <th>사이즈</th><th>총장</th><th>허리단면</th>
+                                {part.sizeChart.some((r) => r.hip !== undefined) && <th>엉덩이단면</th>}
+                                {part.sizeChart.some((r) => r.hem !== undefined) && <th>밑단단면</th>}
+                                {part.sizeChart.some((r) => r.recommendedWeight !== undefined) && <th>권장체중(kg)</th>}
+                                {part.sizeChart.some((r) => r.recommendedHeight !== undefined) && <th>권장신장(cm)</th>}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {part.sizeChart.map((row) => (
+                                <tr key={row.size}>
+                                  <td>{row.size}</td><td>{row.length}</td><td>{row.waist ?? '—'}</td>
+                                  {part.sizeChart.some((r) => r.hip !== undefined) && <td>{row.hip ?? '—'}</td>}
+                                  {part.sizeChart.some((r) => r.hem !== undefined) && <td>{row.hem ?? '—'}</td>}
+                                  {part.sizeChart.some((r) => r.recommendedWeight !== undefined) && <td>{row.recommendedWeight ?? '—'}</td>}
+                                  {part.sizeChart.some((r) => r.recommendedHeight !== undefined) && <td>{row.recommendedHeight ?? '—'}</td>}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </>
+                        ) : (
+                          <>
+                            <thead>
+                              <tr>
+                                <th>사이즈</th><th>총장</th><th>가슴단면</th>
+                                {part.sizeChart.some((r) => r.shoulder !== undefined) && <th>어깨너비</th>}
+                                <th>소매길이</th>
+                                {part.sizeChart.some((r) => r.recommendedWeight !== undefined) && <th>권장체중(kg)</th>}
+                                {part.sizeChart.some((r) => r.recommendedHeight !== undefined) && <th>권장신장(cm)</th>}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {part.sizeChart.map((row) => (
+                                <tr key={row.size}>
+                                  <td>{row.size}</td><td>{row.length}</td><td>{row.chest ?? '—'}</td>
+                                  {part.sizeChart.some((r) => r.shoulder !== undefined) && <td>{row.shoulder ?? '—'}</td>}
+                                  <td>{row.sleeve ?? '—'}</td>
+                                  {part.sizeChart.some((r) => r.recommendedWeight !== undefined) && <td>{row.recommendedWeight ?? '—'}</td>}
+                                  {part.sizeChart.some((r) => r.recommendedHeight !== undefined) && <td>{row.recommendedHeight ?? '—'}</td>}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </>
+                        )}
+                      </table>
+                      <p className={styles.sizeDisclaimer}>
+                        오버핏 제품입니다. 깔끔한 핏을 원하시면 한 사이즈 다운 권장. 측정 방법에 따라 1–3cm 오차가 발생할 수 있습니다.
+                      </p>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
             {isComingSoon ? (
               <div className={styles.comingSoonNotice}>
                 <span className={styles.comingSoonNoticeBadge}>COMING SOON</span>
@@ -931,6 +1074,29 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               </div>
             ) : (
               <>
+                {product.setParts && (
+                  <>
+                    {product.setParts.map((part, idx) => (
+                      <div key={part.label} className={styles.sizeSection}>
+                        <h3>{part.label} 사이즈</h3>
+                        <div className={styles.sizeOptions}>
+                          {part.sizes.map((size) => {
+                            const isSelected = idx === 0 ? selectedTopSize === size : selectedBottomSize === size;
+                            return (
+                              <button
+                                key={size}
+                                className={`${styles.sizeButton} ${isSelected ? styles.selected : ''}`}
+                                onClick={() => idx === 0 ? setSelectedTopSize(size) : setSelectedBottomSize(size)}
+                              >
+                                {size}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
                 {product.colors && product.colors.length > 1 && (
                   <div className={styles.colorSection}>
                     <h3>
@@ -1066,7 +1232,15 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     바로 구매하기
                   </button>
                 </div>
-                {product.category !== 'taping' && product.category !== 'socks' && product.category !== 'boot-skin' &&
+                {product.category === 'set' && (
+                  <div className={styles.freeShippingBanner}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" />
+                    </svg>
+                    SET 구매 시 무료배송
+                  </div>
+                )}
+                {product.category !== 'taping' && product.category !== 'socks' && product.category !== 'boot-skin' && product.category !== 'set' &&
                   product.slug !== 'quarter-zip-flex-blue' && product.slug !== 'quarter-zip-flex-light-green' && (
                     <button className={styles.logoInquiryButton} onClick={() => setLogoInquiryOpen(true)}>
                       맞춤 로고각인 가능
@@ -1208,7 +1382,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 </div>
               </Accordion>
 
-              {product.category !== 'taping' && product.category !== 'boot-skin' && <Accordion title="사이즈 가이드">
+              {product.category !== 'taping' && product.category !== 'boot-skin' && !product.setParts && <Accordion title="사이즈 가이드">
                 <div className={styles.accordionContent}>
                   <p className={styles.sizeUnit}>단위: cm</p>
                   <table className={styles.sizeTable}>

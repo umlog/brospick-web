@@ -75,7 +75,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
     handleDelaySubmit,
   } = actionsState;
 
-  const [fareType, setFareType] = useState<'신용' | '선불'>('신용');
+  const [fareType, setFareType] = useState<'선불' | '착불' | '신용'>('선불');
 
   const handleLogenExport = () => {
     const targetOrders = ordersState.selectedOrders.size > 0
@@ -305,12 +305,13 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
                 ))}
                 <select
                   value={fareType}
-                  onChange={(e) => setFareType(e.target.value as '신용' | '선불')}
+                  onChange={(e) => setFareType(e.target.value as '선불' | '착불' | '신용')}
                   className={styles.bulkClearBtn}
                   style={{ cursor: 'pointer' }}
                 >
-                  <option value="신용">신용</option>
                   <option value="선불">선불</option>
+                  <option value="착불">착불</option>
+                  <option value="신용">신용</option>
                 </select>
                 <button className={styles.logenExportBtn} onClick={handleLogenExport}>
                   로젠 엑셀 내보내기

@@ -1,0 +1,664 @@
+- generic [ref=e1]:
+  - text: "!"
+  - generic [ref=e3]:
+    - generic:
+      - generic [ref=e15]:
+        - textbox "메뉴명 검색" [ref=e18]
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - generic [ref=e23] [cursor=pointer]: 
+          - listitem [ref=e24]:
+            - generic [ref=e26]: 
+            - generic [ref=e27]:
+              - generic [ref=e28]: 동김포
+              - text: (
+              - generic [ref=e29]: 일반거래처
+              - text: )
+          - listitem [ref=e30]:
+            - generic [ref=e32]: 
+            - generic [ref=e33]:
+              - generic [ref=e34]: "31421042"
+              - text: (
+              - generic [ref=e35]: 브로스픽
+              - text: )
+          - listitem [ref=e36]:
+            - generic [ref=e38] [cursor=pointer]: 
+          - listitem
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - link "logen" [ref=e43] [cursor=pointer]:
+              - /url: "#"
+              - img "logen" [ref=e44]
+            - generic [ref=e45]:
+              - generic [ref=e46]: 동김포
+              - generic [ref=e47]: 일반거래처
+          - link " " [ref=e48] [cursor=pointer]:
+            - /url: "#n"
+            - generic [ref=e49]:
+              - generic [ref=e50]: 
+              - generic [ref=e51]: 
+        - generic [ref=e54]:
+          - list [ref=e55]:
+            - listitem [ref=e56]:
+              - link "메뉴 " [ref=e57] [cursor=pointer]:
+                - /url: "#tab_01"
+                - text: 메뉴
+                - generic [ref=e59]: 
+            - listitem [ref=e60]:
+              - link "즐겨찾기" [ref=e61] [cursor=pointer]:
+                - /url: "#tab_02"
+          - list [ref=e63]:
+            - listitem [ref=e64]:
+              - link "인트라넷" [ref=e65] [cursor=pointer]:
+                - /url: "#"
+                - generic "인트라넷" [ref=e68]
+            - listitem [ref=e70]:
+              - link "시스템" [ref=e71] [cursor=pointer]:
+                - /url: "#"
+                - generic "시스템" [ref=e74]
+            - listitem [ref=e76]:
+              - link "예약관리" [ref=e77] [cursor=pointer]:
+                - /url: "#"
+                - generic "예약관리" [ref=e80]
+              - list [ref=e133]:
+                - listitem [ref=e134]:
+                  - link "주문등록/출력(단건)" [ref=e135] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e136]:
+                  - link "주문등록/출력(복수건)" [ref=e137] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e138]:
+                  - link "반품및사고물품회수요청" [ref=e139] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e140]:
+                  - link "주소검색변환서비스" [ref=e141] [cursor=pointer]:
+                    - /url: "#"
+            - listitem [ref=e82]:
+              - link "화물추적" [ref=e83] [cursor=pointer]:
+                - /url: "#"
+                - generic "화물추적" [ref=e86]
+            - listitem [ref=e88]:
+              - link "집배관리" [ref=e89] [cursor=pointer]:
+                - /url: "#"
+                - generic "집배관리" [ref=e92]
+            - listitem [ref=e94]:
+              - link "사고관리" [ref=e95] [cursor=pointer]:
+                - /url: "#"
+                - generic "사고관리" [ref=e98]
+            - listitem [ref=e100]:
+              - link "기준정보" [ref=e101] [cursor=pointer]:
+                - /url: "#"
+                - generic "기준정보" [ref=e104]
+            - listitem [ref=e106]:
+              - link "메뉴얼" [ref=e107] [cursor=pointer]:
+                - /url: "#"
+                - generic "메뉴얼" [ref=e110]
+        - generic [ref=e113]:
+          - generic [ref=e116]:
+            - checkbox [ref=e117]
+            - img "login" [ref=e121] [cursor=pointer]
+          - link [ref=e123] [cursor=pointer]:
+            - /url: "#"
+          - link "0" [ref=e125] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e126]: "0"
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e127]:
+          - link "거래처 Dashboard" [ref=e128] [cursor=pointer]:
+            - /url: javascript:void(0);
+            - generic [ref=e129]: 거래처 Dashboard
+          - link "주문등록/출력(복수건)" [ref=e142] [cursor=pointer]:
+            - /url: javascript:void(0);
+            - generic [ref=e143]: 주문등록/출력(복수건)
+        - generic [ref=e8]:
+          - generic [ref=e9]:
+            - generic:
+              - generic: 
+            - generic:
+              - generic: 
+            - generic [ref=e11] [cursor=pointer]: 
+          - text:      
+      - iframe [active] [ref=e146]:
+        - generic [ref=f2e5]:
+          - generic [ref=f2e6]:
+            - heading "주문등록/출력(복수건)" [level=2] [ref=f2e10]
+            - generic [ref=f2e11]:
+              - button " 조회(F2)" [ref=f2e12] [cursor=pointer]:
+                - generic [ref=f2e14]: 
+                - generic [ref=f2e15]:
+                  - text: 조회
+                  - emphasis [ref=f2e16]: (F2)
+              - text: 
+              - button " 저장(F5)" [ref=f2e17] [cursor=pointer]:
+                - generic [ref=f2e19]: 
+                - generic [ref=f2e20]:
+                  - text: 저장
+                  - emphasis [ref=f2e21]: (F5)
+              - button " 삭제(F4)" [ref=f2e22] [cursor=pointer]:
+                - generic [ref=f2e24]: 
+                - generic [ref=f2e25]:
+                  - text: 삭제
+                  - emphasis [ref=f2e26]: (F4)
+              - text:  
+              - button " 엑셀저장":
+                - generic:
+                  - generic: 
+                - generic: 엑셀저장
+              - button " 창닫기" [ref=f2e27] [cursor=pointer]:
+                - generic [ref=f2e29]: 
+                - generic [ref=f2e30]: 창닫기
+          - generic [ref=f2e31]:
+            - generic [ref=f2e35]:
+              - generic [ref=f2e37]:
+                - generic [ref=f2e38]:
+                  - heading "변환기본정보" [level=3] [ref=f2e39]
+                  - paragraph [ref=f2e40]:
+                    - generic [ref=f2e41]: 강조
+                    - text: 고객 개인정보 유출 시 개인정보 보호법에 따라 처벌될 수 있사오니 각별히 주의 바랍니다.
+                - generic [ref=f2e43]:
+                  - generic [ref=f2e44]:
+                    - generic [ref=f2e45]:
+                      - generic [ref=f2e46]: 접수일자
+                      - generic [ref=f2e48]:
+                        - textbox "YYYY-MM-DD" [ref=f2e49]: 2026-06-08
+                        - generic [ref=f2e51] [cursor=pointer]: 
+                    - generic [ref=f2e52]:
+                      - generic [ref=f2e53]: 운송장구분
+                      - combobox [ref=f2e55] [cursor=pointer]:
+                        - option "일반집하" [selected]
+                    - generic [ref=f2e57]:
+                      - generic [ref=f2e58]: 거래처
+                      - generic [ref=f2e59]:
+                        - generic [ref=f2e60]:
+                          - textbox [disabled] [ref=f2e61]: "31421042"
+                          - generic:
+                            - generic: 
+                        - textbox [disabled] [ref=f2e63]: 브로스픽
+                    - generic [ref=f2e64]:
+                      - generic [ref=f2e65]: 집하영업소
+                      - generic [ref=f2e66]:
+                        - generic:
+                          - textbox: "31410350"
+                          - generic:
+                            - generic: 
+                        - textbox [disabled] [ref=f2e68]: 김홍겸
+                  - generic [ref=f2e70]:
+                    - generic [ref=f2e71]:
+                      - text: 송하인
+                      - text: 변환정보
+                    - generic [ref=f2e73]:
+                      - generic [ref=f2e74]:
+                        - generic [ref=f2e75]: 송하인명
+                        - textbox [ref=f2e77]: 브로스픽
+                      - generic [ref=f2e78]:
+                        - generic [ref=f2e79]: 계약운임
+                        - generic [ref=f2e80]:
+                          - textbox [ref=f2e82]: 2,750
+                          - generic [ref=f2e83]:
+                            - textbox [ref=f2e84]
+                            - generic [ref=f2e86] [cursor=pointer]: 
+                      - generic [ref=f2e87]:
+                        - generic [ref=f2e88]: 운임구분
+                        - combobox [ref=f2e90] [cursor=pointer]:
+                          - option "선불" [selected]
+                          - option "착불"
+                          - option "신용"
+                          - option "본사신용"
+                      - generic [ref=f2e91]:
+                        - generic [ref=f2e92]: 대표전화
+                        - generic [ref=f2e93]:
+                          - spinbutton "전화번호 앞자리" [ref=f2e95]: "010"
+                          - text: "-"
+                          - spinbutton "전화번호 뒷자리" [ref=f2e97]: "6604"
+                          - generic [ref=f2e98]: "-"
+                          - spinbutton "전화번호 뒷자리" [ref=f2e100]: "6269"
+                      - generic [ref=f2e101]:
+                        - generic [ref=f2e102]: 휴대폰
+                        - generic [ref=f2e103]:
+                          - spinbutton "휴대폰 앞자리" [ref=f2e105]
+                          - text: "-"
+                          - spinbutton "휴대폰 중간자리" [ref=f2e107]
+                          - text: "-"
+                          - spinbutton "휴대폰 뒷자리" [ref=f2e109]
+                      - generic [ref=f2e110]:
+                        - generic [ref=f2e111]: 대표품명
+                        - textbox [ref=f2e113]: 의류
+                      - generic [ref=f2e114]:
+                        - generic [ref=f2e115]: 도로명
+                        - generic [ref=f2e117]:
+                          - generic [ref=f2e118]:
+                            - textbox "우편번호" [ref=f2e119]:
+                              - /placeholder: ""
+                              - text: "10120"
+                            - generic [ref=f2e121] [cursor=pointer]: 
+                          - generic:
+                            - textbox [disabled]: 경기 김포시 유현로 51 (풍무동 759)
+                          - textbox [ref=f2e123]: 유현마을현대프라임빌아파트 204 -1003
+              - generic [ref=f2e125]:
+                - heading "변환/출력옵션" [level=3] [ref=f2e126]
+                - generic [ref=f2e128]:
+                  - generic [ref=f2e130]:
+                    - generic [ref=f2e131]: 운임입력
+                    - generic [ref=f2e132]:
+                      - generic:
+                        - radio "총 운임" [checked]
+                        - generic: 총 운임
+                      - generic:
+                        - radio "건별운임"
+                        - generic: 건별운임
+                  - generic [ref=f2e134]:
+                    - generic [ref=f2e135]: 출력순서
+                    - generic [ref=f2e136]:
+                      - checkbox "관내우선" [ref=f2e137]
+                      - generic [ref=f2e138] [cursor=pointer]: 관내우선
+                    - generic [ref=f2e139]:
+                      - checkbox "배송터미널별" [ref=f2e140]
+                      - generic [ref=f2e141] [cursor=pointer]: 배송터미널별
+                  - generic [ref=f2e143]:
+                    - generic [ref=f2e144]: 합포장기준
+                    - combobox [ref=f2e146] [cursor=pointer]:
+                      - option "합포장안함" [selected]
+                      - option "이름+연락처+주소 차수적용"
+                      - option "접수번호(주문번호) 차수적용"
+                      - option "이름+연락처+주소 차수무시"
+                      - option "접수번호(주문번호) 차수무시"
+                  - generic [ref=f2e148]:
+                    - generic [ref=f2e149]: 물품구분자
+                    - button "#" [ref=f2e151] [cursor=pointer]
+                  - generic [ref=f2e153]:
+                    - generic [ref=f2e154]: 안내사항
+                    - button "할증요율" [ref=f2e158] [cursor=pointer]
+                    - button "복수물품 운임 규정" [ref=f2e162] [cursor=pointer]
+            - generic [ref=f2e169]:
+              - generic [ref=f2e171]:
+                - generic [ref=f2e172]: 엑셀타입
+                - generic [ref=f2e173]:
+                  - combobox [ref=f2e174] [cursor=pointer]:
+                    - option "전체" [selected]
+                    - option "A타입 | 구시스템양식"
+                    - option "B타입 | 옥션/G마켓"
+                    - option "C타입 | 11번가"
+                    - option "D타입"
+                    - option "E타입"
+                    - option "F타입"
+                    - option "G타입"
+                    - option "H타입"
+                    - option "I타입"
+                    - option "J타입"
+                    - option "K타입"
+                    - option "L타입"
+                    - option "M타입"
+                    - option "N타입"
+                    - option "O타입"
+                    - option "P타입"
+                    - option "Q타입"
+                    - option "R타입"
+                    - option "S타입"
+                    - option "T타입"
+                    - option "U타입"
+                    - option "V타입"
+                    - option "W타입"
+                    - option "X타입"
+                    - option "Y타입"
+                    - option "Z타입"
+                    - option "AA"
+                    - option "AB"
+                    - option "AC"
+                    - option "AD"
+                    - option "AE"
+                    - option "AF"
+                    - option "AG"
+                    - option "AH"
+                    - option "AI"
+                    - option "AJ"
+                    - option "AK"
+                    - option "AL"
+                    - option "AM"
+                    - option "AN"
+                    - option "AO"
+                    - option "AP"
+                    - option "AQ"
+                    - option "AR"
+                    - option "AS"
+                    - option "AT"
+                    - option "AU"
+                    - option "AV"
+                    - option "AW"
+                    - option "AX"
+                    - option "AY"
+                    - option "AZ"
+                  - button "타입설정" [ref=f2e175] [cursor=pointer]
+                  - button "예제파일" [ref=f2e176] [cursor=pointer]
+              - generic [ref=f2e179]:
+                - list [ref=f2e180]:
+                  - listitem [ref=f2e181]:
+                    - link "변환대상(엑셀)" [ref=f2e182] [cursor=pointer]:
+                      - /url: javascript:fn_excelTab();
+                  - listitem [ref=f2e183]:
+                    - link "변환완료" [ref=f2e184] [cursor=pointer]:
+                      - /url: javascript:fn_dataTab();
+                - generic [ref=f2e186]:
+                  - generic [ref=f2e187] [cursor=pointer]:
+                    - radio "전체" [checked] [ref=f2e188]
+                    - generic [ref=f2e189]: 전체
+                  - generic [ref=f2e190] [cursor=pointer]:
+                    - radio "정상" [ref=f2e191]
+                    - generic [ref=f2e192]: 정상
+                  - generic [ref=f2e193] [cursor=pointer]:
+                    - radio "오류" [ref=f2e194]
+                    - generic [ref=f2e195]: 오류
+                - generic [ref=f2e196]:
+                  - generic [ref=f2e197]: "불러온 파일 : 0건 (정상-0건, 오류-0건)"
+                  - generic [ref=f2e198]:
+                    - textbox "엑셀 비밀번호 입력" [ref=f2e199]
+                    - button " 1.파일열기" [ref=f2e200] [cursor=pointer]:
+                      - generic [ref=f2e202]: 
+                      - generic [ref=f2e203]: 1.파일열기
+                    - button " 엑셀검증" [ref=f2e204] [cursor=pointer]:
+                      - generic [ref=f2e206]: 
+                      - generic [ref=f2e207]: 엑셀검증
+                    - button " 2.서버전송" [ref=f2e208] [cursor=pointer]:
+                      - generic [ref=f2e210]: 
+                      - generic [ref=f2e211]: 2.서버전송
+                  - text:   
+                - generic [ref=f2e214]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - textbox "undefined"
+                      - table:
+                        - rowgroup:
+                          - row:
+                            - columnheader
+                            - columnheader
+                          - row "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC AD AE AF AG AH AI AJ AK AL AM AN AO AP AQ AR AS AT AU AV AW AX AY AZ BA BB BC BD BE BF BG BH BI BJ BK BL BM BN BO BP BQ BR BS BT BU BV BW BX BY BZ CA CB CC CD CE CF CG CH CI CJ CK CL CM CN CO CP CQ CR CS CT CU CV CW CX CY CZ":
+                            - cell "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC AD AE AF AG AH AI AJ AK AL AM AN AO AP AQ AR AS AT AU AV AW AX AY AZ BA BB BC BD BE BF BG BH BI BJ BK BL BM BN BO BP BQ BR BS BT BU BV BW BX BY BZ CA CB CC CD CE CF CG CH CI CJ CK CL CM CN CO CP CQ CR CS CT CU CV CW CX CY CZ":
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - table:
+                                      - rowgroup:
+                                        - row:
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                          - columnheader
+                                        - row "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC AD AE AF AG AH AI AJ AK AL AM AN AO AP AQ AR AS AT AU AV AW AX AY AZ BA BB BC BD BE BF BG BH BI BJ BK BL BM BN BO BP BQ BR BS BT BU BV BW BX BY BZ CA CB CC CD CE CF CG CH CI CJ CK CL CM CN CO CP CQ CR CS CT CU CV CW CX CY CZ":
+                                          - cell
+                                          - cell "A"
+                                          - cell "B"
+                                          - cell "C"
+                                          - cell "D"
+                                          - cell "E"
+                                          - cell "F"
+                                          - cell "G"
+                                          - cell "H"
+                                          - cell "I"
+                                          - cell "J"
+                                          - cell "K"
+                                          - cell "L"
+                                          - cell "M"
+                                          - cell "N"
+                                          - cell "O"
+                                          - cell "P"
+                                          - cell "Q"
+                                          - cell "R"
+                                          - cell "S"
+                                          - cell "T"
+                                          - cell "U"
+                                          - cell "V"
+                                          - cell "W"
+                                          - cell "X"
+                                          - cell "Y"
+                                          - cell "Z"
+                                          - cell "AA"
+                                          - cell "AB"
+                                          - cell "AC"
+                                          - cell "AD"
+                                          - cell "AE"
+                                          - cell "AF"
+                                          - cell "AG"
+                                          - cell "AH"
+                                          - cell "AI"
+                                          - cell "AJ"
+                                          - cell "AK"
+                                          - cell "AL"
+                                          - cell "AM"
+                                          - cell "AN"
+                                          - cell "AO"
+                                          - cell "AP"
+                                          - cell "AQ"
+                                          - cell "AR"
+                                          - cell "AS"
+                                          - cell "AT"
+                                          - cell "AU"
+                                          - cell "AV"
+                                          - cell "AW"
+                                          - cell "AX"
+                                          - cell "AY"
+                                          - cell "AZ"
+                                          - cell "BA"
+                                          - cell "BB"
+                                          - cell "BC"
+                                          - cell "BD"
+                                          - cell "BE"
+                                          - cell "BF"
+                                          - cell "BG"
+                                          - cell "BH"
+                                          - cell "BI"
+                                          - cell "BJ"
+                                          - cell "BK"
+                                          - cell "BL"
+                                          - cell "BM"
+                                          - cell "BN"
+                                          - cell "BO"
+                                          - cell "BP"
+                                          - cell "BQ"
+                                          - cell "BR"
+                                          - cell "BS"
+                                          - cell "BT"
+                                          - cell "BU"
+                                          - cell "BV"
+                                          - cell "BW"
+                                          - cell "BX"
+                                          - cell "BY"
+                                          - cell "BZ"
+                                          - cell "CA"
+                                          - cell "CB"
+                                          - cell "CC"
+                                          - cell "CD"
+                                          - cell "CE"
+                                          - cell "CF"
+                                          - cell "CG"
+                                          - cell "CH"
+                                          - cell "CI"
+                                          - cell "CJ"
+                                          - cell "CK"
+                                          - cell "CL"
+                                          - cell "CM"
+                                          - cell "CN"
+                                          - cell "CO"
+                                          - cell "CP"
+                                          - cell "CQ"
+                                          - cell "CR"
+                                          - cell "CS"
+                                          - cell "CT"
+                                          - cell "CU"
+                                          - cell "CV"
+                                          - cell "CW"
+                                          - cell "CX"
+                                          - cell "CY"
+                                          - cell "CZ"
+                            - cell
+                          - row:
+                            - cell
+                          - row
+                          - row
+                          - row:
+                            - cell:
+                              - generic:
+                                - table:
+                                  - rowgroup:
+                                    - row:
+                                      - cell
+                          - row:
+                            - cell
+                          - row "[0 / 0]":
+                            - cell "[0 / 0]":
+                              - generic:
+                                - table:
+                                  - rowgroup:
+                                    - row "[0 / 0]":
+                                      - cell "[0 / 0]":
+                                        - generic: "[0 / 0]"
+                          - row
+                      - generic:
+                        - textbox "undefined"
+                  - generic [ref=f2e216]:
+                    - generic:
+                      - textbox "undefined" [ref=f2e217]
+                      - table [ref=f2e218]:
+                        - rowgroup [ref=f2e219]:
+                          - row:
+                            - columnheader
+                            - columnheader
+                          - row "No. 시퀀스 오류 유효성" [ref=f2e220]:
+                            - cell "No. 시퀀스 오류 유효성" [ref=f2e221]:
+                              - table [ref=f2e225]:
+                                - rowgroup [ref=f2e226]:
+                                  - row:
+                                    - columnheader
+                                    - columnheader
+                                    - columnheader
+                                    - columnheader
+                                    - columnheader
+                                  - row "No. 시퀀스 오류 유효성" [ref=f2e227]:
+                                    - cell
+                                    - cell "No." [ref=f2e228]
+                                    - cell [ref=f2e229]
+                                    - cell "시퀀스"
+                                    - cell "오류" [ref=f2e231]
+                                    - cell "유효성" [ref=f2e232]
+                            - cell
+                          - row:
+                            - cell
+                          - row
+                          - row
+                          - row [ref=f2e233]:
+                            - cell [ref=f2e234]:
+                              - generic [ref=f2e235]:
+                                - table:
+                                  - rowgroup:
+                                    - row:
+                                      - cell
+                          - row "[0 / 0]" [ref=f2e236]:
+                            - cell "[0 / 0]" [ref=f2e237]:
+                              - table [ref=f2e239]:
+                                - rowgroup [ref=f2e240]:
+                                  - row "[0 / 0]" [ref=f2e241]:
+                                    - cell "[0 / 0]" [ref=f2e242]:
+                                      - generic [ref=f2e243]: "[0 / 0]"
+                          - row
+                      - textbox "undefined" [ref=f2e244]

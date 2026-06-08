@@ -46,11 +46,8 @@ export default function Sportswear({ initialPrices }: Props) {
     el.scrollBy({ left: dir === 'right' ? el.clientWidth * 0.8 : -el.clientWidth * 0.8, behavior: 'smooth' });
   };
 
-  const usedCategories = [...new Set(productList.map((p) => p.category))] as ProductCategory[];
-  const orderedCategories = [
-    ...usedCategories.filter((c) => c === 'boot-skin'),
-    ...usedCategories.filter((c) => c !== 'boot-skin'),
-  ];
+  const productCategories = new Set(productList.map((p) => p.category));
+  const orderedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((c) => productCategories.has(c));
 
   const sorted = [...productList].sort((a, b) => {
     const aDb = dbPrices[a.id];

@@ -838,6 +838,123 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* ── SET 파트 선택 ── */
+.setPartSelector {
+  margin-bottom: var(--space-lg);
+}
+
+.setPartSelector h3 {
+  font-size: var(--size-lg);
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .setPartSelector h3 {
+    font-size: var(--size-sm);
+  }
+}
+
+.setPartOptions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.setPartButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 72px;
+  cursor: pointer;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px 4px 6px;
+  background: transparent;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.setPartButton img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.setPartButton span {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
+
+.setPartButton:hover {
+  border-color: var(--color-accent);
+}
+
+.setPartButtonActive {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.setPartButtonActive span {
+  color: var(--color-text);
+}
+
+.setPartSelector .sizeChartInline {
+  margin-top: var(--space-md);
+}
+
+@media (max-width: 480px) {
+  .setPartButton {
+    width: 64px;
+  }
+  .setPartButton img {
+    width: 56px;
+    height: 56px;
+  }
+  /* 7컬럼 세트 사이즈표 — 모바일에서 셀 패딩 축소 */
+  .setPartSelector .sizeTable th,
+  .setPartSelector .sizeTable td {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+}
+
+/* ── SET 가격 분리 표시 ── */
+.setPriceBreakdown {
+  margin-top: 6px;
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.setPriceBreakdown s {
+  opacity: 0.5;
+  margin-left: 3px;
+  font-size: 11px;
+}
+
+/* ── SET 무료배송 배너 ── */
+.freeShippingBanner {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--space-sm);
+  padding: 10px 14px;
+  background: #f0faf4;
+  border: 1px solid #b7e4c7;
+  border-radius: 6px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: #1a7f3c;
+  letter-spacing: 0.02em;
+}
+
 /* ── 색상 선택 스와치 ── */
 .colorSection {
   margin-bottom: var(--space-lg);
