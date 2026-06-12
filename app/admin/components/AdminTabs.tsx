@@ -57,6 +57,36 @@ export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
       >
         리뷰 관리
       </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'popups' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('popups')}
+      >
+        팝업
+      </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'banners' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('banners')}
+      >
+        배너
+      </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'faqs' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('faqs')}
+      >
+        FAQ
+      </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'coupons' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('coupons')}
+      >
+        쿠폰
+      </button>
+      <button
+        className={`${styles.adminTab} ${activeTab === 'finance' ? styles.adminTabActive : ''}`}
+        onClick={() => onTabChange('finance')}
+      >
+        재무
+      </button>
     </div>
   );
 }

@@ -19,16 +19,17 @@ export function SitePopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const now = new Date().toISOString();
-    supabase
-      .from('site_popups')
-      .select('*')
-      .eq('is_active', true)
-      .or(`starts_at.is.null,starts_at.lte.${now}`)
-      .or(`ends_at.is.null,ends_at.gte.${now}`)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .then(({ data }) => {
+    const fetchPopup = async () => {
+      try {
+        const now = new Date().toISOString();
+        const { data } = await supabase
+          .from('site_popups')
+          .select('*')
+          .eq('is_active', true)
+          .or(`starts_at.is.null,starts_at.lte.${now}`)
+          .or(`ends_at.is.null,ends_at.gte.${now}`)
+          .order('created_at', { ascending: false })
+          .limit(1);
         const d = data?.[0] as Popup | undefined;
         if (!d) return;
         if (d.show_once) {
@@ -37,8 +38,11 @@ export function SitePopup() {
         }
         setPopup(d);
         setVisible(true);
-      })
-      .catch(() => {});
+      } catch {
+        // ignore fetch errors
+      }
+    };
+    fetchPopup();
   }, []);
 
   const close = () => setVisible(false);

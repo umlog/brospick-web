@@ -125,7 +125,45 @@ export interface BlogPost {
 // 어드민 UI
 // -----------------------------------------------------------------------------
 
-export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing' | 'ebook' | 'reviews';
+export type AdminTab = 'orders' | 'returns' | 'products' | 'dashboard' | 'blog' | 'marketing' | 'ebook' | 'reviews' | 'popups' | 'banners' | 'faqs' | 'coupons' | 'finance';
+
+// -----------------------------------------------------------------------------
+// 재무 관리
+// -----------------------------------------------------------------------------
+
+export type ExpenseCategory =
+  | '제품원가'
+  | '배송비(발송)'
+  | '배송비(반품)'
+  | '포장재'
+  | '마케팅/광고'
+  | '플랫폼수수료'
+  | '인건비'
+  | '임차료'
+  | '기타';
+
+export interface Expense {
+  id: string;
+  date: string;
+  category: ExpenseCategory;
+  amount: number;
+  description: string;
+  receipt_url: string | null;
+  vat_deductible: boolean;
+  note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductCost {
+  id: string;
+  product_id: number;
+  color: string | null;
+  cost_price: number;
+  effective_date: string;
+  note: string | null;
+  created_at: string;
+}
 
 // -----------------------------------------------------------------------------
 // 전자책 주문

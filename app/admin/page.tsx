@@ -10,6 +10,10 @@ import { useProductSizes } from './hooks/useProductSizes';
 import { useProductCatalog } from './hooks/useProductCatalog';
 import { useBlogPosts } from './hooks/useBlogPosts';
 import { useEbookOrders } from './hooks/useEbookOrders';
+import { usePopups } from './hooks/usePopups';
+import { useBanners } from './hooks/useBanners';
+import { useFaqs } from './hooks/useFaqs';
+import { useCoupons } from './hooks/useCoupons';
 import { AdminTabs } from './components/AdminTabs';
 import { OrderList } from './components/OrderList';
 import { ReturnList } from './components/ReturnList';
@@ -19,6 +23,11 @@ import { BlogManager } from './components/BlogManager';
 import { MarketingEmailManager } from './components/MarketingEmailManager';
 import { EbookOrderList } from './components/EbookOrderList';
 import { ReviewManager } from './components/ReviewManager';
+import { PopupManager } from './components/PopupManager';
+import { BannerManager } from './components/BannerManager';
+import { FaqManager } from './components/FaqManager';
+import { CouponManager } from './components/CouponManager';
+import { FinanceManager } from './components/FinanceManager';
 import { VisitCounter } from './components/VisitCounter';
 import { Toasts } from './components/Toasts';
 import { ConfirmModal } from './components/ConfirmModal';
@@ -33,6 +42,11 @@ const TAB_TITLES: Record<AdminTab, string> = {
   marketing: '마케팅 이메일',
   ebook: '전자책 주문',
   reviews: '리뷰 관리',
+  popups: '팝업 관리',
+  banners: '배너 관리',
+  faqs: 'FAQ 관리',
+  coupons: '쿠폰 관리',
+  finance: '재무 관리',
 };
 
 export default function AdminPage() {
@@ -47,6 +61,10 @@ export default function AdminPage() {
   const productCatalogState = useProductCatalog();
   const blogState = useBlogPosts();
   const ebookState = useEbookOrders();
+  const popupsState = usePopups();
+  const bannersState = useBanners();
+  const faqsState = useFaqs();
+  const couponsState = useCoupons();
 
   useEffect(() => {
     ordersState.fetchOrders();
@@ -67,6 +85,21 @@ export default function AdminPage() {
     }
     if (tab === 'ebook' && !ebookState.hasLoaded) {
       ebookState.fetchOrders();
+    }
+    if (tab === 'popups' && !popupsState.hasLoaded) {
+      popupsState.fetchPopups();
+    }
+    if (tab === 'banners' && !bannersState.hasLoaded) {
+      bannersState.fetchBanners();
+    }
+    if (tab === 'faqs' && !faqsState.hasLoaded) {
+      faqsState.fetchFaqs();
+    }
+    if (tab === 'coupons' && !couponsState.hasLoaded) {
+      couponsState.fetchCoupons();
+    }
+    if (tab === 'finance' && !productCatalogState.hasLoaded) {
+      productCatalogState.fetchProducts();
     }
   };
 
@@ -144,6 +177,11 @@ export default function AdminPage() {
           />
         )}
         {activeTab === 'reviews' && <ReviewManager />}
+        {activeTab === 'popups' && <PopupManager state={popupsState} />}
+        {activeTab === 'banners' && <BannerManager state={bannersState} />}
+        {activeTab === 'faqs' && <FaqManager state={faqsState} />}
+        {activeTab === 'coupons' && <CouponManager state={couponsState} />}
+        {activeTab === 'finance' && <FinanceManager products={productCatalogState.products} />}
       </div>
       <VisitCounter />
       <Toasts />

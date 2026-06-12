@@ -33,3 +33,80 @@
 [16795166ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
 [17395154ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
 [17995170ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[18595163ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[19195159ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[19795173ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[20395168ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[20995155ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[21595169ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[22195168ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[123389246ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://logis.ilogen.com/common/html/main.html:0
+[123389249ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[123389250ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[123389252ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[123594926ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[123594927ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[123594927ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[124194940ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[124194940ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[124194942ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[124794929ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[124794930ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[124794931ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[125394938ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[125394938ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[125394941ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[125994921ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[125994921ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[125994923ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[126594933ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[126594934ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[126594935ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[127194935ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[127194935ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[127194937ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[127794929ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[127794929ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[127794931ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[128394936ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[128394937ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[128394938ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[128994933ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[128994933ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[128994936ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[129594936ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[129594936ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[129594938ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[130194931ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[130194932ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[130194933ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[130794922ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[130794922ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[130794925ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[131394928ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[131394928ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[131394930ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[131994926ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[131994926ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[131994928ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[132594920ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[132594920ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[132594922ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[133194934ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[133194934ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[133194935ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[133794929ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[133794930ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[133794932ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[134394927ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[134394928ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[134394931ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[134994931ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[134994932ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[134994937ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[135594945ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[135594946ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[135594950ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186
+[136194926ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findMsgCnt/31421042:0
+[136194926ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://logis.ilogen.com/api/lsy02b-notice/msginfo/findPop/31421042:0
+[136194929ms] [LOG] 알림 메시지 없음 @ https://logis.ilogen.com/common/js/main.js:186

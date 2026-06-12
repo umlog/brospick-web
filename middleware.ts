@@ -6,7 +6,6 @@ async function verifySession(cookieValue: string, adminPassword: string): Promis
 
   const [nonce, timestamp, receivedHmac] = parts;
 
-  // 토큰 만료 검사 (7일)
   const tokenAge = Date.now() - parseInt(timestamp, 10);
   if (isNaN(tokenAge) || tokenAge < 0 || tokenAge > 7 * 24 * 60 * 60 * 1000) return false;
 
@@ -38,28 +37,54 @@ async function verifySession(cookieValue: string, adminPassword: string): Promis
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const adminPath = process.env.ADMIN_PATH || 'admin';
+  const adminPrefix = `/${adminPath}`;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const sessionValue = request.cookies.get('admin_session')?.value;
 
+  // 직접 /admin 접근 차단 (커스텀 경로가 설정된 경우)
+  if (adminPath !== 'admin' && (pathname === '/admin' || pathname.startsWith('/admin/'))) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  // 어드민 경로가 아니면 통과
+  if (pathname !== adminPrefix && !pathname.startsWith(`${adminPrefix}/`)) {
+    return NextResponse.next();
+  }
+
+  // /{adminPath}/* → /admin/* 내부 경로 변환
+  const internalPath =
+    adminPath === 'admin' ? pathname : '/admin' + pathname.slice(adminPrefix.length);
+
+  const sessionValue = request.cookies.get('admin_session')?.value;
   const isValid =
     !!adminPassword && !!sessionValue && (await verifySession(sessionValue, adminPassword));
 
-  // /admin/login: 로그인된 경우 /admin으로 리다이렉트, 아니면 통과
-  if (pathname === '/admin/login') {
+  if (internalPath === '/admin/login') {
     if (isValid) {
-      return NextResponse.redirect(new URL('/admin', request.url));
+      return NextResponse.redirect(new URL(adminPrefix, request.url));
+    }
+    if (adminPath !== 'admin') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin/login';
+      return NextResponse.rewrite(url);
     }
     return NextResponse.next();
   }
 
-  // 나머지 /admin/* 경로: 세션 없으면 로그인 페이지로 리다이렉트
   if (!isValid) {
-    return NextResponse.redirect(new URL('/admin/login', request.url));
+    return NextResponse.redirect(new URL(`${adminPrefix}/login`, request.url));
+  }
+
+  if (adminPath !== 'admin') {
+    const url = request.nextUrl.clone();
+    url.pathname = internalPath;
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  // 정적 파일, 이미지, 파비콘 제외한 모든 경로에서 실행
+  matcher: ['/((?!_next|favicon\\.ico|.*\\.[\\w]+$).*)'],
 };

@@ -17,19 +17,23 @@ export function SiteBanner() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    const now = new Date().toISOString();
-    supabase
-      .from('site_banners')
-      .select('*')
-      .eq('is_active', true)
-      .or(`starts_at.is.null,starts_at.lte.${now}`)
-      .or(`ends_at.is.null,ends_at.gte.${now}`)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .then(({ data }) => {
+    const fetchBanner = async () => {
+      try {
+        const now = new Date().toISOString();
+        const { data } = await supabase
+          .from('site_banners')
+          .select('*')
+          .eq('is_active', true)
+          .or(`starts_at.is.null,starts_at.lte.${now}`)
+          .or(`ends_at.is.null,ends_at.gte.${now}`)
+          .order('created_at', { ascending: false })
+          .limit(1);
         if (data?.[0]) setBanner(data[0] as Banner);
-      })
-      .catch(() => {});
+      } catch {
+        // ignore fetch errors
+      }
+    };
+    fetchBanner();
   }, []);
 
   if (!banner || dismissed) return null;

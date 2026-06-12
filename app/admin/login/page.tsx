@@ -24,7 +24,9 @@ export default function AdminLoginPage() {
     setLoading(false);
 
     if (res.ok) {
-      router.push('/admin');
+      // ADMIN_PATH가 설정된 경우 현재 URL에서 base 경로를 추출
+      const base = window.location.pathname.replace(/\/login\/?$/, '') || '/admin';
+      router.push(base);
     } else {
       setError('비밀번호가 올바르지 않습니다.');
     }

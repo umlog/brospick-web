@@ -5,6 +5,7 @@ import { OrderStatus } from '@/lib/domain/enums';
 import { TrackingModal } from './TrackingModal';
 import { NotifyToggle } from './NotifyToggle';
 import { DangerZone } from './DangerZone';
+import { OrderNotes } from './OrderNotes';
 import styles from '../admin.module.css';
 
 interface OrderCardProps {
@@ -302,6 +303,8 @@ export function OrderCard({
               </button>
             </div>
           )}
+
+          <OrderNotes orderId={order.id} />
 
           <DangerZone
             label="주문 삭제"

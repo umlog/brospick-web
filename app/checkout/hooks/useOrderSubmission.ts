@@ -12,7 +12,8 @@ import { saveShippingToCookie } from './useCheckoutForm';
 export function useOrderSubmission(
   formData: CheckoutFormData,
   checkoutItems: CartItem[],
-  selectedTotalPrice: number
+  selectedTotalPrice: number,
+  couponCode?: string,
 ) {
   const router = useRouter();
   const { clearCart } = useCart();
@@ -109,6 +110,16 @@ const stockErrors = await validateCartStock(checkoutItems);
       addressDetail: formData.addressDetail,
     });
     clearCheckoutCart(checkoutItems);
+
+    // 쿠폰 사용 횟수 기록 (실패해도 주문 완료 처리)
+    if (couponCode) {
+      fetch('/api/coupons/use', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode }),
+      }).catch(() => {});
+    }
+
     isSubmittingRef.current = false;
     setIsSubmitting(false);
 

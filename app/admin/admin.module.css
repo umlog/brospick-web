@@ -3035,3 +3035,469 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* ── 팝업·배너·FAQ·쿠폰 공통 ──────────────────────────── */
+
+.badgeActive {
+  background: rgba(52, 199, 89, 0.15);
+  color: #34c759;
+  border-color: rgba(52, 199, 89, 0.3);
+}
+
+.badgeInactive {
+  background: rgba(142, 142, 147, 0.15);
+  color: #8e8e93;
+  border-color: rgba(142, 142, 147, 0.3);
+}
+
+.imgPreview {
+  margin-top: 8px;
+  max-width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popupCheckboxRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.popupCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.popupCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── 배너 ─────────────────────────────────────────────── */
+
+.bannerPreview {
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.bannerCardPreview {
+  padding: 8px 14px;
+  border-radius: 6px 6px 0 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.colorPickerRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.colorPickerRow input[type="color"] {
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── FAQ ──────────────────────────────────────────────── */
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.faqItem {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.faqInactive {
+  opacity: 0.5;
+}
+
+.faqHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.faqHeader:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.faqCategory {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+}
+
+.faqQuestion {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.faqChevron {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.faqAnswer {
+  padding: 0 14px 12px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+  margin: 0 14px;
+}
+
+.faqActions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  padding: 8px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── 쿠폰 ─────────────────────────────────────────────── */
+
+.couponCode {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.couponInactive {
+  opacity: 0.55;
+}
+
+.couponCodeRow {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── 주문 메모 ────────────────────────────────────────── */
+
+.notesSection {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notesSectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.notesList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.noteItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.noteTime {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.noteDeleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 59, 48, 0.5);
+  font-size: 0.7rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.noteDeleteBtn:hover {
+  color: #ff3b30;
+}
+
+.noteInputRow {
+  display: flex;
+  gap: 6px;
+}
+
+.noteInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  color: #fff;
+  outline: none;
+}
+
+.noteInput:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.noteAddBtn {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.noteAddBtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── TipTap 에디터 ────────────────────────────────────── */
+
+.tipTapWrapper {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tipTapToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tipTapBtn {
+  padding: 4px 8px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  cursor: pointer;
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tipTapBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.tipTapBtnActive {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.tipTapSeparator {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 2px 4px;
+  align-self: center;
+}
+
+.tipTapEditor {
+  padding: 14px;
+  min-height: 400px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  outline: none;
+}
+
+.tipTapEditor h1 { font-size: 1.5rem; font-weight: 700; margin: 1em 0 0.5em; }
+.tipTapEditor h2 { font-size: 1.25rem; font-weight: 700; margin: 1em 0 0.5em; }
+.tipTapEditor h3 { font-size: 1.1rem; font-weight: 600; margin: 1em 0 0.5em; }
+.tipTapEditor p { margin: 0 0 0.75em; }
+.tipTapEditor ul, .tipTapEditor ol { padding-left: 1.5em; margin: 0 0 0.75em; }
+.tipTapEditor li { margin-bottom: 0.25em; }
+.tipTapEditor strong { font-weight: 700; }
+.tipTapEditor em { font-style: italic; }
+.tipTapEditor u { text-decoration: underline; }
+.tipTapEditor a { color: #60a5fa; text-decoration: underline; }
+.tipTapEditor blockquote {
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  padding-left: 1em;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0.75em 0;
+}
+.tipTapEditor img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 0.5em 0;
+}
+.tipTapEditor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.75em 0;
+  font-size: 0.85rem;
+}
+.tipTapEditor th, .tipTapEditor td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 10px;
+  text-align: left;
+}
+.tipTapEditor th {
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 600;
+}
+.tipTapEditor code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+.tipTapEditor pre {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.75em 0;
+}
+.tipTapEditor pre code {
+  background: none;
+  padding: 0;
+}
+.tipTapEditor .ProseMirror-selectednode { outline: 2px solid #60a5fa; }
+.tipTapEditor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* ── 쿠폰 입력 (결제 페이지) ─────────────────────────── */
+
+.couponSection {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.couponTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.couponInputRow {
+  display: flex;
+  gap: 8px;
+}
+
+.couponInputField {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: var(--input-bg, #fff);
+  color: var(--text-color, #111);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.couponApplyBtn {
+  padding: 8px 16px;
+  background: var(--btn-bg, #111);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.couponApplyBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.couponSuccess {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.3);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.couponSuccessText {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.couponRemoveBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.couponError {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #e53e3e;
+}

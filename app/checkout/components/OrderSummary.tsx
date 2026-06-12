@@ -7,10 +7,12 @@ interface OrderSummaryProps {
   checkoutItems: CartItem[];
   totalPrice: number;
   postalCode?: string;
+  couponDiscount?: number;
 }
 
-export function OrderSummary({ checkoutItems, totalPrice, postalCode }: OrderSummaryProps) {
+export function OrderSummary({ checkoutItems, totalPrice, postalCode, couponDiscount = 0 }: OrderSummaryProps) {
   const remote = !!postalCode && isRemoteArea(postalCode);
+  const originalTotal = totalPrice + couponDiscount;
   return (
     <div className={styles.orderSummary}>
       <h2>주문 요약</h2>
@@ -31,8 +33,14 @@ export function OrderSummary({ checkoutItems, totalPrice, postalCode }: OrderSum
       <div className={styles.orderTotal}>
         <div className={styles.totalRow}>
           <span>상품 금액</span>
-          <span>{formatPrice(totalPrice)}</span>
+          <span>{formatPrice(originalTotal)}</span>
         </div>
+        {couponDiscount > 0 && (
+          <div className={styles.couponDiscountRow}>
+            <span>쿠폰 할인</span>
+            <span>-{formatPrice(couponDiscount)}</span>
+          </div>
+        )}
         <div className={styles.totalRow}>
           <span>배송비</span>
           {getShippingFee(totalPrice, postalCode) === 0 ? (

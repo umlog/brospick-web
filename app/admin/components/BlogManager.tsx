@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { BlogPost } from '@/lib/domain/types';
 import type { BlogFormData } from '../hooks/useBlogPosts';
+import { TipTapEditor } from './TipTapEditor';
 import styles from '../admin.module.css';
 
 interface BlogManagerProps {
@@ -224,14 +225,11 @@ export function BlogManager({ state }: BlogManagerProps) {
             />
           </FormField>
 
-          <FormField label="본문 (마크다운) *">
-            <textarea
-              className={`${styles.input} ${styles.bmMonospace}`}
-              value={form.content}
-              onChange={(e) => setField('content', e.target.value)}
-              rows={30}
-              placeholder={CONTENT_PLACEHOLDER}
-              required
+          <FormField label="본문 *">
+            <TipTapEditor
+              content={form.content}
+              onChange={(html) => setField('content', html)}
+              placeholder="선수 스토리를 작성하세요..."
             />
           </FormField>
 
@@ -315,6 +313,19 @@ export function BlogManager({ state }: BlogManagerProps) {
               </div>
 
               <div className={styles.bmCardActions}>
+                <select
+                  className={styles.input}
+                  value={post.status}
+                  style={{ fontSize: '0.8rem', padding: '4px 8px', width: 'auto' }}
+                  onChange={(e) => updatePost(post.id, { ...{
+                    player_name: post.player_name, team: post.team, position: post.position,
+                    profile_image: post.profile_image, status: e.target.value,
+                    date: post.date, image: post.image, excerpt: post.excerpt,
+                    content: post.content, highlights: post.highlights, video_url: post.video_url,
+                  }})}
+                >
+                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
                 <button onClick={() => openEdit(post)} className={styles.refreshButton}>
                   수정
                 </button>
@@ -342,38 +353,4 @@ function FormField({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
-const CONTENT_PLACEHOLDER = `# 선수이름의 이야기
 
-## 누구인가
-
-| 항목 | 정보 |
-|------|------|
-| 이름 | 이름 (Name) |
-| 포지션 | LW, RB |
-| 신장/체중 | 175cm / 70kg |
-| 생년월일 | 2003년 1월 1일 |
-| 국적 | 대한민국 |
-| 현소속 | 팀명 |
-
-> "인용구"
-
-## 섹션 제목
-
-본문 내용...
-
-![img]/players/폴더/이미지.jpg
-
-주요 강점:
-- 스피드: 설명
-- 드리블: 설명
-
-## 커리어
-
-| 기간 | 소속팀 |
-|------|--------|
-| 2020 | 팀 A |
-| 2025 | 팀 B |
-
-## 메시지
-
-> "선수 메시지"`;
