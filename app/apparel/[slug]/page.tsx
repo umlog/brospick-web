@@ -1,6 +1,12 @@
+export const revalidate = 60;
+
 import { supabase } from '@/lib/supabase';
 import { products, type ProductSlug } from '../../../lib/products';
 import ProductDetailClient from './ProductDetailClient';
+
+export async function generateStaticParams() {
+  return Object.keys(products).map((slug) => ({ slug }));
+}
 
 async function getProductData(productId: number) {
   const [priceRes, sizesRes] = await Promise.all([

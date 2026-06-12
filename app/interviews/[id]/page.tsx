@@ -1,3 +1,5 @@
+export const revalidate = 3600;
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -5,6 +7,11 @@ import VideoEmbed from '../../components/embeds/VideoEmbed';
 import styles from './interview-detail.module.css';
 import { supabase } from '@/lib/supabase';
 import type { BlogPost } from '@/lib/domain/types';
+
+export async function generateStaticParams() {
+  const { data } = await supabase.from('blog_posts').select('id');
+  return (data ?? []).map((post) => ({ id: String(post.id) }));
+}
 
 async function getPost(id: string): Promise<BlogPost | null> {
   const numId = parseInt(id, 10);

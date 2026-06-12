@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import { supabase } from '@/lib/supabase';
 import { productList } from '@/lib/products';
 import ApparelClient from './ApparelClient';

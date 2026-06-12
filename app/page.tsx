@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 import Manifesto from './components/sections/Manifesto';
 import Project from './components/sections/Project';
