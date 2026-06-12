@@ -640,16 +640,16 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         return;
       }
       if (price === undefined) return;
-      for (const size of selectedSizes) {
-        addToCart({
-          id: product.id,
-          name: productName!,
-          price,
-          size,
-          image: product.image,
-          quantity,
-        });
-      }
+      const items = selectedSizes.map((size) => ({
+        id: product.id,
+        name: productName!,
+        price,
+        size,
+        image: product.image,
+        quantity,
+      }));
+      for (const item of items) addToCart(item);
+      sessionStorage.setItem('checkoutItems', JSON.stringify(items));
       router.push('/checkout');
       return;
     }
@@ -657,14 +657,16 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       if (!selectedTopSize) { alert('상의 사이즈를 선택해주세요.'); return; }
       if (!selectedBottomSize) { alert('하의 사이즈를 선택해주세요.'); return; }
       if (price === undefined) return;
-      addToCart({
+      const item = {
         id: product.id,
         name: productName!,
         price,
         size: `상의: ${selectedTopSize} / 하의: ${selectedBottomSize}`,
         image: product.image,
         quantity,
-      });
+      };
+      addToCart(item);
+      sessionStorage.setItem('checkoutItems', JSON.stringify([item]));
       router.push('/checkout');
       return;
     }
@@ -677,15 +679,16 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
     const cartSize = selectedColor ? `${selectedSize} — ${selectedColor.name}` : selectedSize;
     const cartImage = selectedColor ? selectedColor.images[0] : product.image;
-    addToCart({
+    const item = {
       id: product.id,
       name: productName!,
       price,
       size: cartSize,
       image: cartImage,
       quantity,
-    });
-
+    };
+    addToCart(item);
+    sessionStorage.setItem('checkoutItems', JSON.stringify([item]));
     router.push('/checkout');
   };
 
