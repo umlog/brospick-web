@@ -294,6 +294,49 @@ export function useOrders(notifyOnChange: boolean) {
     }
   };
 
+  const handleBulkDelete = async () => {
+    const selected = orders.filter((o) => selectedOrders.has(o.id));
+    if (selected.length === 0) return;
+
+    const ok = await showConfirm(`선택한 ${selected.length}건을 휴지통으로 이동할까요?\n언제든지 복구할 수 있습니다.`);
+    if (!ok) return;
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      selected.forEach((o) => next.add(o.id));
+      return next;
+    });
+
+    const results = await Promise.allSettled(
+      selected.map((order) => apiClient.orders.delete(order.id))
+    );
+
+    const successIds = new Set<string>();
+    let failCount = 0;
+    results.forEach((result, i) => {
+      if (result.status === 'fulfilled') successIds.add(selected[i].id);
+      else failCount++;
+    });
+
+    if (successIds.size > 0) {
+      setAllOrders((prev) => prev.filter((o) => !successIds.has(o.id)));
+    }
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      selected.forEach((o) => next.delete(o.id));
+      return next;
+    });
+
+    setSelectedOrders(new Set());
+
+    if (failCount === 0) {
+      showToast(`${successIds.size}건이 휴지통으로 이동되었습니다.`, 'success');
+    } else {
+      showToast(`${successIds.size}건 성공, ${failCount}건 실패`, 'error');
+    }
+  };
+
   const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
     const ok = await showConfirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`);
     if (!ok) return;
@@ -338,6 +381,7 @@ export function useOrders(notifyOnChange: boolean) {
     selectAllVisible,
     clearSelection,
     handleBulkStatusChange,
+    handleBulkDelete,
     // 휴지통
     trashMode,
     setTrashMode,

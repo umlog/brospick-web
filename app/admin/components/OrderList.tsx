@@ -316,6 +316,9 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
                 <button className={styles.logenExportBtn} onClick={handleLogenExport}>
                   로젠 엑셀 내보내기
                 </button>
+                <button className={styles.bulkTrashBtn} onClick={ordersState.handleBulkDelete}>
+                  휴지통으로 이동
+                </button>
               </div>
               <button className={styles.bulkClearBtn} onClick={ordersState.clearSelection}>
                 선택 해제

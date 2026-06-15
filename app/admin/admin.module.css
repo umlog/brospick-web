@@ -2780,6 +2780,23 @@
   opacity: 0.85;
 }
 
+.bulkTrashBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: var(--size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.bulkTrashBtn:hover {
+  opacity: 0.85;
+}
+
 /* ── 휴지통 토글 ─────────────────────────────────── */
 .trashToggleBar {
   display: flex;
