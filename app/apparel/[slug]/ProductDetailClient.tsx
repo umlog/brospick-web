@@ -34,11 +34,17 @@ function StarDisplay({ rating, size = 14 }: { rating: number; size?: number }) {
 
 const PHOTO_PREVIEW = 9;
 
-function ProductReviews({ productId }: { productId: number; productSlug?: string }) {
-  const [reviews, setReviews] = React.useState<ReviewItem[]>([]);
-  const [avgRating, setAvgRating] = React.useState(0);
-  const [count, setCount] = React.useState(0);
-  const [loading, setLoading] = React.useState(true);
+function ProductReviews({ productId, initialReviews, initialAvgRating, initialCount }: {
+  productId: number;
+  productSlug?: string;
+  initialReviews: ReviewItem[];
+  initialAvgRating: number;
+  initialCount: number;
+}) {
+  const [reviews, setReviews] = React.useState<ReviewItem[]>(initialReviews);
+  const [avgRating, setAvgRating] = React.useState(initialAvgRating);
+  const [count, setCount] = React.useState(initialCount);
+  const [loading, setLoading] = React.useState(false);
   const [lastOrder, setLastOrder] = React.useState('');
   const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null);
   const [photoOnly, setPhotoOnly] = React.useState(false);
@@ -63,16 +69,6 @@ function ProductReviews({ productId }: { productId: number; productSlug?: string
       const liked = JSON.parse(localStorage.getItem('brospick-liked-reviews') || '[]');
       setLikedIds(new Set(liked));
     } catch { /* ignore */ }
-
-    fetch(`/api/reviews?productId=${productId}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setReviews(data.reviews ?? []);
-        setAvgRating(data.avgRating ?? 0);
-        setCount(data.count ?? 0);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
   }, [productId]);
 
   const handleLike = async (reviewId: string) => {
@@ -307,9 +303,12 @@ interface Props {
   initialPrice: DbPrice | null;
   initialSizes: SizeRow[];
   dbComingSoon?: boolean | null;
+  initialReviews: ReviewItem[];
+  initialAvgRating: number;
+  initialReviewCount: number;
 }
 
-export default function ProductDetailClient({ params, initialPrice, initialSizes, dbComingSoon }: Props) {
+export default function ProductDetailClient({ params, initialPrice, initialSizes, dbComingSoon, initialReviews, initialAvgRating, initialReviewCount }: Props) {
   const router = useRouter();
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -1495,7 +1494,13 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
           </div>
         </div>
 
-        <ProductReviews productId={product.id} productSlug={product.slug} />
+        <ProductReviews
+          productId={product.id}
+          productSlug={product.slug}
+          initialReviews={initialReviews}
+          initialAvgRating={initialAvgRating}
+          initialCount={initialReviewCount}
+        />
 
         {(() => {
           const related = Object.values(products)

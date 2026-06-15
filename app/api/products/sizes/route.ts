@@ -33,7 +33,9 @@ export async function GET() {
       status: s.stock === 0 && s.status === 'available' ? 'sold_out' : s.status,
     }));
 
-    return NextResponse.json({ sizes: corrected });
+    return NextResponse.json({ sizes: corrected }, {
+      headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' },
+    });
   } catch (error) {
     console.error('Product sizes API error:', error);
     return apiError('서버 오류가 발생했습니다.', 500);
