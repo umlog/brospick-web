@@ -1250,10 +1250,10 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                   )}
                 {(product.category === 'taping' || product.category === 'socks' || product.category === 'boot-skin') && (
                   <button className={styles.bulkInquiryButton} onClick={() => setBulkInquiryOpen(true)}>
-                    커스텀 주문 문의
+                    {product.category === 'taping' ? '대량주문 문의' : '커스텀 주문 문의'}
                   </button>
                 )}
-                <p className={styles.returnNotice}>15시 이전 결제 시 당일 발송</p>
+                <p className={styles.returnNotice}>12시 이전 결제 시 당일 발송</p>
               </>
             )}
 
@@ -1568,9 +1568,11 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         <div className={styles.lightboxOverlay} onClick={() => setBulkInquiryOpen(false)}>
           <div className={styles.logoInquiryModal} onClick={(e) => e.stopPropagation()}>
             <button className={styles.lightboxClose} onClick={() => setBulkInquiryOpen(false)}>✕</button>
-            <h3 className={styles.logoInquiryTitle}>커스텀 주문 문의</h3>
+            <h3 className={styles.logoInquiryTitle}>{product.category === 'taping' ? '대량주문 문의' : '커스텀 주문 문의'}</h3>
             <p className={styles.logoInquiryDesc}>
-              팀 로고 및 이외 커스텀 주문 제작은 메일 혹은 인스타그램 DM으로 문의 부탁드립니다.
+              {product.category === 'taping'
+                ? '대량 주문 문의는 메일 혹은 인스타그램 DM으로 연락 부탁드립니다.'
+                : '팀 로고 및 이외 커스텀 주문 제작은 메일 혹은 인스타그램 DM으로 문의 부탁드립니다.'}
             </p>
             <div className={styles.logoInquiryContacts}>
               <a href={SOCIAL_MEDIA.instagram} target="_blank" rel="noopener noreferrer" className={styles.logoInquiryContact}>

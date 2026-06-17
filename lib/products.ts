@@ -50,6 +50,9 @@ export const PRODUCT_SLUGS = {
   BOOTSKIN_ALPHABET: 'bootskin-initial',
   BOOTSKIN_SYMBOL: 'bootskin-symbol',
   BOOTSKIN_KOREA: 'bootskin-korea',
+  BOOTSKIN_FAMILY: 'bootskin-family',
+  BOOTSKIN_SYMBOLS: 'bootskin-symbols',
+  BOOTSKIN_CUSTOM: 'bootskin-custom',
   // ── 5차 추가 상품 ──
   UNDERWRAP_TAPING: 'underwrap-tape',
   // ── 6차 추가 상품 ──
@@ -123,6 +126,10 @@ export const PRODUCT_IDS = {
   ACTIVE_COTTON_TEE: 45,
   // ── 9차 추가 상품 ──
   HEAVY_ESSENTIAL_SET: 46,
+  // ── 10차 추가 상품 ──
+  BOOTSKIN_FAMILY: 47,
+  BOOTSKIN_CUSTOM: 48,
+  BOOTSKIN_SYMBOLS: 49,
 } as const;
 
 export interface SizeChartRow {
@@ -209,6 +216,7 @@ export interface Product {
   popularBadge?: string; // 예: 'BEST' — 상품 카드 이미지 위에 배너로 표시
   variants?: ProductVariant[]; // 묶어서 보여줄 컬러 variants (Coming Soon 그룹)
   hideFromList?: boolean; // true면 productList에서 제외 (다른 상품의 variant로 표시됨)
+  customOrder?: boolean;  // true면 커스텀 주문 전용 페이지로 이동 (장바구니/결제 없음)
   sizeImages?: Record<string, string>; // size value -> 해당 사이즈 선택 시 보여줄 이미지 경로
   sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
@@ -1847,11 +1855,11 @@ export const products: Record<ProductSlug, Product> = {
   [PRODUCT_SLUGS.BOOTSKIN_SYMBOL]: {
     id: PRODUCT_IDS.BOOTSKIN_SYMBOL,
     slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOL,
-    name: 'BOOT SKIN 심볼',
+    name: 'BOOT SKIN 종교',
     category: 'boot-skin',
     comingSoon: false,
     multiSelect: true,
-    sizeLabel: '심볼 선택',
+    sizeLabel: '종교 선택',
     beforeAfterImages: {
       before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
       after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
@@ -1871,16 +1879,20 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/faith-symbol/3-PHIL-4-13.png',
       '/apparel/bootskin/faith-symbol/4-100percent-JESUS-detail.png',
       '/apparel/bootskin/faith-symbol/4-100--JESUS.png',
+      '/apparel/bootskin/faith-symbol/5-GOD.png',
+      '/apparel/bootskin/faith-symbol/6-BELEVE.png',
     ],
     sizeImages: {
       'CROSS': '/apparel/bootskin/faith-symbol/1-cross-detail.png',
       'JESUS': '/apparel/bootskin/faith-symbol/2-JESUS-detail.png',
       'PHIL 4:13': '/apparel/bootskin/faith-symbol/3-philippians-detail.png',
       '100% JESUS': '/apparel/bootskin/faith-symbol/4-100percent-JESUS-detail.png',
+      'GOD': '/apparel/bootskin/faith-symbol/5-GOD.png',
+      'BELEVE': '/apparel/bootskin/faith-symbol/6-BELEVE.png',
     },
-    tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS 심볼 스티커.',
-    description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS 중 원하는 심볼을 선택해 주문하세요.',
-    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS'],
+    tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS, GOD, BELEVE 심볼 스티커.',
+    description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS, GOD, BELEVE 중 원하는 심볼을 선택해 주문하세요.',
+    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS', 'GOD', 'BELEVE'],
     features: [
       { label: '믿음을 담은 디자인', detail: ' — 경기장에서 믿음을 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2418,6 +2430,156 @@ export const products: Record<ProductSlug, Product> = {
         { title: '자연스러운 오버핏 실루엣', description: '일반 정사이즈보다 크게 제작되어 여유로운 핏을 연출합니다. 보다 깔끔한 핏을 원하시면 한 사이즈 다운을 권장합니다.' },
       ],
       material: '상의: 순면 100% · 305G · 오트그레이 / 하의: 면 80% 폴리에스터 20% · 440G · 오트그레이',
+    },
+  },
+
+  // ── 10차 추가 상품 ──
+
+  [PRODUCT_SLUGS.BOOTSKIN_FAMILY]: {
+    id: PRODUCT_IDS.BOOTSKIN_FAMILY,
+    slug: PRODUCT_SLUGS.BOOTSKIN_FAMILY,
+    name: 'BOOT SKIN 가족',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '스타일 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: [
+      '/apparel/bootskin/BootSkinBanner/detail-banner-1.png',
+      '/apparel/bootskin/BootSkinBanner/detail-banner-2.png',
+      '/apparel/bootskin/BootSkinBanner/detail-banner-3.png',
+    ],
+    image: '/apparel/bootskin/family/1-DAD.png',
+    images: [
+      '/apparel/bootskin/family/1-DAD.png',
+      '/apparel/bootskin/family/2-MOM.png',
+      '/apparel/bootskin/family/3-FAMILY.png',
+    ],
+    sizeImages: {
+      'DAD': '/apparel/bootskin/family/1-DAD.png',
+      'MOM': '/apparel/bootskin/family/2-MOM.png',
+      'FAMILY': '/apparel/bootskin/family/3-FAMILY.png',
+    },
+    tagline: '가족을 부츠에 — DAD, MOM, FAMILY 심볼 스티커.',
+    description: '축구화나 럭비화에 붙이는 가족 부츠스킨입니다. DAD, MOM, FAMILY 중 원하는 스타일을 선택해 주문하세요.',
+    sizes: ['DAD', 'MOM', 'FAMILY'],
+    features: [
+      { label: '가족을 담은 디자인', detail: ' — 경기장에서 가족을 표현' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '가족 디자인', description: 'DAD, MOM, FAMILY — 경기장에서 소중한 가족을 표현.' },
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_SYMBOLS]: {
+    id: PRODUCT_IDS.BOOTSKIN_SYMBOLS,
+    slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOLS,
+    name: 'BOOT SKIN 심볼',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '심볼 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    detailBanners: [
+      '/apparel/bootskin/BootSkinBanner/detail-banner-1.png',
+      '/apparel/bootskin/BootSkinBanner/detail-banner-2.png',
+      '/apparel/bootskin/BootSkinBanner/detail-banner-3.png',
+    ],
+    image: '/apparel/bootskin/symbol/1-lightning-black.png',
+    images: [
+      '/apparel/bootskin/symbol/1-lightning-black.png',
+      '/apparel/bootskin/symbol/2-lightning-color.png',
+      '/apparel/bootskin/symbol/3-lightning-white.png',
+      '/apparel/bootskin/symbol/4-crown-black.png',
+      '/apparel/bootskin/symbol/5-crown-white.png',
+      '/apparel/bootskin/symbol/6-heart-white.png',
+      '/apparel/bootskin/symbol/7-heart-black.png',
+      '/apparel/bootskin/symbol/8-pray-color.png',
+      '/apparel/bootskin/symbol/9-pray-white.png',
+      '/apparel/bootskin/symbol/10-fire-color.png',
+      '/apparel/bootskin/symbol/11-fire-white.png',
+      '/apparel/bootskin/symbol/12-star-color.png',
+      '/apparel/bootskin/symbol/13-star-black.png',
+      '/apparel/bootskin/symbol/14-star-white.png',
+    ],
+    sizeImages: {
+      '⚡-black': '/apparel/bootskin/symbol/1-lightning-black.png',
+      '⚡-color': '/apparel/bootskin/symbol/2-lightning-color.png',
+      '⚡-white': '/apparel/bootskin/symbol/3-lightning-white.png',
+      '👑-black': '/apparel/bootskin/symbol/4-crown-black.png',
+      '👑-white': '/apparel/bootskin/symbol/5-crown-white.png',
+      '🤍-white': '/apparel/bootskin/symbol/6-heart-white.png',
+      '❤️-black': '/apparel/bootskin/symbol/7-heart-black.png',
+      '🙏-color': '/apparel/bootskin/symbol/8-pray-color.png',
+      '🙏-white': '/apparel/bootskin/symbol/9-pray-white.png',
+      '🔥-color': '/apparel/bootskin/symbol/10-fire-color.png',
+      '🔥-white': '/apparel/bootskin/symbol/11-fire-white.png',
+      '⭐-color': '/apparel/bootskin/symbol/12-star-color.png',
+      '⭐-black': '/apparel/bootskin/symbol/13-star-black.png',
+      '⭐-white': '/apparel/bootskin/symbol/14-star-white.png',
+    },
+    tagline: '감정을 부츠에 — 번개, 왕관, 하트, 기도, 불꽃, 별 심볼 스티커.',
+    description: '축구화나 럭비화에 붙이는 심볼 부츠스킨입니다. ⚡ 번개, 👑 왕관, ❤️ 하트, 🙏 기도, 🔥 불꽃, ⭐ 별 중 원하는 심볼과 스타일을 선택해 주문하세요.',
+    sizes: ['⚡-black', '⚡-color', '⚡-white', '👑-black', '👑-white', '🤍-white', '❤️-black', '🙏-color', '🙏-white', '🔥-color', '🔥-white', '⭐-color', '⭐-black', '⭐-white'],
+    features: [
+      { label: '다양한 심볼 디자인', detail: ' — 번개, 왕관, 하트, 기도, 불꽃, 별' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '심볼 디자인', description: '번개, 왕관, 하트, 기도, 불꽃, 별 — 블랙/컬러/화이트 스타일로 선택.' },
+        { title: '컬러 & 블랙 & 화이트', description: '같은 심볼을 세 가지 스타일로 표현.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_CUSTOM]: {
+    id: PRODUCT_IDS.BOOTSKIN_CUSTOM,
+    slug: PRODUCT_SLUGS.BOOTSKIN_CUSTOM,
+    name: 'BOOT SKIN 커스텀',
+    category: 'boot-skin',
+    customOrder: true,
+    comingSoon: false,
+    // TODO: 커스텀 전용 대표 이미지로 교체
+    image: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+    images: ['/apparel/bootskin/BootSkinLabel/bootskin-label-before.png'],
+    tagline: '나만의 디자인을 부츠에 — 완전 주문제작 부츠스킨. 최소 10세트.',
+    description: '원하는 디자인으로 제작하는 커스텀 부츠스킨. 인쇄 판 제작이 필요하여 최소 10세트부터 주문 가능합니다.',
+    sizes: [],
+    sizeChart: [],
+    features: [
+      { label: '완전 커스텀', detail: ' — 원하는 디자인으로 제작' },
+      { label: '최소 10세트', detail: ' — 인쇄 판 제작으로 한 번에 제작' },
+    ],
+    details: {
+      functions: [
+        { title: '주문 제작', description: '원하는 디자인으로 제작하는 나만의 부츠스킨.' },
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '기본 사이즈', description: '가로 0.8cm × 세로 1cm. 별도 요청 시 변경 가능.' },
+      ],
+      material: '방수 접착 소재.',
     },
   },
 };

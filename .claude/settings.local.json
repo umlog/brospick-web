@@ -71,7 +71,14 @@
       "Bash(git show:*)",
       "Bash(git pull:*)",
       "WebFetch(domain:www.ilogen.com)",
-      "WebFetch(domain:openapihome.ilogen.com)"
+      "WebFetch(domain:openapihome.ilogen.com)",
+      "Bash(cat app/apparel/[slug]/ProductDetailClient.tsx)",
+      "Bash(cat app/apparel/[slug]/page.tsx)",
+      "Bash(mv 1.png lightning-black.png)",
+      "Bash(mv 2.png lightning-color.png)",
+      "Bash(mv 3.png lightning-white.png)",
+      "Bash(mv 4.png crown-black.png)",
+      "Bash(mv 5.png crown-white.png)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"
