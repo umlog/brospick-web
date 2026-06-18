@@ -70,7 +70,7 @@ const stockErrors = await validateCartStock(checkoutItems);
   };
 
   const handleKakaoPaySubmit = async () => {
-    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
+    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice, couponCode);
 
     saveShippingToCookie({
       name: formData.name,
@@ -98,7 +98,7 @@ const stockErrors = await validateCartStock(checkoutItems);
   };
 
   const handleBankSubmit = async () => {
-    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice);
+    const payload = buildOrderPayload(formData, checkoutItems, selectedTotalPrice, couponCode);
     const data = await apiClient.orders.create(payload);
 
     saveShippingToCookie({
@@ -111,14 +111,7 @@ const stockErrors = await validateCartStock(checkoutItems);
     });
     clearCheckoutCart(checkoutItems);
 
-    // 쿠폰 사용 횟수 기록 (실패해도 주문 완료 처리)
-    if (couponCode) {
-      fetch('/api/coupons/use', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode }),
-      }).catch(() => {});
-    }
+    // 쿠폰 사용 횟수는 order.service.ts createOrder에서 서버 사이드로 처리됨
 
     isSubmittingRef.current = false;
     setIsSubmitting(false);

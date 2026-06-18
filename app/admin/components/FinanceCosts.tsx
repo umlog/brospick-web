@@ -92,7 +92,7 @@ export function FinanceCosts({ products }: Props) {
     <div className={styles.dashboard}>
       <section className={styles.dashboardSection}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-          <h2 className={styles.dashboardSectionTitle} style={{ marginBottom: 0 }}>상품별 원가</h2>
+          <h2 className={styles.dashboardSectionTitle} style={{ marginBottom: 0 }}>상품별 사입가 (실제 매입가)</h2>
           <button className={styles.refreshButton} onClick={() => { setShowForm(!showForm); setEditingId(null); }}>
             {showForm ? '취소' : '+ 원가 추가'}
           </button>
@@ -126,7 +126,7 @@ export function FinanceCosts({ products }: Props) {
                 />
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>원가 (원) *</label>
+                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>사입가 (원) *</label>
                 <input
                   type="number"
                   value={form.cost_price}
@@ -170,7 +170,7 @@ export function FinanceCosts({ products }: Props) {
         {loading ? (
           <p className={styles.loading}>불러오는 중...</p>
         ) : costs.length === 0 ? (
-          <p className={styles.empty}>등록된 원가가 없습니다. 상품별 원가를 등록하면 손익 계산에 반영됩니다.</p>
+          <p className={styles.empty}>등록된 사입가가 없습니다. 실제 매입가를 등록하면 COGS(매출원가) 계산에 반영됩니다. 상품 페이지의 표시 원가(할인율용)와는 별개입니다.</p>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--size-sm)' }}>
@@ -178,7 +178,7 @@ export function FinanceCosts({ products }: Props) {
                 <tr style={{ borderBottom: '1px solid var(--color-border)', color: 'var(--color-text-secondary)' }}>
                   <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>상품명</th>
                   <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>색상</th>
-                  <th style={{ textAlign: 'right', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>원가</th>
+                  <th style={{ textAlign: 'right', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>사입가</th>
                   <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>적용 시작일</th>
                   <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>메모</th>
                   <th style={{ textAlign: 'center', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>관리</th>

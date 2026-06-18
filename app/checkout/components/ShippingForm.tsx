@@ -142,9 +142,10 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
           name="phone"
           value={formData.phone}
           onChange={onInputChange}
-          placeholder="배송 시 연락용으로 사용됩니다"
+          placeholder="010-0000-0000"
           required
         />
+        <p className={styles.fieldHint}>배송·반품 연락 외에는 사용하지 않으며, 마케팅 문자는 발송하지 않습니다.</p>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="emailUser">이메일 *</label>
@@ -184,7 +185,7 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
           )}
         </div>
         {emailError && <p className={styles.emailError}>{emailError}</p>}
-        <p className={styles.emailHint}>주문번호와 배송진행 등의 현황은 모두 메일로 발송되니 수신 가능한 정확한 메일 주소 기재부탁드립니다.</p>
+        <p className={styles.fieldHint}>주문 확인서 및 배송 알림이 이 주소로 발송됩니다.</p>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="postalCode">우편번호 *</label>

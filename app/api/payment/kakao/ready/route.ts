@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
       postalCode, address, addressDetail,
       totalAmount, shippingFee, deliveryNote, items,
       privacyConsent, thirdPartyConsent, marketingConsent,
+      couponCode,
     } = body;
 
     // 주문 생성 (재고 차감/알림은 approve 시점에 처리)
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
           totalAmount, shippingFee, deliveryNote, items,
           privacyConsent, thirdPartyConsent, marketingConsent,
           paymentMethod: '카카오페이',
+          couponCode,
         },
         siteUrl,
         { skipStockDecrement: true, skipNotification: true }

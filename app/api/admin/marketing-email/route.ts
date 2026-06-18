@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
     ${bodyHtml}
     <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
     <p style="font-size:12px;color:#999;margin:0;">
-      본 메일은 BROSPICK 마케팅 정보 수신에 동의하신 분께 발송되었습니다.
+      본 메일은 BROSPICK 마케팅 정보 수신에 동의하신 분께 발송되었습니다.<br>
+      수신을 원치 않으시면 <a href="mailto:team.brospick@gmail.com?subject=마케팅%20수신거부" style="color:#999;">수신 거부</a>를 요청해 주세요.
     </p>
   </div>
 </div>`;

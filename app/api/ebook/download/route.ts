@@ -29,13 +29,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: '최대 다운로드 횟수를 초과했습니다. 브로스픽에 문의해주세요.' }, { status: 403 });
   }
 
-  // 다운로드 횟수 증가
-  await supabaseAdmin
-    .from('ebook_download_tokens')
-    .update({ download_count: tokenRow.download_count + 1 })
-    .eq('id', tokenRow.id);
-
-  // Supabase Storage에서 PDF 다운로드
+  // Supabase Storage에서 PDF 다운로드 (파일 확인 후 횟수 증가)
   const bucket = process.env.EBOOK_PDF_BUCKET ?? 'ebooks';
   const path = process.env.EBOOK_PDF_PATH ?? '';
 
@@ -52,6 +46,12 @@ export async function GET(req: NextRequest) {
     console.error('[ebook/download] Storage error:', fileError);
     return NextResponse.json({ error: '파일을 불러오는 중 오류가 발생했습니다.' }, { status: 500 });
   }
+
+  // 파일 전송 성공이 확인된 후에만 횟수 증가 (파일 오류 시 횟수 낭비 방지)
+  await supabaseAdmin
+    .from('ebook_download_tokens')
+    .update({ download_count: tokenRow.download_count + 1 })
+    .eq('id', tokenRow.id);
 
   const arrayBuffer = await fileData.arrayBuffer();
   const filename = path.split('/').pop() ?? 'BROSPICK-Ebook.pdf';

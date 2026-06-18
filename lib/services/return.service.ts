@@ -161,7 +161,7 @@ export class ReturnService {
         insertData.refund_bank = refundBank;
         insertData.refund_account = refundAccount;
         insertData.refund_holder = refundHolder;
-        insertData.refund_amount = orderItem.price * returnQuantity - RETURN_POLICY.returnShippingFee;
+        insertData.refund_amount = Math.max(0, orderItem.price * returnQuantity - RETURN_POLICY.returnShippingFee);
         insertData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
       }
 
@@ -244,7 +244,7 @@ export class ReturnService {
     if (status === ReturnStatus.APPROVED && current.type === ReturnType.RETURN && !current.refund_amount) {
       const orderItem = Array.isArray(current.order_items) ? current.order_items[0] : current.order_items;
       if (orderItem?.price) {
-        updateData.refund_amount = orderItem.price * current.quantity - RETURN_POLICY.returnShippingFee;
+        updateData.refund_amount = Math.max(0, orderItem.price * current.quantity - RETURN_POLICY.returnShippingFee);
         updateData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
       }
     }

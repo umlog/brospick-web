@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { OrderStatus } from '@/lib/domain/enums';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
       .from('orders')
       .delete()
       .eq('order_number', orderNumber)
-      .eq('status', '카카오페이 결제중');
+      .eq('status', OrderStatus.KAKAO_PAY_PENDING);
   }
 
   return NextResponse.redirect(`${siteUrl}/checkout`);

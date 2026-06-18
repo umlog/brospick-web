@@ -51,11 +51,13 @@ export async function POST(req: Request) {
         orderNumber: order.order_number,
       });
 
-      // 발송 완료 표시
-      await supabase
+      // 발송 완료 표시 (실패 시 예외 throw → catch에서 failed++ 처리, 재발송 방지)
+      const { error: updateError } = await supabase
         .from('orders')
         .update({ review_reminder_sent_at: new Date().toISOString() })
         .eq('id', order.id);
+
+      if (updateError) throw new Error(updateError.message);
 
       sent++;
     } catch (err) {

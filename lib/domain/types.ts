@@ -48,6 +48,8 @@ export interface Order {
   cancel_refund_amount?: number | null;
   cancel_refund_completed?: boolean;
   deleted_at?: string | null;
+  coupon_code?: string | null;
+  discount_amount?: number;
 }
 
 // -----------------------------------------------------------------------------

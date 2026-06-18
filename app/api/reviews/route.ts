@@ -35,7 +35,9 @@ export async function GET(request: NextRequest) {
 
     try {
       const result = await reviewService.getProductReviews(productId);
-      return NextResponse.json(result);
+      return NextResponse.json(result, {
+        headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=300' },
+      });
     } catch (err: unknown) {
       const e = err as Error;
       return apiError(e.message || '리뷰 조회에 실패했습니다.', 500);

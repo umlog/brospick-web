@@ -42,6 +42,8 @@ export async function POST(request: NextRequest) {
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (!adminPassword || password !== adminPassword) {
+    // 브루트포스 방어: 실패 시 최소 500ms 지연 (서버리스 인스턴스 간 공유 불가한 인메모리 카운터 보완)
+    await new Promise(resolve => setTimeout(resolve, 500));
     return NextResponse.json({ error: '비밀번호가 올바르지 않습니다.' }, { status: 401 });
   }
 

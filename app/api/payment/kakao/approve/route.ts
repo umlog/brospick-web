@@ -68,10 +68,30 @@ export async function GET(request: NextRequest) {
     }
 
     // 주문 상태 입금확인으로 업데이트
-    await supabaseAdmin
+    const { error: updateError } = await supabaseAdmin
       .from('orders')
       .update({ status: OrderStatus.PAYMENT_CONFIRMED })
       .eq('order_number', orderNumber);
+
+    if (updateError) {
+      console.error('KakaoPay approve: order status update failed:', updateError);
+      return NextResponse.redirect(`${siteUrl}/checkout?error=payment_failed`);
+    }
+
+    // 쿠폰 사용 횟수 증가
+    if (order.coupon_code) {
+      const { data: coupon } = await supabaseAdmin
+        .from('coupons')
+        .select('id, used_count')
+        .eq('code', order.coupon_code)
+        .single();
+      if (coupon) {
+        await supabaseAdmin
+          .from('coupons')
+          .update({ used_count: coupon.used_count + 1, updated_at: new Date().toISOString() })
+          .eq('id', coupon.id);
+      }
+    }
 
     // 재고 차감 (approve 시점에만 차감)
     const stockItems = (order.order_items as Array<{ product_id: number | null; size: string; quantity: number }>)

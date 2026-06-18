@@ -31,7 +31,8 @@ export function parsePostcodeResult(data: DaumPostcodeData): ParsedAddress {
 export function buildOrderPayload(
   formData: CheckoutFormData,
   checkoutItems: CartItem[],
-  totalPrice: number
+  totalPrice: number,
+  couponCode?: string,
 ) {
   const shippingFee = getShippingFee(totalPrice, formData.postalCode);
   return {
@@ -48,6 +49,7 @@ export function buildOrderPayload(
     privacyConsent: formData.privacyConsent,
     thirdPartyConsent: formData.thirdPartyConsent,
     marketingConsent: formData.marketingConsent,
+    couponCode,
     items: checkoutItems.map((item) => ({
       productId: item.id,
       productName: item.name,

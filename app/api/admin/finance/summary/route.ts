@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const to = searchParams.get('to') ?? new Date().toISOString().split('T')[0];
 
     // 주문 데이터
-    const [ordersRes, ebookRes, expensesRes, costsRes] = await Promise.all([
+    const [ordersRes, ebookRes, expensesRes, costsRes, returnReqsRes] = await Promise.all([
       supabaseAdmin
         .from('orders')
         .select('id, total_amount, shipping_fee, status, created_at, cancel_refund_amount, order_items(product_id, quantity, price)')
@@ -46,17 +46,24 @@ export async function GET(request: NextRequest) {
         .select('product_id, color, cost_price, effective_date')
         .lte('effective_date', to)
         .order('effective_date', { ascending: false }),
+      supabaseAdmin
+        .from('return_requests')
+        .select('refund_amount, return_shipping_fee, type, status')
+        .gte('created_at', `${from}T00:00:00`)
+        .lte('created_at', `${to}T23:59:59`),
     ]);
 
     if (ordersRes.error) return apiError(`주문 조회 실패: ${ordersRes.error.message}`, 500);
     if (ebookRes.error) return apiError(`전자책 조회 실패: ${ebookRes.error.message}`, 500);
     if (expensesRes.error) return apiError(`지출 조회 실패: ${expensesRes.error.message}`, 500);
     if (costsRes.error) return apiError(`원가 조회 실패: ${costsRes.error.message}`, 500);
+    if (returnReqsRes.error) return apiError(`반품 조회 실패: ${returnReqsRes.error.message}`, 500);
 
     const orders = ordersRes.data ?? [];
     const ebookOrders = ebookRes.data ?? [];
     const expenses = expensesRes.data ?? [];
     const costs = costsRes.data ?? [];
+    const returnReqs = returnReqsRes.data ?? [];
 
     // 상품별 최신 원가 맵 (product_id -> cost_price)
     const costMap = new Map<number, number>();
@@ -73,8 +80,17 @@ export async function GET(request: NextRequest) {
     );
 
     const grossRevenue = revenueOrders.reduce((s, o) => s + o.total_amount, 0);
-    const refundTotal = cancelledOrders.reduce((s, o) => s + (o.cancel_refund_amount ?? 0), 0);
-    const netRevenue = grossRevenue - refundTotal;
+    const cancelRefunds = cancelledOrders.reduce((s, o) => s + (o.cancel_refund_amount ?? 0), 0);
+
+    // 반품(처리완료)만 환불액 차감 — refund_amount는 이미 return_shipping_fee가 공제된 순 환불액
+    const completedReturns = returnReqs.filter(r => r.status === '처리완료' && r.type === '반품');
+    const returnRefunds = completedReturns.reduce((s, r) => s + (r.refund_amount ?? 0), 0);
+
+    // 교환 배송비 수입 — 교환 시 고객에게 수취한 왕복 배송비 (별도 수입, refund 없음)
+    const exchanges = returnReqs.filter(r => r.type === '교환');
+    const exchangeShippingIncome = exchanges.reduce((s, r) => s + (r.return_shipping_fee ?? 0), 0);
+
+    const netRevenue = grossRevenue - cancelRefunds - returnRefunds + exchangeShippingIncome;
     const ebookRevenue = ebookOrders.reduce((s, o) => s + o.amount, 0);
     const totalNetRevenue = netRevenue + ebookRevenue;
 
@@ -106,6 +122,20 @@ export async function GET(request: NextRequest) {
     // 영업이익
     const operatingIncome = grossProfit - totalExpenses;
 
+    // 배송비 집계
+    const shippingCollected = revenueOrders.reduce((s, o) => s + (o.shipping_fee ?? 0), 0);
+    const productRevenue = grossRevenue - shippingCollected;
+    const paidShippingCount = revenueOrders.filter(o => (o.shipping_fee ?? 0) > 0).length;
+    const freeShippingCount = revenueOrders.filter(o => (o.shipping_fee ?? 0) === 0).length;
+    // 도서산간: 기본 배송비(3000)보다 높은 경우
+    const remoteAreaCount = revenueOrders.filter(o => (o.shipping_fee ?? 0) > 3000).length;
+    // 반품 배송비: refund_amount에서 이미 공제됨 → 정보성 표시용
+    const returnShippingCollected = completedReturns.reduce((s, r) => s + (r.return_shipping_fee ?? 0), 0);
+    // 교환 배송비는 exchangeShippingIncome으로 이미 계산됨
+    // 실제 발송/반품 배송비 지출 (expenses 테이블 기준)
+    const shippingExpenseOut = (expensesByCategory['배송비(발송)'] ?? 0) + (expensesByCategory['배송비(반품)'] ?? 0);
+    const shippingNetIncome = shippingCollected + returnShippingCollected + exchangeShippingIncome - shippingExpenseOut;
+
     // 부가세 계산 (판매가에 VAT 포함된 과세사업자 기준)
     // 공급가액 = 판매금액 / 1.1, 매출세액 = 공급가액 × 0.1
     const salesTaxBase = Math.round(totalNetRevenue / 1.1);
@@ -118,11 +148,16 @@ export async function GET(request: NextRequest) {
       period: { from, to },
       revenue: {
         gross: grossRevenue,
-        refunds: refundTotal,
+        product_revenue: productRevenue,
+        cancel_refunds: cancelRefunds,
+        return_refunds: returnRefunds,
+        exchange_shipping_income: exchangeShippingIncome,
         net: netRevenue,
         ebook: ebookRevenue,
         total_net: totalNetRevenue,
         order_count: revenueOrders.length,
+        return_count: completedReturns.length,
+        exchange_count: exchanges.length,
       },
       cogs,
       gross_profit: grossProfit,
@@ -130,6 +165,16 @@ export async function GET(request: NextRequest) {
       expenses_by_category: expensesByCategory,
       total_expenses: totalExpenses,
       operating_income: operatingIncome,
+      shipping: {
+        collected: shippingCollected,
+        return_collected: returnShippingCollected,   // 반품 수취 배송비 (정보성, refund_amount에 이미 반영)
+        exchange_collected: exchangeShippingIncome,  // 교환 수취 배송비 (별도 수입)
+        expense_out: shippingExpenseOut,
+        net_income: shippingNetIncome,
+        paid_order_count: paidShippingCount,
+        free_order_count: freeShippingCount,
+        remote_area_count: remoteAreaCount,
+      },
       vat: {
         sales_tax_base: salesTaxBase,
         output_vat: outputVat,

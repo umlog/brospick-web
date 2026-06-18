@@ -78,7 +78,8 @@
       "Bash(mv 2.png lightning-color.png)",
       "Bash(mv 3.png lightning-white.png)",
       "Bash(mv 4.png crown-black.png)",
-      "Bash(mv 5.png crown-white.png)"
+      "Bash(mv 5.png crown-white.png)",
+      "WebFetch(domain:github.com)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

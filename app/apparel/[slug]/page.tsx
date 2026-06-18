@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 300;
 
 import { supabase } from '@/lib/supabase';
 import { reviewService } from '@/lib/services/review.service';
