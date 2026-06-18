@@ -33,6 +33,7 @@ interface CreateOrderPayload {
   thirdPartyConsent?: boolean;
   marketingConsent?: boolean;
   paymentMethod?: string;
+  couponCode?: string;
   items: CreateOrderItem[];
 }
 
@@ -90,7 +91,7 @@ export class OrderService {
       postalCode, address, addressDetail,
       totalAmount, shippingFee, depositorName, deliveryNote,
       privacyConsent, thirdPartyConsent, marketingConsent,
-      paymentMethod, items,
+      paymentMethod, couponCode, items,
     } = payload;
 
     // 필수 필드 검증
@@ -118,7 +119,47 @@ export class OrderService {
       };
     });
 
-    const verifiedTotal = verifiedItems.reduce((sum, i) => sum + i.price * i.quantity, 0) + shippingFee;
+    const itemsSubtotal = verifiedItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    // 쿠폰 서버 검증
+    let couponDiscount = 0;
+    let validatedCouponId: number | null = null;
+    let validatedCouponUsedCount = 0;
+    if (couponCode) {
+      const { data: coupon } = await supabaseAdmin
+        .from('coupons')
+        .select('*')
+        .eq('code', couponCode.trim().toUpperCase())
+        .eq('is_active', true)
+        .single();
+
+      if (!coupon) {
+        throw Object.assign(new Error('유효하지 않은 쿠폰 코드입니다.'), { status: 400 });
+      }
+      if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) {
+        throw Object.assign(new Error('만료된 쿠폰입니다.'), { status: 400 });
+      }
+      if (coupon.max_uses !== null && coupon.used_count >= coupon.max_uses) {
+        throw Object.assign(new Error('사용 한도가 초과된 쿠폰입니다.'), { status: 400 });
+      }
+      if (itemsSubtotal < (coupon.min_order_amount ?? 0)) {
+        throw Object.assign(new Error(`최소 주문 금액 ${coupon.min_order_amount.toLocaleString()}원 이상 주문 시 사용 가능합니다.`), { status: 400 });
+      }
+
+      if (coupon.discount_type === 'amount') {
+        couponDiscount = coupon.discount_value;
+      } else {
+        couponDiscount = Math.floor(itemsSubtotal * coupon.discount_value / 100);
+        if (coupon.max_discount_amount) {
+          couponDiscount = Math.min(couponDiscount, coupon.max_discount_amount);
+        }
+      }
+      couponDiscount = Math.min(couponDiscount, itemsSubtotal);
+      validatedCouponId = coupon.id;
+      validatedCouponUsedCount = coupon.used_count;
+    }
+
+    const verifiedTotal = itemsSubtotal + shippingFee - couponDiscount;
     if (verifiedTotal !== totalAmount) {
       throw Object.assign(
         new Error(`결제 금액이 올바르지 않습니다. (expected: ${verifiedTotal}, received: ${totalAmount})`),
@@ -132,36 +173,40 @@ export class OrderService {
       throw Object.assign(new Error(stockCheck.message ?? '재고가 부족합니다.'), { status: 409 });
     }
 
-    const orderNumber = generateOrderNumber();
-
-    // 주문 생성
-    const { data: order, error: orderError } = await supabaseAdmin
-      .from('orders')
-      .insert({
-        order_number: orderNumber,
-        customer_name: customerName,
-        customer_phone: customerPhone,
-        customer_email: customerEmail || null,
-        postal_code: postalCode,
-        address,
-        address_detail: addressDetail || null,
-        total_amount: totalAmount,
-        shipping_fee: shippingFee,
-        depositor_name: depositorName || null,
-        delivery_note: deliveryNote || null,
-        privacy_consent: privacyConsent ?? true,
-        third_party_consent: thirdPartyConsent ?? true,
-        marketing_consent: marketingConsent ?? false,
-        payment_method: paymentMethod ?? '무통장입금',
-        status: OrderStatus.PENDING_PAYMENT,
-      })
-      .select()
-      .single();
-
-    if (orderError) {
-      console.error('Order creation error:', orderError);
-      throw new Error(`주문 생성에 실패했습니다: ${orderError.message}`);
+    // 주문 생성 (번호 충돌 시 최대 3회 재시도)
+    let order: { id: string; order_number: string; total_amount: number; shipping_fee: number } | null = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { data, error } = await supabaseAdmin
+        .from('orders')
+        .insert({
+          order_number: generateOrderNumber(),
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          customer_email: customerEmail || null,
+          postal_code: postalCode,
+          address,
+          address_detail: addressDetail || null,
+          total_amount: totalAmount,
+          shipping_fee: shippingFee,
+          coupon_code: couponCode ? couponCode.trim().toUpperCase() : null,
+          discount_amount: couponDiscount,
+          depositor_name: depositorName || null,
+          delivery_note: deliveryNote || null,
+          privacy_consent: privacyConsent ?? true,
+          third_party_consent: thirdPartyConsent ?? true,
+          marketing_consent: marketingConsent ?? false,
+          payment_method: paymentMethod ?? '무통장입금',
+          status: OrderStatus.PENDING_PAYMENT,
+        })
+        .select()
+        .single();
+      if (!error) { order = data; break; }
+      if (error.code !== '23505') {
+        console.error('Order creation error:', error);
+        throw new Error(`주문 생성에 실패했습니다: ${error.message}`);
+      }
     }
+    if (!order) throw new Error('주문 번호 생성에 실패했습니다. 다시 시도해주세요.');
 
     // 주문 상품 생성 (서버에서 검증된 가격/이름 사용)
     const orderItems = verifiedItems.map((item) => ({
@@ -176,6 +221,7 @@ export class OrderService {
     const { error: itemsError } = await supabaseAdmin.from('order_items').insert(orderItems);
     if (itemsError) {
       console.error('Order items creation error:', itemsError);
+      throw new Error(`주문 상품 저장에 실패했습니다: ${itemsError.message}`);
     }
 
     // 재고 즉시 차감 (무통장입금만 - 카카오페이는 approve 시점에 차감)
@@ -183,6 +229,15 @@ export class OrderService {
       inventoryService.decrementStock(verifiedItems as StockableItem[]).catch((err) =>
         console.error('Stock decrement failed:', err)
       );
+    }
+
+    // 쿠폰 사용 횟수 증가 (무통장입금만 — 카카오페이는 approve 시점에 처리)
+    if (validatedCouponId !== null && paymentMethod !== '카카오페이') {
+      supabaseAdmin
+        .from('coupons')
+        .update({ used_count: validatedCouponUsedCount + 1, updated_at: new Date().toISOString() })
+        .eq('id', validatedCouponId)
+        .then(({ error }) => { if (error) console.error('Coupon increment failed:', error); });
     }
 
     // 알림 발송 (카카오페이는 approve 시점에 발송)
@@ -297,7 +352,9 @@ export class OrderService {
   // 재고가 차감된 상태인지 판단 (휴지통 이동/복구 시 재고 처리용)
   private wasStockDecremented(status: string, paymentMethod: string): boolean {
     // 취소된 주문은 이미 재고 복구됨
-    if (status === OrderStatus.CANCELLED || status === OrderStatus.CANCEL_REQUESTED) return false;
+    // CANCELLED: cancelOrder()에서 이미 재고 복구됨 → 휴지통 이동 시 재복구 불필요
+    // CANCEL_REQUESTED: 아직 재고 차감 상태 → 휴지통 이동 시 복구 필요
+    if (status === OrderStatus.CANCELLED) return false;
     // 카카오페이: 결제 완료 전에는 차감 안 됨
     if (paymentMethod === '카카오페이') {
       return status !== OrderStatus.KAKAO_PAY_PENDING && status !== OrderStatus.PENDING_PAYMENT;

@@ -29,7 +29,7 @@ export async function POST(
     const { data: tokenRow, error: tokenError } = await supabaseAdmin
       .from('ebook_download_tokens')
       .insert({ order_id: orderId })
-      .select('token, expires_at')
+      .select('id, token, expires_at')
       .single();
 
     if (tokenError || !tokenRow) {
@@ -41,13 +41,19 @@ export async function POST(
     const origin = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
     const downloadUrl = `${origin}/api/ebook/download?token=${tokenRow.token}`;
 
-    await sendEbookDownloadLink({
-      name: order.name,
-      email: order.email,
-      orderNumber: order.order_number,
-      downloadUrl,
-      expiresAt: tokenRow.expires_at,
-    });
+    try {
+      await sendEbookDownloadLink({
+        name: order.name,
+        email: order.email,
+        orderNumber: order.order_number,
+        downloadUrl,
+        expiresAt: tokenRow.expires_at,
+      });
+    } catch (err) {
+      // 이메일 발송 실패 시 생성된 토큰 삭제 (재발송 시 토큰 중복 방지)
+      await supabaseAdmin.from('ebook_download_tokens').delete().eq('id', tokenRow.id);
+      throw err;
+    }
 
     // 주문 상태 업데이트
     await supabaseAdmin
