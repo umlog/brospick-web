@@ -73,7 +73,30 @@ export function SitePopup() {
 
         <div className={styles.body}>
           <h3 className={styles.title}>{popup.title}</h3>
-          <p className={styles.content}>{popup.content}</p>
+          <div className={styles.content}>
+            {popup.content.split('\n').map((line, i) => {
+              const iconMatch = line.match(/^\[icon:([^\]]+)\]\s*/);
+              if (iconMatch) {
+                const rest = line.slice(iconMatch[0].length);
+                const parts = rest.split(/\*\*(.+?)\*\*/g);
+                return (
+                  <span key={i} className={styles.contentRow}>
+                    <span className={`material-symbols-outlined ${styles.contentIcon}`}>{iconMatch[1]}</span>
+                    <span>
+                      {parts.map((part, j) => j % 2 === 1 ? <strong key={j}>{part}</strong> : part)}
+                    </span>
+                  </span>
+                );
+              }
+              const parts = line.split(/\*\*(.+?)\*\*/g);
+              return (
+                <span key={i}>
+                  {parts.map((part, j) => j % 2 === 1 ? <strong key={j}>{part}</strong> : part)}
+                  {'\n'}
+                </span>
+              );
+            })}
+          </div>
           {popup.link_url && (
             <Link href={popup.link_url} className={styles.linkBtn} onClick={close}>
               자세히 보기
