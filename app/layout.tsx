@@ -72,6 +72,7 @@ export default async function RootLayout({
         <SplashController />
         <div
           id="__splash"
+          suppressHydrationWarning
           style={{
             position: 'fixed',
             inset: 0,
@@ -96,7 +97,7 @@ export default async function RootLayout({
         </div>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){function h(){var e=document.getElementById('__splash');if(!e)return;e.style.transition='opacity 0.5s ease';e.style.opacity='0';e.style.pointerEvents='none';setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},500);}if(document.readyState==='complete'){h();}else{window.addEventListener('load',h);}})();`,
+            __html: `(function(){function h(){var e=document.getElementById('__splash');if(!e)return;e.style.transition='opacity 0.5s ease';e.style.opacity='0';e.style.pointerEvents='none';setTimeout(function(){e.style.display='none';},500);}if(document.readyState==='complete'){h();}else{window.addEventListener('load',h);}})();`,
           }}
         />
 

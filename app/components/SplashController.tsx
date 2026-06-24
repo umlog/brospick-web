@@ -9,9 +9,11 @@ export function SplashController() {
     const CACHE_KEY = 'splash_cfg';
     const TTL = 5 * 60 * 1000;
 
+    // React 19: 노드를 제거하면 fiber 트리와 어긋나 네비게이션 시 크래시.
+    // 제거 대신 숨김 처리해 body 자식 노드를 유지한다.
     const remove = () => {
       const el = document.getElementById('__splash');
-      if (el) el.remove();
+      if (el) el.style.display = 'none';
     };
 
     const cached = localStorage.getItem(CACHE_KEY);
