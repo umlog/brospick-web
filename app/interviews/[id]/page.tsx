@@ -27,11 +27,12 @@ async function getPost(id: string): Promise<BlogPost | null> {
   return data as BlogPost;
 }
 
-export default async function InterviewDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function InterviewDetailPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const post = await getPost(params.id);
 
   if (!post) {

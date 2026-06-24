@@ -3,10 +3,8 @@ import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { supabaseAdmin } from '@/lib/supabase';
 
 // 마케팅 수신 동의 철회 (관리자)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);

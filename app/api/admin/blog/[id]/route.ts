@@ -3,10 +3,8 @@ import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { BlogPost } from '@/lib/domain/types';
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);
@@ -49,10 +47,8 @@ export async function PUT(
   });
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!isAdminAuthorized(request)) {
       return apiError('권한이 없습니다.', 401);

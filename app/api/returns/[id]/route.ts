@@ -3,10 +3,8 @@ import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { returnService } from '@/lib/services';
 
 // 교환/반품 상태 변경 (관리자)
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
@@ -27,10 +25,8 @@ export async function PATCH(
 }
 
 // 교환/반품 삭제 (관리자)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);

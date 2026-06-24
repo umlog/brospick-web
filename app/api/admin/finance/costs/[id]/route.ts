@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!isAdminAuthorized(request)) return apiError('권한이 없습니다.', 401);
 
@@ -22,10 +20,8 @@ export async function PATCH(
   });
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!isAdminAuthorized(request)) return apiError('권한이 없습니다.', 401);
 

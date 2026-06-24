@@ -3,10 +3,8 @@ import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { orderService } from '@/lib/services';
 
 // 영구 삭제 (관리자) - 휴지통에서만 호출
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);

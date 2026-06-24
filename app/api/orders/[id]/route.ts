@@ -3,10 +3,8 @@ import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { orderService } from '@/lib/services';
 
 // 주문 소프트 삭제 → 휴지통 이동 (관리자)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
@@ -23,10 +21,8 @@ export async function DELETE(
 }
 
 // 입금 안내 메일 발송 (관리자)
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);
@@ -46,10 +42,8 @@ export async function POST(
 }
 
 // 주문 상태 변경 (관리자)
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);

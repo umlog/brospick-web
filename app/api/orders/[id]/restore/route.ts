@@ -3,10 +3,8 @@ import { apiError, checkAdminSession, withErrorHandler } from '@/lib/errors';
 import { orderService } from '@/lib/services';
 
 // 휴지통에서 복구 (관리자)
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   return withErrorHandler(async () => {
     if (!checkAdminSession(request.cookies.get('admin_session')?.value)) {
       return apiError('권한이 없습니다.', 401);

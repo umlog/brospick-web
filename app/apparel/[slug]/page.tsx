@@ -6,11 +6,12 @@ import { reviewService } from '@/lib/services/review.service';
 import { products, type ProductSlug } from '../../../lib/products';
 import ProductDetailClient from './ProductDetailClient';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const product = products[params.slug as ProductSlug];
   if (!product) return { title: '브로스픽 BROSPICK' };
   return {
@@ -49,11 +50,12 @@ async function getProductData(productId: number) {
   };
 }
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ProductDetailPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const product = products[params.slug as ProductSlug];
 
   if (!product) {
