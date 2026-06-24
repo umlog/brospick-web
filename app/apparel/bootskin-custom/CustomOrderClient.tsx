@@ -1,55 +1,101 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './custom-order.module.css';
 
-type State = 'idle' | 'loading' | 'success' | 'error';
+type State = 'idle' | 'loading' | 'error';
+type PaymentMethod = 'bank' | 'kakaopay';
+
+// Window.daum 전역 타입은 app/checkout/types.ts에서 선언됨 (중복 선언 시 modifier 충돌)
+
+const PRICE_PER_SET = 5000;
+const SHIPPING_FEE = 3000;
 
 export default function CustomOrderClient() {
+  const router = useRouter();
   const [state, setState] = useState<State>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [address, setAddress] = useState('');
+  const [addressDetail, setAddressDetail] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bank');
+  const [depositorName, setDepositorName] = useState('');
+  const [quantity, setQuantity] = useState(10);
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [thirdPartyConsent, setThirdPartyConsent] = useState(false);
+
+  function openAddressSearch() {
+    if (!window.daum?.Postcode) return;
+    new window.daum.Postcode({
+      oncomplete: (data) => {
+        const addr = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+        setPostalCode(data.zonecode);
+        setAddress(addr);
+      },
+    }).open();
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setState('loading');
     setErrorMsg('');
 
-    const formData = new FormData(e.currentTarget);
+    const formEl = e.currentTarget;
+    const description = (formEl.elements.namedItem('description') as HTMLTextAreaElement).value.trim();
+    const imageInput = formEl.elements.namedItem('image') as HTMLInputElement;
+
+    const fd = new FormData();
+    fd.append('description', description);
+    fd.append('quantity', String(quantity));
+    if (imageInput.files?.[0]) fd.append('image', imageInput.files[0]);
+    fd.append('customerName', customerName);
+    fd.append('customerPhone', customerPhone);
+    fd.append('customerEmail', customerEmail);
+    fd.append('postalCode', postalCode);
+    fd.append('address', address);
+    fd.append('addressDetail', addressDetail);
+    fd.append('paymentMethod', paymentMethod);
+    fd.append('depositorName', depositorName);
+    fd.append('privacyConsent', String(privacyConsent));
+    fd.append('thirdPartyConsent', String(thirdPartyConsent));
 
     try {
-      const res = await fetch('/api/custom-order', { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('server error');
-      setState('success');
+      const res = await fetch('/api/custom-order', { method: 'POST', body: fd });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setState('error');
+        setErrorMsg(data.error || '전송 중 오류가 발생했습니다.');
+        return;
+      }
+
+      if (data.type === 'kakao') {
+        window.location.href = data.redirectUrl;
+        return;
+      }
+
+      // 무통장입금
+      const params = new URLSearchParams({
+        method: 'bank',
+        order: data.orderNumber,
+        amount: String(data.totalAmount),
+        shippingFee: String(data.shippingFee),
+        depositor: depositorName || customerName,
+      });
+      router.push(`/order-complete?${params.toString()}`);
     } catch {
       setState('error');
       setErrorMsg('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
   }
 
-  if (state === 'success') {
-    return (
-      <main className={styles.main}>
-        <div className={styles.successContainer}>
-          <div className={styles.successIcon}>✓</div>
-          <h2 className={styles.successTitle}>메일이 전송되었습니다</h2>
-          <p className={styles.successDesc}>
-            주문 문의가 접수되었습니다.<br />
-            인스타그램 DM으로 추가 안내를 드릴 예정입니다.
-          </p>
-          <a
-            href="https://ig.me/m/team.brospick"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.dmButton}
-          >
-            인스타그램 DM으로 이동
-          </a>
-          <Link href="/apparel" className={styles.backLink}>← 쇼핑 계속하기</Link>
-        </div>
-      </main>
-    );
-  }
+  const totalAmount = quantity * PRICE_PER_SET + SHIPPING_FEE;
 
   return (
     <main className={styles.main}>
@@ -72,7 +118,7 @@ export default function CustomOrderClient() {
             <span className={styles.badgeValue}>0.8cm × 1cm</span>
           </div>
           <div className={styles.badge}>
-            <span className={styles.badgeLabel}>결제</span>
+            <span className={styles.badgeLabel}>가격</span>
             <span className={styles.badgeValue}>1세트(2개입) 5,000원</span>
           </div>
         </div>
@@ -84,8 +130,11 @@ export default function CustomOrderClient() {
           <p>사이즈는 기본 가로 0.8cm × 세로 1cm로 제작되며, 별도 요청 주시면 적용 가능합니다.</p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className={styles.form}>
+
+          {/* 디자인 정보 */}
+          <p className={styles.sectionTitle}>디자인 정보</p>
+
           <div className={styles.field}>
             <label className={styles.label} htmlFor="description">
               디자인 설명 <span className={styles.required}>*</span>
@@ -123,18 +172,177 @@ export default function CustomOrderClient() {
               name="quantity"
               type="number"
               min={10}
-              defaultValue={10}
+              value={quantity}
+              onChange={(e) => setQuantity(Math.max(10, parseInt(e.target.value) || 10))}
               className={styles.numberInput}
               required
             />
             <p className={styles.fieldHint}>최소 10세트부터 주문 가능합니다.</p>
           </div>
 
+          {/* 배송 정보 */}
+          <p className={styles.sectionTitle}>배송 정보</p>
+
+          <div className={styles.fieldRow}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="customerName">
+                이름 <span className={styles.required}>*</span>
+              </label>
+              <input
+                id="customerName"
+                type="text"
+                className={styles.input}
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                placeholder="홍길동"
+                required
+              />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="customerPhone">
+                연락처 <span className={styles.required}>*</span>
+              </label>
+              <input
+                id="customerPhone"
+                type="tel"
+                className={styles.input}
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                placeholder="010-0000-0000"
+                required
+              />
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="customerEmail">
+              이메일 <span className={styles.optional}>(선택)</span>
+            </label>
+            <input
+              id="customerEmail"
+              type="email"
+              className={styles.input}
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              placeholder="example@email.com"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>
+              주소 <span className={styles.required}>*</span>
+            </label>
+            <div className={styles.addressRow}>
+              <input
+                type="text"
+                className={styles.postcodeInput}
+                value={postalCode}
+                placeholder="우편번호"
+                readOnly
+                required
+              />
+              <button type="button" className={styles.postcodeBtn} onClick={openAddressSearch}>
+                주소 검색
+              </button>
+            </div>
+            <input
+              type="text"
+              className={styles.input}
+              value={address}
+              placeholder="기본 주소"
+              readOnly
+              required
+            />
+            <input
+              type="text"
+              className={styles.input}
+              value={addressDetail}
+              onChange={(e) => setAddressDetail(e.target.value)}
+              placeholder="상세 주소 (동/호수 등)"
+            />
+          </div>
+
+          {/* 결제 방법 */}
+          <p className={styles.sectionTitle}>결제 방법</p>
+
+          <div className={styles.paymentToggle}>
+            <button
+              type="button"
+              className={paymentMethod === 'bank' ? `${styles.paymentOption} ${styles.paymentOptionActive}` : styles.paymentOption}
+              onClick={() => setPaymentMethod('bank')}
+            >
+              무통장입금
+            </button>
+            <button
+              type="button"
+              className={paymentMethod === 'kakaopay' ? `${styles.paymentOption} ${styles.paymentOptionActive}` : styles.paymentOption}
+              onClick={() => setPaymentMethod('kakaopay')}
+            >
+              카카오페이
+            </button>
+          </div>
+
+          {paymentMethod === 'bank' && (
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="depositorName">
+                입금자명 <span className={styles.optional}>(미입력 시 이름으로 처리)</span>
+              </label>
+              <input
+                id="depositorName"
+                type="text"
+                className={styles.input}
+                value={depositorName}
+                onChange={(e) => setDepositorName(e.target.value)}
+                placeholder={customerName || '홍길동'}
+              />
+            </div>
+          )}
+
+          {/* 주문 금액 */}
+          <div className={styles.orderSummary}>
+            <div className={styles.summaryRow}>
+              <span>부츠스킨 커스텀 {quantity}세트</span>
+              <span>{(quantity * PRICE_PER_SET).toLocaleString()}원</span>
+            </div>
+            <div className={styles.summaryRow}>
+              <span>배송비</span>
+              <span>{SHIPPING_FEE.toLocaleString()}원</span>
+            </div>
+            <div className={styles.summaryTotal}>
+              <span>총 결제금액</span>
+              <span>{totalAmount.toLocaleString()}원</span>
+            </div>
+          </div>
+
+          {/* 약관 동의 */}
+          <div className={styles.consentSection}>
+            <label className={styles.consentLabel}>
+              <input
+                type="checkbox"
+                checked={privacyConsent}
+                onChange={(e) => setPrivacyConsent(e.target.checked)}
+                required
+              />
+              <span>[필수] 개인정보 수집 및 이용에 동의합니다.</span>
+            </label>
+            <label className={styles.consentLabel}>
+              <input
+                type="checkbox"
+                checked={thirdPartyConsent}
+                onChange={(e) => setThirdPartyConsent(e.target.checked)}
+                required
+              />
+              <span>[필수] 개인정보 제3자 제공에 동의합니다.</span>
+            </label>
+          </div>
+
           {state === 'error' && <p className={styles.errorMsg}>{errorMsg}</p>}
 
-          <button type="submit" className={styles.submitButton} disabled={state === 'loading'}>
-            {state === 'loading' ? '전송 중...' : '주문 문의하기'}
+          <button type="submit" className={styles.submitButton} disabled={state === 'loading' || !privacyConsent || !thirdPartyConsent}>
+            {state === 'loading' ? '처리 중...' : paymentMethod === 'kakaopay' ? '카카오페이로 결제하기' : '주문하기'}
           </button>
+
+          <Link href="/apparel" className={styles.backLink}>← 쇼핑 계속하기</Link>
         </form>
       </div>
     </main>

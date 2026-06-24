@@ -1,9 +1,25 @@
 export const revalidate = 300;
 
+import type { Metadata } from 'next';
 import { supabase } from '@/lib/supabase';
 import { reviewService } from '@/lib/services/review.service';
 import { products, type ProductSlug } from '../../../lib/products';
 import ProductDetailClient from './ProductDetailClient';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const product = products[params.slug as ProductSlug];
+  if (!product) return { title: '브로스픽 BROSPICK' };
+  return {
+    title: `${product.name} | 브로스픽 BROSPICK`,
+    openGraph: {
+      title: `${product.name} | 브로스픽 BROSPICK`,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   return Object.keys(products).map((slug) => ({ slug }));

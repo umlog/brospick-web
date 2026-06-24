@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './sportswear.module.css';
-import { productList, getDiscountPercent, CATEGORY_LABELS, ProductCategory, PRODUCT_FALLBACK_IMAGE } from '@/lib/products';
+import ProductImage from '../ProductImage';
+import { productList, getDiscountPercent, CATEGORY_LABELS, ProductCategory } from '@/lib/products';
 
 const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
@@ -128,11 +129,11 @@ export default function Sportswear({ initialPrices }: Props) {
               return (
                 <div key={product.id} className={styles.card}>
                   <div className={styles.imageWrap}>
-                    <img
+                    <ProductImage
                       src={product.image}
                       alt={product.name}
                       className={styles.cardImg}
-                      onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                      sizes="(max-width: 768px) 60vw, 300px"
                     />
                     <div className={styles.comingSoonOverlay}>
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
@@ -162,11 +163,11 @@ export default function Sportswear({ initialPrices }: Props) {
             return (
               <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.card}>
                 <div className={styles.imageWrap}>
-                  <img
+                  <ProductImage
                     src={product.image}
                     alt={product.name}
                     className={styles.cardImg}
-                    onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                    sizes="(max-width: 768px) 60vw, 300px"
                   />
                   {product.popularBadge && (
                     <span className={styles.popularBadge}>{product.popularBadge}</span>

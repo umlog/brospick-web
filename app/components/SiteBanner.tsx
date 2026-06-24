@@ -1,40 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import type { SiteBannerData } from '@/lib/site-content';
 
-interface Banner {
-  id: number;
-  message: string;
-  link_url: string | null;
-  bg_color: string;
-  text_color: string;
+interface Props {
+  initialBanner: SiteBannerData | null;
 }
 
-export function SiteBanner() {
-  const [banner, setBanner] = useState<Banner | null>(null);
+export function SiteBanner({ initialBanner }: Props) {
   const [dismissed, setDismissed] = useState(false);
-
-  useEffect(() => {
-    const fetchBanner = async () => {
-      try {
-        const now = new Date().toISOString();
-        const { data } = await supabase
-          .from('site_banners')
-          .select('*')
-          .eq('is_active', true)
-          .or(`starts_at.is.null,starts_at.lte.${now}`)
-          .or(`ends_at.is.null,ends_at.gte.${now}`)
-          .order('created_at', { ascending: false })
-          .limit(1);
-        if (data?.[0]) setBanner(data[0] as Banner);
-      } catch {
-        // ignore fetch errors
-      }
-    };
-    fetchBanner();
-  }, []);
+  const banner = initialBanner;
 
   if (!banner || dismissed) return null;
 

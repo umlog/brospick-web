@@ -1,24 +1,15 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
+// framer-motion 제거: 라우트 변경 시 key 변경으로 main을 리마운트해
+// globals.css의 pageEnter 키프레임 애니메이션(fade + slide)을 재생한다.
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence>
-      <motion.main
-        key={pathname}
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.3,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        {children}
-      </motion.main>
-    </AnimatePresence>
+    <main key={pathname} className="pageTransition">
+      {children}
+    </main>
   );
 }

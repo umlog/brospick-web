@@ -279,6 +279,182 @@
   color: #aaa;
 }
 
+/* ── Section title ── */
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #666;
+  margin: 8px 0 -8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+/* ── Text input ── */
+.input {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.input:focus {
+  border-color: #444;
+}
+
+.input::placeholder {
+  color: #555;
+}
+
+.input[readonly] {
+  cursor: default;
+  color: #aaa;
+}
+
+/* ── Field row (side by side) ── */
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Address ── */
+.addressRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.postcodeInput {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #aaa;
+  font-size: 14px;
+  width: 120px;
+  outline: none;
+  font-family: inherit;
+  cursor: default;
+}
+
+.postcodeBtn {
+  background: #1a1a1a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.postcodeBtn:hover {
+  background: #222;
+}
+
+/* ── Payment toggle ── */
+.paymentToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.paymentOption {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 13px 16px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.paymentOption:hover {
+  border-color: #444;
+  color: #ccc;
+}
+
+.paymentOptionActive {
+  border-color: #fff;
+  color: #fff;
+  background: #1e1e1e;
+}
+
+/* ── Order summary ── */
+.orderSummary {
+  background: #161616;
+  border: 1px solid #252525;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #999;
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  padding-top: 10px;
+  border-top: 1px solid #252525;
+}
+
+/* ── Consent ── */
+.consentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #161616;
+  border: 1px solid #252525;
+  border-radius: 10px;
+}
+
+.consentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+}
+
+.consentLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  accent-color: #fff;
+  cursor: pointer;
+}
+
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .main {
@@ -309,9 +485,15 @@
     margin-bottom: 0;
   }
 
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+
   /* iOS 자동 줌 방지 */
   .textarea,
-  .numberInput {
+  .numberInput,
+  .input,
+  .postcodeInput {
     font-size: 16px;
   }
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, ReactNode } from 'react';
+import { useRef, useEffect, useState, ReactNode, CSSProperties } from 'react';
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -11,6 +10,15 @@ interface ScrollRevealProps {
   className?: string;
 }
 
+// framer-motion 제거: IntersectionObserver + CSS transition으로 동일 동작 구현.
+const HIDDEN_TRANSFORM: Record<NonNullable<ScrollRevealProps['direction']>, string> = {
+  up: 'translateY(60px)',
+  down: 'translateY(-60px)',
+  left: 'translateX(60px)',
+  right: 'translateX(-60px)',
+  fade: 'none',
+};
+
 export default function ScrollReveal({
   children,
   direction = 'up',
@@ -18,30 +26,41 @@ export default function ScrollReveal({
   duration = 0.6,
   className = '',
 }: ScrollRevealProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
-  const directionVariants = {
-    up: { y: 60, opacity: 0 },
-    down: { y: -60, opacity: 0 },
-    left: { x: 60, opacity: 0 },
-    right: { x: -60, opacity: 0 },
-    fade: { opacity: 0 },
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setVisible(true);
+      return;
+    }
+    // framer-motion useInView({ once: true, margin: '-100px' })와 동일하게
+    // 뷰포트 안으로 100px 들어왔을 때 1회 트리거.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '-100px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const style: CSSProperties = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'none' : HIDDEN_TRANSFORM[direction],
+    transition: `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`,
+    willChange: 'opacity, transform',
   };
 
   return (
-    <motion.div
-      ref={ref}
-      initial={directionVariants[direction]}
-      animate={isInView ? { x: 0, y: 0, opacity: 1 } : directionVariants[direction]}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      className={className}
-    >
+    <div ref={ref} className={className} style={style}>
       {children}
-    </motion.div>
+    </div>
   );
 }

@@ -3,55 +3,38 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './SitePopup.module.css';
-import { supabase } from '@/lib/supabase';
+import type { SitePopupData } from '@/lib/site-content';
 
-interface Popup {
-  id: number;
-  title: string;
-  content: string;
-  image_url: string | null;
-  link_url: string | null;
-  show_once: boolean;
+interface Props {
+  initialPopup: SitePopupData | null;
 }
 
-export function SitePopup() {
-  const [popup, setPopup] = useState<Popup | null>(null);
+export function SitePopup({ initialPopup }: Props) {
+  const popup = initialPopup;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const fetchPopup = async () => {
-      try {
-        const now = new Date().toISOString();
-        const { data } = await supabase
-          .from('site_popups')
-          .select('*')
-          .eq('is_active', true)
-          .or(`starts_at.is.null,starts_at.lte.${now}`)
-          .or(`ends_at.is.null,ends_at.gte.${now}`)
-          .order('created_at', { ascending: false })
-          .limit(1);
-        const d = data?.[0] as Popup | undefined;
-        if (!d) return;
-        if (d.show_once) {
-          const key = `popup_dismissed_${d.id}`;
-          if (sessionStorage.getItem(key)) return;
-        }
-        setPopup(d);
-        setVisible(true);
-      } catch {
-        // ignore fetch errors
-      }
-    };
-    fetchPopup();
-  }, []);
+    if (!popup) return;
+    // show_once: 세션 닫음 또는 "오늘 하루 보지 않기" 처리
+    if (popup.show_once) {
+      if (sessionStorage.getItem(`popup_dismissed_${popup.id}`)) return;
+      if (localStorage.getItem(`popup_today_${popup.id}`) === new Date().toDateString()) return;
+    }
+    setVisible(true);
+  }, [popup]);
 
-  const close = () => setVisible(false);
-
-  const dismissToday = () => {
+  const close = () => {
     if (popup?.show_once) {
       sessionStorage.setItem(`popup_dismissed_${popup.id}`, '1');
     }
-    close();
+    setVisible(false);
+  };
+
+  const dismissToday = () => {
+    if (popup?.show_once) {
+      localStorage.setItem(`popup_today_${popup.id}`, new Date().toDateString());
+    }
+    setVisible(false);
   };
 
   if (!visible || !popup) return null;

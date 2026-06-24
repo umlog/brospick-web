@@ -143,6 +143,45 @@
   font-size: var(--size-base);
 }
 
+/* Splash toggle row (팝업 탭 상단) */
+.splashToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  margin-bottom: var(--space-md);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.splashToggleLabel {
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.toggleOn,
+.toggleOff {
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  min-width: 60px;
+  transition: background 0.2s;
+}
+
+.toggleOn {
+  background: #e02e24;
+  color: #fff;
+}
+
+.toggleOff {
+  background: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
 /* Order List */
 .orderList {
   display: flex;

@@ -288,3 +288,25 @@ a {
 section {
   padding: var(--space-2xl) 0;
 }
+
+/* 라우트 전환 애니메이션 (framer-motion 대체) */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pageTransition {
+  animation: pageEnter 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pageTransition {
+    animation: none;
+  }
+}

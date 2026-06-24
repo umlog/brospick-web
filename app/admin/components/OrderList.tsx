@@ -9,7 +9,6 @@ import { BULK_ELIGIBLE_STATUSES } from '../hooks/useOrders';
 import { StatusFilter } from './StatusFilter';
 import { OrderCard } from './OrderCard';
 import { TrashOrderCard } from './TrashOrderCard';
-import { exportLogenExcel } from '@/lib/logen/exportLogenExcel';
 import styles from '../admin.module.css';
 
 interface OrderListProps {
@@ -77,7 +76,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
 
   const [fareType, setFareType] = useState<'선불' | '착불' | '신용'>('선불');
 
-  const handleLogenExport = () => {
+  const handleLogenExport = async () => {
     const targetOrders = ordersState.selectedOrders.size > 0
       ? orders.filter((o) => ordersState.selectedOrders.has(o.id))
       : orders;
@@ -85,6 +84,8 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
       showToast('내보낼 주문이 없습니다.', 'info');
       return;
     }
+    // xlsx는 무거우므로 내보낼 때만 동적 로드 (어드민 초기 번들에서 분리)
+    const { exportLogenExcel } = await import('@/lib/logen/exportLogenExcel');
     exportLogenExcel(targetOrders, fareType);
     showToast(`${targetOrders.length}건을 로젠 엑셀로 내보냈습니다.`, 'success');
   };

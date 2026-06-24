@@ -46,5 +46,8 @@ next-env.d.ts
 # Claude Code worktrees
 .claude/worktrees/
 
+# Playwright MCP 산출물 (스크린샷/콘솔 로그)
+.playwright-mcp/
+
 # PDF source files (ebook, assets)
 *.pdf

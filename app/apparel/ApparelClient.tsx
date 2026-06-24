@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { productList, getDiscountPercent, PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory } from '../../lib/products';
+import ProductImage from '../components/ProductImage';
 import styles from './apparel-page.module.css';
 
 const ALL = 'all' as const;
@@ -126,10 +127,10 @@ export default function ApparelClient({ initialPrices }: Props) {
                 onClick={() => selectCategory(cat)}
               >
                 <div className={styles.categoryCardImage}>
-                  <img
+                  <ProductImage
                     src={getRepresentativeImage(cat)}
                     alt={CATEGORY_LABELS[cat]}
-                    onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                    sizes="(max-width: 768px) 45vw, 220px"
                   />
                 </div>
                 <span className={styles.categoryCardLabel}>{CATEGORY_LABELS[cat]}</span>
@@ -188,10 +189,10 @@ export default function ApparelClient({ initialPrices }: Props) {
               return isComingSoon ? (
                 <div key={product.id} className={styles.comingSoonCard}>
                   <div className={styles.imageWrapper}>
-                    <img
+                    <ProductImage
                       src={product.image}
                       alt={product.name}
-                      onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                      sizes="(max-width: 768px) 50vw, 280px"
                     />
                     <div className={styles.comingSoonOverlay}>
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
@@ -221,10 +222,10 @@ export default function ApparelClient({ initialPrices }: Props) {
               ) : (
                 <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.productCard} onClick={() => sessionStorage.setItem('apparel-scroll', String(window.scrollY))}>
                   <div className={`${styles.productImage} ${product.imageZoom ? styles.productImageZoom : ''}`}>
-                    <img
+                    <ProductImage
                       src={product.image}
                       alt={product.name}
-                      onError={(e) => { e.currentTarget.src = PRODUCT_FALLBACK_IMAGE; }}
+                      sizes="(max-width: 768px) 50vw, 280px"
                     />
                     {product.popularBadge && (
                       <span className={styles.popularBadge}>{product.popularBadge}</span>

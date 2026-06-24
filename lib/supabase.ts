@@ -5,13 +5,18 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // 공개 클라이언트 (anon key - RLS 적용됨)
+// next.revalidate: 60 → 서버 컴포넌트에서 60초 캐시, 클라이언트에서는 무시됨
 let supabase: SupabaseClient;
 
+const fetchCached: typeof fetch = (url, options) =>
+  fetch(url, { ...options, next: { revalidate: 60 } } as RequestInit);
+
+// 어드민/뮤테이션용 — 캐시 없이 항상 최신 데이터
 const fetchNoCache: typeof fetch = (url, options) =>
   fetch(url, { ...options, cache: 'no-store' });
 
 if (supabaseUrl && supabaseUrl.startsWith('http')) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey, { global: { fetch: fetchNoCache } });
+  supabase = createClient(supabaseUrl, supabaseAnonKey, { global: { fetch: fetchCached } });
 } else {
   supabase = createClient('https://placeholder.supabase.co', 'placeholder');
 }

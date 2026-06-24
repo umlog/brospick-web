@@ -10,6 +10,7 @@ import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } fro
 import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ReviewLightbox from '../../components/ReviewLightbox';
+import ProductImage from '../../components/ProductImage';
 
 interface ReviewItem {
   id: string;
@@ -163,8 +164,7 @@ function ProductReviews({ productId, initialReviews, initialAvgRating, initialCo
                   const isLastMore = !showAllPhotos && i === PHOTO_PREVIEW - 1 && allPhotos.length > PHOTO_PREVIEW;
                   return (
                     <button key={i} className={styles.photoGridItem} onClick={() => setLightboxIndex(i)}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={url} alt="" />
+                      <ProductImage src={url} alt="" sizes="(max-width: 768px) 33vw, 120px" />
                       {isLastMore && (
                         <div className={styles.photoGridMore}>+{allPhotos.length - PHOTO_PREVIEW}</div>
                       )}
@@ -326,12 +326,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [logoInquiryOpen, setLogoInquiryOpen] = useState(false);
   const [bulkInquiryOpen, setBulkInquiryOpen] = useState(false);
-  const [imgScale, setImgScale] = useState(1);
-  const [isPinching, setIsPinching] = useState(false);
-  const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
-  const lensRef = useRef<HTMLDivElement>(null);
-  const zoomPanelRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
   const [bannerExpanded, setBannerExpanded] = useState(false);
   const [selectedColor, setSelectedColor] = useState<ProductColor | undefined>(undefined);
   const modalScrollY = useRef(0);
@@ -572,12 +566,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   }, [emblaApi]);
 
   useEffect(() => {
-    setImgScale(1);
-    setIsPinching(false);
-    pinchRef.current = null;
-  }, [currentImage]);
-
-  useEffect(() => {
     setQuantityInput(String(quantity));
   }, [quantity]);
 
@@ -597,40 +585,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       };
     }
   }, [lightboxOpen, bulkInquiryOpen, logoInquiryOpen]);
-
-  const getPinchDist = (touches: React.TouchList) => {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  const handlePinchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 2) {
-      e.nativeEvent.stopPropagation();
-      setIsPinching(true);
-      pinchRef.current = { dist: getPinchDist(e.touches), scale: imgScale };
-    }
-  };
-
-  const handlePinchMove = (e: React.TouchEvent) => {
-    if (e.touches.length === 2 && pinchRef.current) {
-      e.nativeEvent.stopPropagation();
-      const ratio = getPinchDist(e.touches) / pinchRef.current.dist;
-      setImgScale(Math.min(4, Math.max(1, pinchRef.current.scale * ratio)));
-    }
-  };
-
-  const handlePinchEnd = () => {
-    pinchRef.current = null;
-    setIsPinching(false);
-    setImgScale(1);
-  };
-
-  useEffect(() => {
-    if (zoomPanelRef.current) {
-      zoomPanelRef.current.style.backgroundImage = `url(${product?.images[currentImage]})`;
-    }
-  }, [currentImage]);
 
   const handleBuyNow = () => {
     if (product.multiSelect) {
@@ -711,57 +665,19 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               className={styles.mainImage}
               ref={emblaRef}
               onClick={() => { if (window.matchMedia('(pointer: coarse)').matches) setLightboxOpen(true); }}
-              onMouseMove={(e) => {
-                const target = e.currentTarget;
-                const clientX = e.clientX;
-                const clientY = e.clientY;
-                if (rafRef.current) cancelAnimationFrame(rafRef.current);
-                rafRef.current = requestAnimationFrame(() => {
-                  const rect = target.getBoundingClientRect();
-                  const x = clientX - rect.left;
-                  const y = clientY - rect.top;
-                  const w = rect.width;
-                  const h = rect.height;
-                  if (lensRef.current) {
-                    lensRef.current.style.display = 'block';
-                    lensRef.current.style.left = `${Math.min(Math.max(x - 50, 0), w - 100)}px`;
-                    lensRef.current.style.top = `${Math.min(Math.max(y - 50, 0), h - 100)}px`;
-                  }
-                  if (zoomPanelRef.current) {
-                    zoomPanelRef.current.style.display = 'block';
-                    zoomPanelRef.current.style.backgroundSize = `${w * 3}px ${h * 3}px`;
-                    zoomPanelRef.current.style.backgroundPosition = `${-(x * 3 - w / 2)}px ${-(y * 3 - h / 2)}px`;
-                  }
-                });
-              }}
-              onMouseLeave={() => {
-                if (rafRef.current) cancelAnimationFrame(rafRef.current);
-                if (lensRef.current) lensRef.current.style.display = 'none';
-                if (zoomPanelRef.current) zoomPanelRef.current.style.display = 'none';
-              }}
             >
-              <div
-                className={styles.emblaContainer}
-                onTouchStart={handlePinchStart}
-                onTouchMove={handlePinchMove}
-                onTouchEnd={handlePinchEnd}
-              >
+              <div className={styles.emblaContainer}>
                 {carouselImages.map((img, index) => (
                   <div className={styles.emblaSlide} key={index}>
-                    <img
+                    <ProductImage
                       src={img}
                       alt={`${product.name} ${index + 1}`}
-                      draggable={false}
-                      style={index === currentImage ? {
-                        transform: `scale(${imgScale})`,
-                        transformOrigin: 'center center',
-                        transition: isPinching ? 'none' : 'transform 0.3s ease',
-                      } : undefined}
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      priority={index === 0}
                     />
                   </div>
                 ))}
               </div>
-              <div ref={lensRef} className={styles.lens} style={{ display: 'none' }} />
               {carouselImages.length > 1 && (
                 <>
                   <button
@@ -814,11 +730,6 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
             <div className={styles.progressTrack}>
               <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }} />
             </div>
-            <div
-              ref={zoomPanelRef}
-              className={styles.zoomPanel}
-              style={{ display: 'none', backgroundImage: `url(${carouselImages[currentImage]})` }}
-            />
 
             {product.detailBanners && product.detailBanners.length > 0 && (
               <div className={styles.detailBannerDesktop}>
@@ -1521,7 +1432,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                 {related.map((p) => (
                   <a key={p.slug} href={`/apparel/${p.slug}`} className={styles.relatedCard}>
                     <div className={styles.relatedImageWrap}>
-                      <img src={p.image} alt={p.name} className={styles.relatedImage} />
+                      <ProductImage src={p.image} alt={p.name} className={styles.relatedImage} sizes="(max-width: 768px) 45vw, 200px" />
                       {p.comingSoon && (
                         <span className={styles.relatedComingSoonBadge}>COMING SOON</span>
                       )}

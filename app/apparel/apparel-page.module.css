@@ -75,6 +75,7 @@
 }
 
 .categoryCardImage {
+  position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-md);

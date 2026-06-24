@@ -236,7 +236,7 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Quarter-Zip Training Top',
     popularBadge: 'BEST',
     category: 'training-top',
-    image: '/apparel/training-top/quarter-zip-training-top/1.jpg',
+    image: '/apparel/training-top/quarter-zip-training-top/1.png',
     images: [
       '/apparel/training-top/quarter-zip-training-top/1.png',
       '/apparel/training-top/quarter-zip-training-top/2.png',

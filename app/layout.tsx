@@ -11,6 +11,8 @@ import VisitTracker from './components/VisitTracker';
 import PageTransition from './components/PageTransition';
 import { SiteBanner } from './components/SiteBanner';
 import { SitePopup } from './components/SitePopup';
+import { SplashController } from './components/SplashController';
+import { getActiveBanner, getActivePopup } from '@/lib/site-content';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -45,11 +47,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [banner, popup] = await Promise.all([getActiveBanner(), getActivePopup()]);
+
   return (
     <html lang="ko" className={notoSansKR.variable} data-theme="dark">
       <head>
@@ -65,13 +69,44 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <SplashController />
+        <div
+          id="__splash"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: '#121212',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'sans-serif',
+              fontSize: '20px',
+              fontWeight: 700,
+              letterSpacing: '0.3em',
+              color: '#ffffff',
+            }}
+          >
+            BROSPICK
+          </span>
+        </div>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function h(){var e=document.getElementById('__splash');if(!e)return;e.style.transition='opacity 0.5s ease';e.style.opacity='0';e.style.pointerEvents='none';setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},500);}if(document.readyState==='complete'){h();}else{window.addEventListener('load',h);}})();`,
+          }}
+        />
+
         <ThemeProvider>
           <CartProvider>
-            <SiteBanner />
+            <SiteBanner initialBanner={banner} />
             <Header />
             <PageTransition>{children}</PageTransition>
             <Footer />
-            <SitePopup />
+            <SitePopup initialPopup={popup} />
             <Suspense fallback={null}>
               <FloatingTracker />
             </Suspense>

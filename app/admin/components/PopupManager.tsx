@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SitePopup } from '../hooks/usePopups';
 import { showConfirm } from '../lib/confirm';
 import styles from '../admin.module.css';
@@ -54,6 +54,22 @@ export function PopupManager({ state }: Props) {
   };
 
   const handleToggle = (p: SitePopup) => updatePopup(p.id, { is_active: !p.is_active });
+
+  const [splashEnabled, setSplashEnabled] = useState(true);
+  useEffect(() => {
+    fetch('/api/admin/site-settings')
+      .then((r) => r.json())
+      .then((d) => setSplashEnabled(d.splash_screen_enabled !== 'false'));
+  }, []);
+  const toggleSplash = async () => {
+    const next = !splashEnabled;
+    setSplashEnabled(next);
+    await fetch('/api/admin/site-settings', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ splash_screen_enabled: next ? 'true' : 'false' }),
+    });
+  };
 
   if (loading) return <p className={styles.loading}>로딩 중...</p>;
 
@@ -130,6 +146,16 @@ export function PopupManager({ state }: Props) {
 
   return (
     <div>
+      <div className={styles.splashToggleRow}>
+        <span className={styles.splashToggleLabel}>스플래시 스크린</span>
+        <button
+          className={splashEnabled ? styles.toggleOn : styles.toggleOff}
+          onClick={toggleSplash}
+        >
+          {splashEnabled ? 'ON' : 'OFF'}
+        </button>
+      </div>
+
       <div className={styles.bmListHeader}>
         <button onClick={openCreate} className={`${styles.refreshButton} ${styles.bmPrimaryBtn}`}>
           + 새 팝업

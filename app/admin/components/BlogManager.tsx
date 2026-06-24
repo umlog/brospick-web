@@ -1,10 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import type { BlogPost } from '@/lib/domain/types';
 import type { BlogFormData } from '../hooks/useBlogPosts';
-import { TipTapEditor } from './TipTapEditor';
 import styles from '../admin.module.css';
+
+// tiptap는 무거우므로 블로그 편집 시에만 동적 로드 (어드민 초기 번들에서 분리)
+const TipTapEditor = dynamic(
+  () => import('./TipTapEditor').then((m) => m.TipTapEditor),
+  { ssr: false, loading: () => <div style={{ padding: '1rem', opacity: 0.6 }}>에디터 로딩 중…</div> },
+);
 
 interface BlogManagerProps {
   state: ReturnType<typeof import('../hooks/useBlogPosts').useBlogPosts>;

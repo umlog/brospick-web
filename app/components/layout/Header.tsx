@@ -43,7 +43,7 @@ export default function Header() {
   const navItems = [
     { label: 'BROSPICK', href: '/#manifesto' },
     { label: 'BLOG', href: '/interviews' },
-    { label: 'SPORTWEAR', href: '/apparel-showcase' },
+    { label: 'SPORTSWEAR', href: '/apparel-showcase' },
     { label: 'EBOOK', href: '/ebook' },
   ];
 
