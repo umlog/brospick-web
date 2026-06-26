@@ -9,10 +9,12 @@ import Footer from './components/layout/Footer';
 import FloatingTracker from './components/FloatingTracker';
 import VisitTracker from './components/VisitTracker';
 import PageTransition from './components/PageTransition';
-import { SiteBanner } from './components/SiteBanner';
-import { SitePopup } from './components/SitePopup';
+import { SiteBannerServer } from './components/SiteBannerServer';
+import { SitePopupServer } from './components/SitePopupServer';
 import { SplashController } from './components/SplashController';
-import { getActiveBanner, getActivePopup } from '@/lib/site-content';
+import ScrollProgress from './components/ScrollProgress';
+import BackToTop from './components/BackToTop';
+import CartToast from './components/CartToast';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -47,13 +49,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [banner, popup] = await Promise.all([getActiveBanner(), getActivePopup()]);
-
   return (
     <html lang="ko" className={notoSansKR.variable} data-theme="dark">
       <head>
@@ -84,30 +84,68 @@ export default async function RootLayout({
           }}
         >
           <span
+            className="splash-logo"
             style={{
               fontFamily: 'sans-serif',
-              fontSize: '20px',
-              fontWeight: 700,
+              fontSize: '32px',
+              fontWeight: 800,
               letterSpacing: '0.3em',
               color: '#ffffff',
+              textTransform: 'uppercase',
             }}
           >
             BROSPICK
           </span>
         </div>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              .splash-logo {
+                animation: splashRush 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+              }
+              @keyframes splashRush {
+                0% {
+                  opacity: 0;
+                  transform: scale(2.6);
+                  letter-spacing: 0.9em;
+                  filter: blur(10px);
+                }
+                65% {
+                  opacity: 1;
+                  transform: scale(0.94);
+                  letter-spacing: 0.28em;
+                  filter: blur(0);
+                }
+                100% {
+                  opacity: 1;
+                  transform: scale(1);
+                  letter-spacing: 0.3em;
+                  filter: blur(0);
+                }
+              }
+            `,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){function h(){var e=document.getElementById('__splash');if(!e)return;e.style.transition='opacity 0.5s ease';e.style.opacity='0';e.style.pointerEvents='none';setTimeout(function(){e.style.display='none';},500);}if(document.readyState==='complete'){h();}else{window.addEventListener('load',h);}})();`,
+            __html: `(function(){function h(){var e=document.getElementById('__splash');if(!e)return;e.style.transition='opacity 0.3s ease, transform 0.3s ease';e.style.opacity='0';e.style.transform='scale(1.08)';e.style.pointerEvents='none';setTimeout(function(){e.style.display='none';},300);}function go(){setTimeout(h,520);}if(document.readyState!=='loading'){go();}else{document.addEventListener('DOMContentLoaded',go);}})();`,
           }}
         />
 
         <ThemeProvider>
           <CartProvider>
-            <SiteBanner initialBanner={banner} />
+            <Suspense fallback={null}>
+              <SiteBannerServer />
+            </Suspense>
             <Header />
+            <ScrollProgress />
             <PageTransition>{children}</PageTransition>
             <Footer />
-            <SitePopup initialPopup={popup} />
+            <Suspense fallback={null}>
+              <SitePopupServer />
+            </Suspense>
+            <CartToast />
+            <BackToTop />
             <Suspense fallback={null}>
               <FloatingTracker />
             </Suspense>

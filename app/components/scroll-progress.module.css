@@ -1,0 +1,26 @@
+.track {
+  position: fixed;
+  top: 72px; /* 헤더 높이에 맞춰 바로 아래 */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+.bar {
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  transform-origin: left;
+  transform: scaleX(0);
+  /* scaleX 변화를 부드럽게 따라가게 */
+  transition: transform 0.1s linear;
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.5);
+}
+
+@media (max-width: 768px) {
+  .track {
+    top: 60px;
+  }
+}

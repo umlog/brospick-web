@@ -147,6 +147,20 @@
   min-width: 18px;
   text-align: center;
   line-height: 1.4;
+  /* 수량 변경 시 key 리마운트 → 통통 튀는 팝 */
+  animation: cartBadgePop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cartBadgePop {
+  0% { transform: scale(0.4); }
+  55% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartBadge {
+    animation: none;
+  }
 }
 
 /* ===== 테마 토글 ===== */

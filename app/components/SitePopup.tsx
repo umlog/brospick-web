@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './SitePopup.module.css';
 import type { SitePopupData } from '@/lib/site-content';
 
@@ -10,7 +11,9 @@ interface Props {
 }
 
 export function SitePopup({ initialPopup }: Props) {
-  const popup = initialPopup;
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith('/admin') ?? false;
+  const popup = isAdmin ? null : initialPopup;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

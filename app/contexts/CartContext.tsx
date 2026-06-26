@@ -11,6 +11,14 @@ export interface CartItem {
   image: string;
 }
 
+/** 장바구니 담기 직후 토스트/뱃지 애니메이션을 트리거하기 위한 1회성 이벤트. */
+export interface CartAddEvent {
+  name: string;
+  image: string;
+  /** 같은 상품을 연속으로 담아도 새 이벤트로 인식되도록 하는 증가 카운터. */
+  nonce: number;
+}
+
 interface CartContextType {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
@@ -19,12 +27,15 @@ interface CartContextType {
   clearCart: () => void;
   getTotalPrice: () => number;
   getTotalItems: () => number;
+  /** 마지막으로 담긴 상품 정보. CartToast가 구독한다. */
+  lastAdd: CartAddEvent | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [lastAdd, setLastAdd] = useState<CartAddEvent | null>(null);
 
   // 로컬 스토리지에서 장바구니 불러오기
   useEffect(() => {
@@ -59,6 +70,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return [...prevCart, { ...item, quantity: item.quantity || 1 }];
       }
     });
+
+    // 담기 피드백: 토스트/뱃지 트리거 + 모바일 햅틱
+    setLastAdd((prev) => ({
+      name: item.name,
+      image: item.image,
+      nonce: (prev?.nonce ?? 0) + 1,
+    }));
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      navigator.vibrate(10);
+    }
   };
 
   const removeFromCart = (id: number, size: string) => {
@@ -102,6 +123,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         getTotalPrice,
         getTotalItems,
+        lastAdd,
       }}
     >
       {children}

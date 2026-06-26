@@ -1,0 +1,48 @@
+/* 로딩 중 자리표시 shimmer. 부모(position: relative)를 가득 채운다. */
+.skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-bg-secondary);
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: productShimmer 1.4s ease-in-out infinite;
+  transition: opacity var(--anim-default);
+  pointer-events: none;
+}
+
+.skeletonHidden {
+  opacity: 0;
+}
+
+@keyframes productShimmer {
+  from { background-position: 180% 0; }
+  to { background-position: -80% 0; }
+}
+
+/* 이미지 자체는 로드되면 살짝 페이드인 */
+.image {
+  opacity: 0;
+  transition: opacity var(--anim-default);
+}
+
+.imageLoaded {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+  .image {
+    opacity: 1;
+    transition: none;
+  }
+}
