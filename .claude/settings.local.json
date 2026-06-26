@@ -79,7 +79,23 @@
       "Bash(mv 3.png lightning-white.png)",
       "Bash(mv 4.png crown-black.png)",
       "Bash(mv 5.png crown-white.png)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(rm -f apparel-after.jpeg detail-after.jpeg detail2-after.jpeg related-section.jpeg carousel-after.jpeg carousel-clean.jpeg)",
+      "Bash(ls *.jpeg)",
+      "Bash(python -c 'import sys,json,re;d=json.load\\(sys.stdin\\);t=d[0]['\\\\''text'\\\\''];msgs=re.findall\\(r'\\\\''\\\\[ERROR\\\\] \\(.*?\\)\\(?=\\\\n    at|\\\\n\\\\[|$\\)'\\\\'', t, re.S\\); *)",
+      "Bash(npm uninstall *)",
+      "Bash(git stash *)",
+      "PowerShell(node --version)",
+      "PowerShell(npx tsc --noEmit)",
+      "PowerShell(irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.ps1 | iex)",
+      "PowerShell($script = irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.ps1; $script.Length; $script.Substring\\(0, [Math]::Min\\(400, $script.Length\\)\\))",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "mcp__plugin_playwright_playwright__browser_type",
+      "PowerShell(npx tsc --noEmit -p tsconfig.json 2>&1 | Select-Object -First 30)",
+      "Bash(echo \"exit: $?\")"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

@@ -7,7 +7,8 @@ import { getKakaoPayConfig } from '@/lib/kakao-pay';
 import { OrderStatus } from '@/lib/domain/enums';
 
 const PRICE_PER_SET = 5000;
-const SHIPPING_FEE = 3000;
+// 최소 주문 10세트(=50,000원)라 무료배송 기준(5만원 이상)을 항상 충족하므로 배송비 없음
+const SHIPPING_FEE = 0;
 
 function generateOrderNumber(): string {
   const now = new Date();

@@ -11,7 +11,8 @@ type PaymentMethod = 'bank' | 'kakaopay';
 // Window.daum 전역 타입은 app/checkout/types.ts에서 선언됨 (중복 선언 시 modifier 충돌)
 
 const PRICE_PER_SET = 5000;
-const SHIPPING_FEE = 3000;
+// 최소 주문 10세트(=50,000원)라 무료배송 기준(5만원 이상)을 항상 충족하므로 배송비 없음
+const SHIPPING_FEE = 0;
 
 export default function CustomOrderClient() {
   const router = useRouter();
@@ -306,7 +307,7 @@ export default function CustomOrderClient() {
             </div>
             <div className={styles.summaryRow}>
               <span>배송비</span>
-              <span>{SHIPPING_FEE.toLocaleString()}원</span>
+              <span>무료</span>
             </div>
             <div className={styles.summaryTotal}>
               <span>총 결제금액</span>
