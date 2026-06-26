@@ -9,6 +9,7 @@ import { BULK_ELIGIBLE_STATUSES } from '../hooks/useOrders';
 import { StatusFilter } from './StatusFilter';
 import { OrderCard } from './OrderCard';
 import { TrashOrderCard } from './TrashOrderCard';
+import { LogenTrackingImport } from './LogenTrackingImport';
 import styles from '../admin.module.css';
 
 interface OrderListProps {
@@ -38,6 +39,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
     handleFilterChange,
     handleRevokeMarketing,
     handleCancelRefundComplete,
+    handleBulkTrackingImport,
     trashMode,
     setTrashMode,
     trashedOrders,
@@ -223,6 +225,12 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
               CSV 내보내기
             </button>
           </div>
+
+          <LogenTrackingImport
+            orders={ordersState.allOrders}
+            onImport={handleBulkTrackingImport}
+            notifyDefault={notifyOnChange}
+          />
 
           {loading ? (
             <p className={styles.loading}>로딩 중...</p>

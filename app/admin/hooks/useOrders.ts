@@ -4,6 +4,15 @@ import { apiClient, ApiClientError } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
 import { showConfirm } from '../lib/confirm';
 import { OrderStatus } from '@/lib/domain/enums';
+import { TRACKING } from '@/lib/constants';
+
+// 로젠 운송장 일괄 등록 대상에서 제외할 상태 (이미 배송됐거나 취소된 건)
+export const TRACKING_IMPORT_SKIP_STATUSES: string[] = [
+  OrderStatus.SHIPPING,
+  OrderStatus.DELIVERED,
+  OrderStatus.CANCEL_REQUESTED,
+  OrderStatus.CANCELLED,
+];
 
 // 일괄 변경 가능한 상태 (운송장·날짜 입력 불필요한 것만)
 export const BULK_ELIGIBLE_STATUSES = [
@@ -337,6 +346,61 @@ export function useOrders(notifyOnChange: boolean) {
     }
   };
 
+  // 로젠 결과 엑셀 → 매칭 확정된 주문에 운송장 일괄 등록 (배송중 전환)
+  // items: 미리보기 화면에서 사용자가 직접 선택·확인한 건만 넘어온다.
+  const handleBulkTrackingImport = async (
+    items: { orderId: string; trackingNumber: string }[],
+    sendNotification: boolean
+  ): Promise<{ success: number; fail: number }> => {
+    if (items.length === 0) return { success: 0, fail: 0 };
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      items.forEach((it) => next.add(it.orderId));
+      return next;
+    });
+
+    const results = await Promise.allSettled(
+      items.map((it) =>
+        apiClient.orders.updateStatus(it.orderId, {
+          status: OrderStatus.SHIPPING,
+          sendNotification,
+          trackingNumber: it.trackingNumber,
+          carrier: TRACKING.defaultCarrier,
+        })
+      )
+    );
+
+    const successIds = new Set<string>();
+    let failCount = 0;
+    results.forEach((result, i) => {
+      if (result.status === 'fulfilled') successIds.add(items[i].orderId);
+      else failCount++;
+    });
+
+    if (successIds.size > 0) {
+      setAllOrders((prev) =>
+        prev.map((o) =>
+          successIds.has(o.id) ? { ...o, status: OrderStatus.SHIPPING } : o
+        )
+      );
+    }
+
+    setProcessingOrders((prev) => {
+      const next = new Set(prev);
+      items.forEach((it) => next.delete(it.orderId));
+      return next;
+    });
+
+    if (failCount === 0) {
+      showToast(`${successIds.size}건 배송중 등록 완료`, 'success');
+    } else {
+      showToast(`${successIds.size}건 성공, ${failCount}건 실패`, 'error');
+    }
+
+    return { success: successIds.size, fail: failCount };
+  };
+
   const handleRevokeMarketing = async (orderId: string, orderNumber: string) => {
     const ok = await showConfirm(`주문 ${orderNumber} 고객의 마케팅 수신 동의를 철회할까요?`);
     if (!ok) return;
@@ -382,6 +446,7 @@ export function useOrders(notifyOnChange: boolean) {
     clearSelection,
     handleBulkStatusChange,
     handleBulkDelete,
+    handleBulkTrackingImport,
     // 휴지통
     trashMode,
     setTrashMode,

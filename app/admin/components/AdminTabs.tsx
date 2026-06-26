@@ -4,89 +4,42 @@ import styles from '../admin.module.css';
 interface AdminTabsProps {
   activeTab: AdminTab;
   onTabChange: (tab: AdminTab) => void;
+  /** 탭별 "처리 필요" 카운트. 0이거나 없으면 뱃지를 숨긴다. */
+  counts?: Partial<Record<AdminTab, number>>;
 }
 
-export function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
+const TABS: { key: AdminTab; label: string }[] = [
+  { key: 'orders', label: '주문 관리' },
+  { key: 'returns', label: '교환/반품' },
+  { key: 'products', label: '상품 관리' },
+  { key: 'dashboard', label: '대시보드' },
+  { key: 'blog', label: '블로그 관리' },
+  { key: 'marketing', label: '마케팅 이메일' },
+  { key: 'ebook', label: '전자책 주문' },
+  { key: 'reviews', label: '리뷰 관리' },
+  { key: 'popups', label: '팝업' },
+  { key: 'banners', label: '배너' },
+  { key: 'faqs', label: 'FAQ' },
+  { key: 'coupons', label: '쿠폰' },
+  { key: 'finance', label: '재무' },
+];
+
+export function AdminTabs({ activeTab, onTabChange, counts }: AdminTabsProps) {
   return (
     <div className={styles.adminTabs}>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'orders' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('orders')}
-      >
-        주문 관리
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'returns' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('returns')}
-      >
-        교환/반품
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'products' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('products')}
-      >
-        상품 관리
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'dashboard' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('dashboard')}
-      >
-        대시보드
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'blog' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('blog')}
-      >
-        블로그 관리
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'marketing' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('marketing')}
-      >
-        마케팅 이메일
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'ebook' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('ebook')}
-      >
-        전자책 주문
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'reviews' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('reviews')}
-      >
-        리뷰 관리
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'popups' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('popups')}
-      >
-        팝업
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'banners' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('banners')}
-      >
-        배너
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'faqs' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('faqs')}
-      >
-        FAQ
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'coupons' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('coupons')}
-      >
-        쿠폰
-      </button>
-      <button
-        className={`${styles.adminTab} ${activeTab === 'finance' ? styles.adminTabActive : ''}`}
-        onClick={() => onTabChange('finance')}
-      >
-        재무
-      </button>
+      {TABS.map(({ key, label }) => {
+        const count = counts?.[key] ?? 0;
+        return (
+          <button
+            key={key}
+            className={`${styles.adminTab} ${activeTab === key ? styles.adminTabActive : ''}`}
+            onClick={() => onTabChange(key)}
+          >
+            {label}
+            {count > 0 && <span className={styles.tabBadge}>{count > 99 ? '99+' : count}</span>}
+          </button>
+        );
+      })}
     </div>
   );
 }
