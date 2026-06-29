@@ -134,11 +134,19 @@ export function OrderCard({
           </div>
 
           <div className={styles.detailSection}>
-            <h3>주문 상품</h3>
+            <h3>
+              주문 상품
+              <span className={styles.itemsTotalCount}>
+                총 {order.order_items.reduce((sum, item) => sum + item.quantity, 0)}개
+              </span>
+            </h3>
             {order.order_items.map((item) => (
               <div key={item.id} className={styles.detailItem}>
-                <span>{item.product_name} ({item.size})</span>
-                <span>{item.quantity}개 × ₩{item.price.toLocaleString()}</span>
+                <span className={styles.detailItemName}>
+                  {item.product_name} <span className={styles.detailItemOption}>({item.size})</span>
+                  <span className={styles.detailItemPrice}>₩{item.price.toLocaleString()}</span>
+                </span>
+                <span className={styles.detailItemQty}>{item.quantity}개</span>
               </div>
             ))}
           </div>
