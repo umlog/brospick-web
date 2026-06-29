@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "gen-opt": "node scripts/gen-opt.mjs",
+    "prebuild": "node scripts/gen-opt.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
