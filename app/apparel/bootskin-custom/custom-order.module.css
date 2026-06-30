@@ -72,6 +72,36 @@
 }
 
 /* ── Notice ── */
+.highlight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.45);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.highlightIcon {
+  flex-shrink: 0;
+  color: #ff3b30;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.highlight p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #f0f0f0;
+}
+
+.highlight strong {
+  color: #ff5b52;
+  font-weight: 700;
+}
+
 .notice {
   background: #161616;
   border: 1px solid #252525;

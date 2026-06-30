@@ -206,7 +206,7 @@ export default function ApparelClient({ initialPrices }: Props) {
                     <div className={styles.priceContainer}>
                       {price !== undefined && (
                         <>
-                          <span className={styles.price}>₩{price.toLocaleString()}</span>
+                          <span className={`${styles.price} ${originalPrice && originalPrice > price ? styles.priceSale : ''}`}>₩{price.toLocaleString()}</span>
                           {originalPrice && originalPrice > price && (
                             <>
                               <span className={styles.originalPrice}>₩{originalPrice.toLocaleString()}</span>
@@ -236,7 +236,7 @@ export default function ApparelClient({ initialPrices }: Props) {
                     <div className={styles.priceContainer}>
                       {price !== undefined && (
                         <>
-                          <span className={styles.price}>₩{price.toLocaleString()}</span>
+                          <span className={`${styles.price} ${originalPrice && originalPrice > price ? styles.priceSale : ''}`}>₩{price.toLocaleString()}</span>
                           {originalPrice && originalPrice > price && (
                             <>
                               <span className={styles.originalPrice}>₩{originalPrice.toLocaleString()}</span>

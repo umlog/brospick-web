@@ -124,6 +124,12 @@ export default function CustomOrderClient() {
           </div>
         </div>
 
+        {/* Highlight */}
+        <div className={styles.highlight}>
+          <span className={styles.highlightIcon}>★</span>
+          <p>다른 로고로 <strong>최대 3종류까지 혼합</strong>하여 제작 가능합니다.</p>
+        </div>
+
         {/* Notice */}
         <div className={styles.notice}>
           <p>인쇄 과정에서 새롭게 판을 제작해야 하기 때문에 <strong>최소 주문 수량은 10세트</strong>입니다.</p>
