@@ -9,6 +9,7 @@ import { notificationService } from './notification.service';
 import { OrderStatus, isDelayStatus, isConfirmedStatus, STOCK_RESTORE_STATUSES } from '@/lib/domain/enums';
 import { VALID_ORDER_STATUSES, CANCELLABLE_STATUSES } from '@/lib/domain/constants';
 import { getKakaoPayConfig } from '@/lib/kakao-pay';
+import { getShippingFee } from '@/lib/constants';
 
 interface CreateOrderItem {
   productId?: number;
@@ -89,7 +90,7 @@ export class OrderService {
     const {
       customerName, customerPhone, customerEmail,
       postalCode, address, addressDetail,
-      totalAmount, shippingFee, depositorName, deliveryNote,
+      totalAmount, depositorName, deliveryNote,
       privacyConsent, thirdPartyConsent, marketingConsent,
       paymentMethod, couponCode, items,
     } = payload;
@@ -159,7 +160,11 @@ export class OrderService {
       validatedCouponUsedCount = coupon.used_count;
     }
 
-    const verifiedTotal = itemsSubtotal + shippingFee - couponDiscount;
+    // 배송비도 서버에서 재계산 (클라이언트 전송 값 무시 - 조작 방지)
+    // 무료배송 임계값은 클라이언트와 동일하게 쿠폰 적용 후 금액 기준
+    const discountedSubtotal = Math.max(0, itemsSubtotal - couponDiscount);
+    const verifiedShippingFee = getShippingFee(discountedSubtotal, postalCode);
+    const verifiedTotal = discountedSubtotal + verifiedShippingFee;
     if (verifiedTotal !== totalAmount) {
       throw Object.assign(
         new Error(`결제 금액이 올바르지 않습니다. (expected: ${verifiedTotal}, received: ${totalAmount})`),
@@ -186,8 +191,8 @@ export class OrderService {
           postal_code: postalCode,
           address,
           address_detail: addressDetail || null,
-          total_amount: totalAmount,
-          shipping_fee: shippingFee,
+          total_amount: verifiedTotal,
+          shipping_fee: verifiedShippingFee,
           coupon_code: couponCode ? couponCode.trim().toUpperCase() : null,
           discount_amount: couponDiscount,
           depositor_name: depositorName || null,

@@ -19,6 +19,10 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    # HTTPS 강제 (2년, 서브도메인 포함). 사이트는 이미 HTTPS 전용이라 안전.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    # 사용하지 않는 강력 브라우저 기능 차단
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
 
 [[headers]]
   for = "/_next/static/*"

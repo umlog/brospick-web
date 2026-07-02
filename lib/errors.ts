@@ -47,10 +47,17 @@ export function isAdminAuthorized(request: { cookies: { get: (name: string) => {
   return checkAdminSession(request.cookies.get('admin_session')?.value);
 }
 
+// 세션 서명 키 — 전용 SESSION_SECRET 우선, 없으면 ADMIN_PASSWORD로 폴백.
+// SESSION_SECRET을 설정하면 서명 키가 비밀번호와 분리되어, 비밀번호가 유출돼도 세션 위조가 불가능해진다.
+// (설정 전까지는 기존 동작 유지 — 배포 후 SESSION_SECRET을 추가하면 기존 세션이 만료되어 재로그인 필요)
+export function getSessionSecret(): string | undefined {
+  return process.env.SESSION_SECRET || process.env.ADMIN_PASSWORD;
+}
+
 // 어드민 세션 쿠키 검증 헬퍼 (HMAC 서명 토큰 방식)
 export function checkAdminSession(cookieValue: string | null | undefined): boolean {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword || !cookieValue) return false;
+  const secret = getSessionSecret();
+  if (!secret || !cookieValue) return false;
 
   const parts = cookieValue.split('.');
   if (parts.length !== 3) return false;
@@ -63,7 +70,7 @@ export function checkAdminSession(cookieValue: string | null | undefined): boole
 
   try {
     const payload = `${nonce}.${timestamp}`;
-    const expectedHmac = createHmac('sha256', adminPassword).update(payload).digest('hex');
+    const expectedHmac = createHmac('sha256', secret).update(payload).digest('hex');
     const receivedBuf = Buffer.from(receivedHmac, 'hex');
     const expectedBuf = Buffer.from(expectedHmac, 'hex');
     if (receivedBuf.length !== expectedBuf.length) return false;

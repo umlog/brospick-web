@@ -5,7 +5,31 @@ import { supabaseAdmin } from '@/lib/supabase';
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
+// 인메모리 레이트 리미터 (익명 업로드 남용 방지 — IP당 10분에 20회)
+const uploadAttempts = new Map<string, { count: number; resetAt: number }>();
+const MAX_UPLOADS = 20;
+const WINDOW_MS = 10 * 60 * 1000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = uploadAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    uploadAttempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > MAX_UPLOADS;
+}
+
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: '너무 많은 업로드 시도입니다. 잠시 후 다시 시도해주세요.' },
+      { status: 429 }
+    );
+  }
+
   const formData = await request.formData();
   const file = formData.get('file') as File | null;
 

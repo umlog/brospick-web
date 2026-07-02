@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-async function verifySession(cookieValue: string, adminPassword: string): Promise<boolean> {
+async function verifySession(cookieValue: string, secret: string): Promise<boolean> {
   const parts = cookieValue.split('.');
   if (parts.length !== 3) return false;
 
@@ -13,7 +13,7 @@ async function verifySession(cookieValue: string, adminPassword: string): Promis
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       'raw',
-      encoder.encode(adminPassword),
+      encoder.encode(secret),
       { name: 'HMAC', hash: 'SHA-256' },
       false,
       ['sign']
@@ -39,7 +39,8 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const adminPath = process.env.ADMIN_PATH || 'admin';
   const adminPrefix = `/${adminPath}`;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  // 세션 서명 키: 전용 SESSION_SECRET 우선, 없으면 ADMIN_PASSWORD로 폴백
+  const sessionSecret = process.env.SESSION_SECRET || process.env.ADMIN_PASSWORD;
 
   // 직접 /admin 접근 차단 (커스텀 경로가 설정된 경우)
   if (adminPath !== 'admin' && (pathname === '/admin' || pathname.startsWith('/admin/'))) {
@@ -57,7 +58,7 @@ export async function middleware(request: NextRequest) {
 
   const sessionValue = request.cookies.get('admin_session')?.value;
   const isValid =
-    !!adminPassword && !!sessionValue && (await verifySession(sessionValue, adminPassword));
+    !!sessionSecret && !!sessionValue && (await verifySession(sessionValue, sessionSecret));
 
   if (internalPath === '/admin/login') {
     if (isValid) {
