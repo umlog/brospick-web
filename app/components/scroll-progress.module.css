@@ -16,7 +16,7 @@
   transform: scaleX(0);
   /* scaleX 변화를 부드럽게 따라가게 */
   transition: transform 0.1s linear;
-  box-shadow: 0 0 8px rgba(255, 59, 48, 0.5);
+  box-shadow: 0 0 8px rgba(var(--color-accent-rgb), 0.5);
 }
 
 @media (max-width: 768px) {

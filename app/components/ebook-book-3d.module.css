@@ -62,7 +62,7 @@
 .bookDivider {
   width: 20px;
   height: 1px;
-  background: rgba(255, 59, 48, 0.5);
+  background: rgba(var(--color-accent-rgb), 0.5);
   margin-bottom: 18px;
 }
 

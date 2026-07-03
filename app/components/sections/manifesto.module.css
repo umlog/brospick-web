@@ -45,9 +45,10 @@
 }
 
 .eyebrow {
-  font-size: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.26em;
   color: var(--color-accent);
   text-transform: uppercase;
   margin: 0 0 16px;
@@ -89,9 +90,10 @@
 }
 
 .cardNumber {
-  font-size: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   color: var(--color-accent);
 }
 

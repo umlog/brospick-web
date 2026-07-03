@@ -69,7 +69,7 @@
 }
 
 .ctaButton:hover {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-soft);
   transform: translateY(-2px);
 }
 
@@ -108,7 +108,7 @@
 .thumbnail {
   width: 100%;
   aspect-ratio: 9 / 16;
-  background: linear-gradient(135deg, var(--color-accent), #ff5a52);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-soft));
   border-radius: 8px;
   display: flex;
   align-items: center;

@@ -180,7 +180,7 @@
 }
 
 .shopButton:hover {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-soft);
 }
 
 @media (max-width: 480px) {

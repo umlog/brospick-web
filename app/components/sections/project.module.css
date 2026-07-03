@@ -115,7 +115,7 @@
 .card:hover {
   border-color: var(--color-accent);
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(255, 59, 48, 0.1);
+  box-shadow: 0 8px 24px rgba(var(--color-accent-rgb), 0.1);
 }
 
 .card:hover::before {
@@ -130,8 +130,9 @@
 }
 
 .cardNumber {
-  font-size: 32px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
   color: var(--color-accent);
   line-height: 1;
   flex-shrink: 0;

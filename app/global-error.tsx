@@ -54,7 +54,7 @@ export default function GlobalError({
             BROSPICK
           </span>
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <p style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.3em', color: '#ff3b30', margin: '0 0 16px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.3em', color: '#d6303b', margin: '0 0 16px' }}>
               SERVICE UNAVAILABLE
             </p>
             <h1 style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 12px', color: '#f5f5f5' }}>
@@ -72,9 +72,9 @@ export default function GlobalError({
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '14px 32px',
-                background: '#ff3b30',
+                background: '#d6303b',
                 color: '#fff',
-                border: '1px solid #ff3b30',
+                border: '1px solid #d6303b',
                 borderRadius: '999px',
                 fontSize: '14px',
                 fontWeight: 600,

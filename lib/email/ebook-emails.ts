@@ -19,7 +19,7 @@ export async function sendEbookOrderConfirmation(data: EbookOrderData): Promise<
   <div style="max-width:560px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;">
     <div style="background:#121212;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
       <h1 style="color:#fff;font-size:20px;margin:0 0 8px;">BROSPICK</h1>
-      <p style="color:#ff3b30;font-size:14px;margin:0;font-weight:600;">전자책 주문이 접수되었습니다</p>
+      <p style="color:#d6303b;font-size:14px;margin:0;font-weight:600;">전자책 주문이 접수되었습니다</p>
     </div>
 
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
@@ -35,7 +35,7 @@ export async function sendEbookOrderConfirmation(data: EbookOrderData): Promise<
         </div>
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#888;">결제금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.amount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.amount.toLocaleString()}</span>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ export async function sendEbookOrderConfirmation(data: EbookOrderData): Promise<
 
       <p style="font-size:12px;color:#999;margin:0;">
         문의사항이 있으시면 언제든지 연락해주세요.<br>
-        이메일: <a href="mailto:${CONTACT.email}" style="color:#ff3b30;">${CONTACT.email}</a>
+        이메일: <a href="mailto:${CONTACT.email}" style="color:#c22833;">${CONTACT.email}</a>
         &nbsp;·&nbsp;
         전화: ${CONTACT.phone}
       </p>
@@ -100,7 +100,7 @@ export async function sendEbookDownloadLink(data: {
 
       <div style="text-align:center;margin:0 0 28px;">
         <a href="${data.downloadUrl}"
-           style="display:inline-block;padding:16px 40px;background:#ff3b30;color:#fff;font-size:16px;font-weight:700;text-decoration:none;border-radius:8px;">
+           style="display:inline-block;padding:16px 40px;background:#c22833;color:#fff;font-size:16px;font-weight:700;text-decoration:none;border-radius:8px;">
           전자책 다운로드
         </a>
       </div>
@@ -124,7 +124,7 @@ export async function sendEbookDownloadLink(data: {
       </div>
 
       <p style="font-size:12px;color:#999;margin:0;">
-        문의사항: <a href="mailto:${CONTACT.email}" style="color:#ff3b30;">${CONTACT.email}</a>
+        문의사항: <a href="mailto:${CONTACT.email}" style="color:#c22833;">${CONTACT.email}</a>
         &nbsp;·&nbsp; ${CONTACT.phone}
       </p>
     </div>
@@ -166,7 +166,7 @@ export async function sendEbookOrderNotification(data: EbookOrderData): Promise<
         </div>
         <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid #eee;">
           <span style="font-size:14px;color:#333;font-weight:600;">결제금액</span>
-          <span style="font-size:16px;color:#ff3b30;font-weight:700;">₩${data.amount.toLocaleString()}</span>
+          <span style="font-size:16px;color:#c22833;font-weight:700;">₩${data.amount.toLocaleString()}</span>
         </div>
       </div>
 

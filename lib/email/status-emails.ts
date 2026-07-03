@@ -104,7 +104,7 @@ export async function sendStatusChangeEmail(data: StatusChangeEmailData) {
       </div>` : ''}
 
       <div style="text-align:center;margin-top:24px;">
-        <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+        <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           주문 상태 확인하기
         </a>
       </div>
@@ -150,7 +150,7 @@ export async function sendPaymentReminderEmail(data: PaymentReminderEmailData) {
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
           <span style="font-size:13px;color:#888;">결제금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
         </div>
         <p style="font-size:12px;color:#e65100;margin:0;font-weight:500;">⚠ 주문 후 24시간 이내에 입금해주세요.</p>
       </div>
@@ -163,7 +163,7 @@ export async function sendPaymentReminderEmail(data: PaymentReminderEmailData) {
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+        <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           주문 상태 확인하기
         </a>
       </div>
@@ -211,7 +211,7 @@ export async function sendOrderCancelEmail(data: OrderCancelEmailData) {
     <div style="padding:28px 24px;background:#fff;border:1px solid #eee;border-top:none;">
       <p style="font-size:15px;color:#333;margin:0 0 20px;">${escapeHtml(data.customerName)}님, 안녕하세요.</p>
       <div style="background:#fff0f0;border-radius:8px;padding:20px;margin-bottom:24px;text-align:center;">
-        <div style="display:inline-block;padding:6px 16px;border-radius:20px;background:#ff3b30;color:#fff;font-size:14px;font-weight:600;margin-bottom:12px;">취소완료</div>
+        <div style="display:inline-block;padding:6px 16px;border-radius:20px;background:#c22833;color:#fff;font-size:14px;font-weight:600;margin-bottom:12px;">취소완료</div>
         <p style="font-size:14px;color:#333;margin:12px 0 0;">주문이 정상적으로 취소되었습니다.</p>
       </div>
       <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
@@ -221,7 +221,7 @@ export async function sendOrderCancelEmail(data: OrderCancelEmailData) {
         </div>
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#888;">환불 금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
         </div>
       </div>
       ${refundSection}
@@ -260,7 +260,7 @@ export async function sendAdminCancelNotificationEmail(data: AdminCancelNotifica
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:13px;color:#888;">환불 금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:13px;color:#888;">환불 은행</span>

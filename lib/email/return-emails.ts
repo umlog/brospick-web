@@ -13,7 +13,7 @@ const RETURN_STATUS_INFO: Partial<Record<ReturnStatus, { title: string; message:
   [ReturnStatus.COLLECTING]: { title: '반품 수거가 시작되었습니다', message: '상품 수거가 진행 중입니다.', color: '#5856d6', bgColor: '#f3f0ff' },
   [ReturnStatus.COLLECTED]: { title: '상품 수거가 완료되었습니다', message: '수거된 상품을 확인 중입니다.', color: '#007aff', bgColor: '#f0f6ff' },
   [ReturnStatus.COMPLETED]: { title: '교환/반품 처리가 완료되었습니다', message: '모든 처리가 완료되었습니다. 이용해주셔서 감사합니다.', color: '#34c759', bgColor: '#f0faf3' },
-  [ReturnStatus.REJECTED]: { title: '교환/반품 요청이 거절되었습니다', message: '요청이 거절되었습니다.', color: '#ff3b30', bgColor: '#fff0f0' },
+  [ReturnStatus.REJECTED]: { title: '교환/반품 요청이 거절되었습니다', message: '요청이 거절되었습니다.', color: '#c22833', bgColor: '#fff0f0' },
 };
 
 // 반품/교환 접수 이메일
@@ -74,7 +74,7 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+        <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           처리 상태 확인하기
         </a>
       </div>
@@ -153,7 +153,7 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
       ${extraHtml}
 
       <div style="text-align:center;margin-top:24px;">
-        <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+        <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           처리 상태 확인하기
         </a>
       </div>

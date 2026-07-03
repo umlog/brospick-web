@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
-import { Noto_Sans_KR } from 'next/font/google';
+import { Noto_Sans_KR, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from './contexts/CartContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -20,6 +20,14 @@ const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-noto-sans-kr',
+  display: 'swap',
+});
+
+// 라틴 대문자 라벨·숫자 전용 디스플레이 서체 (저지 넘버·중계 자막 계열)
+const barlowCondensed = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-barlow-condensed',
   display: 'swap',
 });
 
@@ -55,7 +63,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={notoSansKR.variable} data-theme="dark">
+    <html lang="ko" className={`${notoSansKR.variable} ${barlowCondensed.variable}`} data-theme="dark">
       <head>
         <script
           dangerouslySetInnerHTML={{

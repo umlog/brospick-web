@@ -41,7 +41,7 @@ export async function sendReviewReminderEmail(data: ReviewReminderEmailData) {
       </div>
 
       <div style="text-align:center;">
-        <a href="${reviewUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:14px 40px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;">
+        <a href="${reviewUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:14px 40px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;">
           리뷰 작성하기
         </a>
         <p style="font-size:12px;color:#aaa;margin:16px 0 0;">리뷰 작성에는 주문 시 입력하신 전화번호가 필요합니다.</p>

@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(255, 59, 48, 0.4);
+  box-shadow: 0 4px 20px rgba(var(--color-accent-rgb), 0.4);
   z-index: 1000;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
   padding: 0;
@@ -28,7 +28,7 @@
 .trigger:hover {
   transform: scale(1.06);
   background: var(--color-accent-hover);
-  box-shadow: 0 6px 28px rgba(255, 59, 48, 0.55);
+  box-shadow: 0 6px 28px rgba(var(--color-accent-rgb), 0.55);
 }
 
 .triggerOpen {

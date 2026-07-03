@@ -72,7 +72,7 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-soft);
   transform: translateY(-2px);
 }
 
@@ -93,7 +93,7 @@
 
 .errorMessage {
   padding: var(--space-md);
-  background-color: rgba(255, 59, 48, 0.1);
+  background-color: rgba(var(--color-accent-rgb), 0.1);
   border-left: 4px solid var(--color-accent);
   color: var(--color-accent);
   border-radius: 4px;

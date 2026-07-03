@@ -40,7 +40,7 @@
   transform: translate(-50%, -55%);
   width: 640px;
   height: 640px;
-  background: radial-gradient(ellipse at center, rgba(255, 59, 48, 0.16) 0%, transparent 68%);
+  background: radial-gradient(ellipse at center, rgba(var(--color-accent-rgb), 0.16) 0%, transparent 68%);
   pointer-events: none;
   z-index: 0;
 }
@@ -59,9 +59,9 @@
   text-transform: uppercase;
   margin: 0 0 28px;
   padding: 6px 16px;
-  border: 1px solid rgba(255, 59, 48, 0.4);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.4);
   border-radius: var(--radius-pill);
-  background: rgba(255, 59, 48, 0.08);
+  background: rgba(var(--color-accent-rgb), 0.08);
 }
 
 .heroTitle {
@@ -148,8 +148,8 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-accent);
-  background: rgba(255, 59, 48, 0.12);
-  border: 1px solid rgba(255, 59, 48, 0.3);
+  background: rgba(var(--color-accent-rgb), 0.12);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.3);
   border-radius: 20px;
   padding: 3px 10px;
   width: fit-content;
@@ -407,7 +407,7 @@
 .bookDivider {
   width: 20px;
   height: 1px;
-  background: rgba(255, 59, 48, 0.5);
+  background: rgba(var(--color-accent-rgb), 0.5);
   margin-bottom: 18px;
 }
 
@@ -584,7 +584,7 @@
 }
 
 .benefitCard:hover {
-  border-color: rgba(255, 59, 48, 0.4);
+  border-color: rgba(var(--color-accent-rgb), 0.4);
   transform: translateY(-4px);
 }
 
@@ -700,9 +700,9 @@
   text-transform: uppercase;
   flex-shrink: 0;
   padding: 4px 10px;
-  border: 1px solid rgba(255, 59, 48, 0.35);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.35);
   border-radius: var(--radius-pill);
-  background: rgba(255, 59, 48, 0.08);
+  background: rgba(var(--color-accent-rgb), 0.08);
   white-space: nowrap;
   align-self: flex-start;
   margin-top: 2px;
@@ -771,8 +771,8 @@
 
 /* 은행 정보 박스 */
 .bankInfoBox {
-  background: rgba(255, 59, 48, 0.05);
-  border: 1px solid rgba(255, 59, 48, 0.2);
+  background: rgba(var(--color-accent-rgb), 0.05);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.2);
   border-radius: var(--radius-sm);
   padding: 20px 24px;
   margin-bottom: 28px;
@@ -792,7 +792,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(255, 59, 48, 0.1);
+  border-bottom: 1px solid rgba(var(--color-accent-rgb), 0.1);
 }
 
 .bankInfoRow:last-of-type {
@@ -983,7 +983,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(255, 59, 48, 0.1);
+  background: rgba(var(--color-accent-rgb), 0.1);
   border: 2px solid var(--color-accent);
   color: var(--color-accent);
   font-size: 1.6rem;
@@ -1137,8 +1137,8 @@
 }
 
 .dialogBankInfo {
-  background: rgba(255, 59, 48, 0.05);
-  border: 1px solid rgba(255, 59, 48, 0.2);
+  background: rgba(var(--color-accent-rgb), 0.05);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.2);
   border-radius: var(--radius-sm);
   padding: 16px 20px;
 }
@@ -1453,9 +1453,9 @@
 }
 
 .packageBanner {
-  border: 1px solid rgba(255, 59, 48, 0.3);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.3);
   border-radius: var(--radius-md);
-  background: rgba(255, 59, 48, 0.05);
+  background: rgba(var(--color-accent-rgb), 0.05);
   overflow: hidden;
 }
 
@@ -1483,8 +1483,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 59, 48, 0.1);
-  border: 1px solid rgba(255, 59, 48, 0.2);
+  background: rgba(var(--color-accent-rgb), 0.1);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.2);
   border-radius: 50%;
   color: var(--color-accent);
 }

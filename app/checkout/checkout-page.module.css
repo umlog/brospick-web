@@ -180,7 +180,7 @@
 }
 
 .searchButton:hover {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-soft);
 }
 
 .paymentMethodGroup {
@@ -269,7 +269,7 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #ff5a52;
+  background-color: var(--color-accent-soft);
 }
 
 .submitButton:disabled {

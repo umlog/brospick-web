@@ -68,7 +68,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:8px;">
           <span style="font-size:15px;color:#333;font-weight:700;">총 결제금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        <a href="${data.trackingUrl}" style="display:inline-block;background:#ff3b30;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+        <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
           주문 상태 확인하기
         </a>
       </div>
@@ -163,7 +163,7 @@ export async function sendNewOrderNotificationEmail(data: OrderEmailData) {
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:8px;">
           <span style="font-size:15px;color:#333;font-weight:700;">총 결제금액</span>
-          <span style="font-size:15px;color:#ff3b30;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
+          <span style="font-size:15px;color:#c22833;font-weight:700;">₩${data.totalAmount.toLocaleString()}</span>
         </div>
       </div>
     </div>
