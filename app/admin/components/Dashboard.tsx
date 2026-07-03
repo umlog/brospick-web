@@ -3,8 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Order, EbookOrder } from '../types';
 import { OrderStatus } from '@/lib/domain/enums';
+import { request } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
 import { showConfirm } from '../lib/confirm';
+import { toLocalDateString, todayLocal } from '../lib/datetime';
 import styles from '../admin.module.css';
 
 const REVENUE_STATUSES = new Set<string>([
@@ -51,13 +53,12 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
   const [retentionResult, setRetentionResult] = useState<RetentionResult | null>(null);
 
   useEffect(() => {
-    fetch('/api/visits')
-      .then((r) => r.json())
+    request<VisitData>('/api/visits')
       .then((d) => setVisitData(d))
-      .catch(() => {});
+      .catch(() => {}); // 방문 통계는 비핵심 — 실패해도 대시보드 나머지는 표시
   }, []);
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayLocal();
   const thisMonth = today.slice(0, 7);
 
   const orderCountByStatus = useMemo(() => {
@@ -70,7 +71,7 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
   }, [allOrders]);
 
   const todayOrders = useMemo(
-    () => allOrders.filter((o) => o.created_at.startsWith(today)),
+    () => allOrders.filter((o) => toLocalDateString(o.created_at) === today),
     [allOrders, today]
   );
 
@@ -95,7 +96,7 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
 
   const thisMonthRevenue = useMemo(
     () => revenueOrders
-      .filter((o) => o.created_at.startsWith(thisMonth))
+      .filter((o) => toLocalDateString(o.created_at).startsWith(thisMonth))
       .reduce((sum, o) => sum + o.total_amount, 0),
     [revenueOrders, thisMonth]
   );
@@ -133,9 +134,7 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
     setRetentionLoading(true);
     setRetentionResult(null);
     try {
-      const res = await fetch('/api/admin/data-retention', { method: 'POST' });
-      if (!res.ok) throw new Error(`서버 오류 (${res.status})`);
-      const data = await res.json();
+      const data = await request<RetentionResult>('/api/admin/data-retention', { method: 'POST' });
       setRetentionResult(data);
     } catch (err) {
       showToast(`실행 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');

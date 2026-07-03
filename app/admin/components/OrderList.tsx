@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { showToast } from '../lib/toast';
+import { todayLocal } from '../lib/datetime';
 import type { useOrders } from '../hooks/useOrders';
 import type { useOrderActions } from '../hooks/useOrderActions';
 import { STATUS_OPTIONS } from '../constants';
@@ -112,7 +113,7 @@ export function OrderList({ ordersState, actionsState, notifyOnChange, onNotifyC
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `마케팅동의고객_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `마케팅동의고객_${todayLocal()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

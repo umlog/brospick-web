@@ -2,8 +2,20 @@
 
 import { useState } from 'react';
 import type { Coupon, CouponFormData } from '../hooks/useCoupons';
+import { request } from '@/lib/api-client';
 import { showConfirm } from '../lib/confirm';
+import { showToast } from '../lib/toast';
+import { toDatetimeLocalValue, toLocalDateString } from '../lib/datetime';
 import styles from '../admin.module.css';
+
+interface CouponUsage {
+  order_number: string;
+  customer_name: string;
+  discount_amount: number;
+  total_amount: number;
+  status: string;
+  created_at: string;
+}
 
 interface Props {
   state: ReturnType<typeof import('../hooks/useCoupons').useCoupons>;
@@ -55,6 +67,28 @@ export function CouponManager({ state }: Props) {
   };
 
   const handleToggle = (c: Coupon) => updateCoupon(c.id, { is_active: !c.is_active });
+
+  const [usageFor, setUsageFor] = useState<string | null>(null);
+  const [usageOrders, setUsageOrders] = useState<CouponUsage[]>([]);
+  const [usageLoading, setUsageLoading] = useState(false);
+
+  const toggleUsage = async (c: Coupon) => {
+    if (usageFor === c.code) { setUsageFor(null); return; }
+    setUsageFor(c.code);
+    setUsageLoading(true);
+    setUsageOrders([]);
+    try {
+      const data = await request<{ orders: CouponUsage[] }>(
+        `/api/admin/coupons?usage=${encodeURIComponent(c.code)}`,
+      );
+      setUsageOrders(data.orders);
+    } catch {
+      showToast('사용 내역을 불러오지 못했습니다.', 'error');
+      setUsageFor(null);
+    } finally {
+      setUsageLoading(false);
+    }
+  };
 
   const generateCode = () => {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -126,7 +160,7 @@ export function CouponManager({ state }: Props) {
             <div className={styles.bmField}>
               <label className={styles.bmFieldLabel}>만료일 (선택)</label>
               <input type="datetime-local" className={styles.input}
-                value={form.expires_at ? form.expires_at.slice(0, 16) : ''}
+                value={form.expires_at ? toDatetimeLocalValue(form.expires_at) : ''}
                 onChange={(e) => set('expires_at', e.target.value ? new Date(e.target.value).toISOString() : null)} />
             </div>
           </div>
@@ -184,11 +218,32 @@ export function CouponManager({ state }: Props) {
                   </p>
                   <p className={styles.bmCardDate}>
                     사용: {c.used_count}{c.max_uses ? `/${c.max_uses}` : ''}회
-                    {c.expires_at && ` · 만료: ${c.expires_at.slice(0, 10)}`}
+                    {c.expires_at && ` · 만료: ${toLocalDateString(c.expires_at)}`}
                     {c.description && ` · ${c.description}`}
                   </p>
+                  {usageFor === c.code && (
+                    <div style={{ marginTop: 8 }}>
+                      {usageLoading ? (
+                        <p className={styles.bmCardDate}>불러오는 중...</p>
+                      ) : usageOrders.length === 0 ? (
+                        <p className={styles.bmCardDate}>이 쿠폰으로 결제된 주문이 없습니다.</p>
+                      ) : (
+                        usageOrders.map((o) => (
+                          <p key={o.order_number} className={styles.bmCardDate}>
+                            {toLocalDateString(o.created_at)} · {o.order_number} · {o.customer_name} ·
+                            할인 -{o.discount_amount.toLocaleString()}원 · 결제 ₩{o.total_amount.toLocaleString()} · {o.status}
+                          </p>
+                        ))
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className={styles.bmCardActions}>
+                  {c.used_count > 0 && (
+                    <button onClick={() => toggleUsage(c)} className={styles.refreshButton}>
+                      {usageFor === c.code ? '내역 닫기' : '사용 내역'}
+                    </button>
+                  )}
                   <button onClick={() => handleToggle(c)}
                     className={`${styles.refreshButton} ${c.is_active ? styles.bmDeleteBtn : styles.bmPrimaryBtn}`}>
                     {c.is_active ? '비활성화' : '활성화'}

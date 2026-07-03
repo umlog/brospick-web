@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         .lte('created_at', `${to}T23:59:59`),
       supabaseAdmin
         .from('ebook_orders')
-        .select('amount, status')
+        .select('amount, status, created_at')
         .neq('status', 'pending_payment')
         .gte('created_at', `${from}T00:00:00`)
         .lte('created_at', `${to}T23:59:59`),
@@ -136,6 +136,34 @@ export async function GET(request: NextRequest) {
     const shippingExpenseOut = (expensesByCategory['배송비(발송)'] ?? 0) + (expensesByCategory['배송비(반품)'] ?? 0);
     const shippingNetIncome = shippingCollected + returnShippingCollected + exchangeShippingIncome - shippingExpenseOut;
 
+    // 월별 추이 (KST 기준 월, 총매출 기준 — 환불 미반영 단순 추이)
+    const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+    const kstMonth = (iso: string) =>
+      new Date(new Date(iso).getTime() + KST_OFFSET_MS).toISOString().slice(0, 7);
+
+    const monthlyMap = new Map<string, { revenue: number; ebook: number; expenses: number }>();
+    const monthEntry = (month: string) => {
+      let entry = monthlyMap.get(month);
+      if (!entry) {
+        entry = { revenue: 0, ebook: 0, expenses: 0 };
+        monthlyMap.set(month, entry);
+      }
+      return entry;
+    };
+    for (const o of revenueOrders) monthEntry(kstMonth(o.created_at)).revenue += o.total_amount;
+    for (const e of ebookOrders) monthEntry(kstMonth(e.created_at)).ebook += e.amount;
+    for (const e of expenses) monthEntry(e.date.slice(0, 7)).expenses += e.amount;
+
+    const monthly = [...monthlyMap.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([month, m]) => ({
+        month,
+        revenue: m.revenue,
+        ebook: m.ebook,
+        expenses: m.expenses,
+        profit: m.revenue + m.ebook - m.expenses,
+      }));
+
     // 부가세 계산 (판매가에 VAT 포함된 과세사업자 기준)
     // 공급가액 = 판매금액 / 1.1, 매출세액 = 공급가액 × 0.1
     const salesTaxBase = Math.round(totalNetRevenue / 1.1);
@@ -165,6 +193,7 @@ export async function GET(request: NextRequest) {
       expenses_by_category: expensesByCategory,
       total_expenses: totalExpenses,
       operating_income: operatingIncome,
+      monthly,
       shipping: {
         collected: shippingCollected,
         return_collected: returnShippingCollected,   // 반품 수취 배송비 (정보성, refund_amount에 이미 반영)

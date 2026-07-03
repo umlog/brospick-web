@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import type { Expense, ExpenseCategory } from '@/lib/domain/types';
+import { request } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
 import { showConfirm } from '../lib/confirm';
+import { todayLocal } from '../lib/datetime';
+import { downloadCsv } from '../utils';
 import styles from '../admin.module.css';
 
 const CATEGORIES: ExpenseCategory[] = [
@@ -11,14 +14,8 @@ const CATEGORIES: ExpenseCategory[] = [
   '마케팅/광고', '플랫폼수수료', '인건비', '임차료', '기타',
 ];
 
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: 'var(--space-sm)', background: 'var(--color-bg-primary, #0a0a0a)',
-  border: '1px solid var(--color-border)', borderRadius: 4, color: 'var(--color-text-primary)',
-  fontSize: 'var(--size-sm)', boxSizing: 'border-box',
-};
-
 const emptyForm = () => ({
-  date: new Date().toISOString().split('T')[0],
+  date: todayLocal(),
   category: '' as ExpenseCategory | '',
   amount: '',
   description: '',
@@ -38,9 +35,13 @@ export function FinanceExpenses() {
 
   async function fetchExpenses() {
     setLoading(true);
-    const res = await fetch('/api/admin/finance/expenses');
-    if (res.ok) setExpenses(await res.json());
-    setLoading(false);
+    try {
+      setExpenses(await request<Expense[]>('/api/admin/finance/expenses'));
+    } catch {
+      showToast('지출 내역을 불러오지 못했습니다.', 'error');
+    } finally {
+      setLoading(false);
+    }
   }
 
   function resetForm() {
@@ -75,9 +76,12 @@ export function FinanceExpenses() {
       note: form.note || null,
     };
     const url = editingId ? `/api/admin/finance/expenses/${editingId}` : '/api/admin/finance/expenses';
-    const method = editingId ? 'PATCH' : 'POST';
-    const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    if (!res.ok) { showToast('저장 실패', 'error'); return; }
+    try {
+      await request(url, { method: editingId ? 'PATCH' : 'POST', body: payload });
+    } catch {
+      showToast('저장 실패', 'error');
+      return;
+    }
     showToast(editingId ? '지출 수정 완료' : '지출 추가 완료', 'success');
     resetForm();
     fetchExpenses();
@@ -86,58 +90,77 @@ export function FinanceExpenses() {
   async function handleDelete(id: string) {
     const ok = await showConfirm('이 지출 내역을 삭제할까요?');
     if (!ok) return;
-    const res = await fetch(`/api/admin/finance/expenses/${id}`, { method: 'DELETE' });
-    if (res.ok) { showToast('삭제 완료', 'success'); fetchExpenses(); }
-    else showToast('삭제 실패', 'error');
+    try {
+      await request(`/api/admin/finance/expenses/${id}`, { method: 'DELETE' });
+      showToast('삭제 완료', 'success');
+      fetchExpenses();
+    } catch {
+      showToast('삭제 실패', 'error');
+    }
   }
 
   return (
     <div className={styles.dashboard}>
       <section className={styles.dashboardSection}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-          <h2 className={styles.dashboardSectionTitle} style={{ marginBottom: 0 }}>지출 내역</h2>
-          <button className={styles.refreshButton} onClick={() => { setShowForm(!showForm); setEditingId(null); }}>
-            {showForm ? '취소' : '+ 지출 추가'}
-          </button>
+        <div className={styles.finHeaderRow}>
+          <h2 className={`${styles.dashboardSectionTitle} ${styles.finHeaderTitle}`}>지출 내역</h2>
+          <div className={styles.finHeaderActions}>
+            <button
+              className={styles.refreshButton}
+              disabled={expenses.length === 0}
+              onClick={() =>
+                downloadCsv(
+                  `지출내역_${todayLocal()}.csv`,
+                  ['날짜', '카테고리', '금액', '내용', '부가세공제', '메모'],
+                  expenses.map((e) => [e.date, e.category, e.amount, e.description, e.vat_deductible ? 'Y' : 'N', e.note ?? '']),
+                )
+              }
+            >
+              CSV 다운로드
+            </button>
+            <button className={styles.refreshButton} onClick={() => { setShowForm(!showForm); setEditingId(null); }}>
+              {showForm ? '취소' : '+ 지출 추가'}
+            </button>
+          </div>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSubmit} style={{ background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)', borderRadius: 8, padding: 'var(--space-lg)', marginBottom: 'var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--space-md)' }}>
+          <form onSubmit={handleSubmit} className={styles.finForm}>
+            <div className={styles.finFormGrid}>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>날짜 *</label>
-                <input type="date" value={form.date} onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))} required style={inputStyle} />
+                <label className={styles.finLabel}>날짜 *</label>
+                <input type="date" value={form.date} onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))} required className={styles.finInput} />
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>카테고리 *</label>
-                <select value={form.category} onChange={(e) => setForm(f => ({ ...f, category: e.target.value as ExpenseCategory }))} required style={inputStyle}>
+                <label className={styles.finLabel}>카테고리 *</label>
+                <select value={form.category} onChange={(e) => setForm(f => ({ ...f, category: e.target.value as ExpenseCategory }))} required className={styles.finInput}>
                   <option value="">선택</option>
                   {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>금액 (원) *</label>
-                <input type="number" value={form.amount} onChange={(e) => setForm(f => ({ ...f, amount: e.target.value }))} required min={0} placeholder="0" style={inputStyle} />
+                <label className={styles.finLabel}>금액 (원) *</label>
+                <input type="number" value={form.amount} onChange={(e) => setForm(f => ({ ...f, amount: e.target.value }))} required min={0} placeholder="0" className={styles.finInput} />
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>항목 설명 *</label>
-                <input type="text" value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} required placeholder="예: 네이버 광고비 5월" style={inputStyle} />
+                <label className={styles.finLabel}>항목 설명 *</label>
+                <input type="text" value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} required placeholder="예: 네이버 광고비 5월" className={styles.finInput} />
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>영수증 URL</label>
-                <input type="text" value={form.receipt_url} onChange={(e) => setForm(f => ({ ...f, receipt_url: e.target.value }))} placeholder="선택 사항" style={inputStyle} />
+                <label className={styles.finLabel}>영수증 URL</label>
+                <input type="text" value={form.receipt_url} onChange={(e) => setForm(f => ({ ...f, receipt_url: e.target.value }))} placeholder="선택 사항" className={styles.finInput} />
               </div>
               <div>
-                <label style={{ fontSize: 'var(--size-sm)', color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>메모</label>
-                <input type="text" value={form.note} onChange={(e) => setForm(f => ({ ...f, note: e.target.value }))} placeholder="선택 사항" style={inputStyle} />
+                <label className={styles.finLabel}>메모</label>
+                <input type="text" value={form.note} onChange={(e) => setForm(f => ({ ...f, note: e.target.value }))} placeholder="선택 사항" className={styles.finInput} />
               </div>
             </div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--size-sm)', color: 'var(--color-text-primary)', cursor: 'pointer' }}>
+            <label className={styles.finCheckbox}>
               <input type="checkbox" checked={form.vat_deductible} onChange={(e) => setForm(f => ({ ...f, vat_deductible: e.target.checked }))} />
               부가세 공제 가능 (세금계산서 있음)
             </label>
-            <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-              <button type="submit" style={{ padding: 'var(--space-sm) var(--space-lg)', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'var(--size-sm)' }}>
+            <div className={styles.finFormActions}>
+              <button type="submit" className={styles.finSubmitBtn}>
                 {editingId ? '수정' : '저장'}
               </button>
               <button type="button" onClick={resetForm} className={styles.refreshButton}>취소</button>
@@ -150,31 +173,31 @@ export function FinanceExpenses() {
         ) : expenses.length === 0 ? (
           <p className={styles.empty}>등록된 지출 내역이 없습니다.</p>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--size-sm)' }}>
+          <div className={styles.finTableWrap}>
+            <table className={styles.finTable}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--color-border)', color: 'var(--color-text-secondary)' }}>
-                  <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>날짜</th>
-                  <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>카테고리</th>
-                  <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>항목</th>
-                  <th style={{ textAlign: 'right', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>금액</th>
-                  <th style={{ textAlign: 'center', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>VAT</th>
-                  <th style={{ textAlign: 'left', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>메모</th>
-                  <th style={{ textAlign: 'center', padding: 'var(--space-sm) var(--space-md)', fontWeight: 600 }}>관리</th>
+                <tr>
+                  <th>날짜</th>
+                  <th>카테고리</th>
+                  <th>항목</th>
+                  <th className={styles.finRight}>금액</th>
+                  <th className={styles.finCenter}>VAT</th>
+                  <th>메모</th>
+                  <th className={styles.finCenter}>관리</th>
                 </tr>
               </thead>
               <tbody>
                 {expenses.map(e => (
-                  <tr key={e.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', color: 'var(--color-text-secondary)' }}>{e.date}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', color: 'var(--color-text-primary)' }}>{e.category}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', color: 'var(--color-text-primary)' }}>{e.description}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', textAlign: 'right', fontWeight: 600, color: 'var(--color-text-primary)' }}>₩{e.amount.toLocaleString()}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', textAlign: 'center', color: e.vat_deductible ? '#4ade80' : 'var(--color-text-secondary)' }}>{e.vat_deductible ? '✓' : '-'}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', color: 'var(--color-text-secondary)' }}>{e.note ?? '-'}</td>
-                    <td style={{ padding: 'var(--space-sm) var(--space-md)', textAlign: 'center' }}>
-                      <button onClick={() => startEdit(e)} style={{ marginRight: 8, padding: '2px 10px', border: '1px solid var(--color-border)', borderRadius: 4, background: 'transparent', color: 'var(--color-text-secondary)', cursor: 'pointer', fontSize: 12 }}>수정</button>
-                      <button onClick={() => handleDelete(e.id)} style={{ padding: '2px 10px', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 4, background: 'transparent', color: '#f87171', cursor: 'pointer', fontSize: 12 }}>삭제</button>
+                  <tr key={e.id}>
+                    <td>{e.date}</td>
+                    <td className={styles.finStrong}>{e.category}</td>
+                    <td className={styles.finStrong}>{e.description}</td>
+                    <td className={`${styles.finRight} ${styles.finStrong}`}>₩{e.amount.toLocaleString()}</td>
+                    <td className={`${styles.finCenter} ${e.vat_deductible ? styles.finPos : ''}`}>{e.vat_deductible ? '✓' : '-'}</td>
+                    <td>{e.note ?? '-'}</td>
+                    <td className={styles.finCenter}>
+                      <button onClick={() => startEdit(e)} className={styles.finRowBtn}>수정</button>
+                      <button onClick={() => handleDelete(e.id)} className={`${styles.finRowBtn} ${styles.finRowBtnDanger}`}>삭제</button>
                     </td>
                   </tr>
                 ))}

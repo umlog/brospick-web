@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { request } from '@/lib/api-client';
 import styles from '../admin.module.css';
 import { showConfirm } from '../lib/confirm';
 import { showToast } from '../lib/toast';
@@ -37,9 +38,10 @@ export function ReviewManager() {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/reviews');
-      const data = await res.json();
-      if (res.ok) setReviews(data.reviews);
+      const data = await request<{ reviews: AdminReview[] }>('/api/admin/reviews');
+      setReviews(data.reviews);
+    } catch {
+      showToast('리뷰 목록을 불러오지 못했습니다.', 'error');
     } finally {
       setLoading(false);
     }
@@ -53,17 +55,11 @@ export function ReviewManager() {
 
     setDeleting(review.id);
     try {
-      const res = await fetch('/api/admin/reviews', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reviewId: review.id }),
-      });
-      if (res.ok) {
-        setReviews((prev) => prev.filter((r) => r.id !== review.id));
-        showToast('리뷰가 삭제되었습니다.');
-      } else {
-        showToast('삭제에 실패했습니다.');
-      }
+      await request('/api/admin/reviews', { method: 'DELETE', body: { reviewId: review.id } });
+      setReviews((prev) => prev.filter((r) => r.id !== review.id));
+      showToast('리뷰가 삭제되었습니다.');
+    } catch {
+      showToast('삭제에 실패했습니다.', 'error');
     } finally {
       setDeleting(null);
     }

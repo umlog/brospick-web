@@ -26,6 +26,22 @@ export function getStatusColor(status: string): string {
   }
 }
 
+/** 로드된 데이터를 CSV로 다운로드 (클라이언트 생성 — 서버 호출 없음). 엑셀 호환 BOM 포함 */
+export function downloadCsv(filename: string, header: string[], rows: (string | number)[][]): void {
+  const escapeCell = (cell: string | number) => {
+    const s = String(cell);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const csv = [header, ...rows].map((row) => row.map(escapeCell).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export function getReturnStatusColor(status: string): string {
   switch (status) {
     case ReturnStatus.RECEIVED: return styles.returnStatusReceived;

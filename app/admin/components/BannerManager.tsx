@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { SiteBanner } from '../hooks/useBanners';
 import { showConfirm } from '../lib/confirm';
+import { toDatetimeLocalValue } from '../lib/datetime';
 import styles from '../admin.module.css';
 
 interface Props {
@@ -105,13 +106,13 @@ export function BannerManager({ state }: Props) {
             <div className={styles.bmField}>
               <label className={styles.bmFieldLabel}>시작일 (선택)</label>
               <input type="datetime-local" className={styles.input}
-                value={form.starts_at ? form.starts_at.slice(0, 16) : ''}
+                value={form.starts_at ? toDatetimeLocalValue(form.starts_at) : ''}
                 onChange={(e) => set('starts_at', e.target.value ? new Date(e.target.value).toISOString() : null)} />
             </div>
             <div className={styles.bmField}>
               <label className={styles.bmFieldLabel}>종료일 (선택)</label>
               <input type="datetime-local" className={styles.input}
-                value={form.ends_at ? form.ends_at.slice(0, 16) : ''}
+                value={form.ends_at ? toDatetimeLocalValue(form.ends_at) : ''}
                 onChange={(e) => set('ends_at', e.target.value ? new Date(e.target.value).toISOString() : null)} />
             </div>
           </div>

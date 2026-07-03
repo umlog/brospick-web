@@ -17,6 +17,20 @@ function guard(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const err = guard(request); if (err) return err;
   const supabase = getServiceClient();
+
+  // ?usage=CODE — 해당 쿠폰이 쓰인 주문 내역 조회
+  const usageCode = new URL(request.url).searchParams.get('usage');
+  if (usageCode) {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('order_number, customer_name, discount_amount, total_amount, status, created_at')
+      .eq('coupon_code', usageCode.trim().toUpperCase())
+      .order('created_at', { ascending: false });
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ orders: data ?? [] });
+  }
+
   const { data, error } = await supabase
     .from('coupons')
     .select('*')

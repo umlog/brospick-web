@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { request } from '@/lib/api-client';
+import { showToast } from '../lib/toast';
 import styles from '../admin.module.css';
 
 interface Note {
@@ -21,36 +23,36 @@ export function OrderNotes({ orderId }: Props) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/admin/order-notes?order_id=${orderId}`)
-      .then((r) => r.json())
+    request<Note[]>(`/api/admin/order-notes?order_id=${encodeURIComponent(orderId)}`)
       .then((d) => setNotes(Array.isArray(d) ? d : []))
-      .catch(() => {})
+      .catch(() => showToast('메모를 불러오지 못했습니다.', 'error'))
       .finally(() => setLoading(false));
   }, [orderId]);
 
   const handleAdd = async () => {
     if (!input.trim()) return;
     setAdding(true);
-    const res = await fetch('/api/admin/order-notes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order_id: orderId, note: input.trim() }),
-    });
-    if (res.ok) {
-      const data = await res.json();
+    try {
+      const data = await request<Note>('/api/admin/order-notes', {
+        method: 'POST',
+        body: { order_id: orderId, note: input.trim() },
+      });
       setNotes((prev) => [...prev, data]);
       setInput('');
+    } catch {
+      showToast('메모 추가에 실패했습니다.', 'error');
+    } finally {
+      setAdding(false);
     }
-    setAdding(false);
   };
 
   const handleDelete = async (id: number) => {
-    await fetch('/api/admin/order-notes', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    setNotes((prev) => prev.filter((n) => n.id !== id));
+    try {
+      await request('/api/admin/order-notes', { method: 'DELETE', body: { id } });
+      setNotes((prev) => prev.filter((n) => n.id !== id));
+    } catch {
+      showToast('메모 삭제에 실패했습니다.', 'error');
+    }
   };
 
   return (

@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import type { SitePopup } from '../hooks/usePopups';
+import { request } from '@/lib/api-client';
 import { showConfirm } from '../lib/confirm';
+import { showToast } from '../lib/toast';
+import { toDatetimeLocalValue, toLocalDateString } from '../lib/datetime';
 import styles from '../admin.module.css';
 
 interface Props {
@@ -57,18 +60,22 @@ export function PopupManager({ state }: Props) {
 
   const [splashEnabled, setSplashEnabled] = useState(true);
   useEffect(() => {
-    fetch('/api/admin/site-settings')
-      .then((r) => r.json())
-      .then((d) => setSplashEnabled(d.splash_screen_enabled !== 'false'));
+    request<Record<string, string>>('/api/admin/site-settings')
+      .then((d) => setSplashEnabled(d.splash_screen_enabled !== 'false'))
+      .catch(() => showToast('사이트 설정을 불러오지 못했습니다.', 'error'));
   }, []);
   const toggleSplash = async () => {
     const next = !splashEnabled;
     setSplashEnabled(next);
-    await fetch('/api/admin/site-settings', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ splash_screen_enabled: next ? 'true' : 'false' }),
-    });
+    try {
+      await request('/api/admin/site-settings', {
+        method: 'PATCH',
+        body: { splash_screen_enabled: next ? 'true' : 'false' },
+      });
+    } catch {
+      setSplashEnabled(!next);
+      showToast('스플래시 설정 저장에 실패했습니다.', 'error');
+    }
   };
 
   if (loading) return <p className={styles.loading}>로딩 중...</p>;
@@ -103,13 +110,13 @@ export function PopupManager({ state }: Props) {
             <div className={styles.bmField}>
               <label className={styles.bmFieldLabel}>시작일 (선택)</label>
               <input type="datetime-local" className={styles.input}
-                value={form.starts_at ? form.starts_at.slice(0, 16) : ''}
+                value={form.starts_at ? toDatetimeLocalValue(form.starts_at) : ''}
                 onChange={(e) => set('starts_at', e.target.value ? new Date(e.target.value).toISOString() : null)} />
             </div>
             <div className={styles.bmField}>
               <label className={styles.bmFieldLabel}>종료일 (선택)</label>
               <input type="datetime-local" className={styles.input}
-                value={form.ends_at ? form.ends_at.slice(0, 16) : ''}
+                value={form.ends_at ? toDatetimeLocalValue(form.ends_at) : ''}
                 onChange={(e) => set('ends_at', e.target.value ? new Date(e.target.value).toISOString() : null)} />
             </div>
           </div>
@@ -176,8 +183,8 @@ export function PopupManager({ state }: Props) {
                   </span>
                 </div>
                 <p className={styles.bmCardDate}>
-                  {p.starts_at ? `${p.starts_at.slice(0, 10)} ~` : '상시'}{' '}
-                  {p.ends_at ? p.ends_at.slice(0, 10) : ''}
+                  {p.starts_at ? `${toLocalDateString(p.starts_at)} ~` : '상시'}{' '}
+                  {p.ends_at ? toLocalDateString(p.ends_at) : ''}
                 </p>
               </div>
               <div className={styles.bmCardActions}>

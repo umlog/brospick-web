@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { request } from '@/lib/api-client';
 import { showToast } from '../lib/toast';
 import { showConfirm } from '../lib/confirm';
 import styles from '../admin.module.css';
@@ -20,9 +21,9 @@ export function MarketingEmailManager() {
   const [showRecipients, setShowRecipients] = useState(false);
 
   useEffect(() => {
-    fetch('/api/admin/marketing-email')
-      .then(r => r.json())
+    request<{ recipients: Recipient[] }>('/api/admin/marketing-email')
       .then(data => setRecipients(data.recipients ?? []))
+      .catch(() => showToast('수신자 목록을 불러오지 못했습니다.', 'error'))
       .finally(() => setLoadingRecipients(false));
   }, []);
 
@@ -36,13 +37,10 @@ export function MarketingEmailManager() {
     setSending(true);
     setResult(null);
     try {
-      const res = await fetch('/api/admin/marketing-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, body }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message ?? '발송 실패');
+      const data = await request<{ sent: number; failed: string[]; total: number }>(
+        '/api/admin/marketing-email',
+        { method: 'POST', body: { subject, body } },
+      );
       setResult(data);
     } catch (e) {
       showToast(e instanceof Error ? e.message : '발송 중 오류가 발생했습니다.', 'error');

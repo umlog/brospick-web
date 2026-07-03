@@ -23,7 +23,7 @@ export class ApiClientError extends Error {
   }
 }
 
-async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
+export async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body } = options;
 
   const headers: Record<string, string> = {};

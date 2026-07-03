@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { request } from '@/lib/api-client';
+import { showToast } from '../lib/toast';
+import { todayLocal } from '../lib/datetime';
 import styles from '../admin.module.css';
 
 interface SummaryData {
@@ -24,6 +27,7 @@ interface SummaryData {
   expenses_by_category: Record<string, number>;
   total_expenses: number;
   operating_income: number;
+  monthly: { month: string; revenue: number; ebook: number; expenses: number; profit: number }[];
   shipping: {
     collected: number;
     return_collected: number;
@@ -39,16 +43,10 @@ interface SummaryData {
 
 function fmt(n: number) { return '₩' + n.toLocaleString(); }
 
-const row: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-border)', fontSize: 'var(--size-sm)' };
-const rowLast: React.CSSProperties = { ...row, borderBottom: 'none' };
-const lbl: React.CSSProperties = { color: 'var(--color-text-secondary)' };
-const val: React.CSSProperties = { fontWeight: 600, color: 'var(--color-text-primary)' };
-const inputStyle: React.CSSProperties = { padding: 'var(--space-sm)', background: 'var(--color-bg-primary, #0a0a0a)', border: '1px solid var(--color-border)', borderRadius: 4, color: 'var(--color-text-primary)', fontSize: 'var(--size-sm)' };
-
 export function FinanceSummary() {
   const thisYear = new Date().getFullYear();
   const [from, setFrom] = useState(`${thisYear}-01-01`);
-  const [to, setTo] = useState(new Date().toISOString().split('T')[0]);
+  const [to, setTo] = useState(todayLocal());
   const [data, setData] = useState<SummaryData | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -56,22 +54,26 @@ export function FinanceSummary() {
 
   async function fetchSummary() {
     setLoading(true);
-    const res = await fetch(`/api/admin/finance/summary?from=${from}&to=${to}`);
-    if (res.ok) setData(await res.json());
-    setLoading(false);
+    try {
+      setData(await request<SummaryData>(`/api/admin/finance/summary?from=${from}&to=${to}`));
+    } catch {
+      showToast('재무 요약을 불러오지 못했습니다.', 'error');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <div className={styles.dashboard}>
       <section className={styles.dashboardSection}>
-        <div style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+        <div className={styles.finFilterRow}>
           <div>
-            <label style={{ ...lbl, display: 'block', marginBottom: 4 }}>시작일</label>
-            <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} style={inputStyle} />
+            <label className={styles.finLabel}>시작일</label>
+            <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={`${styles.finInput} ${styles.finInputAuto}`} />
           </div>
           <div>
-            <label style={{ ...lbl, display: 'block', marginBottom: 4 }}>종료일</label>
-            <input type="date" value={to} onChange={(e) => setTo(e.target.value)} style={inputStyle} />
+            <label className={styles.finLabel}>종료일</label>
+            <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={`${styles.finInput} ${styles.finInputAuto}`} />
           </div>
           <button onClick={fetchSummary} className={styles.refreshButton}>조회</button>
         </div>
@@ -83,40 +85,71 @@ export function FinanceSummary() {
         <>
           <section className={styles.dashboardSection}>
             <h2 className={styles.dashboardSectionTitle}>매출</h2>
-            <div style={row}><span style={lbl}>총 매출 (주문 {data.revenue.order_count}건)</span><span style={val}>{fmt(data.revenue.gross)}</span></div>
-            <div style={row}><span style={{ ...lbl, paddingLeft: 12 }}>ㄴ 상품 매출</span><span style={val}>{fmt(data.revenue.product_revenue)}</span></div>
-            <div style={row}><span style={{ ...lbl, paddingLeft: 12 }}>ㄴ 수취 배송비</span><span style={val}>{fmt(data.shipping.collected)}</span></div>
-            <div style={row}><span style={lbl}>취소 환불</span><span style={{ fontWeight: 600, color: '#f87171' }}>-{fmt(data.revenue.cancel_refunds)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>총 매출 (주문 {data.revenue.order_count}건)</span><span className={styles.finVal}>{fmt(data.revenue.gross)}</span></div>
+            <div className={styles.finRow}><span className={`${styles.finLbl} ${styles.finLblIndent}`}>ㄴ 상품 매출</span><span className={styles.finVal}>{fmt(data.revenue.product_revenue)}</span></div>
+            <div className={styles.finRow}><span className={`${styles.finLbl} ${styles.finLblIndent}`}>ㄴ 수취 배송비</span><span className={styles.finVal}>{fmt(data.shipping.collected)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>취소 환불</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.revenue.cancel_refunds)}</span></div>
             {data.revenue.return_refunds > 0 && (
-              <div style={row}><span style={lbl}>반품 환불 ({data.revenue.return_count}건)</span><span style={{ fontWeight: 600, color: '#f87171' }}>-{fmt(data.revenue.return_refunds)}</span></div>
+              <div className={styles.finRow}><span className={styles.finLbl}>반품 환불 ({data.revenue.return_count}건)</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.revenue.return_refunds)}</span></div>
             )}
             {data.revenue.exchange_shipping_income > 0 && (
-              <div style={row}><span style={lbl}>교환 배송비 수입 ({data.revenue.exchange_count}건)</span><span style={val}>+{fmt(data.revenue.exchange_shipping_income)}</span></div>
+              <div className={styles.finRow}><span className={styles.finLbl}>교환 배송비 수입 ({data.revenue.exchange_count}건)</span><span className={styles.finVal}>+{fmt(data.revenue.exchange_shipping_income)}</span></div>
             )}
-            <div style={row}><span style={lbl}>순 매출 (주문)</span><span style={val}>{fmt(data.revenue.net)}</span></div>
-            <div style={row}><span style={lbl}>전자책 매출</span><span style={val}>{fmt(data.revenue.ebook)}</span></div>
-            <div style={rowLast}><span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>총 순매출</span><span style={{ fontWeight: 700, fontSize: '1.1em', color: 'var(--color-accent)' }}>{fmt(data.revenue.total_net)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>순 매출 (주문)</span><span className={styles.finVal}>{fmt(data.revenue.net)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>전자책 매출</span><span className={styles.finVal}>{fmt(data.revenue.ebook)}</span></div>
+            <div className={`${styles.finRow} ${styles.finRowLast}`}><span className={styles.finTotalLbl}>총 순매출</span><span className={`${styles.finTotalVal} ${styles.finAccent}`}>{fmt(data.revenue.total_net)}</span></div>
           </section>
 
           <section className={styles.dashboardSection}>
             <h2 className={styles.dashboardSectionTitle}>손익 계산</h2>
-            <div style={row}><span style={lbl}>순매출</span><span style={val}>{fmt(data.revenue.total_net)}</span></div>
-            <div style={row}><span style={lbl}>매출원가 COGS (사입가 기준)</span><span style={{ fontWeight: 600, color: '#f87171' }}>-{fmt(data.cogs)}</span></div>
-            <div style={row}><span style={lbl}>매출총이익</span><span style={val}>{fmt(data.gross_profit)} ({data.gross_margin_pct}%)</span></div>
-            <div style={row}><span style={lbl}>총 지출</span><span style={{ fontWeight: 600, color: '#f87171' }}>-{fmt(data.total_expenses)}</span></div>
-            <div style={rowLast}>
-              <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>영업이익</span>
-              <span style={{ fontWeight: 700, fontSize: '1.1em', color: data.operating_income >= 0 ? '#4ade80' : '#f87171' }}>{fmt(data.operating_income)}</span>
+            <div className={styles.finRow}><span className={styles.finLbl}>순매출</span><span className={styles.finVal}>{fmt(data.revenue.total_net)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>매출원가 COGS (사입가 기준)</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.cogs)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>매출총이익</span><span className={styles.finVal}>{fmt(data.gross_profit)} ({data.gross_margin_pct}%)</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>총 지출</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.total_expenses)}</span></div>
+            <div className={`${styles.finRow} ${styles.finRowLast}`}>
+              <span className={styles.finTotalLbl}>영업이익</span>
+              <span className={`${styles.finTotalVal} ${data.operating_income >= 0 ? styles.finPos : styles.finNeg}`}>{fmt(data.operating_income)}</span>
             </div>
           </section>
+
+          {data.monthly.length > 0 && (
+            <section className={styles.dashboardSection}>
+              <h2 className={styles.dashboardSectionTitle}>월별 추이</h2>
+              <div className={styles.finTableWrap}>
+                <table className={styles.finTable}>
+                  <thead>
+                    <tr>
+                      <th>월</th>
+                      <th className={styles.finRight}>매출</th>
+                      <th className={styles.finRight}>전자책</th>
+                      <th className={styles.finRight}>지출</th>
+                      <th className={styles.finRight}>손익</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.monthly.map((m) => (
+                      <tr key={m.month}>
+                        <td className={styles.finStrong}>{m.month}</td>
+                        <td className={`${styles.finRight} ${styles.finStrong}`}>{fmt(m.revenue)}</td>
+                        <td className={`${styles.finRight} ${styles.finStrong}`}>{fmt(m.ebook)}</td>
+                        <td className={`${styles.finRight} ${styles.finNeg}`}>-{fmt(m.expenses)}</td>
+                        <td className={`${styles.finRight} ${styles.finStrong} ${m.profit >= 0 ? styles.finPos : styles.finNeg}`}>{fmt(m.profit)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className={styles.finNote}>※ 총매출 기준 단순 추이 (환불·COGS 미반영, KST 월 기준)</p>
+            </section>
+          )}
 
           {Object.keys(data.expenses_by_category).length > 0 && (
             <section className={styles.dashboardSection}>
               <h2 className={styles.dashboardSectionTitle}>지출 항목별</h2>
               {Object.entries(data.expenses_by_category).map(([cat, amt]) => (
-                <div key={cat} style={row}><span style={lbl}>{cat}</span><span style={val}>{fmt(amt)}</span></div>
+                <div key={cat} className={styles.finRow}><span className={styles.finLbl}>{cat}</span><span className={styles.finVal}>{fmt(amt)}</span></div>
               ))}
-              <div style={rowLast}><span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>합계</span><span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>{fmt(data.total_expenses)}</span></div>
+              <div className={`${styles.finRow} ${styles.finRowLast}`}><span className={styles.finTotalLbl}>합계</span><span className={styles.finTotalLbl}>{fmt(data.total_expenses)}</span></div>
             </section>
           )}
 
@@ -124,44 +157,44 @@ export function FinanceSummary() {
             <h2 className={styles.dashboardSectionTitle}>배송비</h2>
             <div className={styles.dashboardGrid} style={{ marginBottom: 'var(--space-md)' }}>
               <div className={styles.dashboardCard}>
-                <div style={{ fontSize: 'var(--size-xs)', color: 'var(--color-text-secondary)', marginBottom: 4 }}>유료배송</div>
-                <div style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>{data.shipping.paid_order_count}건</div>
+                <div className={styles.finCardLabel}>유료배송</div>
+                <div className={styles.finCardValue}>{data.shipping.paid_order_count}건</div>
               </div>
               <div className={styles.dashboardCard}>
-                <div style={{ fontSize: 'var(--size-xs)', color: 'var(--color-text-secondary)', marginBottom: 4 }}>무료배송</div>
-                <div style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>{data.shipping.free_order_count}건</div>
+                <div className={styles.finCardLabel}>무료배송</div>
+                <div className={styles.finCardValue}>{data.shipping.free_order_count}건</div>
               </div>
               <div className={styles.dashboardCard}>
-                <div style={{ fontSize: 'var(--size-xs)', color: 'var(--color-text-secondary)', marginBottom: 4 }}>도서산간</div>
-                <div style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>{data.shipping.remote_area_count}건</div>
+                <div className={styles.finCardLabel}>도서산간</div>
+                <div className={styles.finCardValue}>{data.shipping.remote_area_count}건</div>
               </div>
             </div>
-            <div style={row}><span style={lbl}>수취 배송비 (구매)</span><span style={val}>{fmt(data.shipping.collected)}</span></div>
-            <div style={row}>
-              <span style={lbl}>수취 배송비 (반품, {data.revenue.return_count}건)</span>
-              <span style={{ ...val, color: 'var(--color-text-secondary)', fontSize: '0.85em' }}>{fmt(data.shipping.return_collected)} ※ 환불액에 반영됨</span>
+            <div className={styles.finRow}><span className={styles.finLbl}>수취 배송비 (구매)</span><span className={styles.finVal}>{fmt(data.shipping.collected)}</span></div>
+            <div className={styles.finRow}>
+              <span className={styles.finLbl}>수취 배송비 (반품, {data.revenue.return_count}건)</span>
+              <span className={styles.finSubNote}>{fmt(data.shipping.return_collected)} ※ 환불액에 반영됨</span>
             </div>
-            <div style={row}><span style={lbl}>수취 배송비 (교환, {data.revenue.exchange_count}건)</span><span style={val}>{fmt(data.shipping.exchange_collected)}</span></div>
-            <div style={row}><span style={lbl}>지출 배송비 (발송+반품)</span><span style={{ fontWeight: 600, color: '#f87171' }}>-{fmt(data.shipping.expense_out)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>수취 배송비 (교환, {data.revenue.exchange_count}건)</span><span className={styles.finVal}>{fmt(data.shipping.exchange_collected)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>지출 배송비 (발송+반품)</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.shipping.expense_out)}</span></div>
             {data.shipping.expense_out === 0 && (
-              <div style={{ fontSize: 'var(--size-xs)', color: '#facc15', marginBottom: 'var(--space-sm)' }}>
+              <div className={styles.finVatWarn}>
                 ⚠ 지출 내역에 배송비(발송) / 배송비(반품)가 입력되지 않았습니다.
               </div>
             )}
-            <div style={rowLast}>
-              <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>배송비 손익</span>
-              <span style={{ fontWeight: 700, fontSize: '1.1em', color: data.shipping.net_income >= 0 ? '#4ade80' : '#f87171' }}>{fmt(data.shipping.net_income)}</span>
+            <div className={`${styles.finRow} ${styles.finRowLast}`}>
+              <span className={styles.finTotalLbl}>배송비 손익</span>
+              <span className={`${styles.finTotalVal} ${data.shipping.net_income >= 0 ? styles.finPos : styles.finNeg}`}>{fmt(data.shipping.net_income)}</span>
             </div>
           </section>
 
           <section className={styles.dashboardSection}>
             <h2 className={styles.dashboardSectionTitle}>부가세 추정</h2>
-            <div style={row}><span style={lbl}>공급가액 (매출 ÷ 1.1)</span><span style={val}>{fmt(data.vat.sales_tax_base)}</span></div>
-            <div style={row}><span style={lbl}>매출세액</span><span style={val}>{fmt(data.vat.output_vat)}</span></div>
-            <div style={row}><span style={lbl}>매입세액 공제</span><span style={val}>-{fmt(data.vat.input_vat)}</span></div>
-            <div style={rowLast}>
-              <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>납부 예상 부가세</span>
-              <span style={{ fontWeight: 700, fontSize: '1.1em', color: '#facc15' }}>{fmt(data.vat.vat_payable)}</span>
+            <div className={styles.finRow}><span className={styles.finLbl}>공급가액 (매출 ÷ 1.1)</span><span className={styles.finVal}>{fmt(data.vat.sales_tax_base)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>매출세액</span><span className={styles.finVal}>{fmt(data.vat.output_vat)}</span></div>
+            <div className={styles.finRow}><span className={styles.finLbl}>매입세액 공제</span><span className={styles.finVal}>-{fmt(data.vat.input_vat)}</span></div>
+            <div className={`${styles.finRow} ${styles.finRowLast}`}>
+              <span className={styles.finTotalLbl}>납부 예상 부가세</span>
+              <span className={styles.finWarnVal}>{fmt(data.vat.vat_payable)}</span>
             </div>
           </section>
         </>
