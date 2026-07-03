@@ -52,8 +52,11 @@ export default function ApparelClient({ initialPrices }: Props) {
   useEffect(() => {
     const savedCategory = sessionStorage.getItem('apparel-category') as Filter | null;
     const savedSort = sessionStorage.getItem('apparel-sort') as SortMode | null;
-    if (savedCategory) setActiveCategory(savedCategory);
-    if (savedSort) setSortMode(savedSort);
+    // 삭제된 카테고리가 저장돼 있으면 빈 그리드가 되므로 유효성 확인 후 복원
+    if (savedCategory && (savedCategory === ALL || savedCategory in CATEGORY_LABELS)) {
+      setActiveCategory(savedCategory);
+    }
+    if (savedSort && savedSort in SORT_LABELS) setSortMode(savedSort);
 
     const savedScroll = sessionStorage.getItem('apparel-scroll');
     if (savedScroll) {
@@ -84,13 +87,8 @@ export default function ApparelClient({ initialPrices }: Props) {
     if (aComingSoon && !bComingSoon) return 1;
     if (aComingSoon && bComingSoon) return 0;
 
-    // 판매중끼리 정렬
+    // 판매중끼리 정렬 — 어드민 핀(sort_order)이 최우선. BEST 배지는 표시용일 뿐 순서에 개입하지 않는다
     if (sortMode === 'recommended') {
-      // BEST 배지 우선
-      const aBest = a.popularBadge ? 1 : 0;
-      const bBest = b.popularBadge ? 1 : 0;
-      if (bBest !== aBest) return bBest - aBest;
-      // 그 다음 sort_order 순
       if (aSortOrder !== null && bSortOrder !== null) return aSortOrder - bSortOrder;
       if (aSortOrder !== null) return -1;
       if (bSortOrder !== null) return 1;
@@ -101,9 +99,13 @@ export default function ApparelClient({ initialPrices }: Props) {
     return 0;
   });
 
-  const selectCategory = (cat: Filter) => {
+  const changeCategory = (cat: Filter) => {
     setActiveCategory(cat);
     sessionStorage.setItem('apparel-category', cat);
+  };
+
+  const selectCategory = (cat: Filter) => {
+    changeCategory(cat);
     setTimeout(() => {
       gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);
@@ -150,7 +152,7 @@ export default function ApparelClient({ initialPrices }: Props) {
             <div className={styles.categories}>
               <button
                 className={`${styles.categoryButton} ${activeCategory === ALL ? styles.active : ''}`}
-                onClick={() => { setActiveCategory(ALL); sessionStorage.setItem('apparel-category', ALL); }}
+                onClick={() => changeCategory(ALL)}
               >
                 전체
               </button>
@@ -158,7 +160,7 @@ export default function ApparelClient({ initialPrices }: Props) {
                 <button
                   key={cat}
                   className={`${styles.categoryButton} ${activeCategory === cat ? styles.active : ''}`}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => changeCategory(cat)}
                 >
                   {CATEGORY_LABELS[cat]}
                 </button>
