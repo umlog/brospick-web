@@ -4,12 +4,30 @@
 // =============================================================================
 
 import { escapeHtml, sendMail } from './transporter';
-import { RETURN_POLICY } from '@/lib/constants';
+import { RETURN_POLICY, BANK } from '@/lib/constants';
 import type { ReturnRequestEmailData, ReturnStatusEmailData } from '@/lib/domain/types';
 import { ReturnStatus, ReturnType } from '@/lib/domain/enums';
 
+// 교환/반품 불가 사유 (신청 페이지와 동일하게 유지)
+const RETURN_INELIGIBLE_REASONS = [
+  '상품 수령 후 7일이 지난 경우',
+  '착용·세탁·수선 등 사용 흔적이 있는 경우',
+  '상품 택(라벨) 제거 또는 포장이 훼손된 경우',
+  '고객 부주의로 상품이 오염·훼손된 경우',
+  '향수·화장품·체취 등 냄새가 밴 경우',
+] as const;
+
+const ineligibleListHtml = `
+      <div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="font-size:13px;color:#555;margin:0 0 8px;font-weight:600;">교환/반품이 불가한 경우</p>
+        <ul style="font-size:12px;color:#888;margin:0;padding-left:18px;line-height:1.8;">
+          ${RETURN_INELIGIBLE_REASONS.map((r) => `<li>${r}</li>`).join('\n          ')}
+        </ul>
+        <p style="font-size:12px;color:#888;margin:8px 0 0;">위 사유에 해당하는 경우 요청이 거절되고 상품이 반송될 수 있습니다.</p>
+      </div>`;
+
 const RETURN_STATUS_INFO: Partial<Record<ReturnStatus, { title: string; message: string; color: string; bgColor: string }>> = {
-  [ReturnStatus.APPROVED]: { title: '교환/반품이 승인되었습니다', message: '요청이 승인되어 처리가 진행됩니다.', color: '#34c759', bgColor: '#f0faf3' },
+  [ReturnStatus.APPROVED]: { title: '교환/반품이 승인되었습니다', message: '요청이 승인되었습니다. 1~2일 이내 상품 수거가 시작됩니다.', color: '#34c759', bgColor: '#f0faf3' },
   [ReturnStatus.COLLECTING]: { title: '반품 수거가 시작되었습니다', message: '상품 수거가 진행 중입니다.', color: '#5856d6', bgColor: '#f3f0ff' },
   [ReturnStatus.COLLECTED]: { title: '상품 수거가 완료되었습니다', message: '수거된 상품을 확인 중입니다.', color: '#007aff', bgColor: '#f0f6ff' },
   [ReturnStatus.COMPLETED]: { title: '교환/반품 처리가 완료되었습니다', message: '모든 처리가 완료되었습니다. 이용해주셔서 감사합니다.', color: '#34c759', bgColor: '#f0faf3' },
@@ -19,7 +37,9 @@ const RETURN_STATUS_INFO: Partial<Record<ReturnStatus, { title: string; message:
 // 반품/교환 접수 이메일
 export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
   const typeLabel = data.type === '교환' ? '교환 (사이즈 변경)' : '반품 (환불)';
-  const shippingFee = data.type === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee;
+  const shippingFee = data.shippingFee
+    ?? (data.type === '교환' ? RETURN_POLICY.exchangeShippingFee : RETURN_POLICY.returnShippingFee);
+  const isKakaoPay = data.paymentMethod === '카카오페이';
   const detailHtml = data.type === '교환' && data.exchangeSize
     ? `<div style="display:flex;justify-content:space-between;margin-bottom:6px;">
         <span style="font-size:13px;color:#888;">사이즈 변경</span>
@@ -63,15 +83,77 @@ export async function sendReturnRequestEmail(data: ReturnRequestEmailData) {
         </div>
       </div>
 
+      ${data.type === '교환' ? `
       <div style="background:#fff8f0;border:1px solid #ffe0b2;border-radius:8px;padding:16px;margin-bottom:24px;">
-        <p style="font-size:13px;color:#e65100;margin:0 0 8px;font-weight:600;">${data.type} 배송비 안내</p>
+        <p style="font-size:13px;color:#e65100;margin:0 0 8px;font-weight:600;">교환 배송비 입금 안내</p>
+        <p style="font-size:13px;color:#e65100;margin:0 0 12px;">
+          교환 배송비 <strong>₩${shippingFee.toLocaleString()}</strong>(왕복)은 고객 부담입니다. 아래 계좌로 입금해주세요.
+        </p>
+        <div style="background:#fff;border:1px solid #ffe0b2;border-radius:6px;padding:12px 16px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">입금 계좌</span>
+            <span style="font-size:14px;color:#333;font-weight:700;font-family:monospace;">${BANK.name} ${BANK.account}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">예금주</span>
+            <span style="font-size:14px;color:#333;">${BANK.holder}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-size:13px;color:#888;">입금 금액</span>
+            <span style="font-size:14px;color:#c22833;font-weight:700;">₩${shippingFee.toLocaleString()}</span>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#888;margin:0;line-height:1.7;">
+          · 입금자명은 주문자명(${escapeHtml(data.customerName)})으로 입금해주세요.<br/>
+          · 입금 확인 후 <strong>1~2일 이내</strong> 상품 수거가 시작됩니다.<br/>
+          · 입금이 확인되지 않으면 교환 처리가 보류됩니다.
+        </p>
+      </div>` : `
+      <div style="background:#fff8f0;border:1px solid #ffe0b2;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="font-size:13px;color:#e65100;margin:0 0 8px;font-weight:600;">반품 배송비 및 환불 안내</p>
         <p style="font-size:13px;color:#e65100;margin:0;">
-          ${data.type} 배송비 ₩${shippingFee.toLocaleString()}은 고객 부담입니다.${data.type === '반품' ? ' 환불 금액에서 차감됩니다.' : ''}
+          반품 배송비 ₩${shippingFee.toLocaleString()}은 환불 금액에서 차감되므로 <strong>별도 입금이 필요하지 않습니다.</strong>
         </p>
-        <p style="font-size:12px;color:#888;margin:8px 0 0;">
-          접수된 요청은 확인 후 순차적으로 처리됩니다. 처리 상태는 주문 조회에서 확인하실 수 있습니다.
+        ${data.refundAmount !== undefined ? `
+        <div style="background:#fff;border:1px solid #ffe0b2;border-radius:6px;padding:12px 16px;margin-top:12px;">
+          ${data.itemTotal !== undefined ? `
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">상품 금액</span>
+            <span style="font-size:14px;color:#333;">₩${data.itemTotal.toLocaleString()}</span>
+          </div>` : ''}
+          ${data.couponDeduction ? `
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">쿠폰 할인 차감</span>
+            <span style="font-size:14px;color:#333;">-₩${data.couponDeduction.toLocaleString()}</span>
+          </div>` : ''}
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">반품 배송비</span>
+            <span style="font-size:14px;color:#333;">-₩${shippingFee.toLocaleString()}</span>
+          </div>
+          ${data.shippingRecovered ? `
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;color:#888;">최초 배송비 (무료배송 기준 미달)</span>
+            <span style="font-size:14px;color:#333;">-₩${data.shippingRecovered.toLocaleString()}</span>
+          </div>` : ''}
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;border-top:1px solid #eee;padding-top:8px;">
+            <span style="font-size:13px;color:#888;">환불 예정 금액</span>
+            <span style="font-size:14px;color:#c22833;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-size:13px;color:#888;">환불 방법</span>
+            <span style="font-size:14px;color:#333;">${isKakaoPay ? '카카오페이 자동 환불' : '입력하신 계좌로 이체 (처리완료 후 1~3영업일)'}</span>
+          </div>
+        </div>
+        ${data.refundAmount === 0 ? `
+        <p style="font-size:12px;color:#c22833;margin:8px 0 0;">
+          차감 금액이 상품 금액 이상이어서 환불 예정 금액이 없습니다. 문의사항은 고객센터로 연락해주세요.
+        </p>` : ''}` : ''}
+        <p style="font-size:12px;color:#888;margin:12px 0 0;">
+          승인 후 1~2일 이내 상품 수거가 시작됩니다. 수거된 상품 검수 후 환불이 진행됩니다.
         </p>
-      </div>
+      </div>`}
+
+      ${ineligibleListHtml}
 
       <div style="text-align:center;margin-top:24px;">
         <a href="${data.trackingUrl}" style="display:inline-block;background:#c22833;color:#fff;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
@@ -113,11 +195,16 @@ export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
       </div>`;
   }
   if (data.status === ReturnStatus.COMPLETED && data.type === ReturnType.RETURN && data.refundAmount) {
+    const isKakaoPay = data.paymentMethod === '카카오페이';
     extraHtml = `
       <div style="background:#f0faf3;border:1px solid #c8e6c9;border-radius:8px;padding:16px;margin-bottom:24px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:13px;color:#888;">환불 금액</span>
           <span style="font-size:15px;color:#2e7d32;font-weight:700;">₩${data.refundAmount.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:#888;">환불 방법</span>
+          <span style="font-size:14px;color:#333;">${isKakaoPay ? '카카오페이 자동 환불 (즉시)' : '입력하신 계좌로 이체 (1~3영업일)'}</span>
         </div>
       </div>`;
   }

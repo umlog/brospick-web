@@ -124,6 +124,14 @@ export function OrderCard({
             {order.delivery_note && <p>배송 요청사항: {order.delivery_note}</p>}
           </div>
 
+          {order.tracking_number && (
+            <div className={styles.detailSection}>
+              <h3>배송 정보</h3>
+              <p>운송장번호: <span style={{ fontFamily: 'monospace', fontWeight: 700 }}>{order.tracking_number}</span></p>
+              {order.delivered_at && <p>배송완료일: {formatDate(order.delivered_at)}</p>}
+            </div>
+          )}
+
           <div className={styles.detailSection}>
             <h3>결제 정보</h3>
             <p>결제방법: {order.payment_method}</p>

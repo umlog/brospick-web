@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${siteUrl}/checkout?error=payment_failed`);
     }
 
-    // 쿠폰 사용 횟수 증가
+    // 쿠폰 사용 횟수 증가 (RPC로 원자 처리, 함수 없으면 read-update fallback)
     if (order.coupon_code) {
       const { data: coupon } = await supabaseAdmin
         .from('coupons')
@@ -86,10 +86,13 @@ export async function GET(request: NextRequest) {
         .eq('code', order.coupon_code)
         .single();
       if (coupon) {
-        await supabaseAdmin
-          .from('coupons')
-          .update({ used_count: coupon.used_count + 1, updated_at: new Date().toISOString() })
-          .eq('id', coupon.id);
+        const { error: rpcError } = await supabaseAdmin.rpc('increment_coupon_use', { p_coupon_id: coupon.id });
+        if (rpcError) {
+          await supabaseAdmin
+            .from('coupons')
+            .update({ used_count: coupon.used_count + 1, updated_at: new Date().toISOString() })
+            .eq('id', coupon.id);
+        }
       }
     }
 

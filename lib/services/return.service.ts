@@ -9,6 +9,7 @@ import { notificationService } from './notification.service';
 import { OrderStatus, ReturnStatus, ReturnType } from '@/lib/domain/enums';
 import { RETURN_STATUS_TRANSITIONS } from '@/lib/domain/constants';
 import { RETURN_POLICY } from '@/lib/constants';
+import { computeReturnRefund, computeExchangeFee } from '@/lib/refund';
 import { getKakaoPayConfig } from '@/lib/kakao-pay';
 
 function generateRequestNumber(): string {
@@ -81,7 +82,7 @@ export class ReturnService {
     // 주문 조회 + 인증 (주문번호 + 전화번호)
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
-      .select('id, order_number, status, delivered_at, customer_name, customer_phone, customer_email, payment_method')
+      .select('id, order_number, status, delivered_at, customer_name, customer_phone, customer_email, payment_method, postal_code, discount_amount, shipping_fee')
       .eq('order_number', orderNumber)
       .eq('customer_phone', phone)
       .single();
@@ -134,7 +135,41 @@ export class ReturnService {
       throw Object.assign(new Error('이미 진행 중인 교환/반품 요청이 있습니다.'), { status: 400 });
     }
 
-    const returnQuantity = quantity || orderItem.quantity;
+    // 수량 검증 - 클라이언트 값 신뢰 금지 (초과 수량 = 환불 부풀리기 가능)
+    const returnQuantity = quantity ?? orderItem.quantity;
+    if (!Number.isInteger(returnQuantity) || returnQuantity < 1 || returnQuantity > orderItem.quantity) {
+      throw Object.assign(new Error('유효하지 않은 수량입니다.'), { status: 400 });
+    }
+
+    // 주문 전체 상품 금액 (쿠폰 안분·무료배송 회수 계산용)
+    const { data: allItems } = await supabaseAdmin
+      .from('order_items')
+      .select('price, quantity')
+      .eq('order_id', order.id);
+    const itemsSubtotal = (allItems ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    // 같은 주문의 기존 반품(거절 제외) 상품 금액 - 무료배송 회수 이중 차감 방지
+    const { data: priorRequests } = await supabaseAdmin
+      .from('return_requests')
+      .select('quantity, order_items(price)')
+      .eq('order_id', order.id)
+      .eq('type', ReturnType.RETURN)
+      .neq('status', ReturnStatus.REJECTED);
+    const priorReturnedGross = (priorRequests ?? []).reduce((sum, r) => {
+      const oi = Array.isArray(r.order_items) ? r.order_items[0] : r.order_items;
+      return sum + (oi?.price ?? 0) * r.quantity;
+    }, 0);
+
+    const exchangeFee = computeExchangeFee(order.postal_code);
+    const breakdown = computeReturnRefund({
+      itemPrice: orderItem.price,
+      quantity: returnQuantity,
+      itemsSubtotal,
+      discountAmount: order.discount_amount ?? 0,
+      orderShippingFee: order.shipping_fee ?? 0,
+      postalCode: order.postal_code,
+      priorReturnedGross,
+    });
 
     // 요청 생성 (요청번호 충돌 시 최대 3회 재시도)
     let requestNumber = '';
@@ -154,15 +189,16 @@ export class ReturnService {
 
       if (type === ReturnType.EXCHANGE) {
         insertData.exchange_size = exchangeSize;
-        insertData.return_shipping_fee = RETURN_POLICY.exchangeShippingFee;
+        insertData.return_shipping_fee = exchangeFee;
       }
 
       if (type === ReturnType.RETURN) {
         insertData.refund_bank = refundBank;
         insertData.refund_account = refundAccount;
         insertData.refund_holder = refundHolder;
-        insertData.refund_amount = Math.max(0, orderItem.price * returnQuantity - RETURN_POLICY.returnShippingFee);
-        insertData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
+        insertData.refund_amount = breakdown.refundAmount;
+        // 무료배송 회수분 포함 총 차감 배송비 (refund_amount = 상품가 - 쿠폰안분 - 이 값)
+        insertData.return_shipping_fee = breakdown.returnShippingFee + breakdown.shippingRecovered;
       }
 
       const result = await supabaseAdmin.from('return_requests').insert(insertData);
@@ -190,6 +226,12 @@ export class ReturnService {
       currentSize: orderItem.size,
       exchangeSize,
       reason,
+      paymentMethod: order.payment_method,
+      shippingFee: type === ReturnType.EXCHANGE ? exchangeFee : breakdown.returnShippingFee,
+      refundAmount: type === ReturnType.RETURN ? breakdown.refundAmount : undefined,
+      itemTotal: type === ReturnType.RETURN ? breakdown.itemTotal : undefined,
+      couponDeduction: type === ReturnType.RETURN ? breakdown.couponDeduction : undefined,
+      shippingRecovered: type === ReturnType.RETURN ? breakdown.shippingRecovered : undefined,
       siteUrl,
     });
 
@@ -205,7 +247,7 @@ export class ReturnService {
       .from('return_requests')
       .select(`
         *,
-        orders (order_number, customer_name, customer_phone, customer_email, payment_method, kakao_tid),
+        orders (order_number, customer_name, customer_phone, customer_email, payment_method, kakao_tid, postal_code, discount_amount, shipping_fee),
         order_items (product_id, product_name, size, quantity, price)
       `)
       .eq('id', requestId)
@@ -243,9 +285,37 @@ export class ReturnService {
 
     if (status === ReturnStatus.APPROVED && current.type === ReturnType.RETURN && !current.refund_amount) {
       const orderItem = Array.isArray(current.order_items) ? current.order_items[0] : current.order_items;
+      const orderRow = Array.isArray(current.orders) ? current.orders[0] : current.orders;
       if (orderItem?.price) {
-        updateData.refund_amount = Math.max(0, orderItem.price * current.quantity - RETURN_POLICY.returnShippingFee);
-        updateData.return_shipping_fee = RETURN_POLICY.returnShippingFee;
+        const { data: allItems } = await supabaseAdmin
+          .from('order_items')
+          .select('price, quantity')
+          .eq('order_id', current.order_id);
+        const itemsSubtotal = (allItems ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+        const { data: priorRequests } = await supabaseAdmin
+          .from('return_requests')
+          .select('quantity, order_items(price)')
+          .eq('order_id', current.order_id)
+          .eq('type', ReturnType.RETURN)
+          .neq('status', ReturnStatus.REJECTED)
+          .neq('id', requestId);
+        const priorReturnedGross = (priorRequests ?? []).reduce((sum, r) => {
+          const oi = Array.isArray(r.order_items) ? r.order_items[0] : r.order_items;
+          return sum + (oi?.price ?? 0) * r.quantity;
+        }, 0);
+
+        const breakdown = computeReturnRefund({
+          itemPrice: orderItem.price,
+          quantity: current.quantity,
+          itemsSubtotal,
+          discountAmount: orderRow?.discount_amount ?? 0,
+          orderShippingFee: orderRow?.shipping_fee ?? 0,
+          postalCode: orderRow?.postal_code,
+          priorReturnedGross,
+        });
+        updateData.refund_amount = breakdown.refundAmount;
+        updateData.return_shipping_fee = breakdown.returnShippingFee + breakdown.shippingRecovered;
       }
     }
 
@@ -330,6 +400,7 @@ export class ReturnService {
         rejectReason,
         refundAmount: current.refund_amount || data.refund_amount,
         returnTrackingNumber,
+        paymentMethod: order?.payment_method,
         siteUrl,
       });
     }

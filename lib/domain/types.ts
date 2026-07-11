@@ -316,6 +316,12 @@ export interface ReturnRequestEmailData {
   currentSize: string;
   exchangeSize?: string;
   reason: string;
+  paymentMethod?: string;
+  shippingFee?: number;       // 도서산간 할증 포함 배송비
+  refundAmount?: number;      // 반품일 때 환불 예정 금액
+  itemTotal?: number;         // 반품 상품 정가 합
+  couponDeduction?: number;   // 쿠폰 할인 안분 차감액
+  shippingRecovered?: number; // 무료배송 기준 미달 회수 배송비
   trackingUrl: string;
 }
 
@@ -329,5 +335,6 @@ export interface ReturnStatusEmailData {
   rejectReason?: string;
   refundAmount?: number;
   returnTrackingNumber?: string;
+  paymentMethod?: string;
   trackingUrl: string;
 }

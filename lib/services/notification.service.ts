@@ -68,6 +68,12 @@ export interface ReturnCreatedData {
   currentSize: string;
   exchangeSize?: string;
   reason: string;
+  paymentMethod?: string;
+  shippingFee?: number;
+  refundAmount?: number;
+  itemTotal?: number;
+  couponDeduction?: number;
+  shippingRecovered?: number;
   siteUrl: string;
 }
 
@@ -82,6 +88,7 @@ export interface ReturnStatusChangedData {
   rejectReason?: string;
   refundAmount?: number | null;
   returnTrackingNumber?: string;
+  paymentMethod?: string;
   siteUrl: string;
 }
 
@@ -198,6 +205,12 @@ export class NotificationService {
         currentSize: data.currentSize,
         exchangeSize: data.exchangeSize,
         reason: data.reason,
+        paymentMethod: data.paymentMethod,
+        shippingFee: data.shippingFee,
+        refundAmount: data.refundAmount,
+        itemTotal: data.itemTotal,
+        couponDeduction: data.couponDeduction,
+        shippingRecovered: data.shippingRecovered,
         trackingUrl,
       }).catch((err) => console.error('Return request email error:', err));
     }
@@ -227,6 +240,7 @@ export class NotificationService {
         rejectReason: data.rejectReason,
         refundAmount: data.refundAmount ?? undefined,
         returnTrackingNumber: data.returnTrackingNumber,
+        paymentMethod: data.paymentMethod,
         trackingUrl,
       }).catch((err) => console.error('Return status email error:', err));
     }

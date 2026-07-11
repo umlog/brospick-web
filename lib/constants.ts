@@ -78,8 +78,8 @@ export const CONTACT = {
 
 export const RETURN_POLICY = {
   windowDays: 7,
-  returnShippingFee: 3500,   // 반품 배송비
-  exchangeShippingFee: 7000, // 교환 배송비 (왕복)
+  returnShippingFee: 3000,   // 반품 배송비
+  exchangeShippingFee: 6000, // 교환 배송비 (왕복)
   banks: ['카카오뱅크', '국민은행', '신한은행', '우리은행', '하나은행', 'NH농협', '기업은행', 'SC제일은행', '토스뱅크', '케이뱅크'],
 } as const;
 

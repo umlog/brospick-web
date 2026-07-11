@@ -2,7 +2,8 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { RETURN_POLICY, REMOTE_AREA_SURCHARGE, isRemoteArea } from '@/lib/constants';
+import { RETURN_POLICY, REMOTE_AREA_SURCHARGE, isRemoteArea, BANK } from '@/lib/constants';
+import { computeReturnRefund, computeExchangeFee } from '@/lib/refund';
 import { OrderStatus, ReturnStatus } from '@/lib/domain/enums';
 import { CANCELLABLE_STATUSES } from '@/lib/domain/constants';
 import { getProductByName } from '@/lib/products';
@@ -21,6 +22,7 @@ interface ReturnRequest {
   type: '교환' | '반품';
   status: string;
   order_item_id: string;
+  quantity: number;
 }
 
 interface OrderResult {
@@ -32,12 +34,22 @@ interface OrderResult {
   postal_code: string | null;
   payment_method: string;
   shipping_fee: number;
+  discount_amount: number | null;
   total_amount: number;
   order_items: OrderItem[];
   return_requests: ReturnRequest[];
 }
 
 const STEP_LABELS = ['상품', '유형', '정보', '사유', '확인'];
+
+// 교환/반품 불가 사유 (이메일 안내와 동일하게 유지 - lib/email/return-emails.ts)
+const INELIGIBLE_REASONS = [
+  '상품 수령 후 7일이 지난 경우',
+  '착용·세탁·수선 등 사용 흔적이 있는 경우',
+  '상품 택(라벨) 제거 또는 포장이 훼손된 경우',
+  '고객 부주의로 상품이 오염·훼손된 경우',
+  '향수·화장품·체취 등 냄새가 밴 경우',
+];
 
 function ReturnsContent() {
   const searchParams = useSearchParams();
@@ -127,6 +139,27 @@ function ReturnsContent() {
   };
 
   const isKakaoPay = order?.payment_method === '카카오페이';
+
+  // 서버(return.service)와 동일한 규칙으로 환불 예상 금액 계산 (lib/refund.ts 공용)
+  const getRefundEstimate = (item: OrderItem) => {
+    if (!order) return null;
+    const itemsSubtotal = order.order_items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const priorReturnedGross = order.return_requests
+      .filter((r) => r.type === '반품' && r.status !== ReturnStatus.REJECTED && r.order_item_id !== item.id)
+      .reduce((sum, r) => {
+        const oi = order.order_items.find((i) => i.id === r.order_item_id);
+        return sum + (oi?.price ?? 0) * r.quantity;
+      }, 0);
+    return computeReturnRefund({
+      itemPrice: item.price,
+      quantity: item.quantity,
+      itemsSubtotal,
+      discountAmount: order.discount_amount ?? 0,
+      orderShippingFee: order.shipping_fee,
+      postalCode: order.postal_code,
+      priorReturnedGross,
+    });
+  };
 
   const canNext = () => {
     switch (step) {
@@ -305,6 +338,12 @@ function ReturnsContent() {
               <span className={styles.policyItem}>도서산간 반품 +₩{REMOTE_AREA_SURCHARGE.return.toLocaleString()}</span>
               <span className={styles.policyItem}>도서산간 교환 +₩{REMOTE_AREA_SURCHARGE.exchange.toLocaleString()}</span>
             </div>
+            <details style={{ marginTop: '10px', textAlign: 'left' }}>
+              <summary style={{ fontSize: '0.8rem', color: '#888', cursor: 'pointer' }}>교환/반품이 불가한 경우</summary>
+              <ul style={{ fontSize: '0.78rem', color: '#888', margin: '6px 0 0', paddingLeft: '18px', lineHeight: 1.8 }}>
+                {INELIGIBLE_REASONS.map((r) => <li key={r}>{r}</li>)}
+              </ul>
+            </details>
           </div>
           <form className={styles.form} onSubmit={handleLookup}>
             {lookupError && <div className={styles.error}>{lookupError}</div>}
@@ -414,6 +453,9 @@ function ReturnsContent() {
 
   // ─── Return/Exchange Success ────────────────────────────────────────────────
   if (view === 'success') {
+    const exchangeFee = computeExchangeFee(order?.postal_code);
+    const est = selectedItem ? getRefundEstimate(selectedItem) : null;
+
     return (
       <div className={styles.container}>
         <div className={styles.card}>
@@ -434,6 +476,35 @@ function ReturnsContent() {
                 <span>접수완료</span>
               </div>
             </div>
+
+            {returnType === '교환' && (
+              <div style={{ background: '#fff9e6', border: '1px solid #f0c040', borderRadius: 8, padding: '16px 20px', marginTop: 16, textAlign: 'left' }}>
+                <p style={{ margin: 0, fontWeight: 600, color: '#7a5c00', fontSize: '0.9rem' }}>교환 배송비를 입금해주세요</p>
+                <p style={{ margin: '8px 0 0', fontSize: '0.85rem', color: '#7a5c00', lineHeight: 1.7 }}>
+                  입금 계좌: <strong>{BANK.name} {BANK.account}</strong> (예금주: {BANK.holder})<br />
+                  입금 금액: <strong>₩{exchangeFee.toLocaleString()}</strong><br />
+                  입금자명은 주문자명과 동일하게 해주세요.<br />
+                  입금 확인 후 <strong>1~2일 이내</strong> 상품 수거가 시작됩니다.
+                </p>
+              </div>
+            )}
+
+            {returnType === '반품' && est && (
+              <div style={{ background: '#f0f6ff', border: '1px solid #d0e3ff', borderRadius: 8, padding: '16px 20px', marginTop: 16, textAlign: 'left' }}>
+                <p style={{ margin: 0, fontWeight: 600, color: '#1d4ed8', fontSize: '0.9rem' }}>환불 안내</p>
+                <p style={{ margin: '8px 0 0', fontSize: '0.85rem', color: '#1e40af', lineHeight: 1.7 }}>
+                  반품 배송비 ₩{est.returnShippingFee.toLocaleString()}은 환불 금액에서 차감되므로 별도 입금이 필요 없습니다.<br />
+                  {est.couponDeduction > 0 && <>쿠폰 할인 ₩{est.couponDeduction.toLocaleString()}이 차감됩니다.<br /></>}
+                  {est.shippingRecovered > 0 && <>무료배송 기준 미달로 최초 배송비 ₩{est.shippingRecovered.toLocaleString()}이 차감됩니다.<br /></>}
+                  환불 예정 금액: <strong>₩{est.refundAmount.toLocaleString()}</strong><br />
+                  {isKakaoPay
+                    ? '처리 완료 시 카카오페이로 자동 환불됩니다.'
+                    : '처리 완료 후 1~3영업일 이내 입력하신 계좌로 환불됩니다.'}
+                  {est.refundAmount === 0 && <><br /><strong>차감 금액이 상품 금액 이상이어서 환불 금액이 없습니다.</strong></>}
+                </p>
+              </div>
+            )}
+
             <button className={styles.resetButton} onClick={handleReset}>확인</button>
           </div>
         </div>
@@ -776,16 +847,36 @@ function ReturnsContent() {
                   </>
                 );
               })()}
-              {returnType === '반품' && (
+              {returnType === '반품' && (() => {
+                const est = getRefundEstimate(selectedItem);
+                if (!est) return null;
+                return (
                 <>
                   <div className={styles.summaryRow}>
                     <span>상품 금액</span>
-                    <span>₩{(selectedItem.price * selectedItem.quantity).toLocaleString()}</span>
+                    <span>₩{est.itemTotal.toLocaleString()}</span>
                   </div>
+                  {est.couponDeduction > 0 && (
+                    <div className={styles.summaryRow}>
+                      <span>쿠폰 할인 차감</span>
+                      <span>-₩{est.couponDeduction.toLocaleString()}</span>
+                    </div>
+                  )}
+                  {est.shippingRecovered > 0 && (
+                    <div className={styles.summaryRow}>
+                      <span>최초 배송비 (무료배송 기준 미달)</span>
+                      <span>-₩{est.shippingRecovered.toLocaleString()}</span>
+                    </div>
+                  )}
                   <div className={`${styles.summaryRow} ${styles.summaryRowBold}`}>
                     <span>환불 예상 금액</span>
-                    <span>₩{(selectedItem.price * selectedItem.quantity - RETURN_POLICY.returnShippingFee - (order.postal_code && isRemoteArea(order.postal_code) ? REMOTE_AREA_SURCHARGE.return : 0)).toLocaleString()}</span>
+                    <span>₩{est.refundAmount.toLocaleString()}</span>
                   </div>
+                  {est.refundAmount === 0 && (
+                    <div className={styles.summaryRow} style={{ color: '#dc2626', fontSize: '0.8rem' }}>
+                      <span>차감 금액이 상품 금액 이상이어서 환불 금액이 없습니다</span>
+                    </div>
+                  )}
                   {isKakaoPay ? (
                     <div className={styles.summaryRow}>
                       <span>환불 방법</span>
@@ -798,12 +889,24 @@ function ReturnsContent() {
                     </div>
                   )}
                 </>
-              )}
+                );
+              })()}
               <div className={styles.summaryRow}>
                 <span>사유</span>
                 <span>{reason}</span>
               </div>
             </div>
+
+            {returnType === '교환' && (
+              <div style={{ background: '#fff9e6', border: '1px solid #f0c040', borderRadius: 8, padding: '16px 20px', marginTop: 12 }}>
+                <p style={{ margin: 0, fontWeight: 600, color: '#7a5c00', fontSize: '0.9rem' }}>교환 배송비 입금 안내</p>
+                <p style={{ margin: '8px 0 0', fontSize: '0.85rem', color: '#7a5c00', lineHeight: 1.7 }}>
+                  신청 후 아래 계좌로 교환 배송비를 입금해주세요.<br />
+                  <strong>{BANK.name} {BANK.account} (예금주: {BANK.holder})</strong><br />
+                  입금 확인 후 <strong>1~2일 이내</strong> 상품 수거가 시작됩니다.
+                </p>
+              </div>
+            )}
           </div>
         )}
 

@@ -3,6 +3,7 @@ import type { ReturnRequest } from '../types';
 import { RETURN_STATUS_TRANSITIONS } from '../constants';
 import { formatDate, getReturnStatusColor } from '../utils';
 import { ReturnStatus } from '@/lib/domain/enums';
+import { RETURN_POLICY } from '@/lib/constants';
 import { TrackingModal } from './TrackingModal';
 import { NotifyToggle } from './NotifyToggle';
 import { DangerZone } from './DangerZone';
@@ -98,7 +99,12 @@ export function ReturnCard({
               <h3>교환 정보</h3>
               <p>현재 사이즈: {req.order_items.size}</p>
               <p>희망 사이즈: {req.exchange_size}</p>
-              <p>교환 배송비: ₩{(req.return_shipping_fee || 8000).toLocaleString()}</p>
+              <p>교환 배송비: ₩{(req.return_shipping_fee || RETURN_POLICY.exchangeShippingFee).toLocaleString()}</p>
+              {req.status === ReturnStatus.RECEIVED && (
+                <p style={{ color: '#e65100', fontWeight: 600 }}>
+                  ⚠ 승인 전 교환 배송비 입금 확인 필요 (입금자명: {req.orders.customer_name})
+                </p>
+              )}
             </div>
           )}
 
@@ -106,8 +112,15 @@ export function ReturnCard({
             <div className={styles.detailSection}>
               <h3>환불 정보</h3>
               <p>상품 금액: ₩{(req.order_items.price * req.quantity).toLocaleString()}</p>
-              <p>반품 배송비: -₩{(req.return_shipping_fee || 4000).toLocaleString()}</p>
-              <p style={{ fontWeight: 700 }}>환불 금액: ₩{(req.refund_amount || req.order_items.price * req.quantity - (req.return_shipping_fee || 4000)).toLocaleString()}</p>
+              <p>차감 배송비 (반품비+무료배송 회수): -₩{(req.return_shipping_fee || RETURN_POLICY.returnShippingFee).toLocaleString()}</p>
+              {(() => {
+                const fee = req.return_shipping_fee || RETURN_POLICY.returnShippingFee;
+                const naive = Math.max(0, req.order_items.price * req.quantity - fee);
+                const stored = req.refund_amount ?? naive;
+                const couponDiff = naive - stored;
+                return couponDiff > 0 ? <p>쿠폰 할인 차감: -₩{couponDiff.toLocaleString()}</p> : null;
+              })()}
+              <p style={{ fontWeight: 700 }}>환불 금액: ₩{(req.refund_amount ?? Math.max(0, req.order_items.price * req.quantity - (req.return_shipping_fee || RETURN_POLICY.returnShippingFee))).toLocaleString()}</p>
               <p>은행: {req.refund_bank || '-'}</p>
               <p>계좌번호: {req.refund_account || '-'}</p>
               <p>예금주: {req.refund_holder || '-'}</p>

@@ -29,7 +29,13 @@ async function verifySession(cookieValue: string, secret: string): Promise<boole
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
 
-    return expectedHmac === receivedHmac;
+    // 상수 시간 비교 (타이밍 공격 방지 - edge runtime이라 timingSafeEqual 대신 XOR 루프)
+    if (expectedHmac.length !== receivedHmac.length) return false;
+    let diff = 0;
+    for (let i = 0; i < expectedHmac.length; i++) {
+      diff |= expectedHmac.charCodeAt(i) ^ receivedHmac.charCodeAt(i);
+    }
+    return diff === 0;
   } catch {
     return false;
   }

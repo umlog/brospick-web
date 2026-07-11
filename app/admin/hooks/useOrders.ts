@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback, useMemo } from 'react';
 import type { Order } from '../types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
@@ -104,7 +106,11 @@ export function useOrders(notifyOnChange: boolean) {
       });
 
       setAllOrders((prev) =>
-        prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+        prev.map((o) =>
+          o.id === orderId
+            ? { ...o, status: newStatus, ...(trackingNumber && { tracking_number: trackingNumber }) }
+            : o
+        )
       );
 
       if (willNotify) {
@@ -379,9 +385,12 @@ export function useOrders(notifyOnChange: boolean) {
     });
 
     if (successIds.size > 0) {
+      const trackingByOrderId = new Map(items.map((it) => [it.orderId, it.trackingNumber]));
       setAllOrders((prev) =>
         prev.map((o) =>
-          successIds.has(o.id) ? { ...o, status: OrderStatus.SHIPPING } : o
+          successIds.has(o.id)
+            ? { ...o, status: OrderStatus.SHIPPING, tracking_number: trackingByOrderId.get(o.id) }
+            : o
         )
       );
     }

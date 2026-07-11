@@ -238,11 +238,7 @@ export class OrderService {
 
     // 쿠폰 사용 횟수 증가 (무통장입금만 — 카카오페이는 approve 시점에 처리)
     if (validatedCouponId !== null && paymentMethod !== '카카오페이') {
-      supabaseAdmin
-        .from('coupons')
-        .update({ used_count: validatedCouponUsedCount + 1, updated_at: new Date().toISOString() })
-        .eq('id', validatedCouponId)
-        .then(({ error }) => { if (error) console.error('Coupon increment failed:', error); });
+      this.incrementCouponUse(validatedCouponId, validatedCouponUsedCount);
     }
 
     // 알림 발송 (카카오페이는 approve 시점에 발송)
@@ -273,6 +269,23 @@ export class OrderService {
       totalAmount: order.total_amount,
       shippingFee: order.shipping_fee,
     };
+  }
+
+  // 쿠폰 사용 횟수 증가 - RPC로 원자 처리 (동시 주문 시 한도 초과 방지), 함수 없으면 read-update fallback
+  private incrementCouponUse(couponId: number, lastKnownCount: number): void {
+    supabaseAdmin
+      .rpc('increment_coupon_use', { p_coupon_id: couponId })
+      .then(async ({ data, error }) => {
+        if (!error) {
+          if (data === false) console.error(`Coupon ${couponId} increment skipped: max_uses reached`);
+          return;
+        }
+        const { error: fallbackError } = await supabaseAdmin
+          .from('coupons')
+          .update({ used_count: lastKnownCount + 1, updated_at: new Date().toISOString() })
+          .eq('id', couponId);
+        if (fallbackError) console.error('Coupon increment failed:', fallbackError);
+      });
   }
 
   // 주문 상태 변경
@@ -319,8 +332,15 @@ export class OrderService {
     // 입금확인 또는 발송지연으로 전환 시 재고 차감
     // 카카오페이만: 주문 생성 시 skipStockDecrement=true로 생성되므로 여기서 차감
     // 무통장입금: 주문 생성 시 이미 차감했으므로 여기서 다시 차감하면 이중 차감됨
+    // wasStockDecremented 기준: 배송준비/배송중 등 이미 차감된 상태에서 입금확인으로
+    // 되돌려도 재차감하지 않음 (입금확인→배송준비→입금확인 이중 차감 방지)
     const isKakaoPay = currentOrder?.payment_method === '카카오페이';
-    if (isConfirmedStatus(status) && isKakaoPay && currentOrder && !isConfirmedStatus(currentOrder.status)) {
+    if (
+      isConfirmedStatus(status) &&
+      isKakaoPay &&
+      currentOrder &&
+      !this.wasStockDecremented(currentOrder.status, currentOrder.payment_method)
+    ) {
       const items = Array.isArray(currentOrder.order_items) ? currentOrder.order_items : [];
       for (const item of items) {
         if (item.product_id) {

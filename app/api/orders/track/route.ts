@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
         status,
         total_amount,
         shipping_fee,
+        discount_amount,
         payment_method,
         tracking_number,
         delivered_at,
