@@ -22,12 +22,13 @@ export function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
-// 이메일 발송 공통 헬퍼
-export async function sendMail(to: string, subject: string, html: string): Promise<void> {
+// 이메일 발송 공통 헬퍼 (text: plain-text 대체 본문 — 스팸 점수 완화용)
+export async function sendMail(to: string, subject: string, html: string, text?: string): Promise<void> {
   await transporter.sendMail({
     from: `"BROSPICK" <${process.env.GMAIL_USER}>`,
     to,
     subject,
     html,
+    ...(text ? { text } : {}),
   });
 }

@@ -873,6 +873,32 @@
   border-color: var(--color-accent);
 }
 
+.testSendRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.testSendRow input {
+  flex: 1;
+  padding: 6px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: var(--size-sm);
+  font-family: inherit;
+}
+
+.testSendRow input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.testSendRow button {
+  white-space: nowrap;
+}
+
 .sendButton {
   align-self: flex-end;
   padding: var(--space-md) var(--space-xl);
