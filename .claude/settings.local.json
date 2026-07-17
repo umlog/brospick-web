@@ -95,7 +95,16 @@
       "WebFetch(domain:api.github.com)",
       "mcp__plugin_playwright_playwright__browser_type",
       "PowerShell(npx tsc --noEmit -p tsconfig.json 2>&1 | Select-Object -First 30)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "mcp__claude_ai_Supabase__get_advisors",
+      "Bash(perl -0777 -pi -e 's/\\\\.eyebrow \\\\{\\\\n  font-size: 0\\\\.7rem;\\\\n  font-weight: 600;\\\\n  letter-spacing: 0\\\\.2em;/.eyebrow \\\\{\\\\n  font-family: var\\(--font-display\\);\\\\n  font-size: 0.82rem;\\\\n  font-weight: 600;\\\\n  letter-spacing: 0.26em;/' blog.module.css brand-story.module.css ebook-promo.module.css)",
+      "Bash(perl -0777 -pi -e 's/  font-size: 0\\\\.65rem;\\\\n  font-weight: 700;\\\\n  letter-spacing: 0\\\\.25em;/  font-family: var\\(--font-display\\);\\\\n  font-size: 0.75rem;\\\\n  font-weight: 600;\\\\n  letter-spacing: 0.28em;/' brand-story.module.css)",
+      "Bash(perl -0777 -pi -e 's/\\\\.ebookCoverYear \\\\{\\\\n  font-size: 0\\\\.7rem;\\\\n  font-weight: 600;\\\\n  letter-spacing: 0\\\\.15em;/.ebookCoverYear \\\\{\\\\n  font-family: var\\(--font-display\\);\\\\n  font-size: 0.8rem;\\\\n  font-weight: 600;\\\\n  letter-spacing: 0.18em;/' brand-story.module.css)",
+      "Bash(perl -0777 -pi -e 's/\\\\.price \\\\{\\\\n  font-size: 1\\\\.5rem;\\\\n  font-weight: 700;\\\\n  color: var\\\\\\(--color-text-primary\\\\\\);\\\\n  letter-spacing: -0\\\\.02em;/.price \\\\{\\\\n  font-family: var\\(--font-display\\);\\\\n  font-size: 1.7rem;\\\\n  font-weight: 600;\\\\n  color: var\\(--color-text-primary\\);\\\\n  letter-spacing: 0.01em;/' ebook-promo.module.css)",
+      "Bash(perl -0777 -pi -e 's/\\\\.originalPrice \\\\{\\\\n  font-size: 0\\\\.9rem;/.originalPrice \\\\{\\\\n  font-family: var\\(--font-display\\);\\\\n  font-size: 0.95rem;\\\\n  letter-spacing: 0.02em;/' ebook-promo.module.css)",
+      "mcp__plugin_playwright_playwright__browser_run_code_unsafe",
+      "PowerShell(npm run *)",
+      "PowerShell(Remove-Item *)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"
