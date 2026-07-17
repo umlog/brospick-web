@@ -652,6 +652,27 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     ? [...(selectedColor?.images ?? product.colors[0].images), ...sharedImages]
     : sharedImages;
 
+  const colorSection = product.colors && product.colors.length > 1 ? (
+    <div className={styles.colorSection}>
+      <h3>
+        색상 선택
+        {selectedColor && <span className={styles.colorName}> — {selectedColor.name}</span>}
+      </h3>
+      <div className={styles.colorOptions}>
+        {product.colors.map((color) => (
+          <button
+            key={color.name}
+            className={`${styles.colorSwatch} ${selectedColor?.name === color.name ? styles.colorSwatchSelected : ''}`}
+            onClick={() => setSelectedColor(color)}
+            aria-label={color.name}
+            title={color.name}
+            style={{ backgroundColor: color.hex }}
+          />
+        ))}
+      </div>
+    </div>
+  ) : null;
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -1010,31 +1031,15 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     ))}
                   </>
                 )}
-                {product.colors && product.colors.length > 1 && (
-                  <div className={styles.colorSection}>
-                    <h3>
-                      색상 선택
-                      {selectedColor && <span className={styles.colorName}> — {selectedColor.name}</span>}
-                    </h3>
-                    <div className={styles.colorOptions}>
-                      {product.colors.map((color) => (
-                        <button
-                          key={color.name}
-                          className={`${styles.colorSwatch} ${selectedColor?.name === color.name ? styles.colorSwatchSelected : ''}`}
-                          onClick={() => setSelectedColor(color)}
-                          aria-label={color.name}
-                          title={color.name}
-                          style={{ backgroundColor: color.hex }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* multiSelect(부츠스킨)는 색상선택을 번호선택 아래에 배치 */}
+                {!product.multiSelect && colorSection}
                 {product.sizes.length >= 1 && <div className={styles.sizeSection}>
                   <h3>{product.sizeLabel ?? '사이즈 선택'}</h3>
                   <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
                     {product.sizes.map((size) => {
                       const coloredSize = selectedColor ? `${size} — ${selectedColor.name}` : size;
+                      // multiSelect + colors: 선택값에 색상 포함해 저장 (색상 없으면 coloredSize === size)
+                      const selectValue = product.multiSelect ? coloredSize : size;
                       const key = `${product.id}-${coloredSize}`;
                       const sizeStatus = sizeStatuses[key] || 'available';
                       const stock = sizeStocks[key] ?? null;
@@ -1045,17 +1050,17 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                       return (
                         <button
                           key={size}
-                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${product.multiSelect ? (selectedSizes.includes(size) ? styles.selected : '') : (selectedSize === size ? styles.selected : '')
+                          className={`${styles.sizeButton} ${product.category === 'boot-skin' ? styles.sizeButtonBootSkin : ''} ${product.multiSelect ? (selectedSizes.includes(selectValue) ? styles.selected : '') : (selectedSize === size ? styles.selected : '')
                             } ${isSoldOut ? styles.soldOut : ''} ${isDelayed ? styles.delayed : ''}`}
                           onClick={() => {
                             if (isSoldOut) return;
                             if (isDelayed) {
                               if (confirm(`${delayText}\n주문하시겠습니까?`)) {
-                                handleSizeSelect(size);
+                                handleSizeSelect(selectValue);
                               }
                               return;
                             }
-                            handleSizeSelect(size);
+                            handleSizeSelect(selectValue);
                           }}
                           disabled={isSoldOut}
                         >
@@ -1068,6 +1073,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                     })}
                   </div>
                 </div>}
+                {product.multiSelect && colorSection}
 
                 <div className={styles.quantitySection}>
                   <h3>수량</h3>
