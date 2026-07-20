@@ -15,6 +15,7 @@ import { SplashController } from './components/SplashController';
 import ScrollProgress from './components/ScrollProgress';
 import BackToTop from './components/BackToTop';
 import CartToast from './components/CartToast';
+import Analytics from './components/Analytics';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -158,6 +159,7 @@ export default function RootLayout({
               <FloatingTracker />
             </Suspense>
             <VisitTracker />
+            <Analytics />
           </CartProvider>
         </ThemeProvider>
       </body>

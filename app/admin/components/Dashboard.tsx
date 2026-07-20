@@ -22,6 +22,32 @@ interface VisitData {
   recent: { date: string; count: number }[];
 }
 
+interface AnalyticsData {
+  days: number;
+  sources: { source: string; count: number }[];
+  funnel: Partial<Record<'visit' | 'view_item' | 'add_to_cart' | 'begin_checkout', number>>;
+  orders: number;
+}
+
+const SOURCE_LABELS: Record<string, string> = {
+  instagram: '인스타그램',
+  threads: '스레드',
+  naver: '네이버',
+  google: '구글',
+  youtube: '유튜브',
+  kakao: '카카오',
+  facebook: '페이스북',
+  direct: '직접 유입',
+  unknown: '알 수 없음',
+};
+
+const FUNNEL_STEPS = [
+  { key: 'visit', label: '방문' },
+  { key: 'view_item', label: '상품 조회' },
+  { key: 'add_to_cart', label: '장바구니' },
+  { key: 'begin_checkout', label: '결제 진입' },
+] as const;
+
 interface Props {
   allOrders: Order[];
   ebookOrders: EbookOrder[];
@@ -49,6 +75,8 @@ interface RetentionResult {
 
 export function Dashboard({ allOrders, ebookOrders }: Props) {
   const [visitData, setVisitData] = useState<VisitData | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [analyticsDays, setAnalyticsDays] = useState(7);
   const [retentionLoading, setRetentionLoading] = useState(false);
   const [retentionResult, setRetentionResult] = useState<RetentionResult | null>(null);
 
@@ -57,6 +85,12 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
       .then((d) => setVisitData(d))
       .catch(() => {}); // 방문 통계는 비핵심 — 실패해도 대시보드 나머지는 표시
   }, []);
+
+  useEffect(() => {
+    request<AnalyticsData>(`/api/admin/analytics?days=${analyticsDays}`)
+      .then((d) => setAnalyticsData(d))
+      .catch(() => {}); // 유입 통계도 비핵심
+  }, [analyticsDays]);
 
   const today = todayLocal();
   const thisMonth = today.slice(0, 7);
@@ -191,6 +225,65 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
             <div className={styles.statLabel}>구매 전환율</div>
           </div>
         </div>
+      </section>
+
+      <section className={styles.dashboardSection}>
+        <h2 className={styles.dashboardSectionTitle}>
+          유입 경로 · 전환 퍼널 (최근 {analyticsDays}일)
+          <select
+            className={styles.input}
+            value={analyticsDays}
+            onChange={(e) => setAnalyticsDays(Number(e.target.value))}
+            style={{ width: 'auto', marginLeft: 12, display: 'inline-block' }}
+          >
+            <option value={7}>7일</option>
+            <option value={30}>30일</option>
+          </select>
+        </h2>
+        {!analyticsData || analyticsData.sources.length === 0 ? (
+          <p className={styles.empty}>아직 수집된 데이터가 없습니다. 배포 후부터 쌓입니다.</p>
+        ) : (
+          <>
+            <div className={styles.barChart}>
+              {analyticsData.sources.map((row) => {
+                const maxCount = analyticsData.sources[0]?.count || 1;
+                return (
+                  <div key={row.source} className={styles.barRow}>
+                    <span className={styles.barLabel}>{SOURCE_LABELS[row.source] ?? row.source}</span>
+                    <div className={styles.barTrack}>
+                      <div className={styles.bar} style={{ width: `${(row.count / maxCount) * 100}%` }} />
+                    </div>
+                    <span className={styles.barCount}>{row.count.toLocaleString()}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.dashboardGrid} style={{ marginTop: 16 }}>
+              {FUNNEL_STEPS.map((step, idx) => {
+                const count = analyticsData.funnel[step.key] ?? 0;
+                const prevCount = idx === 0 ? null : analyticsData.funnel[FUNNEL_STEPS[idx - 1].key] ?? 0;
+                const rate = prevCount ? ((count / prevCount) * 100).toFixed(1) : null;
+                return (
+                  <div key={step.key} className={styles.dashboardCard}>
+                    <div className={styles.statNumber}>{count.toLocaleString()}</div>
+                    <div className={styles.statLabel}>
+                      {step.label}
+                      {rate !== null && ` (${rate}%)`}
+                    </div>
+                  </div>
+                );
+              })}
+              <div className={`${styles.dashboardCard} ${styles.dashboardCardHighlight}`}>
+                <div className={styles.statNumber}>{analyticsData.orders.toLocaleString()}</div>
+                <div className={styles.statLabel}>
+                  주문
+                  {(analyticsData.funnel.begin_checkout ?? 0) > 0 &&
+                    ` (${((analyticsData.orders / analyticsData.funnel.begin_checkout!) * 100).toFixed(1)}%)`}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </section>
 
       <section className={styles.dashboardSection}>

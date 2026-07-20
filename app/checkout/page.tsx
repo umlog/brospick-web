@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
+import { trackInitiateCheckout } from '../../lib/analytics';
 import { useCheckoutItems } from './hooks/useCheckoutItems';
 import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useOrderSubmission } from './hooks/useOrderSubmission';
@@ -28,6 +29,14 @@ export default function CheckoutPage() {
     discountedTotal,
     couponCode ?? undefined,
   );
+
+  // 결제 페이지 진입 이벤트 (페이지 방문당 1회)
+  const checkoutTracked = useRef(false);
+  useEffect(() => {
+    if (checkoutTracked.current || isLoading || checkoutItems.length === 0) return;
+    checkoutTracked.current = true;
+    trackInitiateCheckout(selectedTotalPrice, checkoutItems.length);
+  }, [isLoading, checkoutItems.length, selectedTotalPrice]);
 
   if (isLoading || checkoutItems.length === 0) {
     return null;

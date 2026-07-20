@@ -6,7 +6,16 @@ import Link from 'next/link';
 import { BANK } from '../../lib/constants';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { removePurchasedItems } from '../checkout/utils';
+import { trackPurchase } from '../../lib/analytics';
 import styles from './order-complete.module.css';
+
+// 새로고침·재방문 시 중복 전송 방지 — 주문번호당 1회만 Purchase 이벤트 발사
+function firePurchaseOnce(orderNumber: string, amount: number) {
+  const trackedKey = `brospick-purchase-tracked-${orderNumber}`;
+  if (sessionStorage.getItem(trackedKey)) return;
+  sessionStorage.setItem(trackedKey, '1');
+  trackPurchase(orderNumber, amount);
+}
 
 function TransferButton({ amount }: { amount: number }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -75,6 +84,7 @@ function OrderCompletePage() {
       }
 
       localStorage.setItem('brospick-last-order', orderNumber);
+      firePurchaseOnce(orderNumber, parseInt(amount, 10));
       setOrderData({
         orderNumber,
         totalAmount: parseInt(amount, 10),
@@ -89,6 +99,7 @@ function OrderCompletePage() {
     if (method === 'bank' && orderNumber && amount) {
       const depositorName = searchParams.get('depositor') || '';
       localStorage.setItem('brospick-last-order', orderNumber);
+      firePurchaseOnce(orderNumber, parseInt(amount, 10));
       setOrderData({
         orderNumber,
         totalAmount: parseInt(amount, 10),

@@ -7,6 +7,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug, type ProductColor } from '../../../lib/products';
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
+import { trackViewContent, trackAddToCart } from '../../../lib/analytics';
 import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ReviewLightbox from '../../components/ReviewLightbox';
@@ -359,6 +360,12 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   const productName = dbPrice?.name ?? product?.name;
   const isComingSoon = dbComingSoon !== null && dbComingSoon !== undefined ? dbComingSoon : product?.comingSoon;
 
+  // 상품 상세 조회 이벤트 (GA4 view_item / Meta ViewContent)
+  useEffect(() => {
+    if (product) trackViewContent(product.id, productName ?? product.name, price);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
+
   if (!product) {
     return (
       <main className={styles.main}>
@@ -408,6 +415,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
           quantity,
         });
       }
+      trackAddToCart(product.id, productName!, price * quantity * selectedSizes.length, quantity * selectedSizes.length);
       setQuantity(1);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
@@ -425,6 +433,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
         image: product.image,
         quantity,
       });
+      trackAddToCart(product.id, productName!, price * quantity, quantity);
       setQuantity(1);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
@@ -447,6 +456,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
       image: cartImage,
       quantity,
     });
+    trackAddToCart(product.id, productName!, price * quantity, quantity);
 
     setQuantity(1);
     setShowSuccess(true);
