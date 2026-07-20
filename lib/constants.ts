@@ -1,6 +1,9 @@
 // 사이트 전역 설정 - 한 곳에서 관리
 // 가격, 배송비, 은행 정보 등을 변경할 때 이 파일만 수정하면 됩니다.
 
+// 사이트 기준 URL — sitemap, JSON-LD, 이메일 링크 등에서 공용 사용
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://brospick.com';
+
 export const SHIPPING = {
   fee: 3000,
   freeThreshold: 50000, // 이 금액 이상 주문 시 무료배송

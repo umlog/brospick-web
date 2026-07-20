@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import VideoEmbed from '../../components/embeds/VideoEmbed';
 import styles from './interview-detail.module.css';
 import { supabase } from '@/lib/supabase';
+import { SITE_URL } from '@/lib/constants';
 import type { BlogPost } from '@/lib/domain/types';
 
 export async function generateStaticParams() {
@@ -39,8 +40,25 @@ export default async function InterviewDetailPage(
     notFound();
   }
 
+  // 구조화 데이터 (검색 결과에 기사로 노출 — "선수이름" 검색 유입용)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${post.player_name} — ${post.team} ${post.position}`,
+    description: post.excerpt,
+    ...(post.image.startsWith('/') && { image: `${SITE_URL}${post.image}` }),
+    datePublished: post.created_at,
+    author: { '@type': 'Organization', name: 'BROSPICK' },
+    publisher: { '@type': 'Organization', name: 'BROSPICK', url: SITE_URL },
+    mainEntityOfPage: `${SITE_URL}/interviews/${post.id}`,
+  };
+
   return (
     <main className={styles.main}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
       <div className={styles.container}>
         <Link href="/interviews" className={styles.backLink}>
           ← 인터뷰 목록으로 돌아가기
