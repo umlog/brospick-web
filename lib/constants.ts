@@ -6,6 +6,9 @@ export const SHIPPING = {
   freeThreshold: 50000, // 이 금액 이상 주문 시 무료배송
 } as const;
 
+// 실제 택배 원가 — 로젠택배에 건당 납부하는 금액 (재무 손익 추정용, 고객 청구 배송비와 무관)
+export const ACTUAL_SHIPPING_UNIT_COST = 2750;
+
 // CJ대한통운 기준 도서산간 지역 추가 요금
 export const REMOTE_AREA_SURCHARGE = {
   shipping: 3000,    // 배송비 추가

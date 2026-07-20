@@ -33,10 +33,15 @@ interface SummaryData {
     return_collected: number;
     exchange_collected: number;
     expense_out: number;
+    expense_estimated: number;
+    expense_is_estimated: boolean;
     net_income: number;
     paid_order_count: number;
     free_order_count: number;
     remote_area_count: number;
+    shipped_order_count: number;
+    free_shipping_burden: number;
+    unit_cost: number;
   };
   vat: { sales_tax_base: number; output_vat: number; input_vat: number; vat_payable: number; vat_deductible_expenses: number };
 }
@@ -175,10 +180,22 @@ export function FinanceSummary() {
               <span className={styles.finSubNote}>{fmt(data.shipping.return_collected)} ※ 환불액에 반영됨</span>
             </div>
             <div className={styles.finRow}><span className={styles.finLbl}>수취 배송비 (교환, {data.revenue.exchange_count}건)</span><span className={styles.finVal}>{fmt(data.shipping.exchange_collected)}</span></div>
-            <div className={styles.finRow}><span className={styles.finLbl}>지출 배송비 (발송+반품)</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.shipping.expense_out)}</span></div>
-            {data.shipping.expense_out === 0 && (
+            {data.shipping.expense_out > 0 && (
+              <div className={styles.finRow}><span className={styles.finLbl}>지출 배송비 (청구서 실입력)</span><span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.shipping.expense_out)}</span></div>
+            )}
+            <div className={styles.finRow}>
+              <span className={styles.finLbl}>지출 배송비 (추정 · 발송 {data.shipping.shipped_order_count}건 등 × {fmt(data.shipping.unit_cost)})</span>
+              {data.shipping.expense_is_estimated
+                ? <span className={`${styles.finVal} ${styles.finNeg}`}>-{fmt(data.shipping.expense_estimated)}</span>
+                : <span className={styles.finSubNote}>{fmt(data.shipping.expense_estimated)} ※ 참고치 (실입력 우선 적용)</span>}
+            </div>
+            <div className={styles.finRow}>
+              <span className={styles.finLbl}>무료배송 부담 ({data.shipping.free_order_count}건 × {fmt(data.shipping.unit_cost)})</span>
+              <span className={styles.finSubNote}>{fmt(data.shipping.free_shipping_burden)} ※ 지출에 포함된 참고치</span>
+            </div>
+            {data.shipping.expense_is_estimated && (
               <div className={styles.finVatWarn}>
-                ⚠ 지출 내역에 배송비(발송) / 배송비(반품)가 입력되지 않았습니다.
+                ⚠ 청구서 미입력 — 건당 {fmt(data.shipping.unit_cost)} 추정 단가로 계산 중입니다. 로젠 월청구서를 지출 탭 배송비(발송)에 입력하면 실제값으로 대체됩니다.
               </div>
             )}
             <div className={`${styles.finRow} ${styles.finRowLast}`}>

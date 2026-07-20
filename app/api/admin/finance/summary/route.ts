@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
+import { ACTUAL_SHIPPING_UNIT_COST } from '@/lib/constants';
 
 import { OrderStatus, isDelayStatus } from '@/lib/domain/enums';
 
@@ -65,13 +66,21 @@ export async function GET(request: NextRequest) {
     const costs = costsRes.data ?? [];
     const returnReqs = returnReqsRes.data ?? [];
 
-    // 상품별 최신 원가 맵 (product_id -> cost_price)
-    const costMap = new Map<number, number>();
+    // 상품별 사입가 이력 (effective_date 내림차순 — 쿼리 정렬 유지)
+    const costsByProduct = new Map<number, { date: string; price: number }[]>();
     for (const c of costs) {
-      if (!costMap.has(c.product_id)) {
-        costMap.set(c.product_id, c.cost_price);
-      }
+      const list = costsByProduct.get(c.product_id);
+      if (list) list.push({ date: c.effective_date, price: c.cost_price });
+      else costsByProduct.set(c.product_id, [{ date: c.effective_date, price: c.cost_price }]);
     }
+
+    // 주문 시점에 유효했던 사입가. 이력 시작 전 주문은 가장 오래된 사입가로 근사
+    const costPriceAt = (productId: number, orderDate: string): number | null => {
+      const list = costsByProduct.get(productId);
+      if (!list) return null;
+      const effective = list.find((c) => c.date <= orderDate);
+      return (effective ?? list[list.length - 1]).price;
+    };
 
     // 매출 계산
     const revenueOrders = orders.filter((o) => isRevenueStatus(o.status));
@@ -94,14 +103,14 @@ export async function GET(request: NextRequest) {
     const ebookRevenue = ebookOrders.reduce((s, o) => s + o.amount, 0);
     const totalNetRevenue = netRevenue + ebookRevenue;
 
-    // COGS 계산 (원가 등록된 상품만)
+    // COGS 계산 (원가 등록된 상품만, 주문 날짜 기준 사입가 적용)
     let cogs = 0;
     for (const order of revenueOrders) {
+      const orderDate = order.created_at.slice(0, 10);
       const items = (order.order_items as { product_id: number | null; quantity: number }[]) ?? [];
       for (const item of items) {
-        if (item.product_id && costMap.has(item.product_id)) {
-          cogs += costMap.get(item.product_id)! * item.quantity;
-        }
+        const costPrice = item.product_id ? costPriceAt(item.product_id, orderDate) : null;
+        if (costPrice !== null) cogs += costPrice * item.quantity;
       }
     }
 
@@ -134,7 +143,19 @@ export async function GET(request: NextRequest) {
     // 교환 배송비는 exchangeShippingIncome으로 이미 계산됨
     // 실제 발송/반품 배송비 지출 (expenses 테이블 기준)
     const shippingExpenseOut = (expensesByCategory['배송비(발송)'] ?? 0) + (expensesByCategory['배송비(반품)'] ?? 0);
-    const shippingNetIncome = shippingCollected + returnShippingCollected + exchangeShippingIncome - shippingExpenseOut;
+    // 추정 지출: 실제 택배가 나간 건만 집계 — 발송(배송중·배송완료) 1회 + 반품 수거 1회 + 교환 왕복 2회
+    const shippedOrderCount = revenueOrders.filter(
+      (o) => o.status === OrderStatus.SHIPPING || o.status === OrderStatus.DELIVERED
+    ).length;
+    const shippingExpenseEstimated =
+      (shippedOrderCount + completedReturns.length + exchanges.length * 2) * ACTUAL_SHIPPING_UNIT_COST;
+    // 청구서(실입력)가 있으면 그 값을, 없으면 추정치를 손익에 사용
+    const shippingExpenseIsEstimated = shippingExpenseOut === 0;
+    const shippingExpenseEffective = shippingExpenseIsEstimated ? shippingExpenseEstimated : shippingExpenseOut;
+    const shippingNetIncome =
+      shippingCollected + returnShippingCollected + exchangeShippingIncome - shippingExpenseEffective;
+    // 무료배송 정책 부담 참고치 (5만원 이상 무료 기준 적정성 판단용)
+    const freeShippingBurden = freeShippingCount * ACTUAL_SHIPPING_UNIT_COST;
 
     // 월별 추이 (KST 기준 월, 총매출 기준 — 환불 미반영 단순 추이)
     const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
@@ -199,10 +220,15 @@ export async function GET(request: NextRequest) {
         return_collected: returnShippingCollected,   // 반품 수취 배송비 (정보성, refund_amount에 이미 반영)
         exchange_collected: exchangeShippingIncome,  // 교환 수취 배송비 (별도 수입)
         expense_out: shippingExpenseOut,
+        expense_estimated: shippingExpenseEstimated,
+        expense_is_estimated: shippingExpenseIsEstimated,
         net_income: shippingNetIncome,
         paid_order_count: paidShippingCount,
         free_order_count: freeShippingCount,
         remote_area_count: remoteAreaCount,
+        shipped_order_count: shippedOrderCount,
+        free_shipping_burden: freeShippingBurden,
+        unit_cost: ACTUAL_SHIPPING_UNIT_COST,
       },
       vat: {
         sales_tax_base: salesTaxBase,
