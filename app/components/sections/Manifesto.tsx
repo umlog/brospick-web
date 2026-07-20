@@ -31,7 +31,7 @@ export default function Manifesto() {
           src={heroBg}
           alt=""
           fill
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: 'cover', objectPosition: 'center 75%' }}
           priority={false}
         />
         <div className={styles.bgOverlay} />
