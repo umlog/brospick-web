@@ -1,20 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { CheckoutFormData } from '../types';
 import styles from '../checkout-page.module.css';
 
-const EMAIL_DOMAINS = [
-  'naver.com',
-  'gmail.com',
-  'daum.net',
-  'kakao.com',
-  'hanmail.net',
-  'nate.com',
-  'hotmail.com',
-  'outlook.com',
-  'icloud.com',
+// 이메일 도메인 빠른 입력 버튼용
+const EMAIL_DOMAINS = ['naver.com', 'gmail.com', 'daum.net', 'kakao.com'];
+
+// 오타 제안(did-you-mean)에 사용할 전체 도메인 목록
+const KNOWN_EMAIL_DOMAINS = [
+  'naver.com', 'gmail.com', 'daum.net', 'kakao.com', 'hanmail.net',
+  'nate.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'yahoo.com',
 ];
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function levenshtein(a: string, b: string): number {
+  const dp = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+// 흔한 도메인 오타를 가장 가까운 정상 도메인으로 교정 제안한다. (예: gmial.com → gmail.com)
+function suggestEmail(email: string): string | null {
+  const at = email.lastIndexOf('@');
+  if (at < 1) return null;
+  const local = email.slice(0, at);
+  const domain = email.slice(at + 1).toLowerCase();
+  if (!domain || KNOWN_EMAIL_DOMAINS.includes(domain)) return null;
+
+  let best: string | null = null;
+  let bestDist = 3;
+  for (const known of KNOWN_EMAIL_DOMAINS) {
+    const dist = levenshtein(domain, known);
+    if (dist > 0 && dist < bestDist) {
+      bestDist = dist;
+      best = known;
+    }
+  }
+  return best && bestDist <= 2 ? `${local}@${best}` : null;
+}
 
 const DELIVERY_NOTE_PRESETS = [
   '문 앞에 놓아주세요',
@@ -43,70 +74,47 @@ interface ShippingFormProps {
 }
 
 export function ShippingForm({ formData, onInputChange, onAddressSearch, savedInfo, onUseSavedInfo }: ShippingFormProps) {
-  const [emailUser, setEmailUser] = useState('');
-  const [emailDomain, setEmailDomain] = useState('');
-  const [isCustomDomain, setIsCustomDomain] = useState(false);
   const [usingSaved, setUsingSaved] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
 
-  const isValidEmail = (user: string, domain: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(`${user}@${domain}`);
-
-  const fireEmailChange = (user: string, domain: string) => {
-    const combined = user && domain ? `${user}@${domain}` : '';
+  const setEmail = (value: string) => {
+    setEmailError(null);
+    setEmailSuggestion(null);
     onInputChange({
-      target: { name: 'email', value: combined },
+      target: { name: 'email', value },
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
-  const handleEmailUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const user = e.target.value;
-    setEmailUser(user);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailError(null);
-    fireEmailChange(user, emailDomain);
+    setEmailSuggestion(null);
+    onInputChange(e);
   };
 
-  const handleEmailUserBlur = () => {
-    if (emailUser && emailDomain) {
-      setEmailError(isValidEmail(emailUser, emailDomain) ? null : '올바른 이메일 형식이 아닙니다.');
-    } else if (emailUser && !emailDomain) {
-      setEmailError('도메인을 선택하거나 입력해주세요.');
+  const validateEmail = () => {
+    const value = formData.email.trim();
+    setEmailError(value && !EMAIL_PATTERN.test(value) ? '올바른 이메일 주소를 입력해 주세요.' : null);
+    setEmailSuggestion(value ? suggestEmail(value) : null);
+  };
+
+  // 도메인 빠른 입력: 현재 입력값의 로컬 파트를 유지하고 도메인만 붙인다.
+  const applyDomain = (domain: string) => {
+    const localPart = formData.email.split('@')[0];
+    if (!localPart) {
+      emailRef.current?.focus();
+      return;
     }
-  };
-
-  const handleDomainSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value === '__custom__') {
-      setIsCustomDomain(true);
-      setEmailDomain('');
-      setEmailError(null);
-      fireEmailChange(emailUser, '');
-    } else {
-      setIsCustomDomain(false);
-      setEmailDomain(value);
-      if (emailUser) {
-        setEmailError(isValidEmail(emailUser, value) ? null : '올바른 이메일 형식이 아닙니다.');
-      }
-      fireEmailChange(emailUser, value);
-    }
-  };
-
-  const handleCustomDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const domain = e.target.value;
-    setEmailDomain(domain);
-    setEmailError(null);
-    fireEmailChange(emailUser, domain);
-  };
-
-  const handleCustomDomainBlur = () => {
-    if (emailUser && emailDomain) {
-      setEmailError(isValidEmail(emailUser, emailDomain) ? null : '올바른 이메일 형식이 아닙니다.');
-    }
+    setEmail(`${localPart}@${domain}`);
   };
 
   const handleUseSavedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsingSaved(e.target.checked);
-    if (e.target.checked) onUseSavedInfo();
+    if (e.target.checked) {
+      setEmailError(null);
+      onUseSavedInfo();
+    }
   };
 
   return (
@@ -131,6 +139,7 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
           name="name"
           value={formData.name}
           onChange={onInputChange}
+          autoComplete="name"
           required
         />
       </div>
@@ -143,49 +152,49 @@ export function ShippingForm({ formData, onInputChange, onAddressSearch, savedIn
           value={formData.phone}
           onChange={onInputChange}
           placeholder="010-0000-0000"
+          autoComplete="tel"
           required
         />
         <p className={styles.fieldHint}>배송·반품 연락 외에는 사용하지 않으며, 마케팅 문자는 발송하지 않습니다.</p>
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="emailUser">이메일 *</label>
-        <div className={styles.emailRow}>
-          <input
-            type="text"
-            id="emailUser"
-            value={emailUser}
-            onChange={handleEmailUserChange}
-            onBlur={handleEmailUserBlur}
-            placeholder="이메일 아이디"
-            required
-            autoComplete="email"
-          />
-          <span className={styles.emailAt}>@</span>
-          {isCustomDomain ? (
-            <input
-              type="text"
-              value={emailDomain}
-              onChange={handleCustomDomainChange}
-              onBlur={handleCustomDomainBlur}
-              placeholder="직접 입력"
-              required
-            />
-          ) : (
-            <select
-              value={emailDomain}
-              onChange={handleDomainSelectChange}
-              required
+        <label htmlFor="email">이메일 *</label>
+        <input
+          ref={emailRef}
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleEmailChange}
+          onBlur={validateEmail}
+          placeholder="example@naver.com"
+          autoComplete="email"
+          inputMode="email"
+          required
+        />
+        <div className={styles.emailDomainRow}>
+          {EMAIL_DOMAINS.map((domain) => (
+            <button
+              key={domain}
+              type="button"
+              className={styles.emailDomainButton}
+              onClick={() => applyDomain(domain)}
             >
-              <option value="" disabled>선택</option>
-              {EMAIL_DOMAINS.map(domain => (
-                <option key={domain} value={domain}>{domain}</option>
-              ))}
-              <option value="__custom__">직접 입력</option>
-            </select>
-          )}
+              @{domain}
+            </button>
+          ))}
         </div>
         {emailError && <p className={styles.emailError}>{emailError}</p>}
-        <p className={styles.fieldHint}>주문 확인서 및 배송 알림이 이 주소로 발송됩니다.</p>
+        {emailSuggestion && (
+          <p className={styles.emailSuggestion}>
+            혹시{' '}
+            <button type="button" className={styles.emailSuggestionButton} onClick={() => setEmail(emailSuggestion)}>
+              {emailSuggestion}
+            </button>
+            {' '}아닌가요?
+          </p>
+        )}
+        <p className={styles.fieldHint}>주문 확인서 및 배송 알림이 이 주소로 발송됩니다. 정확히 입력해 주세요.</p>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="postalCode">우편번호 *</label>

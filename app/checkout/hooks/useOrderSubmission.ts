@@ -8,6 +8,7 @@ import type { CheckoutFormData } from '../types';
 import { apiClient } from '@/lib/api-client';
 import { validateCartStock } from '@/lib/validateStock';
 import { saveShippingToCookie } from './useCheckoutForm';
+import { clearCheckoutBackup } from './useCheckoutItems';
 
 export function useOrderSubmission(
   formData: CheckoutFormData,
@@ -26,26 +27,31 @@ export function useOrderSubmission(
     isSubmittingRef.current = true;
     setIsSubmitting(true);
 
-    if (!formData.privacyConsent || !formData.thirdPartyConsent) {
-      alert('필수 약관에 동의해 주세요.');
+    const stopWith = (message: string) => {
+      alert(message);
       isSubmittingRef.current = false;
       setIsSubmitting(false);
-      return;
+    };
+
+    // 폼에 noValidate가 걸려 있으므로 필수 배송 정보를 직접 검증한다.
+    // (브라우저 기본 검증은 iOS Safari에서 안내 없이 조용히 제출을 막아 버튼이 먹통처럼 보임)
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.name.trim()) return stopWith('이름을 입력해 주세요.');
+    if (!formData.phone.trim()) return stopWith('전화번호를 입력해 주세요.');
+    if (!emailPattern.test(formData.email.trim())) return stopWith('올바른 이메일 주소를 입력해 주세요.');
+    if (!formData.postalCode.trim() || !formData.address.trim()) {
+      return stopWith('주소 검색으로 배송지를 입력해 주세요.');
     }
 
-const stockErrors = await validateCartStock(checkoutItems);
-    if (stockErrors.length > 0) {
-      alert(stockErrors.join('\n'));
-      isSubmittingRef.current = false;
-      setIsSubmitting(false);
-      return;
+    if (!formData.privacyConsent || !formData.thirdPartyConsent) {
+      return stopWith('필수 약관에 동의해 주세요.');
     }
+
+    const stockErrors = await validateCartStock(checkoutItems);
+    if (stockErrors.length > 0) return stopWith(stockErrors.join('\n'));
 
     if (formData.paymentMethod === 'bank' && !formData.depositorName.trim()) {
-      alert('입금자명을 입력해 주세요.');
-      isSubmittingRef.current = false;
-      setIsSubmitting(false);
-      return;
+      return stopWith('입금자명을 입력해 주세요.');
     }
 
     try {
@@ -65,7 +71,7 @@ const stockErrors = await validateCartStock(checkoutItems);
     const currentCart: CartItem[] = JSON.parse(localStorage.getItem('brospick-cart') || '[]');
     const updatedItems = removePurchasedItems(currentCart, checkoutItems);
     localStorage.setItem('brospick-cart', JSON.stringify(updatedItems));
-    sessionStorage.removeItem('checkoutItems');
+    clearCheckoutBackup();
     if (updatedItems.length === 0) clearCart();
   };
 
@@ -93,6 +99,10 @@ const stockErrors = await validateCartStock(checkoutItems);
     }
 
     const data = await res.json();
+
+    if (!data.redirectUrl) {
+      throw new Error('카카오페이 결제 페이지를 여는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
 
     window.location.href = data.redirectUrl;
   };

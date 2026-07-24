@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { BANK } from '../../lib/constants';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { removePurchasedItems } from '../checkout/utils';
+import { CHECKOUT_BACKUP_KEY, clearCheckoutBackup } from '../checkout/hooks/useCheckoutItems';
 import { trackPurchase } from '../../lib/analytics';
 import styles from './order-complete.module.css';
 
@@ -68,8 +69,8 @@ function OrderCompletePage() {
 
     // 카카오페이 결제 완료 (URL 파라미터로 전달)
     if (method === 'kakao' && orderNumber && amount) {
-      // 결제 성공 시점에 장바구니 정리
-      const storedItems = sessionStorage.getItem('checkoutItems');
+      // 결제 성공 시점에 장바구니 정리 (세션 유실 시 localStorage 백업으로 폴백)
+      const storedItems = sessionStorage.getItem('checkoutItems') ?? localStorage.getItem(CHECKOUT_BACKUP_KEY);
       if (storedItems) {
         try {
           const checkoutItems: CartItem[] = JSON.parse(storedItems);
@@ -80,8 +81,8 @@ function OrderCompletePage() {
         } catch {
           // 장바구니 정리 실패해도 주문 완료 페이지는 정상 표시
         }
-        sessionStorage.removeItem('checkoutItems');
       }
+      clearCheckoutBackup();
 
       localStorage.setItem('brospick-last-order', orderNumber);
       firePurchaseOnce(orderNumber, parseInt(amount, 10));

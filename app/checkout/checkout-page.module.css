@@ -118,28 +118,48 @@
   background-color: var(--color-bg-secondary);
 }
 
-.emailRow {
+.emailDomainRow {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-xs);
+  margin-top: var(--space-xs);
 }
 
-.emailRow input,
-.emailRow select {
-  flex: 1;
-  min-width: 0;
-}
-
-.emailAt {
-  font-size: var(--size-base);
+.emailDomainButton {
+  padding: 6px 10px;
+  font-size: var(--size-sm);
   color: var(--color-text-secondary);
-  flex-shrink: 0;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.emailDomainButton:hover {
+  background-color: var(--color-bg-tertiary, var(--color-bg-secondary));
 }
 
 .emailError {
   margin-top: var(--space-xs);
   font-size: var(--size-sm);
   color: #e53e3e;
+}
+
+.emailSuggestion {
+  margin-top: var(--space-xs);
+  font-size: var(--size-sm);
+  color: var(--color-text-secondary);
+}
+
+.emailSuggestionButton {
+  padding: 0;
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--color-accent, #e53e3e);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .emailHint {

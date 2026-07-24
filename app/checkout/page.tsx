@@ -52,7 +52,7 @@ export default function CheckoutPage() {
         <div className={styles.container}>
           <h1>결제</h1>
           <div className={styles.checkoutContent}>
-            <form className={styles.checkoutForm} onSubmit={handleSubmit}>
+            <form className={styles.checkoutForm} onSubmit={handleSubmit} noValidate>
               <ShippingForm
                 formData={formData}
                 onInputChange={handleInputChange}
