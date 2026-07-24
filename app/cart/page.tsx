@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
@@ -25,9 +25,49 @@ export default function CartPage() {
   const router = useRouter();
   const { cart, removeFromCart, updateQuantity, getTotalPrice, clearCart } = useCart();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [soldOutKeys, setSoldOutKeys] = useState<Set<string>>(new Set());
+
+  // 최신 품절 상태를 받아와 장바구니 항목과 대조 (담아둔 뒤 품절된 항목 차단용)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/products/sizes');
+        if (!res.ok) return;
+        const data = await res.json();
+        const rows = Array.isArray(data) ? data : data.sizes ?? [];
+        const soldOut = new Set<string>();
+        for (const row of rows) {
+          if (row.status === 'sold_out' || (row.stock ?? 0) <= 0) {
+            soldOut.add(`${row.product_id}-${row.size}`);
+          }
+        }
+        if (!cancelled) setSoldOutKeys(soldOut);
+      } catch {
+        // 실패 시 품절 표시 생략 — 결제 시 validateCartStock가 최종 방어
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const isSoldOut = (item: CartItem) => soldOutKeys.has(`${item.id}-${item.size}`);
+
+  // 품절 항목이 선택돼 있으면 자동 해제
+  useEffect(() => {
+    if (soldOutKeys.size === 0) return;
+    setSelectedItems((prev) => {
+      const next = new Set(prev);
+      cart.forEach((item, index) => {
+        if (isSoldOut(item)) next.delete(`${item.id}-${item.size}-${index}`);
+      });
+      return next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [soldOutKeys, cart]);
 
   // 체크박스 토글
   const toggleItem = (item: CartItem, index: number) => {
+    if (isSoldOut(item)) return;
     const key = `${item.id}-${item.size}-${index}`;
     setSelectedItems((prev) => {
       const newSet = new Set(prev);
@@ -40,12 +80,18 @@ export default function CartPage() {
     });
   };
 
-  // 전체 선택/해제
+  // 전체 선택/해제 (품절 항목 제외)
+  const selectableCount = cart.filter((item) => !isSoldOut(item)).length;
   const toggleAll = () => {
-    if (selectedItems.size === cart.length) {
+    if (selectedItems.size >= selectableCount && selectableCount > 0) {
       setSelectedItems(new Set());
     } else {
-      setSelectedItems(new Set(cart.map((item, index) => `${item.id}-${item.size}-${index}`)));
+      setSelectedItems(new Set(
+        cart
+          .map((item, index) => ({ item, index }))
+          .filter(({ item }) => !isSoldOut(item))
+          .map(({ item, index }) => `${item.id}-${item.size}-${index}`)
+      ));
     }
   };
 
@@ -123,7 +169,7 @@ export default function CartPage() {
                 <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
-                    checked={selectedItems.size === cart.length && cart.length > 0}
+                    checked={selectableCount > 0 && selectedItems.size >= selectableCount}
                     onChange={toggleAll}
                     className={styles.checkbox}
                   />
@@ -134,14 +180,16 @@ export default function CartPage() {
             {cart.map((item, index) => {
               const key = `${item.id}-${item.size}-${index}`;
               const isSelected = selectedItems.has(key);
+              const soldOut = isSoldOut(item);
               return (
-                <div key={key} className={`${styles.cartItem} ${isSelected ? styles.selected : ''}`}>
+                <div key={key} className={`${styles.cartItem} ${isSelected ? styles.selected : ''} ${soldOut ? styles.soldOutItem : ''}`}>
                   <label className={styles.itemCheckbox}>
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleItem(item, index)}
                       className={styles.checkbox}
+                      disabled={soldOut}
                     />
                   </label>
                   <div className={styles.itemImage}>
@@ -152,11 +200,14 @@ export default function CartPage() {
                         e.currentTarget.src = PRODUCT_FALLBACK_IMAGE;
                       }}
                     />
+                    {soldOut && <span className={styles.soldOutBadge}>품절</span>}
                   </div>
                   <div className={styles.itemInfo}>
                     <h3 className={styles.itemName}>{item.name}</h3>
                     <p className={styles.itemSize}>사이즈: {item.size}</p>
-                    <p className={styles.itemPrice}>₩{item.price.toLocaleString()}</p>
+                    {soldOut
+                      ? <p className={styles.itemSoldOutText}>품절된 상품입니다. 삭제 후 결제해 주세요.</p>
+                      : <p className={styles.itemPrice}>₩{item.price.toLocaleString()}</p>}
                   </div>
                   <div className={styles.itemControls}>
                     <div className={styles.quantityControls}>

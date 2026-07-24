@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
 import { trackInitiateCheckout } from '../../lib/analytics';
+import { validateCartStock } from '../../lib/validateStock';
 import { useCheckoutItems } from './hooks/useCheckoutItems';
 import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useOrderSubmission } from './hooks/useOrderSubmission';
@@ -37,6 +38,18 @@ export default function CheckoutPage() {
     checkoutTracked.current = true;
     trackInitiateCheckout(selectedTotalPrice, checkoutItems.length);
   }, [isLoading, checkoutItems.length, selectedTotalPrice]);
+
+  // 진입 시점에 품절·재고를 미리 확인해, 문제가 있으면 버튼을 막고 안내한다.
+  // (담아둔 뒤 품절된 항목으로 주문하기를 눌러도 반응 없던 문제 방지)
+  const [stockIssues, setStockIssues] = useState<string[]>([]);
+  useEffect(() => {
+    if (isLoading || checkoutItems.length === 0) return;
+    let cancelled = false;
+    validateCartStock(checkoutItems).then((errors) => {
+      if (!cancelled) setStockIssues(errors);
+    });
+    return () => { cancelled = true; };
+  }, [isLoading, checkoutItems]);
 
   if (isLoading || checkoutItems.length === 0) {
     return null;
@@ -73,10 +86,19 @@ export default function CheckoutPage() {
                 onConsentChange={handleConsentChange}
                 onAllConsentChange={handleAllConsentChange}
               />
+              {stockIssues.length > 0 && (
+                <div className={styles.stockWarning}>
+                  <strong>품절된 상품이 있습니다.</strong>
+                  <ul>
+                    {stockIssues.map((msg, i) => <li key={i}>{msg}</li>)}
+                  </ul>
+                  <p>장바구니에서 해당 상품을 삭제한 뒤 다시 주문해 주세요.</p>
+                </div>
+              )}
               <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={isSubmitting}
+                disabled={isSubmitting || stockIssues.length > 0}
               >
                 {isSubmitting ? '주문 처리 중...' : `${formatPrice(discountedTotal + getShippingFee(discountedTotal, formData.postalCode))} 주문하기`}
               </button>

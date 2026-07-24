@@ -366,6 +366,37 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id]);
 
+  // 최신 재고·품절 상태를 마운트 시 새로 받아온다.
+  // (상세 페이지는 ISR 5분 캐시라, 어드민에서 품절로 바꿔도 반영이 지연되던 문제 보완)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/products/sizes');
+        if (!res.ok) return;
+        const data = await res.json();
+        const rows: SizeRow[] = Array.isArray(data) ? data : data.sizes ?? [];
+        if (cancelled || rows.length === 0) return;
+
+        const statusMap: Record<string, string> = {};
+        const stockMap: Record<string, number> = {};
+        const delayMap: Record<string, string> = {};
+        for (const item of rows) {
+          const key = `${item.product_id}-${item.size}`;
+          statusMap[key] = item.status;
+          stockMap[key] = item.stock ?? 0;
+          if (item.delay_text) delayMap[key] = item.delay_text;
+        }
+        setSizeStatuses(statusMap);
+        setSizeStocks(stockMap);
+        setSizeDelayTexts(delayMap);
+      } catch {
+        // 실패 시 SSR 초기 데이터 유지
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [product?.id]);
+
   if (!product) {
     return (
       <main className={styles.main}>

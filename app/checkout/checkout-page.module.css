@@ -276,6 +276,26 @@
   line-height: 1.5;
 }
 
+.stockWarning {
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  background-color: rgba(229, 62, 62, 0.08);
+  border: 1px solid #e53e3e;
+  border-radius: var(--radius-sm);
+  color: #e53e3e;
+  font-size: var(--size-sm);
+}
+
+.stockWarning ul {
+  margin: var(--space-xs) 0;
+  padding-left: var(--space-lg);
+}
+
+.stockWarning p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
 .submitButton {
   padding: var(--space-lg);
   background-color: var(--color-accent);
