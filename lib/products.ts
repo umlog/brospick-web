@@ -867,7 +867,7 @@ export const products: Record<ProductSlug, Product> = {
     name: 'Mini Cross C-Tape (3.8cm)',
     category: 'taping',
     comingSoon: false,
-    image: '/apparel/taping/mini-cross-c-tape-38/1.png',
+    image: '/apparel/taping/mini-cross-c-tape-38/3.png',
     images: [
       '/apparel/taping/mini-cross-c-tape-38/3.png',
       '/apparel/taping/mini-cross-c-tape-38/4.png',
