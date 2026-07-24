@@ -25,7 +25,6 @@ export const PRODUCT_SLUGS = {
   QUARTER_ZIP_FLEX_LIGHT_GREEN: 'quarter-zip-flex-light-green',
   MOTION_TECH_PANTS_BLACK: 'motion-tech-pants-black',
   MOTION_TECH_PANTS_GRAY: 'motion-tech-pants-gray',
-  CROSS_C_TAPING_BLACK: 'mini-cross-c-tape-38',
   CROSS_C_TAPING_GOLD: 'cross-c-tape-gold',
   PHILIPPIANS_413_C_TAPING: 'philippians-413-c-tape',
   // ── 2차 추가 상품 ──
@@ -87,7 +86,6 @@ export const PRODUCT_IDS = {
   QUARTER_ZIP_FLEX_LIGHT_GREEN: 13,
   MOTION_TECH_PANTS_BLACK: 14,
   MOTION_TECH_PANTS_GRAY: 15,
-  CROSS_C_TAPING_BLACK: 16,
   CROSS_C_TAPING_GOLD: 17,
   PHILIPPIANS_413_C_TAPING: 18,
   // ── 2차 추가 상품 ──
@@ -858,43 +856,6 @@ export const products: Record<ProductSlug, Product> = {
         { title: '심플하고 세련된 디자인', description: '일상과 운동 모두에 어울리는 미니멀 무드.' },
       ],
       material: '폴리에스터 90%, 스판덱스 10%. 부드럽고 신축성 좋은 퍼포먼스 기능성 원단.',
-    },
-  },
-
-  [PRODUCT_SLUGS.CROSS_C_TAPING_BLACK]: {
-    id: PRODUCT_IDS.CROSS_C_TAPING_BLACK,
-    slug: PRODUCT_SLUGS.CROSS_C_TAPING_BLACK,
-    name: 'Mini Cross C-Tape (3.8cm)',
-    category: 'taping',
-    comingSoon: false,
-    image: '/apparel/taping/mini-cross-c-tape-38/3.png',
-    images: [
-      '/apparel/taping/mini-cross-c-tape-38/3.png',
-      '/apparel/taping/mini-cross-c-tape-38/4.png',
-    ],
-    tagline: '프리미엄 코튼 원단과 톱니형 절개 구조로 손쉽게 사용할 수 있는 손목·발목 고정 테이핑.',
-    description:
-      '프리미엄 코튼 원단을 사용해 부드럽고 피부 친화적인 착용감을 제공하는 C 테이핑입니다. 톱니형 구조로 손쉽게 뜯어 사용할 수 있어 편리하며, 오래 착용해도 자극이 적어 안정적인 사용이 가능합니다. 손목 및 발목 고정용으로 활용하기 좋으며, 운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 사용할 수 있습니다.',
-    sizes: ['ONE SIZE'],
-    features: [
-      { label: '프리미엄 코튼 원단', detail: ' — 부드럽고 피부 친화적인 사용감' },
-      { label: '톱니형 절개 구조', detail: ' — 손쉽게 뜯어 사용' },
-      { label: '오래 착용해도 자극이 적은 편안함' },
-      { label: '손목 및 발목 고정용 활용' },
-    ],
-    sizeChart: [],
-    details: {
-      functions: [
-        { title: '프리미엄 코튼 원단', description: '부드럽고 피부 친화적인 착용감 제공.' },
-        { title: '톱니형 절개 구조', description: '손쉽게 뜯어 사용할 수 있어 편리함.' },
-        { title: '저자극 장시간 착용', description: '오래 착용해도 자극이 적어 안정적인 사용 가능.' },
-        { title: '손목·발목 고정', description: '운동 전후 테이핑이 필요한 다양한 상황에서 실용적으로 활용.' },
-      ],
-      design: [
-        { title: '블랙 컬러 포인트', description: '깔끔한 블랙 컬러로 스포츠 테이핑 특유의 강한 인상 연출.' },
-        { title: '십자가 C 로고 디테일', description: '실용성과 안정감을 살린 브로스픽 아이덴티티 디자인.' },
-      ],
-      material: '코튼. 가로 3.8cm × 길이 7m.',
     },
   },
 
