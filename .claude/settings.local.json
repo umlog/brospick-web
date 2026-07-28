@@ -104,7 +104,13 @@
       "Bash(perl -0777 -pi -e 's/\\\\.originalPrice \\\\{\\\\n  font-size: 0\\\\.9rem;/.originalPrice \\\\{\\\\n  font-family: var\\(--font-display\\);\\\\n  font-size: 0.95rem;\\\\n  letter-spacing: 0.02em;/' ebook-promo.module.css)",
       "mcp__plugin_playwright_playwright__browser_run_code_unsafe",
       "PowerShell(npm run *)",
-      "PowerShell(Remove-Item *)"
+      "PowerShell(Remove-Item *)",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 30)",
+      "Bash(ls -la cross-c-tape-38/)",
+      "Bash(ls -la cross-c-tape-5cm/)",
+      "Bash(md5sum cross-c-tape-38/*.png)",
+      "Bash(md5sum cross-c-tape-5cm/*.png)",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 20)"
     ],
     "additionalDirectories": [
       "c:\\brospick-web\\brospick-web"

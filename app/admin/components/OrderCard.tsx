@@ -6,6 +6,7 @@ import { TrackingModal } from './TrackingModal';
 import { NotifyToggle } from './NotifyToggle';
 import { DangerZone } from './DangerZone';
 import { OrderNotes } from './OrderNotes';
+import { OrderItemSize } from './OrderItemSize';
 import styles from '../admin.module.css';
 
 interface OrderCardProps {
@@ -151,7 +152,7 @@ export function OrderCard({
             {order.order_items.map((item) => (
               <div key={item.id} className={styles.detailItem}>
                 <span className={styles.detailItemName}>
-                  {item.product_name} <span className={styles.detailItemOption}>({item.size})</span>
+                  {item.product_name} <OrderItemSize size={item.size} />
                   <span className={styles.detailItemPrice}>₩{item.price.toLocaleString()}</span>
                 </span>
                 <span className={styles.detailItemQty}>{item.quantity}개</span>

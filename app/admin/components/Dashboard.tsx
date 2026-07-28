@@ -245,15 +245,25 @@ export function Dashboard({ allOrders, ebookOrders }: Props) {
         ) : (
           <>
             <div className={styles.barChart}>
-              {analyticsData.sources.map((row) => {
+              {analyticsData.sources.map((row, idx) => {
                 const maxCount = analyticsData.sources[0]?.count || 1;
+                const totalCount = analyticsData.sources.reduce((sum, s) => sum + s.count, 0) || 1;
+                const share = ((row.count / totalCount) * 100).toFixed(0);
                 return (
                   <div key={row.source} className={styles.barRow}>
-                    <span className={styles.barLabel}>{SOURCE_LABELS[row.source] ?? row.source}</span>
-                    <div className={styles.barTrack}>
-                      <div className={styles.bar} style={{ width: `${(row.count / maxCount) * 100}%` }} />
+                    <div className={styles.barHeader}>
+                      <span className={styles.barRank}>{idx + 1}</span>
+                      <span className={styles.barLabel}>{SOURCE_LABELS[row.source] ?? row.source}</span>
+                      <span className={styles.barCount}>{row.count.toLocaleString()}</span>
+                      <span className={styles.barShare}>{share}%</span>
                     </div>
-                    <span className={styles.barCount}>{row.count.toLocaleString()}</span>
+                    <div className={styles.barTrack}>
+                      <div
+                        className={styles.bar}
+                        style={{ width: `${(row.count / maxCount) * 100}%` }}
+                        data-rank={idx === 0 ? 'top' : undefined}
+                      />
+                    </div>
                   </div>
                 );
               })}

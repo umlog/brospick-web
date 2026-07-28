@@ -400,8 +400,47 @@
 }
 
 .detailItemOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--color-text-secondary);
   font-weight: 400;
+}
+
+/* 포장 시 색상 혼동을 막기 위한 색상칩 (bootskin Black/White 등) */
+.colorChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-size: calc(var(--size-sm) - 1px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.colorChipBlack {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #1a1a1a;
+}
+
+.colorChipWhite {
+  background-color: #fff;
+  color: #1a1a1a;
+  border: 1px solid #b0b0b0;
+}
+
+.colorChipGray {
+  background-color: #8a8a8a;
+  color: #fff;
+  border: 1px solid #8a8a8a;
+}
+
+.colorChipSky {
+  background-color: #7ec8e3;
+  color: #10303b;
+  border: 1px solid #5bb2d1;
 }
 
 .detailItemPrice {
@@ -1622,45 +1661,84 @@
 .barChart {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
 }
 
 .barRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barHeader {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
 }
 
-.barLabel {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  width: 40px;
+.barRank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  text-align: right;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background-color: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+.barLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .barTrack {
-  flex: 1;
-  height: 20px;
-  background-color: var(--color-bg-secondary);
-  border-radius: 3px;
+  height: 10px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
 .bar {
   height: 100%;
-  background-color: var(--color-text-primary);
-  border-radius: 3px;
-  min-width: 2px;
-  transition: width 0.3s ease;
+  background-color: var(--color-accent-soft);
+  border-radius: var(--radius-pill);
+  min-width: 4px;
+  transition: width 0.4s ease;
+}
+
+.bar[data-rank='top'] {
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-soft));
 }
 
 .barCount {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  width: 36px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.barShare {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  width: 34px;
   text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 640px) {
