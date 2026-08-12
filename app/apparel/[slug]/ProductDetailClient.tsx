@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
 import { products, getDiscountPercent, type ProductSlug, type ProductColor } from '../../../lib/products';
@@ -12,6 +13,29 @@ import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ReviewLightbox from '../../components/ReviewLightbox';
 import ProductImage from '../../components/ProductImage';
+
+/**
+ * 상세 배너의 레이아웃 예약용 기준 크기. 상품마다 실제 배너 비율이 달라
+ * (860x1100 ~ 1254x1254 등) 렌더 비율은 CSS의 height: auto가 원본에서 가져온다.
+ * 이 값은 next/image가 요구하는 초기 예약 박스일 뿐이다.
+ */
+const DETAIL_BANNER_BASE_WIDTH = 1080;
+const DETAIL_BANNER_BASE_HEIGHT = 1380;
+/** PC는 2열 그리드의 왼쪽 열, 모바일(968px 이하)은 전체 폭을 차지한다. */
+const DETAIL_BANNER_SIZES = '(max-width: 968px) 100vw, 50vw';
+
+function DetailBannerImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={DETAIL_BANNER_BASE_WIDTH}
+      height={DETAIL_BANNER_BASE_HEIGHT}
+      sizes={DETAIL_BANNER_SIZES}
+      className={styles.detailBannerImage}
+    />
+  );
+}
 
 interface ReviewItem {
   id: string;
@@ -795,20 +819,18 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
             {product.detailBanners && product.detailBanners.length > 0 && (
               <div className={styles.detailBannerDesktop}>
-                <img
+                <DetailBannerImage
                   src={product.detailBanners[0]}
                   alt={`${product.name} 상세 이미지 1`}
-                  className={styles.detailBannerImage}
                 />
                 {product.detailBanners.length > 1 && (
                   <>
                     <div className={`${styles.detailBannerRest} ${!bannerExpanded ? styles.collapsed : ''}`}>
                       {product.detailBanners.slice(1).map((src, i) => (
-                        <img
+                        <DetailBannerImage
                           key={i + 1}
                           src={src}
                           alt={`${product.name} 상세 이미지 ${i + 2}`}
-                          className={styles.detailBannerImage}
                         />
                       ))}
                       {!bannerExpanded && <div className={styles.detailBannerFade} />}
@@ -1231,20 +1253,18 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
             {product.detailBanners && product.detailBanners.length > 0 && (
               <div className={styles.detailBannerMobile}>
-                <img
+                <DetailBannerImage
                   src={product.detailBanners[0]}
                   alt={`${product.name} 상세 이미지 1`}
-                  className={styles.detailBannerImage}
                 />
                 {product.detailBanners.length > 1 && (
                   <>
                     <div className={`${styles.detailBannerRest} ${!bannerExpanded ? styles.collapsed : ''}`}>
                       {product.detailBanners.slice(1).map((src, i) => (
-                        <img
+                        <DetailBannerImage
                           key={i + 1}
                           src={src}
                           alt={`${product.name} 상세 이미지 ${i + 2}`}
-                          className={styles.detailBannerImage}
                         />
                       ))}
                       {!bannerExpanded && <div className={styles.detailBannerFade} />}

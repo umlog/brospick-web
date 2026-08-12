@@ -83,6 +83,8 @@
 
 .detailBannerImage {
   width: 100%;
+  /* next/image의 width/height는 예약용 기준값이므로, 실제 비율은 원본에서 가져온다. */
+  height: auto;
   display: block;
 }
 
