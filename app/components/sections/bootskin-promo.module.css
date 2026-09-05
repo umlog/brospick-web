@@ -1,0 +1,266 @@
+.section {
+  padding: 80px 0 0;
+  background: var(--background);
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--foreground), transparent);
+  opacity: 0.1;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.viewAll {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--anim-fast), gap var(--anim-fast);
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+.viewAll:hover {
+  color: var(--color-text-primary);
+  gap: 10px;
+}
+
+/* ── 카드 ── */
+/* Before/After 슬라이더를 드래그해야 해서 카드 전체를 링크로 감싸지 않는다 */
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  border: 1px solid rgba(128, 128, 128, 0.12);
+  border-radius: var(--radius-md, 12px);
+  background: rgba(128, 128, 128, 0.03);
+  overflow: hidden;
+}
+
+.visualCol {
+  width: 46%;
+  flex-shrink: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.visualHint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* ── 텍스트 콘텐츠 ── */
+.content {
+  flex: 1;
+  padding: 40px 48px 40px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.cardTitle {
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ── 스티커 샘플 ── */
+.sampleRow {
+  display: flex;
+  gap: 14px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.sample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sampleThumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.16);
+  background: rgba(128, 128, 128, 0.06);
+  overflow: hidden;
+}
+
+.sampleLabel {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: 0.01em;
+}
+
+.priceFrom {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  gap: 6px;
+  transition: gap var(--anim-fast);
+}
+
+.cta:hover {
+  gap: 12px;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .visualCol {
+    width: 100%;
+    padding: 16px 16px 0;
+  }
+
+  .content {
+    padding: 8px 20px 32px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .cardTitle {
+    font-size: 1.2rem;
+  }
+
+  .desc {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .sampleThumb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .price {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 48px 0 0;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .content {
+    padding: 8px 16px 28px;
+  }
+}

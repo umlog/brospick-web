@@ -7,7 +7,8 @@ import { CONTACT } from '../../lib/constants';
 import styles from './FloatingTracker.module.css';
 
 const HIDDEN_PATHS = ['/checkout', '/cart', '/ebook'];
-const HIDDEN_PATTERN = /^\/apparel\/.+/;
+// 상품 상세는 하단 구매 바와 겹치므로 숨긴다 (의류·부츠스킨 양쪽 모두)
+const HIDDEN_PATTERN = /^\/(apparel|bootskin)\/.+/;
 
 export default function FloatingTracker() {
   const [isOpen, setIsOpen] = useState(false);

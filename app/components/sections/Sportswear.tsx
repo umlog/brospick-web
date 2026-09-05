@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './sportswear.module.css';
 import ProductImage from '../ProductImage';
-import { productList, getDiscountPercent, CATEGORY_LABELS, ProductCategory } from '@/lib/products';
+import { apparelProductList, getDiscountPercent, getProductHref, CATEGORY_LABELS, ProductCategory } from '@/lib/products';
 
 const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
@@ -47,10 +47,11 @@ export default function Sportswear({ initialPrices }: Props) {
     el.scrollBy({ left: dir === 'right' ? el.clientWidth * 0.8 : -el.clientWidth * 0.8, behavior: 'smooth' });
   };
 
-  const productCategories = new Set(productList.map((p) => p.category));
+  // 부츠스킨은 홈에서 전용 섹션(BootskinPromo)으로 따로 소개한다
+  const productCategories = new Set(apparelProductList.map((p) => p.category));
   const orderedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((c) => productCategories.has(c));
 
-  const sorted = [...productList].sort((a, b) => {
+  const sorted = [...apparelProductList].sort((a, b) => {
     const aDb = dbPrices[a.id];
     const bDb = dbPrices[b.id];
     const aSortOrder = aDb?.sort_order ?? null;
@@ -161,7 +162,7 @@ export default function Sportswear({ initialPrices }: Props) {
             }
 
             return (
-              <Link key={product.id} href={`/apparel/${product.slug}`} className={styles.card}>
+              <Link key={product.id} href={getProductHref(product)} className={styles.card}>
                 <div className={styles.imageWrap}>
                   <ProductImage
                     src={product.image}

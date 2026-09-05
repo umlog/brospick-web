@@ -10,6 +10,7 @@ import { join, extname, dirname, relative } from 'path';
 
 const SRC_ROOT = 'public';
 const OUT_ROOT = join('public', '_opt');
+const OVERLAY_ROOT = join('public', '_bootskin');
 const WIDTHS = [256, 384, 640, 1080];
 const WEBP_Q = 80;
 const RASTER = /\.(png|jpe?g|webp)$/i;
@@ -18,6 +19,8 @@ function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (p.startsWith(OUT_ROOT)) continue; // 생성물 자기 자신 제외
+    // 부츠스킨 미리보기용 투명 스티커는 원본 그대로 <img>로 쓰므로 버킷을 만들지 않는다
+    if (p.startsWith(OVERLAY_ROOT)) continue;
     const st = statSync(p);
     if (st.isDirectory()) walk(p, out);
     else if (RASTER.test(p)) out.push(p);

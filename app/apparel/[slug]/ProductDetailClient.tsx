@@ -6,11 +6,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
-import { products, getDiscountPercent, type ProductSlug, type ProductColor } from '../../../lib/products';
+import { products, getDiscountPercent, getProductHref, BOOTSKIN_CATEGORY, type ProductSlug, type ProductColor } from '../../../lib/products';
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import { trackViewContent, trackAddToCart } from '../../../lib/analytics';
 import styles from './product-detail.module.css';
 import BeforeAfterSlider from './BeforeAfterSlider';
+import { BOOTSKIN_FAQ } from '../../bootskin/bootskin.config';
+import { renderFaqAnswer } from '../../bootskin/components/BootskinFaq';
 import ReviewLightbox from '../../components/ReviewLightbox';
 import ProductImage from '../../components/ProductImage';
 
@@ -357,6 +359,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
 
   const product = products[params.slug as ProductSlug];
   const isBulkCategory = product?.category === 'taping' || product?.category === 'socks' || product?.category === 'boot-skin';
+  const isBootSkin = product?.category === BOOTSKIN_CATEGORY;
 
   // 서버에서 받은 초기 데이터로 size 맵 구성
   const [sizeStatuses, setSizeStatuses] = useState<Record<string, string>>(() => {
@@ -583,6 +586,25 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
     if (imgIdx >= 0) { emblaApi?.scrollTo(imgIdx); thumbApi?.scrollTo(imgIdx); }
   };
 
+  // 부츠스킨 미리보기에서 `?option=7 — Black` 으로 넘어오면 해당 옵션을 미리 선택해 둔다.
+  // useSearchParams 대신 location을 읽는 이유: 이 페이지는 정적 생성이라 Suspense 경계가 필요해진다.
+  useEffect(() => {
+    if (!product) return;
+    const option = new URLSearchParams(window.location.search).get('option');
+    if (!option) return;
+
+    const colorName = option.split(' — ')[1];
+    if (colorName) {
+      const matched = product.colors?.find((color) => color.name === colorName);
+      if (matched) setSelectedColor(matched);
+    }
+    if (product.multiSelect) {
+      setSelectedSizes((prev) => (prev.includes(option) ? prev : [...prev, option]));
+    } else if (product.sizes.includes(option)) {
+      setSelectedSize(option);
+    }
+  }, [product]);
+
   const handleSizeSelect = (size: string) => {
     if (product.multiSelect) {
       const isRemoving = selectedSizes.includes(size);
@@ -741,9 +763,16 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <Link href="/apparel" className={styles.backLink}>
-          ← 의류 목록으로 돌아가기
-        </Link>
+        <div className={styles.backLinkRow}>
+          <Link href={isBootSkin ? '/bootskin' : '/apparel'} className={styles.backLink}>
+            ← {isBootSkin ? '부츠스킨' : '의류'} 목록으로 돌아가기
+          </Link>
+          {isBootSkin && (
+            <Link href="/bootskin" className={styles.backLink}>
+              축구화에 올려보기 →
+            </Link>
+          )}
+        </div>
 
         <div className={styles.productDetail}>
           <div className={styles.imageSection}>
@@ -1294,42 +1323,12 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               {product.category === 'boot-skin' && (
                 <Accordion title="자주 묻는 질문 (FAQ)" defaultOpen={true}>
                   <div className={styles.faqList}>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. BOOT SKIN은 일반 스티커나 열전사 필름과 어떻게 다른가요?</p>
-                      <p className={styles.faqAnswer}>일반 비닐 스티커는 두껍고 쉽게 들뜨거나 벗겨질 수 있으며, 열전사 필름은 열프레스 장비가 필요합니다. 반면 Boot Skin은 <strong>국내 고급 잉크와 접착 기술</strong>을 사용한 기계로 생산하여 축구화 표면에 자연스럽게 밀착됩니다. <strong>두꺼운 가장자리가 없어</strong> 걸리거나 들뜰 가능성이 적고, <strong>별도의 열 작업 없이</strong> 집에서도 쉽게 부착할 수 있습니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 방수와 날씨 변화에 강한가요?</p>
-                      <p className={styles.faqAnswer}>네. Boot Skin은 다양한 환경에서도 안정적으로 유지됩니다. 비나 젖은 환경에서 <strong>완전 방수</strong>, 직사광선에도 색이 쉽게 바래지 않는 <strong>자외선 저항</strong>, <strong>영하 10°C ~ 영상 60°C 온도 안정성</strong>, 마찰과 흠집을 줄여주는 <strong>보호 코팅</strong>, 진흙도 디자인 손상 없이 쉽게 닦아낼 수 있습니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 어떤 축구화 브랜드와 소재에 사용할 수 있나요?</p>
-                      <p className={styles.faqAnswer}><strong>Nike, Adidas, Puma 등 모든 브랜드</strong>의 축구화에 사용 가능하며, <strong>천연 가죽과 합성 가죽 소재 모두</strong>에 적용할 수 있습니다. Boot Skin의 접착 기술은 축구화 표면에 안정적으로 부착되도록 설계되었습니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 어떤 사이즈가 있나요?</p>
-                      <p className={styles.faqAnswer}>Boot Skin은 <strong>5mm와 10mm</strong> 높이의 전사 제품을 제공합니다. 각 제품 페이지의 옵션 이미지를 확인하시면 정확한 크기를 확인하실 수 있습니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 부착 후 바로 경기해도 되나요?</p>
-                      <p className={styles.faqAnswer}>바로 사용할 수는 있지만, 최대 접착력을 위해 <strong>1~2시간 경화 시간</strong>을 권장합니다. 가장 좋은 결과를 위해 <strong>경기 전날 부착</strong>하는 것을 추천합니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 얼마나 오래 지속되나요?</p>
-                      <p className={styles.faqAnswer}>올바르게 부착된 Boot Skin은 정기적인 플레이 기준 <strong>여러 시즌</strong>, <strong>200시간 이상</strong>의 경기 사용, <strong>300회 이상</strong>의 훈련 세션을 견딜 수 있습니다. 저가형 제품과는 다른 내구성을 제공합니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 경기 중 손상되면 어떻게 되나요?</p>
-                      <p className={styles.faqAnswer}>Boot Skin은 <strong>슬라이딩 태클·축구화 간 접촉</strong>, <strong>인조잔디 마찰</strong>, <strong>스터드 자국과 스크래치</strong>, <strong>강한 볼 임팩트</strong>에도 견딜 수 있도록 제작되었습니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 카탈로그에 없는 맞춤 디자인도 제작할 수 있나요?</p>
-                      <p className={styles.faqAnswer}>물론입니다. 원하시는 로고 파일이나 팀 로고를 보내주시면 제작 가능 여부를 확인해 드립니다. 맞춤 디자인은 제작 처리 기간이 <strong>2~3일 추가</strong>됩니다.</p>
-                    </div>
-                    <div className={styles.faqItem}>
-                      <p className={styles.faqQuestion}>Q. 팀 주문이나 대량 구매 할인도 제공하나요?</p>
-                      <p className={styles.faqAnswer}>네. 팀 주문 및 도매 가격 문의는 이메일 또는 인스타그램 DM으로 직접 연락해 주세요. BROSPICK은 팀 전체의 아이덴티티 표현을 돕는 것을 좋아하며, <strong>대량 주문 시 특별 가격</strong>을 제공합니다.</p>
-                    </div>
+                    {BOOTSKIN_FAQ.map((item) => (
+                      <div key={item.q} className={styles.faqItem}>
+                        <p className={styles.faqQuestion}>Q. {item.q}</p>
+                        <p className={styles.faqAnswer}>{renderFaqAnswer(item.a)}</p>
+                      </div>
+                    ))}
                   </div>
                 </Accordion>
               )}
@@ -1497,7 +1496,7 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
               <h2 className={styles.relatedTitle}>관련 상품</h2>
               <div className={styles.relatedGrid}>
                 {related.map((p) => (
-                  <a key={p.slug} href={`/apparel/${p.slug}`} className={styles.relatedCard}>
+                  <a key={p.slug} href={getProductHref(p)} className={styles.relatedCard}>
                     <div className={styles.relatedImageWrap}>
                       <ProductImage src={p.image} alt={p.name} className={styles.relatedImage} sizes="(max-width: 768px) 45vw, 200px" />
                       {p.comingSoon && (

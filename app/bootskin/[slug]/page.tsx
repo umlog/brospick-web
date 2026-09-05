@@ -15,13 +15,12 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  // 부츠스킨은 /bootskin/[slug]에서 렌더링된다 (여기로 들어오면 301 리다이렉트)
   return Object.values(products)
-    .filter((product) => product.category !== BOOTSKIN_CATEGORY)
+    .filter((product) => product.category === BOOTSKIN_CATEGORY)
     .map((product) => ({ slug: product.slug }));
 }
 
-export default async function ApparelProductDetailPage(
+export default async function BootskinProductDetailPage(
   props: {
     params: Promise<{ slug: string }>;
   }
@@ -29,8 +28,8 @@ export default async function ApparelProductDetailPage(
   const params = await props.params;
   const product = products[params.slug as ProductSlug];
 
-  // 부츠스킨 분리 이전의 옛 주소 — 새 주소로 영구 이동
-  if (product?.category === BOOTSKIN_CATEGORY) {
+  // 부츠스킨이 아닌 상품이 이 경로로 들어오면 의류 상세로 되돌린다
+  if (product && product.category !== BOOTSKIN_CATEGORY) {
     permanentRedirect(getProductHref(product));
   }
 

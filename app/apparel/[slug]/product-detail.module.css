@@ -27,6 +27,15 @@
   color: var(--color-accent);
 }
 
+/* 부츠스킨은 목록 복귀와 미리보기 진입을 나란히 둔다 */
+.backLinkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
 .productDetail {
   display: grid;
   grid-template-columns: 1fr 1fr;

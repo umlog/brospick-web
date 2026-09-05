@@ -66,6 +66,9 @@ export const PRODUCT_SLUGS = {
   ACTIVE_COTTON_TEE: 'active-cotton-tee',
   // ── 9차 추가 상품 ──
   HEAVY_ESSENTIAL_SET: 'heavy-essential-set',
+  // ── 11차 추가 상품 (부츠스킨) ──
+  BOOTSKIN_POSITION: 'bootskin-position',
+  BOOTSKIN_MOTIVATION: 'bootskin-motivation',
 } as const;
 
 export type ProductSlug = (typeof PRODUCT_SLUGS)[keyof typeof PRODUCT_SLUGS];
@@ -128,6 +131,9 @@ export const PRODUCT_IDS = {
   BOOTSKIN_FAMILY: 47,
   BOOTSKIN_CUSTOM: 48,
   BOOTSKIN_SYMBOLS: 49,
+  // ── 11차 추가 상품 ──
+  BOOTSKIN_POSITION: 50,
+  BOOTSKIN_MOTIVATION: 51,
 } as const;
 
 export interface SizeChartRow {
@@ -2067,17 +2073,19 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/nation/1-KOREA.png',
       '/apparel/bootskin/nation/2-nation-flag.png',
       '/apparel/bootskin/nation/3-nation-flag-circle.png',
+      '/apparel/bootskin/nation/4-BRAZIL.png',
     ],
     sizeImages: {
       'KOREA': '/apparel/bootskin/nation/1-KOREA.png',
       '태극기': '/apparel/bootskin/nation/2-nation-flag.png',
       '태극기 원형': '/apparel/bootskin/nation/3-nation-flag-circle.png',
+      '브라질': '/apparel/bootskin/nation/4-BRAZIL.png',
     },
-    tagline: '대한민국을 부츠에 — 태극기와 KOREA 스티커.',
-    description: '축구화나 럭비화에 붙이는 코리아 부츠스킨입니다. 태극기, 태극기 원형, KOREA 중 원하는 스타일을 선택해 주문하세요.',
-    sizes: ['KOREA', '태극기', '태극기 원형'],
+    tagline: '국기를 부츠에 — 태극기, KOREA, 브라질 국기 스티커.',
+    description: '축구화나 럭비화에 붙이는 국기 부츠스킨입니다. 태극기, 태극기 원형, KOREA, 브라질 국기 중 원하는 스타일을 선택해 주문하세요.',
+    sizes: ['KOREA', '태극기', '태극기 원형', '브라질'],
     features: [
-      { label: '대한민국 아이덴티티', detail: ' — 경기장에서 코리아를 표현' },
+      { label: '국가 아이덴티티', detail: ' — 경기장에서 응원하는 나라를 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
     ],
     sizeChart: [],
@@ -2086,8 +2094,8 @@ export const products: Record<ProductSlug, Product> = {
         { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
       ],
       design: [
-        { title: '코리아 디자인', description: '태극기와 KOREA 레터링 — 경기장에서 대한민국을 표현.' },
-        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+        { title: '국기 디자인', description: '태극기, KOREA 레터링, 브라질 국기 — 경기장에서 국가를 표현.' },
+        { title: '원본 컬러', description: '국기는 실제 색 그대로, KOREA 레터링은 베이직 블랙.' },
       ],
       material: '방수 접착 소재.',
     },
@@ -2640,6 +2648,19 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/symbol/14-star-white.png',
       '/apparel/bootskin/symbol/15-world-cup-trophy.png',
       '/apparel/bootskin/symbol/16-GOAT.png',
+      '/apparel/bootskin/symbol/17-cloud-face.png',
+      '/apparel/bootskin/symbol/18-hot-face.png',
+      '/apparel/bootskin/symbol/19-devil.png',
+      '/apparel/bootskin/symbol/20-salute.png',
+      '/apparel/bootskin/symbol/21-star-eyes.png',
+      '/apparel/bootskin/symbol/22-shush.png',
+      '/apparel/bootskin/symbol/23-angry.png',
+      '/apparel/bootskin/symbol/24-cold-face.png',
+      '/apparel/bootskin/symbol/25-yawn.png',
+      '/apparel/bootskin/symbol/26-hand-over-mouth.png',
+      '/apparel/bootskin/symbol/27-skull.png',
+      '/apparel/bootskin/symbol/28-alien.png',
+      '/apparel/bootskin/symbol/29-ghost.png',
     ],
     sizeImages: {
       '⚡-black': '/apparel/bootskin/symbol/1-lightning-black.png',
@@ -2658,12 +2679,25 @@ export const products: Record<ProductSlug, Product> = {
       '⭐-white': '/apparel/bootskin/symbol/14-star-white.png',
       '🏆-color': '/apparel/bootskin/symbol/15-world-cup-trophy.png',
       'GOAT-black': '/apparel/bootskin/symbol/16-GOAT.png',
+      '😶‍🌫️-color': '/apparel/bootskin/symbol/17-cloud-face.png',
+      '🥵-color': '/apparel/bootskin/symbol/18-hot-face.png',
+      '😈-color': '/apparel/bootskin/symbol/19-devil.png',
+      '🫡-color': '/apparel/bootskin/symbol/20-salute.png',
+      '🤩-color': '/apparel/bootskin/symbol/21-star-eyes.png',
+      '🤫-color': '/apparel/bootskin/symbol/22-shush.png',
+      '😡-color': '/apparel/bootskin/symbol/23-angry.png',
+      '🥶-color': '/apparel/bootskin/symbol/24-cold-face.png',
+      '🥱-color': '/apparel/bootskin/symbol/25-yawn.png',
+      '🤭-color': '/apparel/bootskin/symbol/26-hand-over-mouth.png',
+      '☠️-color': '/apparel/bootskin/symbol/27-skull.png',
+      '👽-color': '/apparel/bootskin/symbol/28-alien.png',
+      '👻-color': '/apparel/bootskin/symbol/29-ghost.png',
     },
-    tagline: '감정을 부츠에 — 번개, 왕관, 하트, 기도, 불꽃, 별, 트로피, GOAT 심볼 스티커.',
-    description: '축구화나 럭비화에 붙이는 심볼 부츠스킨입니다. ⚡ 번개, 👑 왕관, ❤️ 하트, 🙏 기도, 🔥 불꽃, ⭐ 별, 🏆 트로피, GOAT 중 원하는 심볼과 스타일을 선택해 주문하세요.',
-    sizes: ['⚡-black', '⚡-color', '⚡-white', '👑-black', '👑-white', '🤍-white', '❤️-black', '🙏-color', '🙏-white', '🔥-color', '🔥-white', '⭐-color', '⭐-black', '⭐-white', '🏆-color', 'GOAT-black'],
+    tagline: '감정을 부츠에 — 번개, 왕관, 하트, 트로피부터 이모지 표정까지.',
+    description: '축구화나 럭비화에 붙이는 심볼 부츠스킨입니다. ⚡ 번개, 👑 왕관, ❤️ 하트, 🙏 기도, 🔥 불꽃, ⭐ 별, 🏆 트로피, GOAT와 😈 악마, 🤩 별눈, ☠️ 해골, 👽 외계인, 👻 유령 등 이모지 표정 중 원하는 심볼과 스타일을 선택해 주문하세요.',
+    sizes: ['⚡-black', '⚡-color', '⚡-white', '👑-black', '👑-white', '🤍-white', '❤️-black', '🙏-color', '🙏-white', '🔥-color', '🔥-white', '⭐-color', '⭐-black', '⭐-white', '🏆-color', 'GOAT-black', '😶‍🌫️-color', '🥵-color', '😈-color', '🫡-color', '🤩-color', '🤫-color', '😡-color', '🥶-color', '🥱-color', '🤭-color', '☠️-color', '👽-color', '👻-color'],
     features: [
-      { label: '다양한 심볼 디자인', detail: ' — 번개, 왕관, 하트, 기도, 불꽃, 별, 트로피, GOAT' },
+      { label: '다양한 심볼 디자인', detail: ' — 번개, 왕관, 하트, 트로피, GOAT부터 이모지 표정까지' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
     ],
     sizeChart: [],
@@ -2673,7 +2707,7 @@ export const products: Record<ProductSlug, Product> = {
       ],
       design: [
         { title: '심볼 디자인', description: '번개, 왕관, 하트, 기도, 불꽃, 별, 트로피, GOAT — 블랙/컬러/화이트 스타일로 선택.' },
-        { title: '컬러 & 블랙 & 화이트', description: '같은 심볼을 세 가지 스타일로 표현.' },
+        { title: '이모지 표정', description: '😈 악마, 🤩 별눈, 🥵 더위, 🥶 추위, ☠️ 해골, 👽 외계인, 👻 유령 등 원본 컬러 그대로.' },
       ],
       material: '방수 접착 소재.',
     },
@@ -2730,6 +2764,124 @@ export const products: Record<ProductSlug, Product> = {
       material: '방수 접착 소재.',
     },
   },
+
+  // ════════════════════════════════════════════════════════════════
+  // 11차 추가 상품 (부츠스킨 포지션·모티베이션, ID 50~51)
+  // ════════════════════════════════════════════════════════════════
+
+  [PRODUCT_SLUGS.BOOTSKIN_POSITION]: {
+    id: PRODUCT_IDS.BOOTSKIN_POSITION,
+    slug: PRODUCT_SLUGS.BOOTSKIN_POSITION,
+    name: 'BOOT SKIN 포지션',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '포지션 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    // 상세 배너는 이 상품 전용 이미지가 준비되면 추가한다. 지금은 구매만 열어둔다.
+    image: '/apparel/bootskin/position/1-ST.png',
+    images: [
+      '/apparel/bootskin/position/1-ST.png',
+      '/apparel/bootskin/position/2-FW.png',
+      '/apparel/bootskin/position/3-GK.png',
+      '/apparel/bootskin/position/4-CB.png',
+      '/apparel/bootskin/position/5-SB.png',
+      '/apparel/bootskin/position/6-MF.png',
+      '/apparel/bootskin/position/7-RW.png',
+      '/apparel/bootskin/position/8-LW.png',
+    ],
+    sizeImages: {
+      'ST': '/apparel/bootskin/position/1-ST.png',
+      'FW': '/apparel/bootskin/position/2-FW.png',
+      'GK': '/apparel/bootskin/position/3-GK.png',
+      'CB': '/apparel/bootskin/position/4-CB.png',
+      'SB': '/apparel/bootskin/position/5-SB.png',
+      'MF': '/apparel/bootskin/position/6-MF.png',
+      'RW': '/apparel/bootskin/position/7-RW.png',
+      'LW': '/apparel/bootskin/position/8-LW.png',
+    },
+    tagline: '내 포지션을 부츠에 — ST, FW, GK, CB, SB, MF, RW, LW.',
+    description: '축구화나 럭비화에 붙이는 포지션 부츠스킨입니다. ST, FW, GK, CB, SB, MF, RW, LW 중 원하는 포지션을 선택해 주문하세요.',
+    sizes: ['ST', 'FW', 'GK', 'CB', 'SB', 'MF', 'RW', 'LW'],
+    features: [
+      { label: '포지션 레터링', detail: ' — 그라운드에서 내 자리를 표현' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '포지션 디자인', description: 'ST, FW, GK, CB, SB, MF, RW, LW — 여덟 가지 포지션 레터링.' },
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
+
+  [PRODUCT_SLUGS.BOOTSKIN_MOTIVATION]: {
+    id: PRODUCT_IDS.BOOTSKIN_MOTIVATION,
+    slug: PRODUCT_SLUGS.BOOTSKIN_MOTIVATION,
+    name: 'BOOT SKIN 모티베이션',
+    category: 'boot-skin',
+    comingSoon: false,
+    multiSelect: true,
+    sizeLabel: '문구 선택',
+    beforeAfterImages: {
+      before: '/apparel/bootskin/BootSkinLabel/bootskin-label-before.png',
+      after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
+    },
+    // 상세 배너는 이 상품 전용 이미지가 준비되면 추가한다. 지금은 구매만 열어둔다.
+    image: '/apparel/bootskin/motivation/5-NO-PAIN-NO-GAIN.png',
+    images: [
+      '/apparel/bootskin/motivation/1-AURA.png',
+      '/apparel/bootskin/motivation/2-CHAMPION.png',
+      '/apparel/bootskin/motivation/3-WINNER.png',
+      '/apparel/bootskin/motivation/4-GLORY.png',
+      '/apparel/bootskin/motivation/5-NO-PAIN-NO-GAIN.png',
+      '/apparel/bootskin/motivation/6-ALL-IN.png',
+      '/apparel/bootskin/motivation/7-KEEP-GOING.png',
+      '/apparel/bootskin/motivation/8-NEVER-GIVE-UP.png',
+      '/apparel/bootskin/motivation/9-MINDSET.png',
+      '/apparel/bootskin/motivation/10-READY.png',
+      '/apparel/bootskin/motivation/11-FOCUS.png',
+    ],
+    sizeImages: {
+      'AURA': '/apparel/bootskin/motivation/1-AURA.png',
+      'CHAMPION': '/apparel/bootskin/motivation/2-CHAMPION.png',
+      'WINNER': '/apparel/bootskin/motivation/3-WINNER.png',
+      'GLORY': '/apparel/bootskin/motivation/4-GLORY.png',
+      'NO PAIN NO GAIN': '/apparel/bootskin/motivation/5-NO-PAIN-NO-GAIN.png',
+      'ALL IN': '/apparel/bootskin/motivation/6-ALL-IN.png',
+      'KEEP GOING': '/apparel/bootskin/motivation/7-KEEP-GOING.png',
+      'NEVER GIVE UP': '/apparel/bootskin/motivation/8-NEVER-GIVE-UP.png',
+      'MINDSET': '/apparel/bootskin/motivation/9-MINDSET.png',
+      'READY': '/apparel/bootskin/motivation/10-READY.png',
+      'FOCUS': '/apparel/bootskin/motivation/11-FOCUS.png',
+    },
+    tagline: '경기 전 다짐을 부츠에 — NO PAIN NO GAIN, NEVER GIVE UP 외 9종.',
+    description: '축구화나 럭비화에 붙이는 모티베이션 부츠스킨입니다. AURA, CHAMPION, WINNER, GLORY, NO PAIN NO GAIN, ALL IN, KEEP GOING, NEVER GIVE UP, MINDSET, READY, FOCUS 중 원하는 문구를 선택해 주문하세요.',
+    sizes: ['AURA', 'CHAMPION', 'WINNER', 'GLORY', 'NO PAIN NO GAIN', 'ALL IN', 'KEEP GOING', 'NEVER GIVE UP', 'MINDSET', 'READY', 'FOCUS'],
+    features: [
+      { label: '동기부여 문구 11종', detail: ' — 경기 전 스스로에게 거는 다짐' },
+      { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
+    ],
+    sizeChart: [],
+    details: {
+      functions: [
+        { title: '강한 접착력', description: '경기 중 충격과 마찰에도 쉽게 떨어지지 않는 내구성.' },
+      ],
+      design: [
+        { title: '모티베이션 문구', description: 'AURA, CHAMPION, WINNER, GLORY, NO PAIN NO GAIN, ALL IN, KEEP GOING, NEVER GIVE UP, MINDSET, READY, FOCUS.' },
+        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+      ],
+      material: '방수 접착 소재.',
+    },
+  },
 };
 
 // 목록 페이지용 간략 상품 리스트
@@ -2753,6 +2905,21 @@ export const productList = Object.values(products)
     variants: p.variants,
     imageZoom: p.imageZoom,
   }));
+
+// 부츠스킨은 의류와 분리된 독립 컬렉션(/bootskin)으로 운영한다
+export const BOOTSKIN_CATEGORY: ProductCategory = 'boot-skin';
+
+// 의류 목록(/apparel)에 노출되는 상품 — 부츠스킨 제외
+export const apparelProductList = productList.filter((p) => p.category !== BOOTSKIN_CATEGORY);
+
+// 부츠스킨 목록(/bootskin)에 노출되는 상품
+export const bootskinProductList = productList.filter((p) => p.category === BOOTSKIN_CATEGORY);
+
+// 상품 상세 URL — 카테고리에 따라 /apparel 또는 /bootskin 하위로 분기
+export function getProductHref(product: { slug: string; category: ProductCategory }): string {
+  const base = product.category === BOOTSKIN_CATEGORY ? '/bootskin' : '/apparel';
+  return `${base}/${product.slug}`;
+}
 
 // 할인율 계산 헬퍼
 export function getDiscountPercent(price: number, originalPrice: number): number {

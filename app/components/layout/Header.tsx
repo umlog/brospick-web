@@ -44,6 +44,7 @@ export default function Header() {
     { label: 'BROSPICK', href: '/#manifesto' },
     { label: 'BLOG', href: '/interviews' },
     { label: 'SPORTSWEAR', href: '/apparel-showcase' },
+    { label: 'BOOTSKIN', href: '/bootskin' },
     { label: 'EBOOK', href: '/ebook' },
   ];
 

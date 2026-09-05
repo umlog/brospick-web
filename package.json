@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run gen-bootskin && npm run gen-opt && next dev",
     "gen-opt": "node scripts/gen-opt.mjs",
-    "prebuild": "node scripts/gen-opt.mjs",
+    "prebuild": "node scripts/gen-bootskin-overlay.mjs && node scripts/gen-opt.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen-bootskin": "node scripts/gen-bootskin-overlay.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

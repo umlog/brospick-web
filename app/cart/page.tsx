@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { SHIPPING, getShippingFee } from '../../lib/constants';
-import { PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, ProductCategory, productList } from '../../lib/products';
+import { PRODUCT_FALLBACK_IMAGE, CATEGORY_LABELS, BOOTSKIN_CATEGORY, ProductCategory, productList } from '../../lib/products';
 import styles from './cart-page.module.css';
 import { validateCartStock } from '../../lib/validateStock';
 
@@ -139,7 +139,7 @@ export default function CartPage() {
             <p className={styles.emptyCategoriesLabel}>카테고리 둘러보기</p>
             <div className={styles.emptyCategoryGrid}>
               {usedCategories.map((cat) => (
-                <Link key={cat} href={`/apparel?category=${cat}`} className={styles.emptyCategoryCard}>
+                <Link key={cat} href={cat === BOOTSKIN_CATEGORY ? '/bootskin' : `/apparel?category=${cat}`} className={styles.emptyCategoryCard}>
                   <div className={styles.emptyCategoryImage}>
                     <img
                       src={getCategoryImage(cat)}

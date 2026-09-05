@@ -1,21 +1,22 @@
 import type { MetadataRoute } from 'next';
-import { productList } from '@/lib/products';
+import { productList, getProductHref } from '@/lib/products';
 import { supabase } from '@/lib/supabase';
 import { SITE_URL } from '@/lib/constants';
 
 export const revalidate = 3600;
 
-const STATIC_PATHS = ['', '/apparel', '/interviews', '/ebook', '/returns', '/tracking', '/review'];
+const STATIC_PATHS = ['', '/apparel', '/bootskin', '/interviews', '/ebook', '/returns', '/tracking', '/review'];
+const DAILY_PATHS = ['', '/apparel', '/bootskin'];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
     url: `${SITE_URL}${path}`,
-    changeFrequency: path === '' || path === '/apparel' ? 'daily' : 'weekly',
+    changeFrequency: DAILY_PATHS.includes(path) ? 'daily' : 'weekly',
     priority: path === '' ? 1 : 0.7,
   }));
 
   const productEntries: MetadataRoute.Sitemap = productList.map((product) => ({
-    url: `${SITE_URL}/apparel/${product.slug}`,
+    url: `${SITE_URL}${getProductHref(product)}`,
     changeFrequency: 'weekly',
     priority: 0.8,
   }));

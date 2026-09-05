@@ -3,6 +3,7 @@ export const revalidate = 300;
 import Manifesto from './components/sections/Manifesto';
 import Project from './components/sections/Project';
 import Blog from './components/sections/Blog';
+import BootskinPromo from './components/sections/BootskinPromo';
 import EbookPromo from './components/sections/EbookPromo';
 import Future from './components/sections/Future';
 // import PickerApp from './components/sections/PickerApp';
@@ -28,6 +29,7 @@ export default async function Home() {
     <>
       <ScrollHint />
       <Sportswear initialPrices={prices} />
+      <BootskinPromo prices={prices} />
       <BrandStory />
       <EbookPromo />
       <Blog />

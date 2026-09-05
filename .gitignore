@@ -20,6 +20,9 @@
 # 이미지 로더 사전 생성물 (scripts/gen-opt.mjs가 빌드 때 생성)
 /public/_opt/
 
+# 부츠스킨 미리보기용 투명 스티커 (scripts/gen-bootskin-overlay.mjs가 빌드 때 생성)
+/public/_bootskin/
+
 # production
 /build
 

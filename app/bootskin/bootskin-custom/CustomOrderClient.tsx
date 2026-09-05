@@ -349,7 +349,7 @@ export default function CustomOrderClient() {
             {state === 'loading' ? '처리 중...' : paymentMethod === 'kakaopay' ? '카카오페이로 결제하기' : '주문하기'}
           </button>
 
-          <Link href="/apparel" className={styles.backLink}>← 쇼핑 계속하기</Link>
+          <Link href="/bootskin" className={styles.backLink}>← 쇼핑 계속하기</Link>
         </form>
       </div>
     </main>
