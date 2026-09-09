@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import styles from './hero.module.css';
-import heroBg from '../../styles/hero-bg2.jpg';
 import txtLogo from '../../styles/txtlogo.svg';
 import { CONTACT } from '../../../lib/constants';
+
+// public/ 경로 문자열로 참조한다 — 자세한 이유는 Identity.tsx 주석 참고
+const heroBg = '/brand/hero-bg2.jpg';
 
 const GROUP_ORDER_MAILTO = `mailto:${CONTACT.email}?subject=${encodeURIComponent('[단체주문 문의] 단체명을 입력해주세요')}&body=${encodeURIComponent(
   '안녕하세요, BROSPICK 단체주문 문의드립니다.\n\n' +
@@ -29,6 +31,7 @@ export default function Hero() {
           alt=""
           className={styles.bgImage}
           fill
+          sizes="100vw"
           priority
           style={{ objectFit: 'cover' }}
         />

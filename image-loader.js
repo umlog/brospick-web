@@ -11,6 +11,11 @@ const RASTER = /\.(png|jpe?g|webp)$/i;
 export default function imageLoader({ src, width }) {
   // 외부 호스트(Supabase Storage 등)는 변환 없이 통과
   if (/^https?:\/\//.test(src)) return src;
+  // 정적 import(`import bg from './x.jpg'`)는 /_next/static/media/... 로 온다.
+  // gen-opt는 public/ 만 훑으므로 이 경로에는 대응하는 _opt 파일이 없다.
+  // 매핑하면 404로 이미지가 깨지므로 원본 그대로 통과시킨다.
+  // (최적화가 필요하면 에셋을 public/ 아래로 옮기고 경로 문자열로 참조할 것)
+  if (src.startsWith('/_next/')) return src;
   // 로컬 라스터만 사전 생성 webp로 매핑, 그 외(svg/gif 등)는 통과
   if (!RASTER.test(src)) return src;
 

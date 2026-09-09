@@ -4,8 +4,13 @@ import styles from './identity.module.css';
 import ScrollReveal from '../animations/ScrollReveal';
 import { supabase } from '@/lib/supabase';
 import { SOCIAL_MEDIA } from '@/lib/constants';
-import heroBg from '../../styles/hero-bg2.jpg';
-import symbolImg from '../../styles/symbol.png';
+
+// 배경·심볼은 public/ 아래 경로 문자열로 참조한다.
+// import로 가져오면 /_next/static/media/... 가 되는데, 커스텀 image-loader가
+// 그 경로를 존재하지 않는 /_opt/_next/... 로 바꿔버려 이미지가 깨진다.
+// public/ 아래여야 scripts/gen-opt.mjs가 webp 버킷을 만들어 준다.
+const HERO_BG = '/brand/hero-bg2.jpg';
+const SYMBOL = '/brand/symbol.png';
 
 // 메인의 "우리가 존재하는 이유 / What We Do / Our Services" 세 섹션을 하나로 합친 섹션.
 // 선수가 브로스픽을 거치는 여정 3단계(발굴 → 홍보 → 진출)를 보여주고,
@@ -77,9 +82,10 @@ export default async function Identity() {
     <section id="about" className={styles.identity}>
       <div className={styles.bgWrapper}>
         <Image
-          src={heroBg}
+          src={HERO_BG}
           alt=""
           fill
+          sizes="100vw"
           style={{ objectFit: 'cover', objectPosition: 'center 75%' }}
           priority={false}
         />
@@ -87,7 +93,7 @@ export default async function Identity() {
       </div>
 
       <div className={styles.symbolWrapper}>
-        <Image src={symbolImg} alt="" fill style={{ objectFit: 'contain' }} />
+        <Image src={SYMBOL} alt="" fill sizes="(max-width: 768px) 320px, 560px" style={{ objectFit: 'contain' }} />
       </div>
 
       <div className={styles.container}>
