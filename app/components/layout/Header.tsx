@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useCart } from '../../contexts/CartContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import styles from './header.module.css';
-import symbolImg from '../../styles/symbol.svg';
+import { BrandSymbol } from '../brand/BrandSymbol';
 import { SOCIAL_MEDIA } from '../../../lib/constants';
 
 export default function Header() {
@@ -41,7 +40,7 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   const navItems = [
-    { label: 'BROSPICK', href: '/#manifesto' },
+    { label: 'BROSPICK', href: '/#about' },
     { label: 'BLOG', href: '/interviews' },
     { label: 'SPORTSWEAR', href: '/apparel-showcase' },
     { label: 'BOOTSKIN', href: '/bootskin' },
@@ -52,12 +51,7 @@ export default function Header() {
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
         <Link href="/" className={styles.logo} onClick={closeMenu}>
-          <Image
-            src={symbolImg}
-            alt="Brospick"
-            className={styles.logoImage}
-            priority
-          />
+          <BrandSymbol className={styles.logoImage} title="Brospick" />
         </Link>
 
         {/* 데스크탑 네비 */}

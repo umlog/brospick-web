@@ -7,18 +7,38 @@ import { products, PRODUCT_SLUGS } from '@/lib/products';
 
 const ASSET_ROOT = '/apparel/bootskin';
 
+/**
+ * scripts/gen-bootskin-overlay.mjs가 prebuild에서 만드는 투명 스티커 폴더.
+ * gitignore 대상이라 dev에서는 `npm run gen-bootskin`을 먼저 돌려야 보인다.
+ * next/image 커스텀 로더가 참조하는 /_opt 사전 생성물이 없으므로 여기 이미지는 <img>로 쓴다.
+ */
+const OVERLAY_ROOT = '/_bootskin';
+
 export const BOOTSKIN_BEFORE_AFTER = {
   before: `${ASSET_ROOT}/BootSkinLabel/bootskin-label-before.png`,
   after: `${ASSET_ROOT}/BootSkinLabel/bootskin-label-after.png`,
 };
 
-/** 홈 프로모션 섹션에 노출할 대표 스티커 샘플 */
+/**
+ * 홈 프로모션 섹션에 노출할 대표 스티커 샘플.
+ * 커스텀을 뺀 미리보기 8개 그룹과 1:1로 맞춘다 — 그룹이 늘면 여기도 같이 늘려야
+ * "이게 전부"라는 신호가 깨지지 않는다. 라벨은 GROUP_SPECS와 같은 말을 쓴다.
+ *
+ * 이미지는 상품 원본이 아니라 생성기가 만든 투명본(OVERLAY_ROOT)을 쓴다.
+ * 원본 900x900은 대부분 여백이고 하단에 "가로: N mm" 캡션까지 인쇄돼 있어,
+ * 56px 칩에 넣으면 스티커가 점만 하게 보이고 캡션 글씨가 지저분하게 남는다.
+ * 투명본은 잉크 경계로 잘려 있어 칩을 꽉 채운다.
+ * 56px에서 뭉개지지 않도록 글자가 짧은 아트웍으로 고른다.
+ */
 export const BOOTSKIN_SAMPLES = [
-  { label: '번호', image: `${ASSET_ROOT}/number/2-1.png` },
-  { label: '이니셜', image: `${ASSET_ROOT}/initial/10-J.png` },
-  { label: '국가', image: `${ASSET_ROOT}/nation/1-KOREA.png` },
-  { label: '심볼', image: `${ASSET_ROOT}/symbol/15-world-cup-trophy.png` },
-  { label: '가족', image: `${ASSET_ROOT}/family/1-DAD.png` },
+  { label: '번호', image: `${OVERLAY_ROOT}/number/1.png` },
+  { label: '이니셜', image: `${OVERLAY_ROOT}/initial/J.png` },
+  { label: '국기', image: `${OVERLAY_ROOT}/nation/KOREA.png` },
+  { label: '가족', image: `${OVERLAY_ROOT}/family/DAD.png` },
+  { label: '종교', image: `${OVERLAY_ROOT}/faith-symbol/CROSS.png` },
+  { label: '심볼', image: `${OVERLAY_ROOT}/symbol/world-cup-trophy.png` },
+  { label: '포지션', image: `${OVERLAY_ROOT}/position/ST.png` },
+  { label: '문구', image: `${OVERLAY_ROOT}/motivation/GLORY.png` },
 ] as const;
 
 /* ===================== 축구화 미리보기 ===================== */
@@ -141,6 +161,7 @@ const FAITH_FILES = [
   'GLORY-TO-GOD.png',
   'LORD-IS-ALWAYS-WITH-YOU.png',
   'THANK-GOD.png',
+  'GOD-IS-FAITHFUL.png',
 ];
 /**
  * 옵션별 실측 크기 [가로mm, 세로mm].
@@ -226,6 +247,7 @@ const FAITH_MM: Record<string, StickerMm> = {
   'GLORY TO GOD': [33, 4],
   'LORD IS ALWAYS WITH YOU': [33, 8],
   'THANK GOD': [20, 3],
+  'GOD IS FAITHFUL': [33, 3],
 };
 
 const SYMBOL_MM: Record<string, StickerMm> = {

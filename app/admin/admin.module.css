@@ -2640,6 +2640,26 @@
 
 .bmCardInfo {
   flex: 1;
+  min-width: 0;
+}
+
+/* 인스타 큐레이션 썸네일 */
+.igThumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.igThumbPreview {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  margin-top: 8px;
 }
 
 .bmCardNameRow {

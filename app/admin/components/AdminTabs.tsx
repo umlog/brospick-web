@@ -19,6 +19,7 @@ const TABS: { key: AdminTab; label: string }[] = [
   { key: 'reviews', label: '리뷰 관리' },
   { key: 'popups', label: '팝업' },
   { key: 'banners', label: '배너' },
+  { key: 'instagram', label: '인스타 큐레이션' },
   { key: 'faqs', label: 'FAQ' },
   { key: 'coupons', label: '쿠폰' },
   { key: 'finance', label: '재무' },

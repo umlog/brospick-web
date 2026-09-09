@@ -13,6 +13,7 @@ import { useBlogPosts } from './hooks/useBlogPosts';
 import { useEbookOrders } from './hooks/useEbookOrders';
 import { usePopups } from './hooks/usePopups';
 import { useBanners } from './hooks/useBanners';
+import { useInstagramPosts } from './hooks/useInstagramPosts';
 import { useFaqs } from './hooks/useFaqs';
 import { useCoupons } from './hooks/useCoupons';
 import { AdminTabs } from './components/AdminTabs';
@@ -26,6 +27,7 @@ import { EbookOrderList } from './components/EbookOrderList';
 import { ReviewManager } from './components/ReviewManager';
 import { PopupManager } from './components/PopupManager';
 import { BannerManager } from './components/BannerManager';
+import { InstagramManager } from './components/InstagramManager';
 import { FaqManager } from './components/FaqManager';
 import { CouponManager } from './components/CouponManager';
 import { FinanceManager } from './components/FinanceManager';
@@ -45,6 +47,7 @@ const TAB_TITLES: Record<AdminTab, string> = {
   reviews: '리뷰 관리',
   popups: '팝업 관리',
   banners: '배너 관리',
+  instagram: '인스타 큐레이션',
   faqs: 'FAQ 관리',
   coupons: '쿠폰 관리',
   finance: '재무 관리',
@@ -68,6 +71,7 @@ export default function AdminPage() {
   const ebookState = useEbookOrders();
   const popupsState = usePopups();
   const bannersState = useBanners();
+  const instagramState = useInstagramPosts();
   const faqsState = useFaqs();
   const couponsState = useCoupons();
 
@@ -121,6 +125,9 @@ export default function AdminPage() {
     }
     if (tab === 'banners' && !bannersState.hasLoaded) {
       bannersState.fetchBanners();
+    }
+    if (tab === 'instagram' && !instagramState.hasLoaded) {
+      instagramState.fetchPosts();
     }
     if (tab === 'faqs' && !faqsState.hasLoaded) {
       faqsState.fetchFaqs();
@@ -216,6 +223,7 @@ export default function AdminPage() {
         {activeTab === 'reviews' && <ReviewManager />}
         {activeTab === 'popups' && <PopupManager state={popupsState} />}
         {activeTab === 'banners' && <BannerManager state={bannersState} />}
+        {activeTab === 'instagram' && <InstagramManager state={instagramState} />}
         {activeTab === 'faqs' && <FaqManager state={faqsState} />}
         {activeTab === 'coupons' && <CouponManager state={couponsState} />}
         {activeTab === 'finance' && <FinanceManager products={productCatalogState.products} />}

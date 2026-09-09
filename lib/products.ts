@@ -1968,6 +1968,7 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/faith-symbol/7-GLORY-TO-GOD.png',
       '/apparel/bootskin/faith-symbol/8-LORD-IS-ALWAYS-WITH-YOU.png',
       '/apparel/bootskin/faith-symbol/9-THANK-GOD.png',
+      '/apparel/bootskin/faith-symbol/10-GOD-IS-FAITHFUL.png',
     ],
     sizeImages: {
       'CROSS': '/apparel/bootskin/faith-symbol/1-cross-detail.png',
@@ -1979,10 +1980,11 @@ export const products: Record<ProductSlug, Product> = {
       'GLORY TO GOD': '/apparel/bootskin/faith-symbol/7-GLORY-TO-GOD.png',
       'LORD IS ALWAYS WITH YOU': '/apparel/bootskin/faith-symbol/8-LORD-IS-ALWAYS-WITH-YOU.png',
       'THANK GOD': '/apparel/bootskin/faith-symbol/9-THANK-GOD.png',
+      'GOD IS FAITHFUL': '/apparel/bootskin/faith-symbol/10-GOD-IS-FAITHFUL.png',
     },
-    tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD 심볼 스티커.',
-    description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD 중 원하는 심볼을 선택해 주문하세요.',
-    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS', 'GOD', 'BELEVE', 'GLORY TO GOD', 'LORD IS ALWAYS WITH YOU', 'THANK GOD'],
+    tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD, GOD IS FAITHFUL 심볼 스티커.',
+    description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD, GOD IS FAITHFUL 중 원하는 심볼을 선택해 주문하세요.',
+    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS', 'GOD', 'BELEVE', 'GLORY TO GOD', 'LORD IS ALWAYS WITH YOU', 'THANK GOD', 'GOD IS FAITHFUL'],
     features: [
       { label: '믿음을 담은 디자인', detail: ' — 경기장에서 믿음을 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2836,8 +2838,9 @@ export const products: Record<ProductSlug, Product> = {
       after: '/apparel/bootskin/BootSkinLabel/bootskin-label-after.png',
     },
     // 상세 배너는 이 상품 전용 이미지가 준비되면 추가한다. 지금은 구매만 열어둔다.
-    image: '/apparel/bootskin/motivation/5-NO-PAIN-NO-GAIN.png',
+    image: '/apparel/bootskin/motivation/motivation-thumb.png',
     images: [
+      '/apparel/bootskin/motivation/motivation-thumb.png',
       '/apparel/bootskin/motivation/1-AURA.png',
       '/apparel/bootskin/motivation/2-CHAMPION.png',
       '/apparel/bootskin/motivation/3-WINNER.png',

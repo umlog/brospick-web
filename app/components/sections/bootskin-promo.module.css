@@ -86,15 +86,6 @@
   gap: 10px;
 }
 
-.visualHint {
-  margin: 0;
-  text-align: center;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--color-text-secondary);
-  opacity: 0.7;
-}
-
 /* ── 텍스트 콘텐츠 ── */
 .content {
   flex: 1;
@@ -149,12 +140,23 @@
 
 .sampleThumb {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 56px;
   height: 56px;
+  padding: 9px;
   border-radius: 10px;
   border: 1px solid rgba(128, 128, 128, 0.16);
-  background: rgba(128, 128, 128, 0.06);
+  /* 투명본이 검은 잉크라 라이트·다크 어느 쪽에서도 보이도록 밝은 판을 깐다 */
+  background: #f4f4f4;
   overflow: hidden;
+}
+
+.sampleImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .sampleLabel {

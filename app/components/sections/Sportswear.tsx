@@ -4,10 +4,18 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './sportswear.module.css';
 import ProductImage from '../ProductImage';
-import { apparelProductList, getDiscountPercent, getProductHref, CATEGORY_LABELS, ProductCategory } from '@/lib/products';
+import { productList, getDiscountPercent, getProductHref, CATEGORY_LABELS, BOOTSKIN_CATEGORY, ProductCategory } from '@/lib/products';
 
 const ALL = 'all' as const;
 type Filter = ProductCategory | typeof ALL;
+
+/**
+ * '전체' 탭에 남기는 부츠스킨 대표 카드 수.
+ *
+ * 부츠스킨은 9종이라 전부 풀면 의류 카드가 가로 스크롤 뒤로 밀린다.
+ * 정렬 상위 몇 개만 미끼로 두고 나머지는 부츠스킨 탭에서 본다.
+ */
+const BOOTSKIN_CARDS_IN_ALL = 2;
 
 interface Props {
   initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null; sort_order: number | null }>;
@@ -35,11 +43,20 @@ export default function Sportswear({ initialPrices }: Props) {
     return () => el.removeEventListener('scroll', updateArrows);
   }, [updateArrows]);
 
-  // 카테고리 바뀔 때 화살표 상태 재계산 (페인트 완료 후)
+  const scrollToStart = useCallback(() => {
+    scrollRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+  }, []);
+
+  // 카테고리 바뀔 때 처음으로 되돌리고 화살표 상태 재계산.
+  // 클릭 핸들러에서 바로 되돌리면 아직 이전 카드가 붙어 있어 애니메이션이 끊기므로
+  // 새 목록이 그려진 다음 프레임에 실행한다.
   useEffect(() => {
-    const id = requestAnimationFrame(updateArrows);
+    const id = requestAnimationFrame(() => {
+      scrollToStart();
+      updateArrows();
+    });
     return () => cancelAnimationFrame(id);
-  }, [active, updateArrows]);
+  }, [active, scrollToStart, updateArrows]);
 
   const scroll = (dir: 'left' | 'right') => {
     const el = scrollRef.current;
@@ -47,11 +64,11 @@ export default function Sportswear({ initialPrices }: Props) {
     el.scrollBy({ left: dir === 'right' ? el.clientWidth * 0.8 : -el.clientWidth * 0.8, behavior: 'smooth' });
   };
 
-  // 부츠스킨은 홈에서 전용 섹션(BootskinPromo)으로 따로 소개한다
-  const productCategories = new Set(apparelProductList.map((p) => p.category));
+  // 부츠스킨은 전용 섹션(BootskinPromo)과 별개로 이 목록에도 노출한다 — 주력 상품이라 진입점을 둘 다 둔다
+  const productCategories = new Set(productList.map((p) => p.category));
   const orderedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((c) => productCategories.has(c));
 
-  const sorted = [...apparelProductList].sort((a, b) => {
+  const sorted = [...productList].sort((a, b) => {
     const aDb = dbPrices[a.id];
     const bDb = dbPrices[b.id];
     const aSortOrder = aDb?.sort_order ?? null;
@@ -68,11 +85,19 @@ export default function Sportswear({ initialPrices }: Props) {
     return a.id - b.id;
   });
 
-  const filtered = active === ALL ? sorted : sorted.filter((p) => p.category === active);
+  const bootskinTop = sorted
+    .filter((p) => p.category === BOOTSKIN_CATEGORY)
+    .slice(0, BOOTSKIN_CARDS_IN_ALL);
+
+  const filtered =
+    active === ALL
+      ? sorted.filter((p) => p.category !== BOOTSKIN_CATEGORY || bootskinTop.includes(p))
+      : sorted.filter((p) => p.category === active);
 
   const changeCategory = (cat: Filter) => {
     setActive(cat);
-    if (scrollRef.current) scrollRef.current.scrollLeft = 0;
+    // 같은 탭을 다시 눌렀을 때는 리렌더가 없어 위 effect가 돌지 않는다
+    scrollToStart();
   };
 
   return (
@@ -81,7 +106,7 @@ export default function Sportswear({ initialPrices }: Props) {
         {/* 타이틀 */}
         <div className={styles.header}>
           <p className={styles.eyebrow}>COLLECTION</p>
-          <h2 className={styles.title}>브로스픽 의류</h2>
+          <h2 className={styles.title}>브로스픽 상품</h2>
         </div>
 
         {/* 카테고리 탭 */}
@@ -195,9 +220,13 @@ export default function Sportswear({ initialPrices }: Props) {
         </div>
 
         {/* 전체 보기 */}
+        {/* 부츠스킨은 /apparel 목록에서 제외돼 있으므로 전용 컬렉션으로 보낸다 */}
         <div className={styles.cta}>
-          <Link href="/apparel" className={styles.ctaBtn}>
-            모두 보기
+          <Link
+            href={active === BOOTSKIN_CATEGORY ? '/bootskin' : '/apparel'}
+            className={styles.ctaBtn}
+          >
+            {active === BOOTSKIN_CATEGORY ? '부츠스킨 모두 보기' : '모두 보기'}
           </Link>
         </div>
       </div>

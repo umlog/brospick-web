@@ -137,9 +137,14 @@
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  /*
+   * mandatory는 카드마다 스크롤을 강제로 붙잡아 뚝뚝 끊기는 느낌을 준다.
+   * proximity는 손을 뗀 위치가 카드 근처일 때만 정렬해서 훨씬 부드럽다.
+   */
+  scroll-snap-type: x proximity;
+  /* 화살표 버튼과 카테고리 전환 시 위치 복귀를 애니메이션으로 처리 */
+  scroll-behavior: smooth;
   touch-action: pan-x;
-  -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-bottom: 8px;
@@ -150,6 +155,12 @@
 
 .scrollTrack::-webkit-scrollbar {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollTrack {
+    scroll-behavior: auto;
+  }
 }
 
 /* ===== 상품 카드 ===== */
@@ -175,7 +186,7 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-bg-secondary);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-card);
 }
 
 .cardImg {

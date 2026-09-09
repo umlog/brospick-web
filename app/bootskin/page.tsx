@@ -18,7 +18,7 @@ import styles from './bootskin-page.module.css';
 export const metadata: Metadata = {
   title: '부츠스킨 | 브로스픽 BROSPICK',
   description:
-    '축구화에 붙이는 번호·이니셜·국기·심볼 스티커. 붙이기 전에 내 축구화에 올려보고 고르세요.',
+    '축구화에 붙이는 번호·이니셜·국기·가족·종교·심볼·포지션·문구 스티커. 붙이기 전에 내 축구화에 올려보고 고르세요.',
 };
 
 async function getPrices() {
@@ -72,8 +72,8 @@ export default async function BootskinPage() {
             <p className={styles.eyebrow}>BROSPICK BOOT SKIN</p>
             <h1 className={styles.heroTitle}>축구화에 나를 새기다</h1>
             <p className={styles.heroSubtitle}>
-              번호와 이니셜부터 국기·심볼까지 골라 축구화에 직접 올려보세요.
-              실제 부착 위치 그대로 보여드립니다.
+              번호·이니셜·국기·가족·종교·심볼·포지션·문구, 여덟 가지에서 골라
+              축구화에 직접 올려보세요. 실제 부착 위치 그대로 보여드립니다.
             </p>
             <a href="#products" className={styles.heroSkip}>
               바로 상품 목록 보기 ↓

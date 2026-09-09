@@ -2080,6 +2080,73 @@
   flex-shrink: 0;
 }
 
+/*
+ * 손잡이가 움직인다는 신호 — 잔물결이 한 번 번지고 화살표가 좌우로 살짝 벌어진다.
+ * 사용자가 한 번이라도 만지면 클래스가 빠져 곧바로 멈춘다.
+ */
+.beforeAfterKnobHint {
+  animation: knobRipple 2.8s ease-out infinite;
+}
+
+.beforeAfterKnobHint svg:first-of-type {
+  animation: knobNudgeLeft 2.8s ease-in-out infinite;
+}
+
+.beforeAfterKnobHint svg:last-of-type {
+  animation: knobNudgeRight 2.8s ease-in-out infinite;
+}
+
+@keyframes knobRipple {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(255, 255, 255, 0.55);
+  }
+  40% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes knobNudgeLeft {
+  0%, 60%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-3px); }
+}
+
+@keyframes knobNudgeRight {
+  0%, 60%, 100% { transform: translateX(0); }
+  30% { transform: translateX(3px); }
+}
+
+/* 손잡이 아래 떠 있는 안내 — 처음 만지면 부드럽게 사라진다 */
+.beforeAfterHint {
+  position: absolute;
+  left: 50%;
+  /* 손잡이는 세로 막대 아래쪽 끝(높이 40px)에 붙어 있다 — 그 바로 위에 띄운다 */
+  bottom: 52px;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity var(--anim-fast), transform var(--anim-fast);
+}
+
+.beforeAfterHintGone {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beforeAfterKnobHint,
+  .beforeAfterKnobHint svg {
+    animation: none;
+  }
+}
+
 .beforeAfterLabel {
   position: absolute;
   top: 12px;

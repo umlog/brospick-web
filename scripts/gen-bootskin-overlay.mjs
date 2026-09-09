@@ -219,8 +219,8 @@ for (const kind of KINDS) {
   mkdirSync(outDir, { recursive: true });
 
   for (const name of readdirSync(srcDir)) {
-    // *-detail.png 은 상세 설명용 이미지라 스티커가 아니다
-    if (!name.endsWith('.png') || name.includes('detail')) continue;
+    // *-detail.png(상세 설명) · *-thumb.png(목록 대표 사진) 은 실착 사진이라 스티커가 아니다
+    if (!name.endsWith('.png') || name.includes('detail') || name.includes('thumb')) continue;
 
     const srcPath = join(srcDir, name);
     // 원본은 `순번-값.png` 이지만 순번이 일부 어긋나 있다(예: 23-W.png / 24-W-white.png).

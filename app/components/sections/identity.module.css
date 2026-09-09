@@ -1,0 +1,348 @@
+.identity {
+  position: relative;
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+/* ===== 배경 ===== */
+.bgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.68) 45%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+.symbolWrapper {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 560px;
+  height: 560px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== 콘텐츠 ===== */
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.heading {
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+.lead {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: var(--size-base);
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.62);
+  text-align: center;
+}
+
+/* ===== 3단계 여정 ===== */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 72px;
+  position: relative;
+}
+
+/* 데스크톱에서 카드 상단을 가로로 잇는 선 — 단계가 이어진다는 신호 */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--color-accent-rgb), 0.5),
+    transparent
+  );
+}
+
+.stepReveal {
+  height: 100%;
+}
+
+.step {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(var(--color-accent-rgb), 0.55);
+  border-radius: var(--radius-md);
+  padding: 36px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background var(--anim-fast), border-color var(--anim-fast), transform var(--anim-default);
+}
+
+.step:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top-color: var(--color-accent);
+  transform: translateY(-4px);
+}
+
+.stepHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.stepNumber {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.stepLabel {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.stepTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.stepText {
+  flex: 1;
+  font-size: var(--size-sm);
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.66);
+  margin: 0;
+}
+
+.stepLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: color var(--anim-fast), gap var(--anim-fast);
+}
+
+.stepLink:hover {
+  color: var(--color-accent-soft);
+  gap: 12px;
+}
+
+/* ===== 인스타 큐레이션 ===== */
+.feed {
+  margin-top: 80px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.feedHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.feedEyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.feedTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.feedCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-pill);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: background var(--anim-fast), border-color var(--anim-fast);
+}
+
+.feedCta:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+.feedGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feedItem {
+  position: relative;
+}
+
+.feedLink {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform var(--anim-default), border-color var(--anim-fast);
+}
+
+.feedLink:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* 영상 표시용 재생 삼각형 */
+.playBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border-left: 11px solid #fff;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+
+.feedCaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 18px 10px 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  font-size: var(--size-xs);
+  line-height: 1.4;
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--anim-fast);
+}
+
+.feedLink:hover .feedCaption {
+  opacity: 1;
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 1024px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .steps::before {
+    display: none;
+  }
+
+  .feedGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .identity {
+    padding: 80px 0;
+  }
+
+  .symbolWrapper {
+    width: 320px;
+    height: 320px;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .steps {
+    margin-top: 48px;
+  }
+
+  .step {
+    padding: 28px 24px;
+  }
+
+  .feed {
+    margin-top: 56px;
+  }
+
+  .feedHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .feedGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* 터치 기기에선 호버가 없으므로 캡션을 항상 보여준다 */
+  .feedCaption {
+    opacity: 1;
+  }
+}

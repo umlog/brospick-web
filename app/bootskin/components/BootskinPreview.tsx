@@ -84,6 +84,38 @@ function stickerBox(
 }
 
 /**
+ * 고르는 칩 안에서 스티커를 얼마나 크게 그릴지 정한다.
+ *
+ * 칩에 object-fit: contain만 걸면 아트웍의 바깥 상자가 칩에 꽉 차게 늘어난다.
+ * 그러면 M·W처럼 가로로 넓은 글자는 가로에 먼저 걸려 세로가 낮아지고,
+ * I처럼 좁은 글자는 세로에 걸려 끝까지 올라와서 글자 높이가 제각각 보인다.
+ * 실제 이니셜은 전부 세로 6mm로 같으므로 이건 사실과도 다르다.
+ *
+ * 그래서 fit이 'height'인 그룹(번호·이니셜)은 축구화 위에서와 똑같이 세로만 실측 mm로
+ * 고정하고 가로는 아트웍 비율대로 흐르게 둔다. 세로가 같으니 줄이 맞는다.
+ * fit이 'box'인 그룹(국기·심볼·문구 등)은 서로 크기 차이가 5배까지 나서
+ * mm대로 그리면 작은 게 안 보인다. 그쪽은 지금처럼 칩을 꽉 채운다.
+ */
+/** 가장 넓은 글자가 칩 밖으로 나가지 않도록 남기는 여유. mm 표가 0.5mm 단위로 반올림돼 있어 필요하다 */
+const CHIP_HEADROOM = 0.96;
+
+function optionChipBox(
+  group: PreviewGroup,
+  option: PreviewOption,
+): { width: string; height: string } | undefined {
+  if (group.fit !== 'height') return undefined;
+
+  const longestMm = Math.max(
+    ...group.options.flatMap(({ mm }) => [mm[0], mm[1]]),
+  );
+  const heightMm = option.mm[1];
+  return {
+    width: 'auto',
+    height: `${((heightMm / longestMm) * 100 * CHIP_HEADROOM).toFixed(2)}%`,
+  };
+}
+
+/**
  * 장바구니·재고·주문 항목이 공유하는 옵션 문자열.
  * 색상이 있는 그룹은 `7 — Black` 형식이어야 어드민 색상칩과 재고 검증이 맞는다.
  */
@@ -329,7 +361,12 @@ export default function BootskinPreview({ prices, stock }: Props) {
                 onClick={() => toggleOption(activeGroup, option.value)}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={option.overlay} alt="" className={styles.previewOptionImage} />
+                <img
+                  src={option.overlay}
+                  alt=""
+                  className={styles.previewOptionImage}
+                  style={optionChipBox(activeGroup, option)}
+                />
               </button>
             );
           })}

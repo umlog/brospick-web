@@ -55,6 +55,9 @@
   height: 44px;
   width: auto;
   object-fit: contain;
+  /* 인라인 SVG라 fill 이 currentColor 를 따른다.
+     링크 기본색(브랜드 레드)이 아니라 본문색을 쓰도록 고정한다. */
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {

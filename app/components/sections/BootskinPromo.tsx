@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import BeforeAfterSlider from '@/app/apparel/[slug]/BeforeAfterSlider';
-import ProductImage from '../ProductImage';
 import { bootskinProductList } from '@/lib/products';
 import { BOOTSKIN_BEFORE_AFTER, BOOTSKIN_SAMPLES } from '@/app/bootskin/bootskin.config';
 import styles from './bootskin-promo.module.css';
@@ -38,22 +37,25 @@ export default function BootskinPromo({ prices }: Props) {
               beforeLabel="BEFORE"
               afterLabel="AFTER"
               height={360}
+              autoPlayOnView
+              hint="드래그해 보세요"
             />
-            <p className={styles.visualHint}>슬라이더를 드래그해 보세요</p>
           </div>
 
           <div className={styles.content}>
             <p className={styles.badge}>대표 상품</p>
             <h3 className={styles.cardTitle}>축구화에 나를 새기다</h3>
             <p className={styles.desc}>
-              등번호, 이니셜, 국기, 가족의 이름까지. 붙이는 순간 남의 축구화가 내 축구화가 됩니다.
+              등번호부터 포지션과 문구까지 여덟 가지. 붙이는 순간 남의 축구화가 내 축구화가 됩니다.
             </p>
 
             <ul className={styles.sampleRow}>
               {BOOTSKIN_SAMPLES.map((sample) => (
                 <li key={sample.image} className={styles.sample}>
                   <div className={styles.sampleThumb}>
-                    <ProductImage src={sample.image} alt={sample.label} sizes="72px" />
+                    {/* 투명본은 /_opt 사전 생성물이 없어 next/image 로더를 태울 수 없다 */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={sample.image} alt={sample.label} className={styles.sampleImage} />
                   </div>
                   <span className={styles.sampleLabel}>{sample.label}</span>
                 </li>
