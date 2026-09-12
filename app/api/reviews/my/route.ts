@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiError, withErrorHandler } from '@/lib/errors';
+import { clientIp, isRateLimited } from '@/lib/rate-limit';
 import { reviewService } from '@/lib/services/review.service';
+
+// 전화번호만으로 열리는 조회라 번호를 돌려보는 열거를 막아야 한다
+const LOOKUP_LIMIT = { max: 12, windowMs: 10 * 60 * 1000 };
 
 // 내 리뷰 조회
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
+    if (isRateLimited(`reviews:my:${clientIp(request)}`, LOOKUP_LIMIT)) {
+      return apiError('조회 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.', 429);
+    }
+
     const { phone } = await request.json();
     if (!phone) return apiError('전화번호를 입력해주세요.', 400);
 

@@ -11,6 +11,7 @@ export const ErrorCode = {
   NOT_FOUND: 'NOT_FOUND',
   UNAUTHORIZED: 'UNAUTHORIZED',
   CONFLICT: 'CONFLICT',
+  RATE_LIMITED: 'RATE_LIMITED',
   INTERNAL: 'INTERNAL_ERROR',
 } as const;
 
@@ -22,13 +23,14 @@ const DEFAULT_ERROR_CODES: Record<number, ErrorCode> = {
   401: ErrorCode.UNAUTHORIZED,
   404: ErrorCode.NOT_FOUND,
   409: ErrorCode.CONFLICT,
+  429: ErrorCode.RATE_LIMITED,
   500: ErrorCode.INTERNAL,
 };
 
 // 표준 에러 응답 생성
 export function apiError(
   message: string,
-  status: 400 | 401 | 404 | 409 | 500,
+  status: 400 | 401 | 404 | 409 | 429 | 500,
   code?: ErrorCode
 ): NextResponse {
   return NextResponse.json(

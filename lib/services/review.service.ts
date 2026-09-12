@@ -1,7 +1,8 @@
 import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { maskOrderNumber } from '@/lib/utils/order-number';
 
 export interface SubmitReviewPayload {
-  orderNumber: string;
+  name: string;
   phone: string;
   orderItemId: string;
   rating: number;
@@ -23,44 +24,112 @@ export interface Review {
   helpful_count: number;
 }
 
-export class ReviewService {
-  // 리뷰 제출 (주문번호+전화번호 인증 후)
-  async submitReview(payload: SubmitReviewPayload) {
-    const { orderNumber, phone, orderItemId, rating, content, images = [], height, usual_size } = payload;
+export interface ReviewableItem {
+  id: string;
+  productId: number;
+  productName: string;
+  size: string;
+  quantity: number;
+  reviewed: boolean;
+  existingReview: { rating: number; content: string; images: string[] } | null;
+}
 
-    if (!orderNumber || !phone || !orderItemId || !rating || !content?.trim()) {
+/** 화면에서 "어느 주문인지" 고르는 단위. 진짜 주문번호는 담기지 않는다. */
+export interface ReviewableOrder {
+  /** 주문 UUID — 목록에서 주문을 구분하는 키로만 쓴다 */
+  id: string;
+  /** 가려진 주문번호 (예: BP-20250209-****) */
+  orderNumberMasked: string;
+  orderedAt: string;
+  items: ReviewableItem[];
+}
+
+interface OrderItemRow {
+  id: string;
+  product_id: number | null;
+  product_name: string;
+  size: string;
+  quantity: number;
+}
+
+interface OrderWithItems {
+  id: string;
+  order_number: string;
+  created_at: string;
+  customer_name: string;
+  order_items: OrderItemRow[] | null;
+}
+
+/**
+ * 이름 대조용 정규화. 공백을 모두 지우고 대소문자를 맞춘다 —
+ * "홍 길동"과 "홍길동"을 다른 사람으로 보면 정작 본인이 못 들어온다.
+ */
+function normalizeName(name: string): string {
+  return name.replace(/\s+/g, '').toLowerCase();
+}
+
+// DB에 01012345678 / 010-1234-5678 / +821012345678 세 형식이 섞여 있어 모두로 매칭한다
+export function phoneVariants(phone: string): string[] {
+  let digits = phone.replace(/\D/g, '');
+  // +82 10 ... 로 저장된 번호를 국내 형식으로 되돌린다
+  if (digits.startsWith('82') && digits.length >= 11) digits = `0${digits.slice(2)}`;
+  if (!digits) return [];
+
+  const variants = [digits];
+
+  if (digits.length === 11) {
+    variants.push(`${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`);
+  } else if (digits.length === 10) {
+    variants.push(`${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`);
+  }
+
+  if (digits.startsWith('0')) variants.push(`+82${digits.slice(1)}`);
+
+  return Array.from(new Set(variants));
+}
+
+export class ReviewService {
+  // 리뷰 제출 (이름+전화번호로 주문 소유권 확인)
+  async submitReview(payload: SubmitReviewPayload) {
+    const { name, phone, orderItemId, rating, content, images = [], height, usual_size } = payload;
+
+    if (!name?.trim() || !phone || !orderItemId || !rating || !content?.trim()) {
       throw Object.assign(new Error('필수 정보가 누락되었습니다.'), { status: 400 });
     }
     if (rating < 1 || rating > 5) {
       throw Object.assign(new Error('별점은 1~5 사이여야 합니다.'), { status: 400 });
     }
 
-    // 주문번호 + 전화번호로 주문 인증
-    const { data: order, error: orderError } = await supabaseAdmin
-      .from('orders')
-      .select('id, customer_name, customer_phone')
-      .eq('order_number', orderNumber)
-      .eq('customer_phone', phone)
-      .is('deleted_at', null)
-      .single();
-
-    if (orderError || !order) {
-      throw Object.assign(
-        new Error('주문을 찾을 수 없습니다. 주문번호와 전화번호를 확인해주세요.'),
-        { status: 404 }
-      );
-    }
-
-    // order_item이 해당 주문에 속하는지 확인 + product_id 획득
+    // 상품이 속한 주문을 먼저 찾는다. 주문번호는 화면으로 내보내지 않으므로
+    // 여기서도 받지 않고, 상품 id 에서 거꾸로 주문을 짚는다.
     const { data: orderItem, error: itemError } = await supabaseAdmin
       .from('order_items')
-      .select('id, product_id')
+      .select('id, product_id, order_id')
       .eq('id', orderItemId)
-      .eq('order_id', order.id)
       .single();
 
     if (itemError || !orderItem) {
-      throw Object.assign(new Error('해당 주문에서 상품을 찾을 수 없습니다.'), { status: 404 });
+      throw Object.assign(new Error('주문 상품을 찾을 수 없습니다.'), { status: 404 });
+    }
+
+    // 그 주문이 정말 이 사람 것인지 이름·전화번호로 대조한다
+    const { data: order, error: orderError } = await supabaseAdmin
+      .from('orders')
+      .select('id, customer_name')
+      .eq('id', orderItem.order_id)
+      .in('customer_phone', phoneVariants(phone))
+      .is('deleted_at', null)
+      .single();
+
+    if (
+      orderError ||
+      !order ||
+      normalizeName(order.customer_name ?? '') !== normalizeName(name)
+    ) {
+      throw Object.assign(
+        new Error('주문을 확인할 수 없습니다. 이름과 전화번호를 다시 확인해주세요.'),
+        { status: 404 }
+      );
     }
 
     if (!orderItem.product_id) {
@@ -100,53 +169,95 @@ export class ReviewService {
     return { reviewId: review.id };
   }
 
-  // 주문번호+전화번호로 리뷰 작성 가능한 주문 상품 조회
-  async getReviewableItems(orderNumber: string, phone: string) {
-    const { data: order, error: orderError } = await supabaseAdmin
-      .from('orders')
-      .select('id, customer_name, order_items(id, product_id, product_name, size, quantity)')
-      .eq('order_number', orderNumber)
-      .eq('customer_phone', phone)
-      .is('deleted_at', null)
-      .single();
+  /**
+   * 이름+전화번호로 리뷰 작성 가능한 주문 목록 조회 (최신 주문이 앞).
+   *
+   * 전화번호만으로 열어주면 번호를 기계적으로 돌려 이름과 구매내역을 긁어갈 수 있다.
+   * 이름 대조는 반드시 여기(서버)에서 한다 — 화면에서 거르는 것은 방어가 아니다.
+   */
+  async getReviewableOrders(name: string, phone: string): Promise<{
+    customerName: string;
+    orders: ReviewableOrder[];
+  }> {
+    if (!name?.trim()) {
+      throw Object.assign(new Error('이름을 입력해주세요.'), { status: 400 });
+    }
+    if (!phone?.trim()) {
+      throw Object.assign(new Error('전화번호를 입력해주세요.'), { status: 400 });
+    }
 
-    if (orderError || !order) {
+    const variants = phoneVariants(phone);
+    if (!variants.length) {
+      throw Object.assign(new Error('전화번호 형식이 올바르지 않습니다.'), { status: 400 });
+    }
+
+    const { data: rows } = await supabaseAdmin
+      .from('orders')
+      .select('id, order_number, created_at, customer_name, order_items(id, product_id, product_name, size, quantity)')
+      .in('customer_phone', variants)
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false });
+
+    const target = normalizeName(name);
+    const orders = ((rows ?? []) as OrderWithItems[]).filter(
+      (order) => normalizeName(order.customer_name ?? '') === target
+    );
+
+    // 번호는 맞는데 이름이 틀린 경우와 주문이 아예 없는 경우를 같은 문구로 돌려준다.
+    // 문구가 갈리면 "이 번호는 존재한다"는 사실이 새어 나간다.
+    if (!orders.length) {
       throw Object.assign(
-        new Error('주문을 찾을 수 없습니다. 주문번호와 전화번호를 확인해주세요.'),
+        new Error('일치하는 주문이 없습니다. 이름과 전화번호를 다시 확인해주세요.'),
         { status: 404 }
       );
     }
 
-    const items = Array.isArray(order.order_items) ? order.order_items : [];
-    const itemIds = items.map((i: { id: string }) => i.id);
+    return {
+      customerName: orders[0].customer_name,
+      orders: await this._buildReviewableOrders(orders),
+    };
+  }
+
+  // 주문별로 리뷰 작성 가능한 상품을 묶는다. 상품이 하나도 없는 주문은 뺀다.
+  private async _buildReviewableOrders(orders: OrderWithItems[]): Promise<ReviewableOrder[]> {
+    const allItemIds = orders.flatMap((order) =>
+      (Array.isArray(order.order_items) ? order.order_items : [])
+        .filter((i) => i.product_id)
+        .map((i) => i.id)
+    );
+
+    if (!allItemIds.length) return [];
 
     const { data: existingReviews } = await supabaseAdmin
       .from('reviews')
-      .select('order_item_id, rating, content, images, height, usual_size')
-      .in('order_item_id', itemIds);
+      .select('order_item_id, rating, content, images')
+      .in('order_item_id', allItemIds);
 
     const reviewedMap = new Map(
-      (existingReviews ?? []).map((r: { order_item_id: string; rating: number; content: string }) => [
+      (existingReviews ?? []).map((r: { order_item_id: string; rating: number; content: string; images: string[] }) => [
         r.order_item_id,
-        r,
+        { rating: r.rating, content: r.content, images: r.images ?? [] },
       ])
     );
 
-    return {
-      orderNumber,
-      customerName: order.customer_name,
-      items: items
-        .filter((i: { product_id: number | null }) => i.product_id)
-        .map((i: { id: string; product_id: number; product_name: string; size: string; quantity: number }) => ({
-          id: i.id,
-          productId: i.product_id,
-          productName: i.product_name,
-          size: i.size,
-          quantity: i.quantity,
-          reviewed: reviewedMap.has(i.id),
-          existingReview: reviewedMap.get(i.id) ?? null,
-        })),
-    };
+    return orders
+      .map((order) => ({
+        id: order.id,
+        orderNumberMasked: maskOrderNumber(order.order_number),
+        orderedAt: order.created_at,
+        items: (Array.isArray(order.order_items) ? order.order_items : [])
+          .filter((i) => i.product_id)
+          .map((i) => ({
+            id: i.id,
+            productId: i.product_id as number,
+            productName: i.product_name,
+            size: i.size,
+            quantity: i.quantity,
+            reviewed: reviewedMap.has(i.id),
+            existingReview: reviewedMap.get(i.id) ?? null,
+          })),
+      }))
+      .filter((order) => order.items.length > 0);
   }
 
   // 전화번호로 내 리뷰 조회 (개인정보 보유기간 5년 적용)
@@ -155,12 +266,10 @@ export class ReviewService {
       throw Object.assign(new Error('전화번호를 입력해주세요.'), { status: 400 });
     }
 
-    const normalized = phone.replace(/[-\s]/g, '');
-
     const { data: orders } = await supabaseAdmin
       .from('orders')
       .select('id')
-      .or(`customer_phone.eq.${phone},customer_phone.eq.${normalized}`)
+      .in('customer_phone', phoneVariants(phone))
       .is('deleted_at', null);
 
     if (!orders?.length) return { reviews: [] };
@@ -258,12 +367,11 @@ export class ReviewService {
 
     if (!item) throw Object.assign(new Error('리뷰를 찾을 수 없습니다.'), { status: 404 });
 
-    const normalized = phone.replace(/[-\s]/g, '');
     const { data: order } = await supabaseAdmin
       .from('orders')
       .select('id')
       .eq('id', item.order_id)
-      .or(`customer_phone.eq.${phone},customer_phone.eq.${normalized}`)
+      .in('customer_phone', phoneVariants(phone))
       .is('deleted_at', null)
       .single();
 
