@@ -59,7 +59,7 @@ export default function FloatingTracker() {
               </div>
               <div className={styles.menuText}>
                 <span className={styles.menuTitle}>리뷰 작성</span>
-                <span className={styles.menuSub}>전화번호만으로 주문 불러오기</span>
+                <span className={styles.menuSub}>이름·전화번호로 주문 불러오기</span>
               </div>
               <svg className={styles.menuArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />

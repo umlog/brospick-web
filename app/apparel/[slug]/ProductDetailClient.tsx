@@ -232,9 +232,8 @@ function ProductReviews({ productId, initialReviews, initialAvgRating, initialCo
               return (
                 <div key={r.id} className={styles.reviewCard}>
                   <div className={styles.reviewCardMeta}>
-                    <span className={styles.reviewAuthor}>
-                      {r.reviewer_name.slice(0, 1)}*{r.reviewer_name.slice(-1)}
-                    </span>
+                    {/* 서버가 이미 가려서 내려보낸다 — 여기서 또 자르면 두 글자 이름이 늘어난다 */}
+                    <span className={styles.reviewAuthor}>{r.reviewer_name}</span>
                     <span className={styles.reviewDate}>{formatDate(r.created_at)}</span>
                   </div>
                   <StarDisplay rating={r.rating} size={14} />

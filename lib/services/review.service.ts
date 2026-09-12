@@ -1,5 +1,6 @@
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { maskOrderNumber } from '@/lib/utils/order-number';
+import { maskPersonName } from '@/lib/utils/mask-name';
 
 export interface SubmitReviewPayload {
   name: string;
@@ -191,12 +192,18 @@ export class ReviewService {
       throw Object.assign(new Error('전화번호 형식이 올바르지 않습니다.'), { status: 400 });
     }
 
-    const { data: rows } = await supabaseAdmin
+    const { data: rows, error } = await supabaseAdmin
       .from('orders')
       .select('id, order_number, created_at, customer_name, order_items(id, product_id, product_name, size, quantity)')
       .in('customer_phone', variants)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
+
+    // 조회 자체가 실패한 것과 "주문이 없다"를 같은 404로 뭉개면 원인을 못 찾는다
+    if (error) {
+      console.error('[review] 주문 조회 실패:', error.message);
+      throw new Error('주문 조회에 실패했습니다.');
+    }
 
     const target = normalizeName(name);
     const orders = ((rows ?? []) as OrderWithItems[]).filter(
@@ -212,9 +219,20 @@ export class ReviewService {
       );
     }
 
+    // 주문은 찾았지만 리뷰를 쓸 수 있는 상품이 하나도 없을 수 있다
+    // (단종·삭제되어 product_id 가 끊긴 상품만 담긴 주문). 빈 목록을 그냥 돌려주면
+    // 화면에 "주문 0건"만 뜨고 아무것도 못 하게 된다.
+    const reviewableOrders = await this._buildReviewableOrders(orders);
+    if (!reviewableOrders.length) {
+      throw Object.assign(
+        new Error('리뷰를 작성할 수 있는 상품이 없습니다.'),
+        { status: 404 }
+      );
+    }
+
     return {
       customerName: orders[0].customer_name,
-      orders: await this._buildReviewableOrders(orders),
+      orders: reviewableOrders,
     };
   }
 
@@ -388,7 +406,12 @@ export class ReviewService {
 
     if (error) throw new Error(`리뷰 조회에 실패했습니다: ${error.message}`);
 
-    const reviews: Review[] = data ?? [];
+    // 누구나 부를 수 있는 응답이다. 작성자 본명은 여기서 가려서 내보낸다 —
+    // 화면에서만 자르면 API 를 직접 부르는 쪽에는 본명이 그대로 간다.
+    const reviews: Review[] = (data ?? []).map((r: Review) => ({
+      ...r,
+      reviewer_name: maskPersonName(r.reviewer_name),
+    }));
     const avgRating =
       reviews.length > 0
         ? Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10
