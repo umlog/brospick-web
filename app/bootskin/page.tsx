@@ -167,7 +167,7 @@ export default async function BootskinPage() {
       </section>
 
       {/* ===== FAQ ===== */}
-      <section className={styles.faq}>
+      <section className={styles.faq} id="faq">
         <div className={styles.sectionInner}>
           <div className={styles.sectionHeader}>
             <p className={styles.eyebrow}>FAQ</p>

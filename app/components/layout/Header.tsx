@@ -2,11 +2,33 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '../../contexts/CartContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import styles from './header.module.css';
 import { BrandSymbol } from '../brand/BrandSymbol';
 import { SOCIAL_MEDIA } from '../../../lib/constants';
+import { PRODUCT_SLUGS } from '../../../lib/products';
+
+/**
+ * 헤더 메뉴는 지금 있는 갈래를 따라간다.
+ *
+ * 부츠스킨과 스포츠웨어는 한 장바구니를 쓰지만 방문자에게는 별개의 가게처럼 보여야 한다.
+ * 부츠스킨 안에서 의류 메뉴가 계속 보이면 그 분리가 첫 화면에서 바로 깨진다.
+ * 게이트(/)는 고르는 화면이므로 메뉴 자체를 두지 않는다 — 로고·장바구니·테마만 남는다.
+ */
+const BOOTSKIN_NAV = [
+  { label: 'COLLECTION', href: '/bootskin#products' },
+  { label: 'CUSTOM', href: `/bootskin/${PRODUCT_SLUGS.BOOTSKIN_CUSTOM}` },
+  { label: 'FAQ', href: '/bootskin#faq' },
+];
+
+const APPAREL_NAV = [
+  { label: 'SPORTSWEAR', href: '/apparel' },
+  { label: 'BLOG', href: '/interviews' },
+  { label: 'EBOOK', href: '/ebook' },
+  { label: 'BROSPICK', href: '/story' },
+];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +36,10 @@ export default function Header() {
   const { getTotalItems } = useCart();
   const { theme, toggleTheme } = useTheme();
   const menuScrollY = useRef(0);
+  const pathname = usePathname();
+
+  const isGate = pathname === '/';
+  const navItems = isGate ? [] : pathname.startsWith('/bootskin') ? BOOTSKIN_NAV : APPAREL_NAV;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -38,14 +64,6 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const closeMenu = () => setIsMenuOpen(false);
-
-  const navItems = [
-    { label: 'BROSPICK', href: '/#about' },
-    { label: 'BLOG', href: '/interviews' },
-    { label: 'SPORTSWEAR', href: '/apparel-showcase' },
-    { label: 'BOOTSKIN', href: '/bootskin' },
-    { label: 'EBOOK', href: '/ebook' },
-  ];
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
@@ -96,16 +114,18 @@ export default function Header() {
 
         {/* 모바일 왼쪽: 햄버거 + 테마 */}
         <div className={styles.mobileLeft}>
-          <button
-            className={`${styles.menuButton} ${isMenuOpen ? styles.open : ''}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
-            aria-expanded={isMenuOpen}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
+          {navItems.length > 0 && (
+            <button
+              className={`${styles.menuButton} ${isMenuOpen ? styles.open : ''}`}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-expanded={isMenuOpen}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          )}
           <button onClick={toggleTheme} className={styles.themeToggleMobileIcon} aria-label="테마 전환">
             {theme === 'dark' ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -141,7 +161,7 @@ export default function Header() {
       </div>
 
       {/* 모바일 풀스크린 메뉴 */}
-      {isMenuOpen && (
+      {isMenuOpen && navItems.length > 0 && (
         <nav className={styles.navMobile}>
           {navItems.map((item) => (
             <Link

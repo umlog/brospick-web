@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { CONTACT, COMPANY, SOCIAL_MEDIA } from '../../../lib/constants';
 import { LegalModal, type LegalModalType } from '../LegalModal';
 import styles from './footer.module.css';
@@ -29,6 +30,11 @@ function FooterSection({ title, children }: { title: string; children: React.Rea
 export default function Footer() {
   const year = new Date().getFullYear();
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
+  const pathname = usePathname();
+
+  // 게이트(/)는 스크롤 없이 한 화면에 끝나야 선택 화면으로 읽힌다.
+  // 사업자 정보는 게이트에서 한 번 더 들어간 모든 페이지에 그대로 남아 있다.
+  if (pathname === '/') return null;
 
   return (
     <>

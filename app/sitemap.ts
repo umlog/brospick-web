@@ -5,7 +5,7 @@ import { SITE_URL } from '@/lib/constants';
 
 export const revalidate = 3600;
 
-const STATIC_PATHS = ['', '/apparel', '/bootskin', '/interviews', '/ebook', '/returns', '/tracking', '/review'];
+const STATIC_PATHS = ['', '/apparel', '/bootskin', '/story', '/interviews', '/ebook', '/returns', '/tracking', '/review'];
 const DAILY_PATHS = ['', '/apparel', '/bootskin'];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

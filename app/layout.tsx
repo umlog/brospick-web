@@ -12,6 +12,7 @@ import PageTransition from './components/PageTransition';
 import { SiteBannerServer } from './components/SiteBannerServer';
 import { SitePopupServer } from './components/SitePopupServer';
 import { SplashController } from './components/SplashController';
+import { SplashTransition } from './components/SplashTransition';
 import ScrollProgress from './components/ScrollProgress';
 import BackToTop from './components/BackToTop';
 import CartToast from './components/CartToast';
@@ -111,6 +112,7 @@ export default function RootLayout({
       </head>
       <body>
         <SplashController />
+        <SplashTransition />
         <div id="__splash" suppressHydrationWarning>
           {/* 배경을 위·아래 두 패널로 나눠 커튼처럼 갈라지며 사라진다 */}
           <div className="splash-panel splash-panel-top" />
@@ -259,6 +261,44 @@ export default function RootLayout({
               @keyframes splashShine {
                 from { background-position: 100% 0; }
                 to { background-position: 0% 0; }
+              }
+
+              /* ── 재생 모드 ──────────────────────────────────────────────
+                 게이트에서 컬렉션으로 들어갈 때 SplashTransition 이 붙이는 상태다.
+                 커튼이 닫혀서 이동을 덮고, 도착하면 다시 열린다.
+                 is-open = 커튼이 화면 밖(열린 상태). 떼면 닫히고, 다시 붙이면 열린다. */
+              #__splash.is-replay {
+                /* 세션당 1회 규칙으로 박히는 display:none!important 를 이긴다 */
+                display: flex !important;
+              }
+              #__splash.is-replay .splash-panel {
+                /* SplashTransition 의 CLOSE_MS·OPEN_MS 와 같은 값이어야 한다 */
+                transition: transform 0.22s cubic-bezier(0.7, 0, 0.3, 1);
+              }
+              #__splash.is-replay.is-open .splash-panel-top { transform: translateY(-100%); }
+              #__splash.is-replay.is-open .splash-panel-bottom { transform: translateY(100%); }
+
+              /* 로고 등장 애니메이션은 0.5초 안에 끝나지 않아 잘린 것처럼 보인다.
+                 재생 모드에서는 끄고 커튼과 같은 박자로 페이드만 시킨다. */
+              #__splash.is-replay .splash-mono,
+              #__splash.is-replay .splash-orbit,
+              #__splash.is-replay .splash-logo {
+                animation: none;
+              }
+              #__splash.is-replay .splash-logo-wrap {
+                animation: none;
+                opacity: 1;
+                transition: opacity 0.16s ease, transform 0.16s ease;
+              }
+              #__splash.is-replay.is-open .splash-logo-wrap {
+                opacity: 0;
+                transform: scale(0.97);
+              }
+
+              /* 커튼을 시작 위치에 앉히는 한 프레임 동안만 트랜지션을 끊는다 */
+              #__splash.no-anim .splash-panel,
+              #__splash.no-anim .splash-logo-wrap {
+                transition: none !important;
               }
 
               @media (prefers-reduced-motion: reduce) {
