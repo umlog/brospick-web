@@ -43,7 +43,7 @@ const GATES = [
     href: '/bootskin',
     label: 'BOOT SKIN',
     // 모바일 버튼에서만 쓴다 — 이름만으로는 무엇을 파는지 모르는 사람이 많다
-    note: '축구화에 붙이는 스킨',
+    note: '당신만의 아이덴티티를 신발에 입히다',
     image: '/gate/bootskin-card.png',
     alt: '부츠스킨을 붙인 흰색 축구화',
   },
@@ -66,7 +66,7 @@ const EXTRAS = [
 export const metadata: Metadata = {
   title: '브로스픽 BROSPICK | 부츠스킨 · 스포츠웨어',
   description:
-    '축구화에 붙이는 부츠스킨과 기능성 스포츠웨어를 만드는 브로스픽입니다. 원하는 쪽을 골라 들어가세요.',
+    'BROSPICK / BootSkin & SportWear',
 };
 
 export default function Home() {
@@ -91,7 +91,7 @@ export default function Home() {
                 src={gate.image}
                 alt={gate.alt}
                 fill
-                sizes="(max-width: 768px) 64px, 50vw"
+                sizes="(max-width: 768px) 96px, 50vw"
                 className={styles.image}
                 priority
               />

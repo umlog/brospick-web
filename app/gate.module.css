@@ -246,7 +246,7 @@
   .panels {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     flex: none;
     width: 100%;
     max-width: 420px;
@@ -265,12 +265,12 @@
   .panel {
     flex-direction: row;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     /* 44px 최소 터치 타겟을 크게 넘긴다 — 엄지로 누르는 유일한 목적지다 */
-    min-height: 84px;
-    padding: 12px 16px 12px 12px;
+    min-height: 116px;
+    padding: 14px 18px 14px 14px;
     background: var(--gate-card);
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
   }
 
@@ -290,14 +290,14 @@
 
   .media {
     flex: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
     overflow: hidden;
     background: var(--gate-surface);
   }
 
-  /* 썸네일에서는 잘라내지 않는다. 60px 안에서 가운데만 보이면 축구화인지 알아볼 수 없다.
+  /* 썸네일에서는 잘라내지 않는다. 88px 안에서 가운데만 보이면 축구화인지 알아볼 수 없다.
      타일 배경과 썸네일 배경이 같은 값이라 남는 자리는 그대로 이어진다. */
   .image {
     object-fit: contain;
@@ -308,13 +308,13 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     padding: 0;
   }
 
   .label {
     padding-bottom: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     letter-spacing: 0.17em;
     text-indent: 0.17em;
     transition: none;
@@ -327,7 +327,7 @@
 
   .note {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     letter-spacing: 0.01em;
     color: var(--gate-ink-soft);
     line-height: 1.3;
