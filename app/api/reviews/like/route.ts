@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { clientIp, isRateLimited } from '@/lib/rate-limit';
 
-// fingerprint 는 브라우저가 만들어 보내는 값이라 바꿔가며 누르면 좋아요를 무한히 올릴 수 있다.
-// 막을 수는 없으니 IP당 횟수로 부풀리는 속도를 끊는다.
-const LIKE_LIMIT = { max: 60, windowMs: 10 * 60 * 1000 };
+// 엉터리 값은 DB에 보내기 전에 끊는다 (DB 에러 로그가 쌓이지 않게)
 const MAX_FINGERPRINT_LENGTH = 128;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function POST(request: NextRequest) {
-  if (await isRateLimited(`reviews:like:${clientIp(request)}`, LIKE_LIMIT)) {
-    return NextResponse.json({ error: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.' }, { status: 429 });
-  }
-
   const { reviewId, fingerprint } = await request.json();
 
   if (!reviewId || !fingerprint) {
