@@ -99,7 +99,7 @@ export const COMPANY = {
   businessNumber: '847-07-03351',
   communicationSalesNumber: '제 2026-경기파주-0883 호',
   address: '경기도 파주시 금정20길 19',
-  privacyOfficer: '홍주영',
+  privacyOfficer: '정지영',
 } as const;
 
 export const SOCIAL_MEDIA = {
@@ -115,11 +115,11 @@ export const TRACKING = {
   trackingUrl: (carrier: Carrier, trackingNumber: string): string => {
     const encoded = encodeURIComponent(trackingNumber);
     switch (carrier) {
-      case '로젠택배':     return `https://www.ilogen.com/web/personal/trace/${encoded}`;
-      case 'CJ대한통운':   return `https://cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo=${encoded}`;
-      case '한진택배':     return `https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KOR&wblnumText2=${encoded}`;
-      case '롯데택배':     return `https://www.lotteglogis.com/home/reservation/tracking/index?InvNo=${encoded}`;
-      case '우체국택배':   return `https://service.epost.go.kr/trace.RetrieveEmsRigiPrclDeliv.retrieve?sid1=${encoded}`;
+      case '로젠택배': return `https://www.ilogen.com/web/personal/trace/${encoded}`;
+      case 'CJ대한통운': return `https://cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo=${encoded}`;
+      case '한진택배': return `https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KOR&wblnumText2=${encoded}`;
+      case '롯데택배': return `https://www.lotteglogis.com/home/reservation/tracking/index?InvNo=${encoded}`;
+      case '우체국택배': return `https://service.epost.go.kr/trace.RetrieveEmsRigiPrclDeliv.retrieve?sid1=${encoded}`;
     }
   },
 } as const;
