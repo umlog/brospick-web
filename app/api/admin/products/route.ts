@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
+import { revalidateProducts } from '@/lib/cache';
 
 // 상품 목록 조회
 export async function GET(request: NextRequest) {
@@ -64,6 +65,7 @@ export async function PATCH(request: NextRequest) {
       .single();
 
     if (error) return apiError(`상품 수정 실패: ${error.message}`, 500);
+    revalidateProducts([id]);
     return NextResponse.json({ product: data });
   });
 }

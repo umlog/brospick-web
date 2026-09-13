@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { productList, products as staticProducts } from '@/lib/products';
+import { revalidateProductList } from '@/lib/cache';
 
 // lib/products.ts 기준으로 DB에 없는 상품 목록 조회
 export async function GET(request: NextRequest) {
@@ -56,6 +57,8 @@ export async function POST(request: NextRequest) {
 
     const { error } = await supabaseAdmin.from('products').insert(toInsert);
     if (error) return apiError(`등록 실패: ${error.message}`, 500);
+    // 새 상품은 상세 페이지 캐시가 아직 없으므로 목록만 갱신하면 된다
+    revalidateProductList();
 
     // 사이즈 정보 자동 삽입 (stock=0, status=sold_out)
     const sizesToInsert = Object.values(staticProducts)

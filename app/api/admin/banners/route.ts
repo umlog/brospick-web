@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { isAdminAuthorized, apiError } from '@/lib/errors';
+import { revalidateSiteBanner } from '@/lib/cache';
 
 function getServiceClient() {
   return createClient(
@@ -37,6 +38,8 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // 어드민에서 켜고 끄거나 수정하면 사이트에 바로 반영
+  revalidateSiteBanner();
   return NextResponse.json(data);
 }
 
@@ -52,6 +55,8 @@ export async function PUT(request: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // 어드민에서 켜고 끄거나 수정하면 사이트에 바로 반영
+  revalidateSiteBanner();
   return NextResponse.json(data);
 }
 
@@ -62,5 +67,7 @@ export async function DELETE(request: NextRequest) {
   const { error } = await supabase.from('site_banners').delete().eq('id', id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // 어드민에서 켜고 끄거나 수정하면 사이트에 바로 반영
+  revalidateSiteBanner();
   return NextResponse.json({ success: true });
 }

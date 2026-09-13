@@ -1,6 +1,7 @@
-import { supabase } from '@/lib/supabase';
+import { cachedSupabase, CACHE_TAGS } from '@/lib/cache';
 
 // 서버 컴포넌트(layout)에서 ISR로 한 번만 조회해 클라이언트에 props로 내려준다.
+// 어드민에서 켜고 끄거나 저장할 때 태그가 갱신되므로, 평소엔 DB를 부르지 않는다.
 // 쿼리에 now 타임스탬프를 넣지 않아야 fetch 캐시(URL 기준)가 동작하므로,
 // is_active만 쿼리하고 시간창(starts_at/ends_at)은 JS에서 필터한다.
 
@@ -33,7 +34,7 @@ function withinWindow(row: TimeWindow, now: number): boolean {
 }
 
 export async function getActiveBanner(): Promise<SiteBannerData | null> {
-  const { data } = await supabase
+  const { data } = await cachedSupabase([CACHE_TAGS.siteBanner])
     .from('site_banners')
     .select('id, message, link_url, bg_color, text_color, starts_at, ends_at')
     .eq('is_active', true)
@@ -47,7 +48,7 @@ export async function getActiveBanner(): Promise<SiteBannerData | null> {
 }
 
 export async function getActivePopup(): Promise<SitePopupData | null> {
-  const { data } = await supabase
+  const { data } = await cachedSupabase([CACHE_TAGS.sitePopup])
     .from('site_popups')
     .select('id, title, content, image_url, link_url, show_once, starts_at, ends_at')
     .eq('is_active', true)

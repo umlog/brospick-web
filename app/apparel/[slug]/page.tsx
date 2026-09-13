@@ -1,4 +1,5 @@
-export const revalidate = 300;
+// 가격·재고·리뷰가 바뀌면 상품 태그로 즉시 갱신된다. 이 값은 안전장치 (lib/cache.ts)
+export const revalidate = 3600;
 
 import type { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';

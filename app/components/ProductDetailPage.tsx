@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { supabase } from '@/lib/supabase';
+import { cachedSupabase, CACHE_TAGS } from '@/lib/cache';
 import { reviewService } from '@/lib/services/review.service';
 import { SITE_URL } from '@/lib/constants';
 import { products, getProductHref, type ProductSlug } from '../../lib/products';
@@ -20,13 +20,15 @@ export function buildProductMetadata(slug: string): Metadata {
 }
 
 async function getProductData(productId: number) {
+  // 가격·재고·리뷰가 바뀌면 이 태그가 갱신된다 (lib/cache.ts)
+  const db = cachedSupabase([CACHE_TAGS.product(productId)]);
   const [priceRes, sizesRes, reviewsRes] = await Promise.all([
-    supabase
+    db
       .from('products')
       .select('id, name, price, original_price, coming_soon')
       .eq('id', productId)
       .single(),
-    supabase
+    db
       .from('product_sizes')
       .select('product_id, size, status, stock, delay_text')
       .eq('product_id', productId),

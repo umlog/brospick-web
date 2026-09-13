@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
 import { supabaseAdmin } from '@/lib/supabase';
+import { revalidateProducts } from '@/lib/cache';
 
 // 전체 리뷰 목록 조회
 export async function GET(request: NextRequest) {
@@ -52,11 +53,17 @@ export async function DELETE(request: NextRequest) {
     const { reviewId } = await request.json();
     if (!reviewId) return apiError('reviewId가 필요합니다.', 400);
 
-    const { error } = await supabaseAdmin.from('reviews').delete().eq('id', reviewId);
+    const { data: deleted, error } = await supabaseAdmin
+      .from('reviews')
+      .delete()
+      .eq('id', reviewId)
+      .select('product_id');
     if (error) {
       console.error('[admin/reviews] DELETE error:', error);
       return apiError('리뷰 삭제에 실패했습니다.', 500);
     }
+
+    revalidateProducts((deleted ?? []).map((r: { product_id: number | null }) => r.product_id).filter((id): id is number => id != null));
 
     return NextResponse.json({ success: true });
   });

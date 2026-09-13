@@ -1,4 +1,5 @@
-import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
+import { cachedSupabase, CACHE_TAGS, revalidateProducts } from '@/lib/cache';
 import { maskOrderNumber } from '@/lib/utils/order-number';
 import { maskPersonName } from '@/lib/utils/mask-name';
 
@@ -217,6 +218,7 @@ export class ReviewService {
       throw new Error(`리뷰 등록에 실패했습니다: ${insertError.message}`);
     }
 
+    revalidateProducts([orderItem.product_id]);
     return { reviewId: review.id };
   }
 
@@ -414,7 +416,7 @@ export class ReviewService {
     updates: { rating: number; content: string; images?: string[]; height?: number | null; usual_size?: string | null }
   ) {
     assertValidReviewFields(updates);
-    await this._assertOwnership(name, phone, reviewId);
+    const { productId } = await this._assertOwnership(name, phone, reviewId);
 
     const { error } = await supabaseAdmin
       .from('reviews')
@@ -428,28 +430,30 @@ export class ReviewService {
       .eq('id', reviewId);
 
     if (error) throw new Error(error.message);
+    if (productId) revalidateProducts([productId]);
   }
 
   // 리뷰 삭제 (이름+전화번호 소유권 확인)
   async deleteReview(name: string, phone: string, reviewId: string) {
-    await this._assertOwnership(name, phone, reviewId);
+    const { productId } = await this._assertOwnership(name, phone, reviewId);
 
     const { error } = await supabaseAdmin.from('reviews').delete().eq('id', reviewId);
     if (error) throw new Error(error.message);
+    if (productId) revalidateProducts([productId]);
   }
 
   /**
    * 이름+전화번호로 리뷰 소유권 확인.
    * 리뷰 id 는 공개 리뷰 목록에 그대로 실려 나가므로 id 를 안다는 것만으로는 아무 증명이 안 된다.
    */
-  private async _assertOwnership(name: string, phone: string, reviewId: string) {
+  private async _assertOwnership(name: string, phone: string, reviewId: string): Promise<{ productId: number | null }> {
     if (!name?.trim() || !phone?.trim()) {
       throw Object.assign(new Error('권한이 없습니다.'), { status: 403 });
     }
 
     const { data: review } = await supabaseAdmin
       .from('reviews')
-      .select('order_item_id')
+      .select('order_item_id, product_id')
       .eq('id', reviewId)
       .single();
 
@@ -474,11 +478,13 @@ export class ReviewService {
     if (!order || normalizeName(order.customer_name ?? '') !== normalizeName(name)) {
       throw Object.assign(new Error('권한이 없습니다.'), { status: 403 });
     }
+
+    return { productId: review.product_id ?? null };
   }
 
-  // 상품별 리뷰 목록 조회 (공개)
+  // 상품별 리뷰 목록 조회 (공개). 리뷰가 바뀌면 상품 태그로 갱신된다.
   async getProductReviews(productId: number) {
-    const { data, error } = await supabase
+    const { data, error } = await cachedSupabase([CACHE_TAGS.product(productId)])
       .from('reviews')
       .select('id, rating, content, reviewer_name, created_at, images, height, usual_size, helpful_count')
       .eq('product_id', productId)

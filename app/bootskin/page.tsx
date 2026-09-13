@@ -1,8 +1,9 @@
-export const revalidate = 300;
+// 가격·정렬·재고가 바뀌면 product-list 태그로 즉시 갱신된다. 이 값은 안전장치 (lib/cache.ts)
+export const revalidate = 3600;
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { cachedSupabase, CACHE_TAGS } from '@/lib/cache';
 import { bootskinProductList, PRODUCT_SLUGS } from '@/lib/products';
 import BeforeAfterSlider from '@/app/apparel/[slug]/BeforeAfterSlider';
 import BootskinClient from './BootskinClient';
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 async function getPrices() {
-  const { data } = await supabase
+  const { data } = await cachedSupabase([CACHE_TAGS.productList])
     .from('products')
     .select('id, name, price, original_price, coming_soon, sort_order');
 
@@ -40,7 +41,7 @@ async function getPrices() {
  */
 async function getBootskinStock() {
   const ids = bootskinProductList.map((product) => product.id);
-  const { data } = await supabase
+  const { data } = await cachedSupabase([CACHE_TAGS.productList])
     .from('product_sizes')
     .select('product_id, size, status, stock')
     .in('product_id', ids);

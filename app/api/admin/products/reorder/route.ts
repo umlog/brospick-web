@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, isAdminAuthorized, withErrorHandler } from '@/lib/errors';
+import { revalidateProductList } from '@/lib/cache';
 
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
@@ -21,6 +22,9 @@ export async function POST(request: NextRequest) {
 
     const results = await Promise.all(updates);
     const failed = results.filter((r) => r.error);
+
+    // 일부만 저장됐어도 목록은 DB 상태와 맞춘다
+    revalidateProductList();
 
     if (failed.length > 0) {
       return apiError(`${failed.length}개 상품 순서 저장 실패`, 500);

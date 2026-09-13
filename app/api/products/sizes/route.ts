@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { apiError, checkAdminSession } from '@/lib/errors';
+import { revalidateProducts } from '@/lib/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,7 @@ export async function GET() {
         .update({ status: 'sold_out' })
         .eq('status', 'available')
         .eq('stock', 0);
+      revalidateProducts(toFix.map((s) => s.product_id));
     }
 
     const corrected = (data ?? []).map((s) => ({
@@ -128,6 +130,7 @@ export async function PATCH(request: NextRequest) {
       return apiError('변경에 실패했습니다.', 500);
     }
 
+    revalidateProducts([Number(productId)]);
     return NextResponse.json({ success: true, size: data });
   } catch (error) {
     console.error('Product size update API error:', error);

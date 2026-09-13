@@ -1,11 +1,12 @@
-export const revalidate = 300;
+// 가격·정렬·재고가 바뀌면 product-list 태그로 즉시 갱신된다. 이 값은 안전장치 (lib/cache.ts)
+export const revalidate = 3600;
 
-import { supabase } from '@/lib/supabase';
+import { cachedSupabase, CACHE_TAGS } from '@/lib/cache';
 import { productList } from '@/lib/products';
 import ApparelClient from './ApparelClient';
 
 async function getPrices() {
-  const { data } = await supabase
+  const { data } = await cachedSupabase([CACHE_TAGS.productList])
     .from('products')
     .select('id, name, price, original_price, coming_soon, sort_order');
 

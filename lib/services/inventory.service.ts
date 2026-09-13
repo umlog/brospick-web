@@ -6,6 +6,7 @@
 
 import { supabaseAdmin } from '@/lib/supabase';
 import { SizeStatus } from '@/lib/domain/enums';
+import { revalidateProducts } from '@/lib/cache';
 
 export interface StockableItem {
   productId?: number | null;
@@ -48,6 +49,9 @@ export class InventoryService {
       .from('product_sizes')
       .update(updateData)
       .match({ product_id: productId, size });
+
+    // 품절·재입고가 상세·목록 페이지에 바로 보이도록 캐시 갱신
+    revalidateProducts([productId]);
   }
 
   // 주문 가능 여부 확인 (주문 생성 전 재고 체크)
@@ -136,6 +140,8 @@ export class InventoryService {
         }
       })
     );
+
+    revalidateProducts(itemsWithProduct.map((item) => (item.productId ?? item.product_id)!));
   }
 
   // 재고 복구 (주문 삭제 또는 반품 처리 시)
