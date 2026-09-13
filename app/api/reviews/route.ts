@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiError, withErrorHandler } from '@/lib/errors';
+import { clientIp, isRateLimited } from '@/lib/rate-limit';
 import { reviewService } from '@/lib/services/review.service';
+
+// 제출도 이름·전화번호 대조를 거치므로, 대입 시도를 끊기 위해 횟수를 센다
+const SUBMIT_LIMIT = { max: 20, windowMs: 10 * 60 * 1000 };
 
 // 리뷰 제출
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
+    if (await isRateLimited(`reviews:submit:${clientIp(request)}`, SUBMIT_LIMIT)) {
+      return apiError('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.', 429);
+    }
+
     const body = await request.json();
 
     try {

@@ -89,6 +89,58 @@ export function phoneVariants(phone: string): string[] {
   return Array.from(new Set(variants));
 }
 
+const MAX_REVIEW_IMAGES = 5;
+const MAX_CONTENT_LENGTH = 2000;
+const MIN_HEIGHT_CM = 100;
+const MAX_HEIGHT_CM = 250;
+const MAX_USUAL_SIZE_LENGTH = 10;
+
+// 리뷰 사진은 우리 업로드 API(/api/reviews/upload)가 만든 공개 URL만 받는다.
+// 검사하지 않으면 외부 추적 이미지나 엉뚱한 주소를 리뷰에 박아 공개 페이지에 띄울 수 있다.
+// 업로드 API와 같은 getPublicUrl 로 접두사를 만들어야 주소 형식이 어긋나지 않는다.
+const REVIEW_IMAGE_URL_PREFIX = supabaseAdmin.storage.from('review-images').getPublicUrl('').data.publicUrl;
+
+interface ReviewFields {
+  rating: unknown;
+  content: unknown;
+  images?: unknown;
+  height?: unknown;
+  usual_size?: unknown;
+}
+
+function badRequest(message: string): Error {
+  return Object.assign(new Error(message), { status: 400 });
+}
+
+/** 작성·수정 공통 입력 검증. 클라이언트가 보낸 값을 그대로 믿지 않는다. */
+function assertValidReviewFields({ rating, content, images, height, usual_size }: ReviewFields) {
+  if (typeof rating !== 'number' || !Number.isInteger(rating) || rating < 1 || rating > 5) {
+    throw badRequest('별점은 1~5 사이여야 합니다.');
+  }
+  if (typeof content !== 'string' || !content.trim()) {
+    throw badRequest('리뷰 내용을 입력해주세요.');
+  }
+  if (content.length > MAX_CONTENT_LENGTH) {
+    throw badRequest(`리뷰는 ${MAX_CONTENT_LENGTH}자 이내로 작성해주세요.`);
+  }
+  if (images !== undefined) {
+    if (!Array.isArray(images) || images.length > MAX_REVIEW_IMAGES) {
+      throw badRequest(`사진은 최대 ${MAX_REVIEW_IMAGES}장까지 첨부할 수 있습니다.`);
+    }
+    if (!images.every((url) => typeof url === 'string' && url.startsWith(REVIEW_IMAGE_URL_PREFIX))) {
+      throw badRequest('올바르지 않은 사진이 포함되어 있습니다.');
+    }
+  }
+  if (height != null) {
+    if (typeof height !== 'number' || !Number.isInteger(height) || height < MIN_HEIGHT_CM || height > MAX_HEIGHT_CM) {
+      throw badRequest(`키는 ${MIN_HEIGHT_CM}~${MAX_HEIGHT_CM}cm 사이로 입력해주세요.`);
+    }
+  }
+  if (usual_size != null && (typeof usual_size !== 'string' || usual_size.length > MAX_USUAL_SIZE_LENGTH)) {
+    throw badRequest('평소 사이즈는 10자 이내로 입력해주세요.');
+  }
+}
+
 export class ReviewService {
   // 리뷰 제출 (이름+전화번호로 주문 소유권 확인)
   async submitReview(payload: SubmitReviewPayload) {
@@ -97,9 +149,7 @@ export class ReviewService {
     if (!name?.trim() || !phone || !orderItemId || !rating || !content?.trim()) {
       throw Object.assign(new Error('필수 정보가 누락되었습니다.'), { status: 400 });
     }
-    if (rating < 1 || rating > 5) {
-      throw Object.assign(new Error('별점은 1~5 사이여야 합니다.'), { status: 400 });
-    }
+    assertValidReviewFields({ rating, content, images, height, usual_size });
 
     // 상품이 속한 주문을 먼저 찾는다. 주문번호는 화면으로 내보내지 않으므로
     // 여기서도 받지 않고, 상품 id 에서 거꾸로 주문을 짚는다.
@@ -278,21 +328,40 @@ export class ReviewService {
       .filter((order) => order.items.length > 0);
   }
 
-  // 전화번호로 내 리뷰 조회 (개인정보 보유기간 5년 적용)
-  async getMyReviews(phone: string) {
+  /**
+   * 이름+전화번호로 내 리뷰 조회 (개인정보 보유기간 5년 적용).
+   *
+   * 리뷰 작성 조회와 같은 이유로 이름까지 대조한다. 전화번호만 받으면 번호를 돌려
+   * 남의 구매 상품·사이즈·키를 볼 수 있다.
+   */
+  async getMyReviews(name: string, phone: string) {
+    if (!name?.trim()) {
+      throw Object.assign(new Error('이름을 입력해주세요.'), { status: 400 });
+    }
     if (!phone?.trim()) {
       throw Object.assign(new Error('전화번호를 입력해주세요.'), { status: 400 });
     }
 
-    const { data: orders } = await supabaseAdmin
+    const { data: rows, error: ordersError } = await supabaseAdmin
       .from('orders')
-      .select('id')
+      .select('id, customer_name')
       .in('customer_phone', phoneVariants(phone))
       .is('deleted_at', null);
 
-    if (!orders?.length) return { reviews: [] };
+    if (ordersError) {
+      console.error('[review] 내 리뷰 주문 조회 실패:', ordersError.message);
+      throw new Error('리뷰 조회에 실패했습니다.');
+    }
 
-    const orderIds = orders.map((o: { id: string }) => o.id);
+    const target = normalizeName(name);
+    const orders = ((rows ?? []) as { id: string; customer_name: string | null }[]).filter(
+      (order) => normalizeName(order.customer_name ?? '') === target
+    );
+
+    // 번호·이름이 틀린 경우와 리뷰가 없는 경우를 구분하지 않는다 — 번호 존재 여부가 새지 않게
+    if (!orders.length) return { reviews: [] };
+
+    const orderIds = orders.map((o) => o.id);
 
     const { data: items } = await supabaseAdmin
       .from('order_items')
@@ -337,13 +406,15 @@ export class ReviewService {
     };
   }
 
-  // 리뷰 수정 (전화번호 소유권 확인)
+  // 리뷰 수정 (이름+전화번호 소유권 확인)
   async updateReview(
+    name: string,
     phone: string,
     reviewId: string,
     updates: { rating: number; content: string; images?: string[]; height?: number | null; usual_size?: string | null }
   ) {
-    await this._assertOwnership(phone, reviewId);
+    assertValidReviewFields(updates);
+    await this._assertOwnership(name, phone, reviewId);
 
     const { error } = await supabaseAdmin
       .from('reviews')
@@ -359,16 +430,23 @@ export class ReviewService {
     if (error) throw new Error(error.message);
   }
 
-  // 리뷰 삭제 (전화번호 소유권 확인)
-  async deleteReview(phone: string, reviewId: string) {
-    await this._assertOwnership(phone, reviewId);
+  // 리뷰 삭제 (이름+전화번호 소유권 확인)
+  async deleteReview(name: string, phone: string, reviewId: string) {
+    await this._assertOwnership(name, phone, reviewId);
 
     const { error } = await supabaseAdmin.from('reviews').delete().eq('id', reviewId);
     if (error) throw new Error(error.message);
   }
 
-  // 전화번호로 리뷰 소유권 확인
-  private async _assertOwnership(phone: string, reviewId: string) {
+  /**
+   * 이름+전화번호로 리뷰 소유권 확인.
+   * 리뷰 id 는 공개 리뷰 목록에 그대로 실려 나가므로 id 를 안다는 것만으로는 아무 증명이 안 된다.
+   */
+  private async _assertOwnership(name: string, phone: string, reviewId: string) {
+    if (!name?.trim() || !phone?.trim()) {
+      throw Object.assign(new Error('권한이 없습니다.'), { status: 403 });
+    }
+
     const { data: review } = await supabaseAdmin
       .from('reviews')
       .select('order_item_id')
@@ -387,13 +465,15 @@ export class ReviewService {
 
     const { data: order } = await supabaseAdmin
       .from('orders')
-      .select('id')
+      .select('id, customer_name')
       .eq('id', item.order_id)
       .in('customer_phone', phoneVariants(phone))
       .is('deleted_at', null)
       .single();
 
-    if (!order) throw Object.assign(new Error('권한이 없습니다.'), { status: 403 });
+    if (!order || normalizeName(order.customer_name ?? '') !== normalizeName(name)) {
+      throw Object.assign(new Error('권한이 없습니다.'), { status: 403 });
+    }
   }
 
   // 상품별 리뷰 목록 조회 (공개)

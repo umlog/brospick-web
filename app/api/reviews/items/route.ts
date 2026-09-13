@@ -10,7 +10,7 @@ const LOOKUP_LIMIT = { max: 12, windowMs: 10 * 60 * 1000 };
 
 export async function POST(request: NextRequest) {
   return withErrorHandler(async () => {
-    if (isRateLimited(`reviews:items:${clientIp(request)}`, LOOKUP_LIMIT)) {
+    if (await isRateLimited(`reviews:items:${clientIp(request)}`, LOOKUP_LIMIT)) {
       return apiError('조회 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.', 429);
     }
 

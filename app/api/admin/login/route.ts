@@ -2,26 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, createHash, randomBytes, timingSafeEqual } from 'crypto';
 import { sendMail } from '@/lib/email';
 import { escapeHtml } from '@/lib/email/transporter';
+import { clientIp, isRateLimited } from '@/lib/rate-limit';
 
-// 인메모리 레이트 리미터 (서버 재시작 시 초기화됨)
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
-const MAX_ATTEMPTS = 10;
-const WINDOW_MS = 15 * 60 * 1000; // 15분
-
-function getClientIp(request: NextRequest): string {
-  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-}
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = loginAttempts.get(ip);
-  if (!entry || now > entry.resetAt) {
-    loginAttempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > MAX_ATTEMPTS;
-}
+// 비밀번호 대입 방어 — IP당 15분에 10회. 카운트는 모든 서버 인스턴스가 공유한다.
+const LOGIN_LIMIT = { max: 10, windowMs: 15 * 60 * 1000 };
 
 function createSessionToken(secret: string): string {
   const nonce = randomBytes(16).toString('hex');
@@ -69,8 +53,8 @@ function sendLoginAlert(request: NextRequest, ip: string): void {
 }
 
 export async function POST(request: NextRequest) {
-  const ip = getClientIp(request);
-  if (isRateLimited(ip)) {
+  const ip = clientIp(request);
+  if (await isRateLimited(`admin:login:${ip}`, LOGIN_LIMIT)) {
     return NextResponse.json(
       { error: '너무 많은 시도입니다. 잠시 후 다시 시도해주세요.' },
       { status: 429 }
@@ -81,7 +65,7 @@ export async function POST(request: NextRequest) {
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (!adminPassword || typeof password !== 'string' || !safeEqual(password, adminPassword)) {
-    // 브루트포스 방어: 실패 시 최소 500ms 지연 (서버리스 인스턴스 간 공유 불가한 인메모리 카운터 보완)
+    // 브루트포스 방어: 실패 시 최소 500ms 지연
     await new Promise(resolve => setTimeout(resolve, 500));
     return NextResponse.json({ error: '비밀번호가 올바르지 않습니다.' }, { status: 401 });
   }

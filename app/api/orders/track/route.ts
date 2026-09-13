@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { clientIp, isRateLimited } from '@/lib/rate-limit';
+
+// 주문번호 뒷자리가 4자리라, 전화번호를 아는 사람이 날짜별로 대입해볼 수 있다. 횟수를 끊는다.
+const TRACK_LIMIT = { max: 20, windowMs: 10 * 60 * 1000 };
 
 // 주문 조회 (공개 - 주문번호 + 전화번호로 인증)
 export async function POST(request: NextRequest) {
   try {
+    if (await isRateLimited(`orders:track:${clientIp(request)}`, TRACK_LIMIT)) {
+      return NextResponse.json(
+        { error: '조회 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.' },
+        { status: 429 }
+      );
+    }
+
     const { orderNumber, phone } = await request.json();
 
     if (!orderNumber || !phone) {

@@ -25,6 +25,8 @@ interface ImagePreview {
 }
 
 const MAX_IMAGES = 5;
+// 서버(review.service)의 MAX_CONTENT_LENGTH 와 같은 값
+const MAX_CONTENT_LENGTH = 2000;
 
 function StarDisplay({ rating }: { rating: number }) {
   return (
@@ -36,6 +38,7 @@ function StarDisplay({ rating }: { rating: number }) {
 }
 
 function MyReviewsContent() {
+  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -70,7 +73,7 @@ function MyReviewsContent() {
       const res = await fetch('/api/reviews/my', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone }),
+        body: JSON.stringify({ name, phone }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error); return; }
@@ -172,6 +175,7 @@ function MyReviewsContent() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name,
           phone,
           reviewId,
           rating: editRating,
@@ -215,7 +219,7 @@ function MyReviewsContent() {
       const res = await fetch('/api/reviews/my', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, reviewId }),
+        body: JSON.stringify({ name, phone, reviewId }),
       });
       if (!res.ok) return;
       setReviews((prev) => prev ? prev.filter((r) => r.id !== reviewId) : prev);
@@ -239,10 +243,21 @@ function MyReviewsContent() {
         <div className={styles.card}>
           <div className={styles.header}>
             <h1>내 리뷰 조회</h1>
-            <p>주문 시 입력한 전화번호로 작성한 리뷰를 확인하고 수정·삭제할 수 있습니다.</p>
+            <p>주문 시 입력한 이름과 전화번호로 작성한 리뷰를 확인하고 수정·삭제할 수 있습니다.</p>
           </div>
           <form className={styles.form} onSubmit={handleLookup}>
             {error && <div className={styles.error}>{error}</div>}
+            <div className={styles.inputGroup}>
+              <label>이름</label>
+              <input
+                type="text"
+                placeholder="주문자 이름"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                required
+              />
+            </div>
             <div className={styles.inputGroup}>
               <label>전화번호</label>
               <input
@@ -317,6 +332,7 @@ function MyReviewsContent() {
                         value={editContent}
                         onChange={(e) => setEditContent(e.target.value)}
                         rows={4}
+                        maxLength={MAX_CONTENT_LENGTH}
                       />
 
                       {/* 사이즈 정보 수정 */}
@@ -446,7 +462,7 @@ function MyReviewsContent() {
         )}
 
         <div className={styles.footer}>
-          <button className={styles.resetButton} onClick={() => { setReviews(null); setPhone(''); }}>
+          <button className={styles.resetButton} onClick={() => { setReviews(null); setName(''); setPhone(''); }}>
             다시 조회
           </button>
         </div>

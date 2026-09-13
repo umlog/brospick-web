@@ -39,6 +39,8 @@ interface ImagePreview {
 }
 
 const MAX_IMAGES = 5;
+// 서버(review.service)의 MAX_CONTENT_LENGTH 와 같은 값
+const MAX_CONTENT_LENGTH = 2000;
 
 function ReviewContent() {
   const searchParams = useSearchParams();
@@ -389,6 +391,7 @@ function ReviewContent() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={4}
+                maxLength={MAX_CONTENT_LENGTH}
               />
             </div>
 
