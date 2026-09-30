@@ -40,11 +40,17 @@ export function useOrderActions(handleStatusChange: StatusChangeFn) {
 
   const handleTrackingSubmit = () => {
     if (!trackingModal) return;
-    if (!trackingInput.trim()) {
+    // 붙여넣기로 딸려오는 하이픈·공백은 떼고, 그 외 글자(이름 등)가 섞이면 막는다.
+    const trackingNumber = trackingInput.replace(/[\s-]/g, '');
+    if (!trackingNumber) {
       showToast('운송장번호를 입력해주세요.', 'error');
       return;
     }
-    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingInput.trim(), carrierInput);
+    if (!/^\d+$/.test(trackingNumber)) {
+      showToast('운송장번호는 숫자만 입력할 수 있습니다.', 'error');
+      return;
+    }
+    handleStatusChange(trackingModal, OrderStatus.SHIPPING, trackingNumber, carrierInput);
     setTrackingModal(null);
     setTrackingInput('');
     setCarrierInput(TRACKING.defaultCarrier);

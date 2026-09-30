@@ -298,6 +298,9 @@ export class OrderService {
     if (!this.isValidStatus(status)) {
       throw Object.assign(new Error('유효하지 않은 상태입니다.'), { status: 400 });
     }
+    if (options.trackingNumber && !/^\d+$/.test(options.trackingNumber)) {
+      throw Object.assign(new Error('운송장번호는 숫자만 입력할 수 있습니다.'), { status: 400 });
+    }
 
     // 현재 주문 상태 조회 (재고 차감 판단용)
     const { data: currentOrder } = await supabaseAdmin
