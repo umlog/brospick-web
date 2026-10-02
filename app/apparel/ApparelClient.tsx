@@ -34,9 +34,10 @@ function getRepresentativeImage(category: ProductCategory): string {
 
 interface Props {
   initialPrices: Record<number, DbPrice>;
+  categoryOrder: ProductCategory[];
 }
 
-export default function ApparelClient({ initialPrices }: Props) {
+export default function ApparelClient({ initialPrices, categoryOrder }: Props) {
   const [activeCategory, setActiveCategory] = useState<Filter>(ALL);
   const [sortMode, setSortMode] = useState<SortMode>('recommended');
   const [dbPrices] = useState<Record<number, DbPrice>>(initialPrices);
@@ -59,7 +60,7 @@ export default function ApparelClient({ initialPrices }: Props) {
   }, []);
 
   const productCategories = new Set(apparelProductList.map((p) => p.category));
-  const usedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((cat) => productCategories.has(cat));
+  const usedCategories = categoryOrder.filter((cat) => productCategories.has(cat));
 
   const baseList = activeCategory === ALL
     ? apparelProductList

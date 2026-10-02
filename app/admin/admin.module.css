@@ -2049,6 +2049,27 @@
   opacity: 0.7;
 }
 
+.pmCategoryOrderBtn {
+  border-style: dashed;
+}
+
+.pmCategoryEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pmCategoryChip {
+  cursor: grab;
+  touch-action: none;
+}
+
+.pmCategoryEditorActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .pmTitle {
   font-size: var(--size-base);
   font-weight: 700;

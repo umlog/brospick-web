@@ -19,9 +19,10 @@ const BOOTSKIN_CARDS_IN_ALL = 2;
 
 interface Props {
   initialPrices: Record<number, { price: number; original_price: number | null; coming_soon: boolean; launched_at: string | null; sort_order: number | null }>;
+  categoryOrder: ProductCategory[];
 }
 
-export default function Sportswear({ initialPrices }: Props) {
+export default function Sportswear({ initialPrices, categoryOrder }: Props) {
   const [active, setActive] = useState<Filter>(ALL);
   const scrollRef = useRef<HTMLDivElement>(null);
   const dbPrices = initialPrices;
@@ -66,7 +67,7 @@ export default function Sportswear({ initialPrices }: Props) {
 
   // 부츠스킨은 전용 섹션(BootskinPromo)과 별개로 이 목록에도 노출한다 — 주력 상품이라 진입점을 둘 다 둔다
   const productCategories = new Set(productList.map((p) => p.category));
-  const orderedCategories = (Object.keys(CATEGORY_LABELS) as ProductCategory[]).filter((c) => productCategories.has(c));
+  const orderedCategories = categoryOrder.filter((c) => productCategories.has(c));
 
   const sorted = [...productList].sort((a, b) => {
     const aDb = dbPrices[a.id];

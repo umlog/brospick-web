@@ -204,6 +204,31 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'socks': '양말',
 };
 
+// 카테고리 기본 노출 순서 (가을·겨울 기준 — 아우터·긴 옷이 앞).
+// 어드민 상품 탭에서 순서를 저장하면 그 값이 우선한다 (lib/category-order.ts)
+export const DEFAULT_CATEGORY_ORDER: ProductCategory[] = [
+  'boot-skin',
+  'outer',
+  'training-top',
+  'set',
+  'top',
+  'bottom',
+  'socks',
+  'taping',
+];
+
+/**
+ * 저장된 순서를 지금 코드의 카테고리 목록에 맞춘다.
+ * 없어진 카테고리는 버리고, 저장 이후 새로 생긴 카테고리는 기본 순서대로 뒤에 붙인다.
+ */
+export function resolveCategoryOrder(saved: unknown): ProductCategory[] {
+  if (!Array.isArray(saved)) return DEFAULT_CATEGORY_ORDER;
+  const valid = [...new Set(saved)].filter(
+    (cat): cat is ProductCategory => typeof cat === 'string' && cat in CATEGORY_LABELS
+  );
+  const missing = DEFAULT_CATEGORY_ORDER.filter((cat) => !valid.includes(cat));
+  return [...valid, ...missing];
+}
 
 export interface Product {
   id: number;          // DB FK용 숫자 ID

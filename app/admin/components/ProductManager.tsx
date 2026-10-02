@@ -21,6 +21,8 @@ import { CSS } from '@dnd-kit/utilities';
 import { products as staticProducts, CATEGORY_LABELS, getStockKeys, getImplicitColor } from '@/lib/products';
 import type { useProductCatalog } from '../hooks/useProductCatalog';
 import type { useProductSizes } from '../hooks/useProductSizes';
+import { useCategoryOrder } from '../hooks/useCategoryOrder';
+import { CategoryOrderEditor } from './CategoryOrderEditor';
 import type { AdminProduct, ProductSize } from '@/lib/domain/types';
 import { showToast } from '../lib/toast';
 import styles from '../admin.module.css';
@@ -386,6 +388,8 @@ export function ProductManager({
   const [orderDirty, setOrderDirty] = useState(false);
   const [orderSaving, setOrderSaving] = useState(false);
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [editingCategoryOrder, setEditingCategoryOrder] = useState(false);
+  const { order: categoryOrder, saving: categoryOrderSaving, saveOrder: saveCategoryOrder } = useCategoryOrder();
 
   const { products, loading: catalogLoading, saving: catalogSaving, updateProduct, reorderProducts, unsynced, missingSizes, syncing, syncProducts } = catalogState;
   const { sizes, loading: sizesLoading, updateSize, updateStock, updateDelayText, fetchSizes } = sizesState;
@@ -442,7 +446,7 @@ export function ProductManager({
   };
 
   const activeProduct = activeId ? products.find((p) => p.id === activeId) : null;
-  const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
+  const categories = categoryOrder.map((key) => [key, CATEGORY_LABELS[key]] as [string, string]);
 
   if (catalogLoading || sizesLoading) {
     return <p className={styles.catalogEmpty}>불러오는 중...</p>;
@@ -478,6 +482,14 @@ export function ProductManager({
         </div>
       )}
 
+      {editingCategoryOrder ? (
+        <CategoryOrderEditor
+          order={categoryOrder}
+          saving={categoryOrderSaving}
+          onSave={saveCategoryOrder}
+          onClose={() => setEditingCategoryOrder(false)}
+        />
+      ) : (
       <div className={styles.catalogFilterTabs}>
         <button
           className={`${styles.catalogFilterTab} ${selectedCategory === 'all' ? styles.catalogFilterTabActive : ''}`}
@@ -498,7 +510,14 @@ export function ProductManager({
             </button>
           );
         })}
+        <button
+          className={`${styles.catalogFilterTab} ${styles.pmCategoryOrderBtn}`}
+          onClick={() => setEditingCategoryOrder(true)}
+        >
+          ⇄ 카테고리 순서
+        </button>
       </div>
+      )}
 
       {!isDragEnabled && (
         <p className={styles.pmDragHint}>순서 변경은 전체 탭에서 가능합니다.</p>

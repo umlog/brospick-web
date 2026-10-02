@@ -9,6 +9,7 @@ import Sportswear from '../components/sections/Sportswear';
 import BrandStory from '../components/sections/BrandStory';
 import ScrollHint from '../components/ScrollHint';
 import { supabase } from '@/lib/supabase';
+import { getCategoryOrder } from '@/lib/category-order';
 
 export const metadata: Metadata = {
   title: '브로스픽 이야기 | 브로스픽 BROSPICK',
@@ -26,12 +27,12 @@ async function getPrices(): Promise<Record<number, { price: number; original_pri
 }
 
 export default async function StoryPage() {
-  const prices = await getPrices();
+  const [prices, categoryOrder] = await Promise.all([getPrices(), getCategoryOrder()]);
 
   return (
     <>
       <ScrollHint />
-      <Sportswear initialPrices={prices} />
+      <Sportswear initialPrices={prices} categoryOrder={categoryOrder} />
       <BootskinPromo prices={prices} />
       <BrandStory />
       <EbookPromo />

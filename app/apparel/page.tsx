@@ -3,6 +3,7 @@ export const revalidate = 3600;
 
 import { cachedSupabase, CACHE_TAGS } from '@/lib/cache';
 import { productList } from '@/lib/products';
+import { getCategoryOrder } from '@/lib/category-order';
 import ApparelClient from './ApparelClient';
 
 async function getPrices() {
@@ -18,7 +19,7 @@ async function getPrices() {
 }
 
 export default async function ApparelPage() {
-  const prices = await getPrices();
+  const [prices, categoryOrder] = await Promise.all([getPrices(), getCategoryOrder()]);
 
   if (process.env.NODE_ENV === 'development') {
     for (const product of productList) {
@@ -28,5 +29,5 @@ export default async function ApparelPage() {
     }
   }
 
-  return <ApparelClient initialPrices={prices} />;
+  return <ApparelClient initialPrices={prices} categoryOrder={categoryOrder} />;
 }

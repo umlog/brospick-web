@@ -194,6 +194,17 @@ export const apiClient = {
       }),
   },
 
+  categories: {
+    getOrder: () =>
+      request<{ order: string[] }>('/api/admin/categories/order'),
+
+    saveOrder: (order: string[]) =>
+      request<{ order: string[] }>('/api/admin/categories/order', {
+        method: 'PUT',
+        body: { order },
+      }),
+  },
+
   blog: {
     list: () =>
       request<{ posts: BlogPost[] }>('/api/admin/blog'),
