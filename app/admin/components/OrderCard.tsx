@@ -152,7 +152,7 @@ export function OrderCard({
             {order.order_items.map((item) => (
               <div key={item.id} className={styles.detailItem}>
                 <span className={styles.detailItemName}>
-                  {item.product_name} <OrderItemSize size={item.size} />
+                  {item.product_name} <OrderItemSize size={item.size} productId={item.product_id} />
                   <span className={styles.detailItemPrice}>₩{item.price.toLocaleString()}</span>
                 </span>
                 <span className={styles.detailItemQty}>{item.quantity}개</span>

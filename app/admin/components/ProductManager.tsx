@@ -18,7 +18,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { products as staticProducts, CATEGORY_LABELS } from '@/lib/products';
+import { products as staticProducts, CATEGORY_LABELS, getStockKeys, getImplicitColor } from '@/lib/products';
 import type { useProductCatalog } from '../hooks/useProductCatalog';
 import type { useProductSizes } from '../hooks/useProductSizes';
 import type { AdminProduct, ProductSize } from '@/lib/domain/types';
@@ -32,6 +32,12 @@ const STATUS_LABELS: Record<string, string> = {
   available: '재고',
   sold_out: '품절',
   delayed: '지연',
+};
+
+/** 재고 줄에 붙이는 색상칩 — 주문 목록(OrderItemSize)과 같은 모양 */
+const PM_COLOR_CHIP_CLASS: Record<string, string> = {
+  Black: styles.colorChipBlack,
+  White: styles.colorChipWhite,
 };
 
 // ── SizeRow ──────────────────────────────────────────────────────
@@ -51,6 +57,8 @@ function SizeRow({
   onDelayTextUpdate: (id: number, size: string, text: string | null) => Promise<void>;
 }) {
   const isNew = !sizeData;
+  // 블랙/화이트가 섞인 목록에서 줄마다 색이 바로 보이게 한다 (묶음 제목만으로는 스크롤하면 놓친다)
+  const rowColor = size.includes(' — ') ? size.split(' — ')[1] : getImplicitColor(productId, size);
   const currentStatus = sizeData?.status ?? 'available';
   const [stock, setStock] = useState(sizeData?.stock ?? 0);
   const [stockDirty, setStockDirty] = useState(false);
@@ -85,6 +93,9 @@ function SizeRow({
     <div className={styles.pmSizeRow}>
       <span className={styles.pmSizeLabel}>
         {size.includes(' — ') ? size.split(' — ')[0] : size}
+        {rowColor && PM_COLOR_CHIP_CLASS[rowColor] && (
+          <span className={`${styles.colorChip} ${PM_COLOR_CHIP_CLASS[rowColor]}`}>{rowColor.toUpperCase()}</span>
+        )}
       </span>
 
       <div className={styles.pmStatusToggle}>
@@ -162,6 +173,7 @@ function ProductCard({
   catalogSaving,
   sizes,
   staticSizes,
+  defaultColor,
   thumbnail,
   dragHandleProps,
   onCatalogUpdate,
@@ -173,6 +185,8 @@ function ProductCard({
   catalogSaving: boolean;
   sizes: ProductSize[];
   staticSizes: string[];
+  /** 색상 표기가 없는 옵션의 색 — 일부 옵션만 다른 색이 있는 상품에서 기본색 묶음에 제목을 단다 */
+  defaultColor?: string;
   thumbnail?: string;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
   onCatalogUpdate: (id: number, updates: { name?: string; price?: number; original_price?: number | null; coming_soon?: boolean }) => Promise<void>;
@@ -301,8 +315,12 @@ function ProductCard({
               ? staticSizes[idx - 1].split(' — ')[1]
               : null;
             const showColorHeader = colorPart !== null && colorPart !== prevColorPart;
+            const showDefaultColorHeader = idx === 0 && colorPart === null && defaultColor !== undefined;
             return (
               <React.Fragment key={size}>
+                {showDefaultColorHeader && (
+                  <div className={styles.pmColorGroupHeader}>{defaultColor}</div>
+                )}
                 {showColorHeader && (
                   <div className={styles.pmColorGroupHeader}>{colorPart}</div>
                 )}
@@ -369,8 +387,14 @@ export function ProductManager({
   const [orderSaving, setOrderSaving] = useState(false);
   const [activeId, setActiveId] = useState<number | null>(null);
 
-  const { products, loading: catalogLoading, saving: catalogSaving, updateProduct, reorderProducts } = catalogState;
-  const { sizes, loading: sizesLoading, updateSize, updateStock, updateDelayText } = sizesState;
+  const { products, loading: catalogLoading, saving: catalogSaving, updateProduct, reorderProducts, unsynced, missingSizes, syncing, syncProducts } = catalogState;
+  const { sizes, loading: sizesLoading, updateSize, updateStock, updateDelayText, fetchSizes } = sizesState;
+  const needsSync = unsynced.length > 0 || missingSizes.length > 0;
+
+  const handleSync = async () => {
+    await syncProducts();
+    await fetchSizes();
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -442,6 +466,18 @@ export function ProductManager({
         )}
       </div>
 
+      {needsSync && (
+        <div className={styles.pmPageHeader}>
+          <p className={styles.pmDesc}>
+            코드에만 있고 DB에 없는 항목이 있습니다 — 상품 {unsynced.length}개 · 옵션 {missingSizes.length}개.
+            동기화하면 품절 상태로 등록되고, 재고를 입력해야 판매됩니다.
+          </p>
+          <button className={styles.pmSaveOrderBtn} onClick={handleSync} disabled={syncing}>
+            {syncing ? '동기화 중…' : '동기화'}
+          </button>
+        </div>
+      )}
+
       <div className={styles.catalogFilterTabs}>
         <button
           className={`${styles.catalogFilterTab} ${selectedCategory === 'all' ? styles.catalogFilterTabActive : ''}`}
@@ -488,13 +524,8 @@ export function ProductManager({
                     isDragEnabled={isDragEnabled}
                     catalogSaving={catalogSaving === product.id}
                     sizes={sizes.filter((s) => s.product_id === product.id)}
-                    staticSizes={
-                      staticProduct?.setParts?.length
-                        ? staticProduct.setParts.flatMap(part => part.sizes.map(s => `${s} — ${part.label}`))
-                        : staticProduct?.colors?.length
-                        ? staticProduct.colors.flatMap(c => staticProduct.sizes.map(s => `${s} — ${c.name}`))
-                        : (staticProduct?.sizes ?? [])
-                    }
+                    staticSizes={staticProduct ? getStockKeys(staticProduct) : []}
+                    defaultColor={staticProduct?.colorSizes ? staticProduct.colors?.[0]?.name : undefined}
                     thumbnail={staticProduct?.images?.[0]}
                     onCatalogUpdate={updateProduct}
                     onStatusChange={updateSize}

@@ -177,12 +177,15 @@ export const apiClient = {
       }),
 
     checkUnsynced: () =>
-      request<{ unsynced: { id: number; slug: string; name: string; category: string }[] }>(
+      request<{
+        unsynced: { id: number; slug: string; name: string; category: string }[];
+        missingSizes: { product_id: number; size: string }[];
+      }>(
         '/api/admin/products/sync'
       ),
 
     sync: () =>
-      request<{ inserted: number }>('/api/admin/products/sync', { method: 'POST' }),
+      request<{ inserted: number; insertedSizes: number }>('/api/admin/products/sync', { method: 'POST' }),
 
     reorder: (orders: { id: number; sort_order: number }[]) =>
       request<{ ok: true }>('/api/admin/products/reorder', {

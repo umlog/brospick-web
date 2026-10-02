@@ -11,6 +11,7 @@ import { ReturnStatus, SizeStatus, ReturnType } from './enums';
 
 export interface OrderItem {
   id: string;
+  product_id?: number;
   product_name: string;
   size: string;
   quantity: number;

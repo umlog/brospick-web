@@ -117,10 +117,10 @@ function optionChipBox(
 
 /**
  * 장바구니·재고·주문 항목이 공유하는 옵션 문자열.
- * 색상이 있는 그룹은 `7 — Black` 형식이어야 어드민 색상칩과 재고 검증이 맞는다.
+ * 색상이 있는 옵션은 `7 — Black` 형식이어야 어드민 색상칩과 재고 검증이 맞는다.
  */
-function toOptionValue(group: PreviewGroup, value: string, tone: 'Black' | 'White'): string {
-  return group.toned ? `${value} — ${tone}` : value;
+function toOptionValue(group: PreviewGroup, value: string): string {
+  return group.options.find((option) => option.value === value)?.optionValue ?? value;
 }
 
 export default function BootskinPreview({ prices, stock }: Props) {
@@ -135,7 +135,7 @@ export default function BootskinPreview({ prices, stock }: Props) {
   const activeGroup = groups.find((group) => group.key === activeTab) ?? groups[0];
 
   const soldOutOf = (group: PreviewGroup, value: string): boolean => {
-    const row = stock[`${group.productId}-${toOptionValue(group, value, tone)}`];
+    const row = stock[`${group.productId}-${toOptionValue(group, value)}`];
     return !!row && (row.status === 'sold_out' || row.stock <= 0);
   };
 
@@ -180,7 +180,7 @@ export default function BootskinPreview({ prices, stock }: Props) {
         id: group.productId,
         name: priceRow.name ?? group.productName,
         price: priceRow.price,
-        size: toOptionValue(group, value, tone),
+        size: toOptionValue(group, value),
         image: group.thumbnail,
         quantity: 1,
       });
@@ -208,8 +208,6 @@ export default function BootskinPreview({ prices, stock }: Props) {
         {slotGroups.map((group) => {
           const options = findSelectedOptions(group);
           if (options.length === 0) return null;
-          // 흰 축구화 위의 화이트 스티커는 윤곽이 없으면 보이지 않는다
-          const isLight = group.toned && tone === 'White';
           return (
             // 같은 그룹(예: 이니셜 3글자)은 한 덩어리로 묶어 나란히 붙인다
             <span
@@ -221,8 +219,9 @@ export default function BootskinPreview({ prices, stock }: Props) {
                 const { plate } = option;
                 // 판이 있으면 그림자·등장 효과는 판이 맡는다.
                 // 인쇄된 국기는 평평하므로 태극과 괘가 깃면 위에 그림자를 지면 안 된다.
+                // 흰 축구화 위의 화이트 스티커는 윤곽이 없으면 보이지 않는다
                 const needsOutline =
-                  !plate && (isLight || isLightSticker(option.value));
+                  !plate && (option.light || isLightSticker(option.value));
                 // 생성물(public/_bootskin)은 next/image 최적화 대상이 아니라 그대로 쓴다
                 // eslint-disable-next-line @next/next/no-img-element
                 const sticker = (
@@ -344,7 +343,7 @@ export default function BootskinPreview({ prices, stock }: Props) {
             const isSoldOut = soldOutOf(activeGroup, option.value);
             // 화이트 스티커는 밝은 칩 위에서 보이지 않으므로 칩을 어둡게 깐다
             const needsDarkChip =
-              isLightSticker(option.value) || (activeGroup.toned && tone === 'White');
+              isLightSticker(option.value) || option.light;
             return (
               <button
                 key={option.value}
@@ -382,13 +381,13 @@ export default function BootskinPreview({ prices, stock }: Props) {
                   <li key={`${group.key}-${value}`} className={styles.previewChosenItem}>
                     <span className={styles.previewChosenLabel}>{group.label}</span>
                     <span className={styles.previewChosenValue}>
-                      {toOptionValue(group, value, tone)}
+                      {toOptionValue(group, value)}
                     </span>
                     <span className={styles.previewChosenPrice}>
                       ₩{(prices[group.productId]?.price ?? 0).toLocaleString()}
                     </span>
                     <Link
-                      href={`/bootskin/${group.slug}?option=${encodeURIComponent(toOptionValue(group, value, tone))}`}
+                      href={`/bootskin/${group.slug}?option=${encodeURIComponent(toOptionValue(group, value))}`}
                       className={styles.previewChosenLink}
                     >
                       자세히

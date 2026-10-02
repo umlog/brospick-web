@@ -7,6 +7,8 @@
 //   4. public/apparel/[category]/[slug]/ 폴더 만들고 이미지 넣기
 //   5. Supabase product_sizes 테이블에 새 product_id 행 추가
 
+import { stickerColorSizes, stickerSizeImages, stickerSizes, withStickerImages } from './bootskin-stickers';
+
 export const PRODUCT_FALLBACK_IMAGE = '/apparel/training-top/quarter-zip-training-top/thumb.png';
 
 // URL + 코드 식별자 (오타 방지용 타입 안전 상수)
@@ -202,6 +204,7 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'socks': '양말',
 };
 
+
 export interface Product {
   id: number;          // DB FK용 숫자 ID
   slug: ProductSlug;   // URL + 코드 식별자
@@ -225,6 +228,11 @@ export interface Product {
   sizeLabel?: string;                  // 사이즈 선택 헤더 텍스트 (기본값: '사이즈 선택')
   multiSelect?: boolean;               // true면 중복 선택 가능 (부츠스킨 등)
   colors?: ProductColor[];              // 색상 선택 (있으면 스와치 UI 표시, images는 공통 세부 이미지)
+  /**
+   * 색상이 일부 옵션에만 있는 상품용 — 색상 이름 → 그 색으로 파는 옵션 값.
+   * 여기 있는 색만 재고 키가 `값 — 색상`이 되고, 없는 색(기본색)은 값 그대로다. getStockKey 참고
+   */
+  colorSizes?: Record<string, string[]>;
   imageZoom?: boolean;                 // true면 썸네일 기본 scale 살짝 키움
   detailBanners?: string[];             // 상세 배너 이미지 배열 (jpg/png 모두 가능)
   beforeAfterImages?: { before: string; after: string; label?: string }; // Before/After 비교 슬라이더
@@ -1691,7 +1699,7 @@ export const products: Record<ProductSlug, Product> = {
     multiSelect: true,
     sizeLabel: '번호 선택',
     image: '/apparel/bootskin/number/1-number-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_NUMBER, [
       '/apparel/bootskin/number/1-number-detail.png',
       '/apparel/bootskin/number/2-number-detail.png',
       '/apparel/bootskin/number/3-number-detail.png',
@@ -1715,36 +1723,15 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/number/8-7-white.png',
       '/apparel/bootskin/number/9-8-white.png',
       '/apparel/bootskin/number/10-9-white.png',
-    ],
-    sizeImages: {
-      '0 — Black': '/apparel/bootskin/number/1-0.png',
-      '0 — White': '/apparel/bootskin/number/1-0-white.png',
-      '1 — Black': '/apparel/bootskin/number/2-1.png',
-      '1 — White': '/apparel/bootskin/number/2-1-white.png',
-      '2 — Black': '/apparel/bootskin/number/3-2.png',
-      '2 — White': '/apparel/bootskin/number/3-2-white.png',
-      '3 — Black': '/apparel/bootskin/number/4-3.png',
-      '3 — White': '/apparel/bootskin/number/4-3-white.png',
-      '4 — Black': '/apparel/bootskin/number/5-4.png',
-      '4 — White': '/apparel/bootskin/number/5-4-white.png',
-      '5 — Black': '/apparel/bootskin/number/6-5.png',
-      '5 — White': '/apparel/bootskin/number/6-5-white.png',
-      '6 — Black': '/apparel/bootskin/number/7-6.png',
-      '6 — White': '/apparel/bootskin/number/7-6-white.png',
-      '7 — Black': '/apparel/bootskin/number/8-7.png',
-      '7 — White': '/apparel/bootskin/number/8-7-white.png',
-      '8 — Black': '/apparel/bootskin/number/9-8.png',
-      '8 — White': '/apparel/bootskin/number/9-8-white.png',
-      '9 — Black': '/apparel/bootskin/number/10-9.png',
-      '9 — White': '/apparel/bootskin/number/10-9-white.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_NUMBER),
     colors: [
       { name: 'Black', hex: '#1a1a1a', images: ['/apparel/bootskin/number/1-0.png'] },
       { name: 'White', hex: '#f0f0f0', images: ['/apparel/bootskin/number/1-0-white.png'] },
     ],
     tagline: '부츠에 붙이는 숫자 스티커 — 0부터 9까지, 블랙과 화이트 중 선택하세요.',
     description: '축구화나 럭비화에 붙이는 숫자 부츠스킨입니다. 0부터 9까지 원하는 번호를 블랙/화이트 컬러로 중복 선택해 주문할 수 있습니다.',
-    sizes: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_NUMBER),
     features: [
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
       { label: '블랙 & 화이트 컬러', detail: ' — 어떤 화색에도 잘 어울리는 베이직 톤' },
@@ -1790,7 +1777,7 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/BootSkinBanner/14.png',
     ],
     image: '/apparel/bootskin/initial/1-initial-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_ALPHABET, [
       '/apparel/bootskin/initial/1-initial-detail.png',
       '/apparel/bootskin/initial/2-initial-detail.png',
       '/apparel/bootskin/initial/1-A.png',
@@ -1845,68 +1832,15 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/initial/25-X-white.png',
       '/apparel/bootskin/initial/26-Y-white.png',
       '/apparel/bootskin/initial/27-Z-white.png',
-    ],
-    sizeImages: {
-      'A — Black': '/apparel/bootskin/initial/1-A.png',
-      'A — White': '/apparel/bootskin/initial/1-A-white.png',
-      'B — Black': '/apparel/bootskin/initial/2-B.png',
-      'B — White': '/apparel/bootskin/initial/2-B-white.png',
-      'C — Black': '/apparel/bootskin/initial/3-C.png',
-      'C — White': '/apparel/bootskin/initial/3-C-white.png',
-      'D — Black': '/apparel/bootskin/initial/4-D.png',
-      'D — White': '/apparel/bootskin/initial/4-D-white.png',
-      'E — Black': '/apparel/bootskin/initial/5-E.png',
-      'E — White': '/apparel/bootskin/initial/5-E-white.png',
-      'F — Black': '/apparel/bootskin/initial/6-F.png',
-      'F — White': '/apparel/bootskin/initial/6-F-white.png',
-      'G — Black': '/apparel/bootskin/initial/7-G.png',
-      'G — White': '/apparel/bootskin/initial/7-G-white.png',
-      'H — Black': '/apparel/bootskin/initial/8-H.png',
-      'H — White': '/apparel/bootskin/initial/8-H-white.png',
-      'I — Black': '/apparel/bootskin/initial/9-I.png',
-      'I — White': '/apparel/bootskin/initial/9-I-white.png',
-      'J — Black': '/apparel/bootskin/initial/10-J.png',
-      'J — White': '/apparel/bootskin/initial/10-J-white.png',
-      'K — Black': '/apparel/bootskin/initial/11-K.png',
-      'K — White': '/apparel/bootskin/initial/11-K-white.png',
-      'L — Black': '/apparel/bootskin/initial/12-L.png',
-      'L — White': '/apparel/bootskin/initial/12-L-white.png',
-      'M — Black': '/apparel/bootskin/initial/13-M.png',
-      'M — White': '/apparel/bootskin/initial/13-M-white.png',
-      'N — Black': '/apparel/bootskin/initial/14-N.png',
-      'N — White': '/apparel/bootskin/initial/14-N-white.png',
-      'O — Black': '/apparel/bootskin/initial/15-O.png',
-      'O — White': '/apparel/bootskin/initial/15-O-white.png',
-      'P — Black': '/apparel/bootskin/initial/16-P.png',
-      'P — White': '/apparel/bootskin/initial/16-P-white.png',
-      'Q — Black': '/apparel/bootskin/initial/17-Q.png',
-      'Q — White': '/apparel/bootskin/initial/17-Q-white.png',
-      'R — Black': '/apparel/bootskin/initial/18-R.png',
-      'R — White': '/apparel/bootskin/initial/18-R-white.png',
-      'S — Black': '/apparel/bootskin/initial/19-S.png',
-      'S — White': '/apparel/bootskin/initial/19-S-white.png',
-      'T — Black': '/apparel/bootskin/initial/20-T.png',
-      'T — White': '/apparel/bootskin/initial/20-T-white.png',
-      'U — Black': '/apparel/bootskin/initial/21-U.png',
-      'U — White': '/apparel/bootskin/initial/21-U-white.png',
-      'V — Black': '/apparel/bootskin/initial/22-V.png',
-      'V — White': '/apparel/bootskin/initial/22-V-white.png',
-      'W — Black': '/apparel/bootskin/initial/23-W.png',
-      'W — White': '/apparel/bootskin/initial/24-W-white.png',
-      'X — Black': '/apparel/bootskin/initial/24-X.png',
-      'X — White': '/apparel/bootskin/initial/25-X-white.png',
-      'Y — Black': '/apparel/bootskin/initial/25-Y.png',
-      'Y — White': '/apparel/bootskin/initial/26-Y-white.png',
-      'Z — Black': '/apparel/bootskin/initial/26-Z.png',
-      'Z — White': '/apparel/bootskin/initial/27-Z-white.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_ALPHABET),
     colors: [
       { name: 'Black', hex: '#1a1a1a', images: ['/apparel/bootskin/initial/1-A.png'] },
       { name: 'White', hex: '#f0f0f0', images: ['/apparel/bootskin/initial/1-A-white.png'] },
     ],
     tagline: '부츠에 붙이는 이니셜 스티커 — A부터 Z까지, 블랙과 화이트 중 선택하세요.',
     description: '축구화나 럭비화에 붙이는 이니셜 부츠스킨입니다. A부터 Z까지 원하는 글자를 블랙/화이트 컬러로 중복 선택해 주문할 수 있습니다.',
-    sizes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_ALPHABET),
     features: [
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
       { label: '블랙 & 화이트 컬러', detail: ' — 어떤 화색에도 잘 어울리는 베이직 톤' },
@@ -1952,7 +1886,7 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/BootSkinBanner/14.png',
     ],
     image: '/apparel/bootskin/faith-symbol/1-cross-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_SYMBOL, [
       '/apparel/bootskin/faith-symbol/1-cross-detail.png',
       '/apparel/bootskin/faith-symbol/1-CROSS.png',
       '/apparel/bootskin/faith-symbol/2-JESUS-detail.png',
@@ -1969,22 +1903,16 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/faith-symbol/8-LORD-IS-ALWAYS-WITH-YOU.png',
       '/apparel/bootskin/faith-symbol/9-THANK-GOD.png',
       '/apparel/bootskin/faith-symbol/10-GOD-IS-FAITHFUL.png',
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_SYMBOL),
+    colors: [
+      { name: 'Black', hex: '#1a1a1a', images: ['/apparel/bootskin/faith-symbol/1-CROSS.png'] },
+      { name: 'White', hex: '#f0f0f0', images: ['/apparel/bootskin/faith-symbol/1-CROSS-white.png'] },
     ],
-    sizeImages: {
-      'CROSS': '/apparel/bootskin/faith-symbol/1-cross-detail.png',
-      'JESUS': '/apparel/bootskin/faith-symbol/2-JESUS-detail.png',
-      'PHIL 4:13': '/apparel/bootskin/faith-symbol/3-PHIL-413-detail.png',
-      '100% JESUS': '/apparel/bootskin/faith-symbol/4-100percent-JESUS-detail.png',
-      'GOD': '/apparel/bootskin/faith-symbol/5-GOD.png',
-      'BELEVE': '/apparel/bootskin/faith-symbol/6-BELEVE-detail.png',
-      'GLORY TO GOD': '/apparel/bootskin/faith-symbol/7-GLORY-TO-GOD.png',
-      'LORD IS ALWAYS WITH YOU': '/apparel/bootskin/faith-symbol/8-LORD-IS-ALWAYS-WITH-YOU.png',
-      'THANK GOD': '/apparel/bootskin/faith-symbol/9-THANK-GOD.png',
-      'GOD IS FAITHFUL': '/apparel/bootskin/faith-symbol/10-GOD-IS-FAITHFUL.png',
-    },
+    colorSizes: stickerColorSizes(PRODUCT_SLUGS.BOOTSKIN_SYMBOL),
     tagline: '믿음을 부츠에 — 십자가, JESUS, 빌립보서 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD, GOD IS FAITHFUL 심볼 스티커.',
     description: '축구화나 럭비화에 붙이는 신앙 심볼 부츠스킨입니다. CROSS, JESUS, PHIL 4:13, 100% JESUS, GOD, BELEVE, GLORY TO GOD, LORD IS ALWAYS WITH YOU, THANK GOD, GOD IS FAITHFUL 중 원하는 심볼을 선택해 주문하세요.',
-    sizes: ['CROSS', 'JESUS', 'PHIL 4:13', '100% JESUS', 'GOD', 'BELEVE', 'GLORY TO GOD', 'LORD IS ALWAYS WITH YOU', 'THANK GOD', 'GOD IS FAITHFUL'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_SYMBOL),
     features: [
       { label: '믿음을 담은 디자인', detail: ' — 경기장에서 믿음을 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -1996,7 +1924,7 @@ export const products: Record<ProductSlug, Product> = {
       ],
       design: [
         { title: '신앙 심볼 디자인', description: '십자가, JESUS, 빌립보서 4:13, 100% JESUS — 경기장에서 믿음을 표현.' },
-        { title: '블랙 컬러', description: '어떤 부츠 색상에도 잘 어울리는 베이직 블랙.' },
+        { title: '블랙 & 화이트 컬러', description: '기본은 베이직 블랙. CROSS·JESUS·PHIL 4:13·100% JESUS는 화이트도 선택 가능.' },
       ],
       material: '방수 접착 소재.',
     },
@@ -2070,22 +1998,22 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/BootSkinBanner/14.png',
     ],
     image: '/apparel/bootskin/nation/1-KOREA-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_KOREA, [
       '/apparel/bootskin/nation/1-KOREA-detail.png',
       '/apparel/bootskin/nation/1-KOREA.png',
       '/apparel/bootskin/nation/2-nation-flag.png',
       '/apparel/bootskin/nation/3-nation-flag-circle.png',
       '/apparel/bootskin/nation/4-BRAZIL.png',
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_KOREA),
+    colors: [
+      { name: 'Black', hex: '#1a1a1a', images: ['/apparel/bootskin/nation/1-KOREA.png'] },
+      { name: 'White', hex: '#f0f0f0', images: ['/apparel/bootskin/nation/1-KOREA-white.png'] },
     ],
-    sizeImages: {
-      'KOREA': '/apparel/bootskin/nation/1-KOREA.png',
-      '태극기': '/apparel/bootskin/nation/2-nation-flag.png',
-      '태극기 원형': '/apparel/bootskin/nation/3-nation-flag-circle.png',
-      '브라질': '/apparel/bootskin/nation/4-BRAZIL.png',
-    },
+    colorSizes: stickerColorSizes(PRODUCT_SLUGS.BOOTSKIN_KOREA),
     tagline: '국기를 부츠에 — 태극기, KOREA, 브라질 국기 스티커.',
     description: '축구화나 럭비화에 붙이는 국기 부츠스킨입니다. 태극기, 태극기 원형, KOREA, 브라질 국기 중 원하는 스타일을 선택해 주문하세요.',
-    sizes: ['KOREA', '태극기', '태극기 원형', '브라질'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_KOREA),
     features: [
       { label: '국가 아이덴티티', detail: ' — 경기장에서 응원하는 나라를 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2097,7 +2025,7 @@ export const products: Record<ProductSlug, Product> = {
       ],
       design: [
         { title: '국기 디자인', description: '태극기, KOREA 레터링, 브라질 국기 — 경기장에서 국가를 표현.' },
-        { title: '원본 컬러', description: '국기는 실제 색 그대로, KOREA 레터링은 베이직 블랙.' },
+        { title: '원본 컬러', description: '국기는 실제 색 그대로, KOREA 레터링은 블랙·화이트 중 선택.' },
       ],
       material: '방수 접착 소재.',
     },
@@ -2571,20 +2499,16 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/BootSkinBanner/14.png',
     ],
     image: '/apparel/bootskin/family/1-DAD-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_FAMILY, [
       '/apparel/bootskin/family/1-DAD-detail.png',
       '/apparel/bootskin/family/1-DAD.png',
       '/apparel/bootskin/family/2-MOM.png',
       '/apparel/bootskin/family/3-FAMILY.png',
-    ],
-    sizeImages: {
-      'DAD': '/apparel/bootskin/family/1-DAD.png',
-      'MOM': '/apparel/bootskin/family/2-MOM.png',
-      'FAMILY': '/apparel/bootskin/family/3-FAMILY.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_FAMILY),
     tagline: '가족을 부츠에 — DAD, MOM, FAMILY 심볼 스티커.',
     description: '축구화나 럭비화에 붙이는 가족 부츠스킨입니다. DAD, MOM, FAMILY 중 원하는 스타일을 선택해 주문하세요.',
-    sizes: ['DAD', 'MOM', 'FAMILY'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_FAMILY),
     features: [
       { label: '가족을 담은 디자인', detail: ' — 경기장에서 가족을 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2631,7 +2555,7 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/BootSkinBanner/14.png',
     ],
     image: '/apparel/bootskin/symbol/1-lightning-detail.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_SYMBOLS, [
       '/apparel/bootskin/symbol/1-lightning-detail.png',
       '/apparel/bootskin/symbol/4-crown-detail.png',
       '/apparel/bootskin/symbol/1-lightning-black.png',
@@ -2663,41 +2587,11 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/symbol/27-skull.png',
       '/apparel/bootskin/symbol/28-alien.png',
       '/apparel/bootskin/symbol/29-ghost.png',
-    ],
-    sizeImages: {
-      '⚡-black': '/apparel/bootskin/symbol/1-lightning-black.png',
-      '⚡-color': '/apparel/bootskin/symbol/2-lightning-color.png',
-      '⚡-white': '/apparel/bootskin/symbol/3-lightning-white.png',
-      '👑-black': '/apparel/bootskin/symbol/4-crown-black.png',
-      '👑-white': '/apparel/bootskin/symbol/5-crown-white.png',
-      '🤍-white': '/apparel/bootskin/symbol/6-heart-white.png',
-      '❤️-black': '/apparel/bootskin/symbol/7-heart-black.png',
-      '🙏-color': '/apparel/bootskin/symbol/8-pray-color.png',
-      '🙏-white': '/apparel/bootskin/symbol/9-pray-white.png',
-      '🔥-color': '/apparel/bootskin/symbol/10-fire-color.png',
-      '🔥-white': '/apparel/bootskin/symbol/11-fire-white.png',
-      '⭐-color': '/apparel/bootskin/symbol/12-star-color.png',
-      '⭐-black': '/apparel/bootskin/symbol/13-star-black.png',
-      '⭐-white': '/apparel/bootskin/symbol/14-star-white.png',
-      '🏆-color': '/apparel/bootskin/symbol/15-world-cup-trophy.png',
-      'GOAT-black': '/apparel/bootskin/symbol/16-GOAT.png',
-      '😶‍🌫️-color': '/apparel/bootskin/symbol/17-cloud-face.png',
-      '🥵-color': '/apparel/bootskin/symbol/18-hot-face.png',
-      '😈-color': '/apparel/bootskin/symbol/19-devil.png',
-      '🫡-color': '/apparel/bootskin/symbol/20-salute.png',
-      '🤩-color': '/apparel/bootskin/symbol/21-star-eyes.png',
-      '🤫-color': '/apparel/bootskin/symbol/22-shush.png',
-      '😡-color': '/apparel/bootskin/symbol/23-angry.png',
-      '🥶-color': '/apparel/bootskin/symbol/24-cold-face.png',
-      '🥱-color': '/apparel/bootskin/symbol/25-yawn.png',
-      '🤭-color': '/apparel/bootskin/symbol/26-hand-over-mouth.png',
-      '☠️-color': '/apparel/bootskin/symbol/27-skull.png',
-      '👽-color': '/apparel/bootskin/symbol/28-alien.png',
-      '👻-color': '/apparel/bootskin/symbol/29-ghost.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_SYMBOLS),
     tagline: '감정을 부츠에 — 번개, 왕관, 하트, 트로피부터 이모지 표정까지.',
     description: '축구화나 럭비화에 붙이는 심볼 부츠스킨입니다. ⚡ 번개, 👑 왕관, ❤️ 하트, 🙏 기도, 🔥 불꽃, ⭐ 별, 🏆 트로피, GOAT와 😈 악마, 🤩 별눈, ☠️ 해골, 👽 외계인, 👻 유령 등 이모지 표정 중 원하는 심볼과 스타일을 선택해 주문하세요.',
-    sizes: ['⚡-black', '⚡-color', '⚡-white', '👑-black', '👑-white', '🤍-white', '❤️-black', '🙏-color', '🙏-white', '🔥-color', '🔥-white', '⭐-color', '⭐-black', '⭐-white', '🏆-color', 'GOAT-black', '😶‍🌫️-color', '🥵-color', '😈-color', '🫡-color', '🤩-color', '🤫-color', '😡-color', '🥶-color', '🥱-color', '🤭-color', '☠️-color', '👽-color', '👻-color'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_SYMBOLS),
     features: [
       { label: '다양한 심볼 디자인', detail: ' — 번개, 왕관, 하트, 트로피, GOAT부터 이모지 표정까지' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2785,7 +2679,7 @@ export const products: Record<ProductSlug, Product> = {
     },
     // 상세 배너는 이 상품 전용 이미지가 준비되면 추가한다. 지금은 구매만 열어둔다.
     image: '/apparel/bootskin/position/1-ST.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_POSITION, [
       '/apparel/bootskin/position/1-ST.png',
       '/apparel/bootskin/position/2-FW.png',
       '/apparel/bootskin/position/3-GK.png',
@@ -2794,20 +2688,11 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/position/6-MF.png',
       '/apparel/bootskin/position/7-RW.png',
       '/apparel/bootskin/position/8-LW.png',
-    ],
-    sizeImages: {
-      'ST': '/apparel/bootskin/position/1-ST.png',
-      'FW': '/apparel/bootskin/position/2-FW.png',
-      'GK': '/apparel/bootskin/position/3-GK.png',
-      'CB': '/apparel/bootskin/position/4-CB.png',
-      'SB': '/apparel/bootskin/position/5-SB.png',
-      'MF': '/apparel/bootskin/position/6-MF.png',
-      'RW': '/apparel/bootskin/position/7-RW.png',
-      'LW': '/apparel/bootskin/position/8-LW.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_POSITION),
     tagline: '내 포지션을 부츠에 — ST, FW, GK, CB, SB, MF, RW, LW.',
     description: '축구화나 럭비화에 붙이는 포지션 부츠스킨입니다. ST, FW, GK, CB, SB, MF, RW, LW 중 원하는 포지션을 선택해 주문하세요.',
-    sizes: ['ST', 'FW', 'GK', 'CB', 'SB', 'MF', 'RW', 'LW'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_POSITION),
     features: [
       { label: '포지션 레터링', detail: ' — 그라운드에서 내 자리를 표현' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2839,7 +2724,7 @@ export const products: Record<ProductSlug, Product> = {
     },
     // 상세 배너는 이 상품 전용 이미지가 준비되면 추가한다. 지금은 구매만 열어둔다.
     image: '/apparel/bootskin/motivation/motivation-thumb.png',
-    images: [
+    images: withStickerImages(PRODUCT_SLUGS.BOOTSKIN_MOTIVATION, [
       '/apparel/bootskin/motivation/motivation-thumb.png',
       '/apparel/bootskin/motivation/1-AURA.png',
       '/apparel/bootskin/motivation/2-CHAMPION.png',
@@ -2852,23 +2737,11 @@ export const products: Record<ProductSlug, Product> = {
       '/apparel/bootskin/motivation/9-MINDSET.png',
       '/apparel/bootskin/motivation/10-READY.png',
       '/apparel/bootskin/motivation/11-FOCUS.png',
-    ],
-    sizeImages: {
-      'AURA': '/apparel/bootskin/motivation/1-AURA.png',
-      'CHAMPION': '/apparel/bootskin/motivation/2-CHAMPION.png',
-      'WINNER': '/apparel/bootskin/motivation/3-WINNER.png',
-      'GLORY': '/apparel/bootskin/motivation/4-GLORY.png',
-      'NO PAIN NO GAIN': '/apparel/bootskin/motivation/5-NO-PAIN-NO-GAIN.png',
-      'ALL IN': '/apparel/bootskin/motivation/6-ALL-IN.png',
-      'KEEP GOING': '/apparel/bootskin/motivation/7-KEEP-GOING.png',
-      'NEVER GIVE UP': '/apparel/bootskin/motivation/8-NEVER-GIVE-UP.png',
-      'MINDSET': '/apparel/bootskin/motivation/9-MINDSET.png',
-      'READY': '/apparel/bootskin/motivation/10-READY.png',
-      'FOCUS': '/apparel/bootskin/motivation/11-FOCUS.png',
-    },
+    ]),
+    sizeImages: stickerSizeImages(PRODUCT_SLUGS.BOOTSKIN_MOTIVATION),
     tagline: '경기 전 다짐을 부츠에 — NO PAIN NO GAIN, NEVER GIVE UP 외 9종.',
     description: '축구화나 럭비화에 붙이는 모티베이션 부츠스킨입니다. AURA, CHAMPION, WINNER, GLORY, NO PAIN NO GAIN, ALL IN, KEEP GOING, NEVER GIVE UP, MINDSET, READY, FOCUS 중 원하는 문구를 선택해 주문하세요.',
-    sizes: ['AURA', 'CHAMPION', 'WINNER', 'GLORY', 'NO PAIN NO GAIN', 'ALL IN', 'KEEP GOING', 'NEVER GIVE UP', 'MINDSET', 'READY', 'FOCUS'],
+    sizes: stickerSizes(PRODUCT_SLUGS.BOOTSKIN_MOTIVATION),
     features: [
       { label: '동기부여 문구 11종', detail: ' — 경기 전 스스로에게 거는 다짐' },
       { label: '방수 내구성 소재', detail: ' — 경기 중에도 떨어지지 않는 강한 접착력' },
@@ -2922,6 +2795,46 @@ export const bootskinProductList = productList.filter((p) => p.category === BOOT
 export function getProductHref(product: { slug: string; category: ProductCategory }): string {
   const base = product.category === BOOTSKIN_CATEGORY ? '/bootskin' : '/apparel';
   return `${base}/${product.slug}`;
+}
+
+/**
+ * 옵션 하나를 고른 색으로 살 때의 재고(product_sizes.size) 키. 그 색으로 팔지 않는 옵션이면 null.
+ * colorSizes가 있는 상품은 거기 적힌 색만 `값 — 색상`이고, 기본색은 값 그대로다.
+ */
+export function getStockKey(product: Product, size: string, colorName?: string): string | null {
+  if (!colorName || !product.colors?.length) return size;
+  if (!product.colorSizes) return `${size} — ${colorName}`;
+  const colorOnlySizes = product.colorSizes[colorName];
+  if (!colorOnlySizes) return size;
+  return colorOnlySizes.includes(size) ? `${size} — ${colorName}` : null;
+}
+
+/**
+ * 재고 키에 색상이 안 적힌 옵션의 실제 색 — 어드민 표시 전용.
+ * 일부 옵션만 다른 색이 있는 상품(colorSizes)에서, 다른 색 짝이 있는 옵션의 기본색을 돌려준다
+ * (`CROSS` → Black. 짝이 없는 `GOD`이나 풀컬러 `태극기`는 undefined).
+ * 고객 화면·주문 데이터의 값은 그대로 두고 어드민에서만 색상칩을 붙이는 데 쓴다.
+ */
+export function getImplicitColor(productId: number, size: string): string | undefined {
+  const product = Object.values(products).find((candidate) => candidate.id === productId);
+  if (!product?.colorSizes) return undefined;
+  const hasOtherColor = Object.values(product.colorSizes).some((sizes) => sizes.includes(size));
+  return hasOtherColor ? product.colors?.[0]?.name : undefined;
+}
+
+// 재고(product_sizes.size) 키 목록 — 세트는 `사이즈 — 파트`, 색상이 있으면 `사이즈 — 색상`, 아니면 사이즈 그대로
+export function getStockKeys(product: Product): string[] {
+  if (product.setParts?.length) {
+    return product.setParts.flatMap((part) => part.sizes.map((size) => `${size} — ${part.label}`));
+  }
+  if (product.colors?.length) {
+    return product.colors.flatMap((color) =>
+      product.sizes
+        .map((size) => getStockKey(product, size, color.name))
+        .filter((key): key is string => key !== null),
+    );
+  }
+  return product.sizes ?? [];
 }
 
 // 할인율 계산 헬퍼

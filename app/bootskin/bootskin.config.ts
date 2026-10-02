@@ -4,6 +4,7 @@
  * 여기에는 카피와 이미지 배치 정보만 둔다.
  */
 import { products, PRODUCT_SLUGS } from '@/lib/products';
+import { getStickerProduct, resolveSticker } from '@/lib/bootskin-stickers';
 
 const ASSET_ROOT = '/apparel/bootskin';
 
@@ -92,8 +93,12 @@ export interface StickerPlate {
 }
 
 export interface PreviewOption {
-  /** 상품 상세의 옵션 값과 동일한 문자열 */
+  /** 스티커 값. 색을 바꿔도 같은 스티커면 같은 값이다 */
   value: string;
+  /** 장바구니·재고·주문 항목이 공유하는 옵션 문자열 (`7 — Black`, `CROSS — White`, `GOD`) */
+  optionValue: string;
+  /** 화이트 아트웍인지 — 밝은 바탕에서는 윤곽이나 어두운 칩이 필요하다 */
+  light: boolean;
   /** 미리보기에 얹을 투명 스티커 (scripts/gen-bootskin-overlay.mjs 생성물) */
   overlay: string;
   /** 이 스티커의 실측 크기 */
@@ -112,83 +117,13 @@ export interface PreviewGroup {
   /** 장바구니에 담길 때 쓸 대표 이미지 */
   thumbnail: string;
   slot: PreviewSlot;
-  /** 블랙/화이트 두 벌이 있는 그룹인지 */
+  /** 블랙/화이트를 고를 수 있는 그룹인지 (일부 스티커만 화이트가 있어도 해당) */
   toned: boolean;
   /** 한 번에 고를 수 있는 개수. 이니셜·번호는 여러 장을 나란히 붙인다 */
   maxPicks: number;
   fit: StickerFit;
   options: PreviewOption[];
 }
-
-/**
- * 옵션 값 → 스티커 파일 매핑.
- *
- * 상품의 sizeImages를 그대로 쓸 수 없다. 일부 옵션(종교 등)은 목록용으로
- * 실착 사진(`*-detail.png`)을 가리키고 있어 축구화 위에 얹을 수 없기 때문이다.
- * 그래서 각 그룹의 sizes 순서에 맞춰 실제 스티커 파일명을 여기에 명시한다.
- *
- * 파일명은 scripts/gen-bootskin-overlay.mjs가 원본의 순번을 떼고 정규화한 이름이다.
- */
-type FileResolver = (value: string, index: number, tone: 'Black' | 'White') => string;
-
-/** 번호·이니셜은 값 그대로가 파일명이다 (7.png / W-white.png) */
-const tonedFile: FileResolver = (value, _index, tone) =>
-  `${value}${tone === 'White' ? '-white' : ''}.png`;
-
-const NATION_FILES = ['KOREA.png', 'nation-flag.png', 'nation-flag-circle.png', 'BRAZIL.png'];
-const FAMILY_FILES = ['DAD.png', 'MOM.png', 'FAMILY.png'];
-const POSITION_FILES = ['ST.png', 'FW.png', 'GK.png', 'CB.png', 'SB.png', 'MF.png', 'RW.png', 'LW.png'];
-const MOTIVATION_FILES = [
-  'AURA.png',
-  'CHAMPION.png',
-  'WINNER.png',
-  'GLORY.png',
-  'NO-PAIN-NO-GAIN.png',
-  'ALL-IN.png',
-  'KEEP-GOING.png',
-  'NEVER-GIVE-UP.png',
-  'MINDSET.png',
-  'READY.png',
-  'FOCUS.png',
-];
-const FAITH_FILES = [
-  'CROSS.png',
-  'JESUS.png',
-  'PHIL-4-13.png',
-  '100--JESUS.png',
-  'GOD.png',
-  'BELEVE.png',
-  'GLORY-TO-GOD.png',
-  'LORD-IS-ALWAYS-WITH-YOU.png',
-  'THANK-GOD.png',
-  'GOD-IS-FAITHFUL.png',
-];
-/**
- * 옵션별 실측 크기 [가로mm, 세로mm].
- *
- * 상품 원본 이미지(public/apparel/bootskin/<종류>/*.png) 하단에 인쇄된
- * "가로: N mm / 세로: N mm" 캡션을 그대로 옮긴 값이다. 눈대중이 아니므로
- * 화면을 보며 임의로 조정하지 말 것 — 크기가 달라 보이면 슬롯의 mmScale을 만진다.
- * 블랙·화이트·컬러 변형은 모두 같은 크기로 인쇄된다.
- */
-const NUMBER_MM: Record<string, StickerMm> = {
-  '0': [5, 6], '1': [3, 6], '2': [4.5, 6], '3': [4.5, 6], '4': [5.5, 6],
-  '5': [4.5, 6], '6': [4.5, 6], '7': [4.5, 6], '8': [5, 6], '9': [4.5, 6],
-};
-
-const INITIAL_MM: Record<string, StickerMm> = {
-  A: [6, 6], B: [4.5, 6], C: [4.5, 6], D: [5, 6], E: [4, 6], F: [4, 6], G: [5, 6],
-  H: [5, 6], I: [1.5, 6], J: [4.5, 6], K: [5, 6], L: [4, 6], M: [6.5, 6], N: [5, 6],
-  O: [5, 6], P: [5, 6], Q: [4, 6], R: [5, 6], S: [4.5, 6], T: [4.5, 6], U: [4.5, 6],
-  V: [5.5, 6], W: [8, 6], X: [5.5, 6], Y: [5.5, 6], Z: [4.5, 6],
-};
-
-const NATION_MM: Record<string, StickerMm> = {
-  KOREA: [17, 5],
-  '태극기': [10, 7.5],
-  '태극기 원형': [10, 10],
-  '브라질': [10, 7.5],
-};
 
 /**
  * 태극기의 흰 깃면 크기. 캡션의 10×7.5mm는 괘 끝에서 끝까지(잉크)라 깃면보다 작다.
@@ -202,155 +137,66 @@ const NATION_PLATES: Record<string, StickerPlate> = {
   '태극기 원형': { mm: [10, 10], round: true },
 };
 
-/**
- * 포지션·모티베이션·이모지 심볼은 캡션에 한 변만 인쇄돼 있다.
- * (포지션·모티베이션은 가로만, 이모지는 세로만)
- *
- * 빠진 변은 눈대중이 아니라 원본의 잉크 경계 상자 비율로 구했다 —
- * 캡션에 있는 변 ÷ (잉크 가로 ÷ 잉크 세로). 소수 첫째 자리에서 반올림했다.
- * 아트웍이 교체되면 비율이 달라지므로 이 표도 다시 재야 한다.
- */
-
-/** 포지션은 전부 가로 10mm로 인쇄된다. 글자 수가 같아도 자폭이 달라 세로가 제각각이다 */
-const POSITION_MM: Record<string, StickerMm> = {
-  ST: [10, 6], FW: [10, 5.1], GK: [10, 5.6], CB: [10, 5.8],
-  SB: [10, 5.9], MF: [10, 5.4], RW: [10, 4.8], LW: [10, 5],
-};
-
-const MOTIVATION_MM: Record<string, StickerMm> = {
-  AURA: [13, 2.9],
-  CHAMPION: [24, 3.4],
-  WINNER: [19, 3.4],
-  GLORY: [17, 3.6],
-  'NO PAIN NO GAIN': [33, 3],
-  'ALL IN': [15, 3.1],
-  'KEEP GOING': [28, 3.4],
-  'NEVER GIVE UP': [28, 2.8],
-  MINDSET: [21, 3.5],
-  READY: [17, 3.8],
-  FOCUS: [17, 3.6],
-};
-
-const FAMILY_MM: Record<string, StickerMm> = {
-  DAD: [10.9, 4],
-  MOM: [13, 4],
-  FAMILY: [19.6, 4],
-};
-
-const FAITH_MM: Record<string, StickerMm> = {
-  CROSS: [6, 10],
-  JESUS: [17, 5],
-  'PHIL 4:13': [23, 5],
-  '100% JESUS': [28, 4],
-  GOD: [10.8, 4],
-  BELEVE: [22, 4],
-  'GLORY TO GOD': [33, 4],
-  'LORD IS ALWAYS WITH YOU': [33, 8],
-  'THANK GOD': [20, 3],
-  'GOD IS FAITHFUL': [33, 3],
-};
-
-const SYMBOL_MM: Record<string, StickerMm> = {
-  '⚡-black': [7.5, 10], '⚡-color': [7.5, 10], '⚡-white': [7.5, 10],
-  '👑-black': [15, 10], '👑-white': [15, 10],
-  '🤍-white': [11, 10], '❤️-black': [11, 10],
-  '🙏-color': [8.7, 10], '🙏-white': [8.7, 10],
-  '🔥-color': [7, 8.5], '🔥-white': [7, 8.5],
-  '⭐-color': [10.5, 10], '⭐-black': [10.5, 10], '⭐-white': [10.5, 10],
-  '🏆-color': [6, 15],
-  'GOAT-black': [13.5, 4.5],
-  // 이모지는 전부 세로 8.5mm로 인쇄된다 (가로는 아트웍 비율에서 유도)
-  '😶‍🌫️-color': [8.5, 8.5], '🥵-color': [8.4, 8.5], '😈-color': [8.9, 8.5],
-  '🫡-color': [9.2, 8.5], '🤩-color': [9.3, 8.5], '🤫-color': [7.9, 8.5],
-  '😡-color': [8.7, 8.5], '🥶-color': [7.8, 8.5], '🥱-color': [8.4, 8.5],
-  '🤭-color': [8.4, 8.5], '☠️-color': [9.4, 8.5], '👽-color': [7.9, 8.5],
-  '👻-color': [9.9, 8.5],
-};
-
-const SYMBOL_FILES = [
-  'lightning-black.png',
-  'lightning-color.png',
-  'lightning-white.png',
-  'crown-black.png',
-  'crown-white.png',
-  'heart-white.png',
-  'heart-black.png',
-  'pray-color.png',
-  'pray-white.png',
-  'fire-color.png',
-  'fire-white.png',
-  'star-color.png',
-  'star-black.png',
-  'star-white.png',
-  'world-cup-trophy.png',
-  'GOAT.png',
-  'cloud-face.png',
-  'hot-face.png',
-  'devil.png',
-  'salute.png',
-  'star-eyes.png',
-  'shush.png',
-  'angry.png',
-  'cold-face.png',
-  'yawn.png',
-  'hand-over-mouth.png',
-  'skull.png',
-  'alien.png',
-  'ghost.png',
-];
-
-/** 표에 빠진 옵션이 있으면 화면에서 조용히 어긋나므로 눈에 띄는 기본값을 쓴다 */
+/** 매니페스트에 mm가 없는 옵션(캡션 판독 실패)은 화면에서 조용히 어긋나므로 눈에 띄는 기본값을 쓴다 */
 const FALLBACK_MM: StickerMm = [6, 6];
 
+/**
+ * 옵션 목록은 lib/bootskin-stickers.json에서 온다 — 값·원본 파일·실측 mm가 한곳에 있다.
+ *
+ * mm는 상품 원본 이미지 하단에 인쇄된 "가로: N mm / 세로: N mm" 캡션을
+ * `npm run sync-bootskin`이 읽은 값이다. 한 변만 인쇄된 그룹(포지션·모티베이션은 가로만,
+ * 이모지는 세로만)은 원본 잉크 경계 상자 비율로 나머지 변을 유도한다.
+ * 화면을 보며 임의로 조정하지 말 것 — 크기가 달라 보이면 슬롯의 mmScale을 만진다.
+ *
+ * 투명 스티커 파일명은 생성기가 원본의 순번을 뗀 이름이다 (`24-W-white.png` → `W-white.png`).
+ */
 function buildOptions(
   slug: string,
-  kind: string,
-  files: string[] | FileResolver,
-  mm: Record<string, StickerMm>,
   plates: Record<string, StickerPlate> | undefined,
-  tone: 'Black' | 'White' = 'Black',
+  tone: 'Black' | 'White',
 ): PreviewOption[] {
-  const sizes = products[slug as keyof typeof products]?.sizes ?? [];
-  return sizes.map((value, index) => ({
-    value,
-    overlay: `/_bootskin/${kind}/${typeof files === 'function' ? files(value, index, tone) : files[index]}`,
-    mm: mm[value] ?? FALLBACK_MM,
-    plate: plates?.[value],
-  }));
+  const product = getStickerProduct(slug);
+  return product.stickers.map((sticker) => {
+    const { file, optionValue, inTone } = resolveSticker(product, sticker, tone);
+    return {
+      value: sticker.value,
+      optionValue,
+      light: inTone && tone === 'White',
+      overlay: `${OVERLAY_ROOT}/${product.folder}/${file.replace(/^\d+-/, '')}`,
+      mm: sticker.mm ?? FALLBACK_MM,
+      plate: plates?.[sticker.value],
+    };
+  });
 }
 
-/** 미리보기 탭 구성. 크기는 옵션별 실측 mm(*_MM)에서 오고, 배치는 PREVIEW_SLOTS에서 온다. */
+/** 미리보기 탭 구성. 크기는 매니페스트의 실측 mm에서 오고, 배치는 PREVIEW_SLOTS에서 온다. */
 interface GroupSpec {
   key: string;
   label: string;
   slug: string;
-  /** public/_bootskin 하위 폴더명 */
-  kind: string;
   slot: PreviewSlot;
-  toned: boolean;
   maxPicks: number;
   fit: StickerFit;
-  files: string[] | FileResolver;
-  mm: Record<string, StickerMm>;
   /** 흰 바탕이 디자인인 옵션만 (태극기) */
   plates?: Record<string, StickerPlate>;
 }
 
 /** 이니셜은 세 글자(예: KDB), 번호는 두 자리(예: 10)까지 나란히 붙이는 게 보통이다 */
 const GROUP_SPECS: GroupSpec[] = [
-  { key: 'number', label: '번호', slug: PRODUCT_SLUGS.BOOTSKIN_NUMBER, kind: 'number', slot: 'front', toned: true, maxPicks: 2, fit: 'height', files: tonedFile, mm: NUMBER_MM },
-  { key: 'initial', label: '이니셜', slug: PRODUCT_SLUGS.BOOTSKIN_ALPHABET, kind: 'initial', slot: 'front', toned: true, maxPicks: 3, fit: 'height', files: tonedFile, mm: INITIAL_MM },
-  { key: 'nation', label: '국기', slug: PRODUCT_SLUGS.BOOTSKIN_KOREA, kind: 'nation', slot: 'front', toned: false, maxPicks: 1, fit: 'box', files: NATION_FILES, mm: NATION_MM, plates: NATION_PLATES },
-  { key: 'family', label: '가족', slug: PRODUCT_SLUGS.BOOTSKIN_FAMILY, kind: 'family', slot: 'front', toned: false, maxPicks: 1, fit: 'box', files: FAMILY_FILES, mm: FAMILY_MM },
-  { key: 'faith', label: '종교', slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOL, kind: 'faith-symbol', slot: 'heel', toned: false, maxPicks: 1, fit: 'box', files: FAITH_FILES, mm: FAITH_MM },
-  { key: 'symbol', label: '심볼', slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOLS, kind: 'symbol', slot: 'heel', toned: false, maxPicks: 1, fit: 'box', files: SYMBOL_FILES, mm: SYMBOL_MM },
-  { key: 'position', label: '포지션', slug: PRODUCT_SLUGS.BOOTSKIN_POSITION, kind: 'position', slot: 'front', toned: false, maxPicks: 1, fit: 'box', files: POSITION_FILES, mm: POSITION_MM },
-  { key: 'motivation', label: '문구', slug: PRODUCT_SLUGS.BOOTSKIN_MOTIVATION, kind: 'motivation', slot: 'heel', toned: false, maxPicks: 1, fit: 'box', files: MOTIVATION_FILES, mm: MOTIVATION_MM },
+  { key: 'number', label: '번호', slug: PRODUCT_SLUGS.BOOTSKIN_NUMBER, slot: 'front', maxPicks: 2, fit: 'height' },
+  { key: 'initial', label: '이니셜', slug: PRODUCT_SLUGS.BOOTSKIN_ALPHABET, slot: 'front', maxPicks: 3, fit: 'height' },
+  { key: 'nation', label: '국기', slug: PRODUCT_SLUGS.BOOTSKIN_KOREA, slot: 'front', maxPicks: 1, fit: 'box', plates: NATION_PLATES },
+  { key: 'family', label: '가족', slug: PRODUCT_SLUGS.BOOTSKIN_FAMILY, slot: 'front', maxPicks: 1, fit: 'box' },
+  { key: 'faith', label: '종교', slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOL, slot: 'heel', maxPicks: 1, fit: 'box' },
+  { key: 'symbol', label: '심볼', slug: PRODUCT_SLUGS.BOOTSKIN_SYMBOLS, slot: 'heel', maxPicks: 1, fit: 'box' },
+  { key: 'position', label: '포지션', slug: PRODUCT_SLUGS.BOOTSKIN_POSITION, slot: 'front', maxPicks: 1, fit: 'box' },
+  { key: 'motivation', label: '문구', slug: PRODUCT_SLUGS.BOOTSKIN_MOTIVATION, slot: 'heel', maxPicks: 1, fit: 'box' },
 ];
 
 export function getPreviewGroups(tone: 'Black' | 'White'): PreviewGroup[] {
   return GROUP_SPECS.map((spec) => {
     const product = products[spec.slug as keyof typeof products];
+    const stickerProduct = getStickerProduct(spec.slug);
     return {
       key: spec.key,
       label: spec.label,
@@ -359,10 +205,10 @@ export function getPreviewGroups(tone: 'Black' | 'White'): PreviewGroup[] {
       productName: product.name,
       thumbnail: product.image,
       slot: spec.slot,
-      toned: spec.toned,
+      toned: Boolean(stickerProduct.tones) || stickerProduct.stickers.some((sticker) => sticker.colorFiles),
       maxPicks: spec.maxPicks,
       fit: spec.fit,
-      options: buildOptions(spec.slug, spec.kind, spec.files, spec.mm, spec.plates, tone),
+      options: buildOptions(spec.slug, spec.plates, tone),
     };
   });
 }

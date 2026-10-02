@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCart } from '../../contexts/CartContext';
-import { products, getDiscountPercent, getProductHref, BOOTSKIN_CATEGORY, type ProductSlug, type ProductColor } from '../../../lib/products';
+import { products, getDiscountPercent, getProductHref, getStockKey, BOOTSKIN_CATEGORY, type ProductSlug, type ProductColor } from '../../../lib/products';
 import { SHIPPING, CONTACT, RETURN_POLICY, CARE_INSTRUCTIONS, SOCIAL_MEDIA } from '../../../lib/constants';
 import { trackViewContent, trackAddToCart } from '../../../lib/analytics';
 import styles from './product-detail.module.css';
@@ -1128,7 +1128,9 @@ export default function ProductDetailClient({ params, initialPrice, initialSizes
                   <h3>{product.sizeLabel ?? '사이즈 선택'}</h3>
                   <div className={`${styles.sizeOptions} ${product.category === 'boot-skin' ? styles.sizeOptionsBootSkin : ''}`}>
                     {product.sizes.map((size) => {
-                      const coloredSize = selectedColor ? `${size} — ${selectedColor.name}` : size;
+                      const coloredSize = getStockKey(product, size, selectedColor?.name);
+                      // 고른 색으로는 팔지 않는 옵션 (부츠스킨 종교·국기의 화이트는 일부 스티커만 있다)
+                      if (coloredSize === null) return null;
                       // multiSelect + colors: 선택값에 색상 포함해 저장 (색상 없으면 coloredSize === size)
                       const selectValue = product.multiSelect ? coloredSize : size;
                       const key = `${product.id}-${coloredSize}`;

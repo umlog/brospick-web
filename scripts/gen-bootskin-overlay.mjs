@@ -10,13 +10,16 @@
 import sharp from 'sharp';
 import { readdirSync, existsSync, mkdirSync, statSync } from 'fs';
 import { join } from 'path';
+import { glyphBounds, GLYPH_THRESHOLD } from './lib/bootskin-image.mjs';
+import { readManifest, stickerFiles } from './lib/bootskin-manifest.mjs';
 
 const SRC_ROOT = join('public', 'apparel', 'bootskin');
 const OUT_ROOT = join('public', '_bootskin');
-/** 스티커 종류 폴더 — 상세 설명 이미지만 있는 폴더(BootSkinBanner 등)는 제외 */
-const KINDS = ['number', 'initial', 'nation', 'symbol', 'faith-symbol', 'family', 'position', 'motivation'];
+const manifest = Object.values(readManifest());
+/** 스티커 종류 폴더 — 매니페스트(lib/bootskin-stickers.json)에 등록된 상품 폴더만. 배너 폴더 등은 제외된다 */
+const KINDS = manifest.map((product) => product.folder);
 /**
- * 흰색이 디자인의 일부인 풀컬러 아트웍 (`<종류>/<파일명>`).
+ * 흰색이 디자인의 일부인 풀컬러 아트웍 (`<종류>/<파일명>`). 매니페스트의 `fullColor: true`에서 온다.
  *
  * 아래 toRgba는 흰 배경을 걷어내려고 흰 픽셀을 투명으로 만든다. 검은 글리프에는
  * 맞지만 브라질 국기의 흰 띠나 해골·유령처럼 흰색 자체가 그림인 경우 그 부분에
@@ -26,30 +29,21 @@ const KINDS = ['number', 'initial', 'nation', 'symbol', 'faith-symbol', 'family'
  * 그래서 이 목록의 파일은 알파 되돌리기를 건너뛰고, 테두리에서 번져 닿은 바깥
  * 배경만 투명으로 만든다. 안쪽 픽셀은 원본 색 그대로 남는다.
  */
-const FULL_COLOR = new Set([
-  'nation/4-BRAZIL.png',
-  'symbol/17-cloud-face.png',
-  'symbol/18-hot-face.png',
-  'symbol/19-devil.png',
-  'symbol/20-salute.png',
-  'symbol/21-star-eyes.png',
-  'symbol/22-shush.png',
-  'symbol/23-angry.png',
-  'symbol/24-cold-face.png',
-  'symbol/25-yawn.png',
-  'symbol/26-hand-over-mouth.png',
-  'symbol/27-skull.png',
-  'symbol/28-alien.png',
-  'symbol/29-ghost.png',
-]);
-/** 캡션이 차지하는 하단 영역 비율 */
-const CAPTION_RATIO = 0.2;
-/** 배경과 이만큼 차이나면 글리프로 본다 (0~765) */
-const GLYPH_THRESHOLD = 40;
+const FULL_COLOR = new Set(
+  manifest.flatMap((product) =>
+    product.stickers
+      .filter((sticker) => sticker.fullColor)
+      .flatMap((sticker) => stickerFiles(sticker).map((file) => `${product.folder}/${file}`)),
+  ),
+);
 /** 트리밍 후 최대 변 길이 */
 const MAX_EDGE = 300;
-/** 변환 규칙이 바뀌면 기존 생성물도 다시 만들어야 하므로 이 파일의 수정 시각도 기준에 넣는다 */
-const SCRIPT_MTIME = statSync(new URL(import.meta.url)).mtimeMs;
+/** 변환 규칙·풀컬러 목록이 바뀌면 기존 생성물도 다시 만들어야 하므로 스크립트와 매니페스트의 수정 시각도 기준에 넣는다 */
+const SCRIPT_MTIME = Math.max(
+  statSync(new URL(import.meta.url)).mtimeMs,
+  statSync(new URL('./lib/bootskin-image.mjs', import.meta.url)).mtimeMs,
+  statSync('lib/bootskin-stickers.json').mtimeMs,
+);
 
 /**
  * 순백/순흑 배경 위에 합성된 글리프를 알파 채널로 되돌린다.
@@ -183,30 +177,6 @@ function opaqueOnBackground(data, info, background) {
     out[o + 3] = 255;
   }
   return out;
-}
-
-/** 배경과 다른 픽셀의 경계 상자를 구한다 (캡션 영역 제외) */
-function glyphBounds(data, info, background) {
-  const { width, height, channels } = info;
-  const limitY = Math.floor(height * (1 - CAPTION_RATIO));
-  let minX = width, minY = height, maxX = -1, maxY = -1;
-
-  for (let y = 0; y < limitY; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = (y * width + x) * channels;
-      const diff =
-        Math.abs(data[i] - background[0]) +
-        Math.abs(data[i + 1] - background[1]) +
-        Math.abs(data[i + 2] - background[2]);
-      if (diff <= GLYPH_THRESHOLD) continue;
-      if (x < minX) minX = x;
-      if (x > maxX) maxX = x;
-      if (y < minY) minY = y;
-      if (y > maxY) maxY = y;
-    }
-  }
-  if (maxX < 0) return null;
-  return { left: minX, top: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
 }
 
 let made = 0, skipped = 0, errors = 0;

@@ -18,6 +18,12 @@ function sortProducts(list: AdminProduct[]): AdminProduct[] {
   });
 }
 
+/** products.ts에는 있는데 product_sizes 행이 없는 옵션 (예: 새로 추가한 부츠스킨 스티커) */
+interface MissingSize {
+  product_id: number;
+  size: string;
+}
+
 interface UnsyncedProduct {
   id: number;
   slug: string;
@@ -31,6 +37,7 @@ export function useProductCatalog() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState<number | null>(null);
   const [unsynced, setUnsynced] = useState<UnsyncedProduct[]>([]);
+  const [missingSizes, setMissingSizes] = useState<MissingSize[]>([]);
   const [syncing, setSyncing] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
 
@@ -44,6 +51,7 @@ export function useProductCatalog() {
       ]);
       setProducts(sortProducts(productsData.products));
       setUnsynced(syncData.unsynced);
+      setMissingSizes(syncData.missingSizes);
       setHasLoaded(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : '상품 목록 조회 실패');
@@ -56,7 +64,11 @@ export function useProductCatalog() {
     setSyncing(true);
     try {
       const data = await apiClient.products.sync();
-      showToast(`${data.inserted}개 상품이 DB에 등록되었습니다. 가격을 설정해주세요.`, 'success');
+      const messages = [
+        data.inserted > 0 && `상품 ${data.inserted}개 등록 — 가격을 설정해주세요.`,
+        data.insertedSizes > 0 && `옵션 ${data.insertedSizes}개를 품절로 등록 — 재고를 입력하면 판매됩니다.`,
+      ].filter(Boolean);
+      showToast(messages.join(' ') || '이미 동기화되어 있습니다.', 'success');
       await fetchProducts();
     } catch (e) {
       const msg = e instanceof Error ? e.message : '동기화 실패';
@@ -107,5 +119,5 @@ export function useProductCatalog() {
     []
   );
 
-  return { products, loading, error, saving, hasLoaded, fetchProducts, updateProduct, reorderProducts, unsynced, syncing, syncProducts };
+  return { products, loading, error, saving, hasLoaded, fetchProducts, updateProduct, reorderProducts, unsynced, missingSizes, syncing, syncProducts };
 }
