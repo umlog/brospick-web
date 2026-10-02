@@ -57,3 +57,7 @@ next-env.d.ts
 
 # PDF source files (ebook, assets)
 *.pdf
+
+# 참고 자료·목업·작업 메모 — 로컬에만 둔다
+# (사업자 정보·외부 서비스 계정값이 섞여 있어 커밋하면 안 됨)
+/docs/
